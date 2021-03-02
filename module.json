@@ -1,0 +1,20 @@
+{
+	"name": "df-architect",
+	"title": "DF Architect",
+	"description": "Architect for FoundryVTT provides a major overhaul of the Walls and Lighting editing features.",
+	"version": "0.0.0",
+	"author": "flamewave000#6766",
+	"minimumCoreVersion": "0.7.9",
+	"compatibleCoreVersion": "0.7.9",
+	"esmodules": [ "src/df-architect.js" ],
+	"styles": "{{css}}",
+	"languages": [
+		{ "lang": "en", "name": "English", "path": "lang/en.json" }
+	],
+	"url":		"https://github.com/flamewave000/df-architect",
+	"license":	"https://github.com/flamewave000/df-architect/blob/master/LICENSE",
+	"manifest":	"https://dragonflagon.cafe/mods/man/df-architect",
+	"download":	"https://dragonflagon.cafe/mods/pak/df-architect",
+	"readme":	"https://github.com/flamewave000/df-architect/blob/master/README.md",
+	"changelog":"https://github.com/flamewave000/df-architect/blob/master/CHANGELOG.md"
+}
