@@ -11,10 +11,10 @@
 	"languages": [
 		{ "lang": "en", "name": "English", "path": "lang/en.json" }
 	],
-	"url":		"https://github.com/flamewave000/df-architect",
-	"license":	"https://github.com/flamewave000/df-architect/blob/master/LICENSE",
-	"manifest":	"https://dragonflagon.cafe/mods/man/df-architect",
-	"download":	"https://dragonflagon.cafe/mods/pak/df-architect",
-	"readme":	"https://github.com/flamewave000/df-architect/blob/master/README.md",
-	"changelog":"https://github.com/flamewave000/df-architect/blob/master/CHANGELOG.md"
+	"url":		"https://github.com/flamewave000/dragonflagon-arch",
+	"license":	"https://github.com/flamewave000/dragonflagon-arch/blob/master/LICENSE",
+	"manifest":	"https://dragonflagon.cafe/mods/man/dragonflagon-arch",
+	"download":	"https://dragonflagon.cafe/mods/pak/dragonflagon-arch",
+	"readme":	"https://github.com/flamewave000/dragonflagon-arch/blob/master/README.md",
+	"changelog":"https://github.com/flamewave000/dragonflagon-arch/blob/master/CHANGELOG.md"
 }
