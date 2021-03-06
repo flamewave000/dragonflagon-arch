@@ -1,6 +1,10 @@
 {
 	"name": "df-architect",
 	"version": "1.0.0",
+	"license": "MIT",
+	"repository": {
+		"url": "https://github.com/flamewave000/dragonflagon-arch"
+	},
 	"scripts": {
 		"build": "npx gulp",
 		"watch": "npx gulp watch",
@@ -12,6 +16,7 @@
 		"tag": "git tag -d ${npm_package_name}_${npm_package_version} 2>/dev/null ; git tag ${npm_package_name}_${npm_package_version} && git push -f origin ${npm_package_name}_${npm_package_version}"
 	},
 	"devDependencies": {
+		"@league-of-foundry-developers/foundry-vtt-types": "^0.7.9-0",
 		"del": "^6.0.0",
 		"gulp": "^4.0.2",
 		"gulp-cli": "^2.3.0",
