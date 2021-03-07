@@ -1,3 +1,5 @@
+import KEYMAP from "../_data/keymap.js";
+
 interface HandlerEntry {
 	id: string;
 	handler: (id: string) => void;
@@ -35,27 +37,26 @@ export default class Hotkeys {
 	}
 
 	private static handleKeyDown(event: KeyboardEvent) {
-		if (this._handled.has(event.key) || this._isMeta(event)) return;
-		console.debug(event.key);
+		if (this._handled.has(event.code) || this._isMeta(event)) return;
 		const metaKey = this._metaKey(event);
 		const metaHandlers = this._handlers.get(metaKey);
 		if (!metaHandlers) {
-			this._handled.add(event.key);
+			this._handled.add(event.code);
 			return;
 		}
-		const eventKey = event.key.toLowerCase();
-		const eventHandlers = metaHandlers.get(eventKey);
+		const eventHandlers = metaHandlers.get(event.code);
 		if (!eventHandlers) {
-			this._handled.add(event.key);
+			this._handled.add(event.code);
 			return;
 		}
+		event.preventDefault();
 		eventHandlers.forEach(x => x.handler(x.id));
-		this._handled.add(event.key);
+		this._handled.add(event.code);
 	}
 
 	private static handleKeyUp(event: KeyboardEvent) {
-		if (!this._handled.has(event.key)) return;
-		this._handled.delete(event.key);
+		if (!this._handled.has(event.code)) return;
+		this._handled.delete(event.code);
 	}
 
 	static init() {
@@ -76,7 +77,7 @@ export default class Hotkeys {
 		{ shift?: boolean, alt?: boolean, ctrl?: boolean } = {}): string {
 		const metaKey = (alt ? 0x1 : 0) | (ctrl ? 0x2 : 0) | (shift ? 0x4 : 0);
 		const metaHandlers = this._handlers.getOrDefault(metaKey, () => new Map());
-		const eventHandlers = metaHandlers.getOrDefault(key.toLowerCase(), () => new Array());
+		const eventHandlers = metaHandlers.getOrDefault(key, () => new Array());
 		const id = this._genId(metaKey, key);
 		eventHandlers.push({ id: id, handler: handler })
 		return id;

@@ -7,7 +7,11 @@
 			"request": "attach",
 			"port": 9222,
 			"url": "http://localhost:30000/game",
-			"webRoot": "${workspaceFolder}/dist"
+			"webRoot": "${workspaceFolder}/dist",
+			// "sourceMapPathOverrides": {
+			// 	"localhost:30000/df-architect/src/*": "${webRoot}/*",
+			// 	"localhost:30000/src/*": "${webRoot}/*"
+			// }
 		}
 	]
 }

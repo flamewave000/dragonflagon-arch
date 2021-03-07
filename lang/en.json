@@ -14,5 +14,7 @@
 	"DF_ARCHITECT.LayerShortcuts_Settings_Layer_Walls": "Walls: ",
 	"DF_ARCHITECT.LayerShortcuts_Settings_Layer_Lighting": "Lighting: ",
 	"DF_ARCHITECT.LayerShortcuts_Settings_Layer_Sounds": "Sounds: ",
-	"DF_ARCHITECT.LayerShortcuts_Settings_Layer_Notes": "Notes: "
+	"DF_ARCHITECT.LayerShortcuts_Settings_Layer_Notes": "Notes: ",
+	"DF_ARCHITECT.LayerShortcuts_Settings_Reset": "Reset to Defaults",
+	"DF_ARCHITECT.LayerShortcuts_Settings_Save": "Save"
 }

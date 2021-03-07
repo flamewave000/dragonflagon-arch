@@ -1,6 +1,5 @@
 <form>
 	<h2>{{localize 'DF_ARCHITECT.LayerShortcuts_Settings_Title'}}</h2>
-
 	<table>
 		<thead>
 			<th>Layer</th>
@@ -12,19 +11,34 @@
 			<tr>
 				<td>{{localize layer.label}}</td>
 				<td>
-					<select name="{{layer.name}}-key">
-						{{#each keyTypes as | key |}}
-						<option value="{{key}}">{{key}}</option>
+					<select name="{{layer.name}}.key" data-dtype="String">
+						<option value="">---</option>
+						{{#each ../keys}}
+						<option value="{{key}}" {{#if (eq key layer.setting.key)}} selected{{/if}}>{{value}}</option>
 						{{/each}}
 					</select>
 				</td>
 				<td>
-					<label for="{{layer.name}}-shift">Shift </label><input type="checkbox" id="{{layer.name}}-shift" name="{{layer.name}}-shift" />
-					<label for="{{layer.name}}-ctrl">Ctrl </label><input type="checkbox" id="{{layer.name}}-ctrl" name="{{layer.name}}-ctrl" />
-					<label for="{{layer.name}}-alt">Alt </label><input type="checkbox" id="{{layer.name}}-alt" name="{{layer.name}}-alt" />
+					<label>
+						<span>Shift </span>
+						<input type="checkbox" name="{{layer.name}}.shift" {{#if layer.setting.shift}}checked{{/if}} />
+					</label>
+					<label>
+						<span>Ctrl </span>
+						<input type="checkbox" name="{{layer.name}}.ctrl" {{#if layer.setting.ctrl}}checked{{/if}} />
+					</label>
+					<label>
+						<span>Alt </span>
+						<input type="checkbox" name="{{layer.name}}.alt" {{#if layer.setting.alt}}checked{{/if}} />
+					</label>
 				</td>
 			</tr>
 			{{/each}}
 		</tbody>
 	</table>
+	<blockquote>
+		Beware <code>Ctrl+W</code> on Chromium browsers (Chrome, Edge, Brave). This combo will close the browser.
+	</blockquote>
+	<button id="reset"><i class="fas fa-redo"></i> {{localize 'DF_ARCHITECT.LayerShortcuts_Settings_Reset'}}</button>
+	<button type="submit"><i class="fas fa-save"></i> {{localize 'DF_ARCHITECT.LayerShortcuts_Settings_Save'}}</button>
 </form>

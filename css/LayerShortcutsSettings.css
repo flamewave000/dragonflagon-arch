@@ -1,0 +1,30 @@
+#DFArchLSMenu select {
+	margin-right: 1em;
+	margin-left: 0.5em;
+}
+
+#DFArchLSMenu tr td:first-child {
+	text-align: right;
+}
+
+#DFArchLSMenu form {
+	display: flex;
+	flex-flow: row wrap;
+}
+
+#DFArchLSMenu form h2,
+#DFArchLSMenu form table {
+	flex: 0 0 100%;
+}
+#DFArchLSMenu form button {
+	flex: 1 0;
+}
+#DFArchLSMenu form label {
+	display: inline-block;
+}
+#DFArchLSMenu form label>span {
+	vertical-align:middle;
+}
+#DFArchLSMenu form label>input {
+	vertical-align:middle;
+}
