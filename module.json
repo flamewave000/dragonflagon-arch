@@ -2,7 +2,7 @@
 	"name": "{{name}}",
 	"title": "{{title}}",
 	"description": "{{description}}",
-	"version": "0.0.0",
+	"version": "{{version}}",
 	"author": "flamewave000#6766",
 	"minimumCoreVersion": "0.7.9",
 	"compatibleCoreVersion": "0.7.9",
@@ -13,8 +13,8 @@
 	],
 	"url":		"https://github.com/flamewave000/dragonflagon-arch",
 	"license":	"https://github.com/flamewave000/dragonflagon-arch/blob/master/LICENSE",
-	"manifest":	"https://dragonflagon.cafe/mods/man/dragonflagon-arch",
-	"download":	"https://dragonflagon.cafe/mods/pak/dragonflagon-arch",
+	"manifest":	"https://dragonflagon.cafe/mods/man/{{name}}",
+	"download":	"https://dragonflagon.cafe/mods/pak/{{name}}",
 	"readme":	"https://github.com/flamewave000/dragonflagon-arch/blob/master/README.md",
 	"changelog":"https://github.com/flamewave000/dragonflagon-arch/blob/master/CHANGELOG.md"
 }

@@ -1,6 +1,9 @@
 #DFArchLSMenu select {
-	margin-right: 1em;
 	margin-left: 0.5em;
+}
+
+#DFArchLSMenu tr td {
+	text-align: center;
 }
 
 #DFArchLSMenu tr td:first-child {
@@ -12,19 +15,28 @@
 	flex-flow: row wrap;
 }
 
+#DFArchLSMenu form input {
+	margin: 0;
+}
+
 #DFArchLSMenu form h2,
 #DFArchLSMenu form table {
 	flex: 0 0 100%;
 }
+
 #DFArchLSMenu form button {
 	flex: 1 0;
 }
+
 #DFArchLSMenu form label {
 	display: inline-block;
+	margin: 0 0.375em;
 }
+
 #DFArchLSMenu form label>span {
-	vertical-align:middle;
+	vertical-align: middle;
 }
+
 #DFArchLSMenu form label>input {
-	vertical-align:middle;
+	vertical-align: middle;
 }

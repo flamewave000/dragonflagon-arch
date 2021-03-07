@@ -2,9 +2,9 @@
 	<h2>{{localize 'DF_ARCHITECT.LayerShortcuts_Settings_Title'}}</h2>
 	<table>
 		<thead>
-			<th>Layer</th>
-			<th>Key</th>
-			<th>Modifiers</th>
+			<th>{{localize 'DF_ARCHITECT.LayerShortcuts_Settings_Label_TableLayer'}}</th>
+			<th>{{localize 'DF_ARCHITECT.LayerShortcuts_Settings_Label_TableKey'}}</th>
+			<th>{{localize 'DF_ARCHITECT.LayerShortcuts_Settings_Label_TableMods'}}</th>
 		</thead>
 		<tbody>
 			{{#each layers as | layer |}}
@@ -20,15 +20,15 @@
 				</td>
 				<td>
 					<label>
-						<span>Shift </span>
+						<span>Shift</span>
 						<input type="checkbox" name="{{layer.name}}.shift" {{#if layer.setting.shift}}checked{{/if}} />
 					</label>
 					<label>
-						<span>Ctrl </span>
+						<span>Ctrl</span>
 						<input type="checkbox" name="{{layer.name}}.ctrl" {{#if layer.setting.ctrl}}checked{{/if}} />
 					</label>
 					<label>
-						<span>Alt </span>
+						<span>Alt</span>
 						<input type="checkbox" name="{{layer.name}}.alt" {{#if layer.setting.alt}}checked{{/if}} />
 					</label>
 				</td>
@@ -37,7 +37,7 @@
 		</tbody>
 	</table>
 	<blockquote>
-		Beware <code>Ctrl+W</code> on Chromium browsers (Chrome, Edge, Brave). This combo will close the browser.
+		{{{localize 'DF_ARCHITECT.LayerShortcuts_Settings_Label_Warning'}}}
 	</blockquote>
 	<button id="reset"><i class="fas fa-redo"></i> {{localize 'DF_ARCHITECT.LayerShortcuts_Settings_Reset'}}</button>
 	<button type="submit"><i class="fas fa-save"></i> {{localize 'DF_ARCHITECT.LayerShortcuts_Settings_Save'}}</button>
