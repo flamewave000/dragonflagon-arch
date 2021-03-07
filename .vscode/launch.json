@@ -1,0 +1,13 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "Attach to Foundry",
+			"type": "chrome",
+			"request": "attach",
+			"port": 9222,
+			"url": "http://localhost:30000/game",
+			"webRoot": "${workspaceFolder}/dist"
+		}
+	]
+}

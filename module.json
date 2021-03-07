@@ -1,12 +1,12 @@
 {
-	"name": "df-architect",
-	"title": "DF Architect",
-	"description": "Architect for FoundryVTT provides a major overhaul of the Walls and Lighting editing features.",
+	"name": "{{name}}",
+	"title": "{{title}}",
+	"description": "{{description}}",
 	"version": "0.0.0",
 	"author": "flamewave000#6766",
 	"minimumCoreVersion": "0.7.9",
 	"compatibleCoreVersion": "0.7.9",
-	"esmodules": [ "src/df-architect.js" ],
+	"esmodules": "{{sources}}",
 	"styles": "{{css}}",
 	"languages": [
 		{ "lang": "en", "name": "English", "path": "lang/en.json" }

@@ -36,6 +36,7 @@ export default class Hotkeys {
 
 	private static handleKeyDown(event: KeyboardEvent) {
 		if (this._handled.has(event.key) || this._isMeta(event)) return;
+		console.debug(event.key);
 		const metaKey = this._metaKey(event);
 		const metaHandlers = this._handlers.get(metaKey);
 		if (!metaHandlers) {

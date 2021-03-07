@@ -1,0 +1,30 @@
+<form>
+	<h2>{{localize 'DF_ARCHITECT.LayerShortcuts_Settings_Title'}}</h2>
+
+	<table>
+		<thead>
+			<th>Layer</th>
+			<th>Key</th>
+			<th>Modifiers</th>
+		</thead>
+		<tbody>
+			{{#each layers as | layer |}}
+			<tr>
+				<td>{{localize layer.label}}</td>
+				<td>
+					<select name="{{layer.name}}-key">
+						{{#each keyTypes as | key |}}
+						<option value="{{key}}">{{key}}</option>
+						{{/each}}
+					</select>
+				</td>
+				<td>
+					<label for="{{layer.name}}-shift">Shift </label><input type="checkbox" id="{{layer.name}}-shift" name="{{layer.name}}-shift" />
+					<label for="{{layer.name}}-ctrl">Ctrl </label><input type="checkbox" id="{{layer.name}}-ctrl" name="{{layer.name}}-ctrl" />
+					<label for="{{layer.name}}-alt">Alt </label><input type="checkbox" id="{{layer.name}}-alt" name="{{layer.name}}-alt" />
+				</td>
+			</tr>
+			{{/each}}
+		</tbody>
+	</table>
+</form>

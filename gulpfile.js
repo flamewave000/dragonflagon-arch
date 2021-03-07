@@ -7,6 +7,7 @@ const zip = require('gulp-zip');
 const rename = require('gulp-rename');
 const minify = require('gulp-minify');
 const tabify = require('gulp-tabify');
+const stringify = require('json-stringify-pretty-compact');
 
 const GLOB = '**/*';
 const DIST = 'dist/';
@@ -43,16 +44,17 @@ function desc(name, lambda) {
 function buildSource(keepSources, minifySources = false, output = null) {
 	return desc('build Source', () => {
 		var stream = gulp.src(SOURCE + GLOB);
-		if (keepSources) stream = stream.pipe(sm.init())
+		// if (keepSources) stream = stream.pipe(sm.init())
 		stream = stream.pipe(ts.createProject("tsconfig.json")())
-		if (keepSources) stream = stream.pipe(sm.write())
+		// if (keepSources) stream = stream.pipe(sm.write())
 		if (minifySources) stream = stream.pipe(minify({
 			ext: { min: '.js' },
 			mangle: false,
 			noSource: true
 		}));
 		else stream = stream.pipe(tabify(4, false));
-		return stream.pipe(gulp.dest((output || DIST) + SOURCE));
+		if (output) stream = stream.pipe(gulp.dest(output + SOURCE));
+		return stream.pipe(gulp.dest(DIST + SOURCE));
 	});
 }
 exports.step_buildSourceDev = buildSource(true);
@@ -64,14 +66,23 @@ exports.step_buildSourceMin = buildSource(false, true);
  */
 function buildManifest(output = null) {
 	const files = []; // Collector for all the file paths
-	return desc('build Manifest', (cb) => gulp.src(CSS + GLOB) // grab all the CSS files
+	return desc('build Manifest', (cb) => gulp.src(PACKAGE.main) // collect the source files
+		.pipe(rename({ extname: '.js' })) // rename their extensions to `.js`
+		.pipe(gulp.src(CSS + GLOB)) // grab all the CSS files
 		.on('data', file => files.push(file.path.replace(file.base, file.base.replace(file.cwd + '/', '')))) // Collect all the file paths
 		.on('end', () => { // output the filepaths to the module.json
 			if (files.length == 0)
 				throw Error('No files found in ' + SOURCE + GLOB + " or " + CSS + GLOB);
+			const js = files.filter(e => e.endsWith('js')); // split the CSS and JS files
+			const css = files.filter(e => e.endsWith('css'));
 			fs.readFile('module.json', (err, data) => {
 				const module = data.toString() // Inject the data into the module.json
-					.replace('"{{css}}"', JSON.stringify(files, null, '\t').replaceAll('\n', '\n\t'));
+					.replaceAll('{{name}}', PACKAGE.name)
+					.replaceAll('{{title}}', PACKAGE.title)
+					.replaceAll('{{version}}', PACKAGE.version)
+					.replaceAll('{{description}}', PACKAGE.description)
+					.replace('"{{sources}}"', stringify(js, { indent: '\t' }))
+					.replace('"{{css}}"', stringify(css, { indent: '\t' }));
 				fs.writeFile((output || DIST) + 'module.json', module, cb); // save the module to the distribution directory
 			});
 		}));
@@ -115,8 +126,8 @@ exports.step_outputDistToDevEnvironment = outputDistToDevEnvironment;
 /**
  * Simple clean command
  */
-exports.clean = pdel([DIST, BUNDLE]);
-exports.devClean = pdel([DEV_DIST()]);
+exports.clean = gulp.series(pdel([DIST, BUNDLE]));
+exports.devClean = gulp.series(pdel([DEV_DIST()]));
 /**
  * Default Build operation
  */
@@ -136,7 +147,7 @@ exports.default = gulp.series(
  * Extends the default build task by copying the result to the Development Environment
  */
 exports.dev = gulp.series(
-	pdel([DEV_DIST() + GLOB], { force: true }),
+	pdel([DIST + GLOB, DEV_DIST() + GLOB], { force: true }),
 	gulp.parallel(
 		buildSource(true, false, DEV_DIST())
 		, buildManifest(DEV_DIST())
