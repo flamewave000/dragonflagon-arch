@@ -20,5 +20,9 @@
 	"DF_ARCHITECT.LayerShortcuts_Settings_Label_TableLayer": "Layer",
 	"DF_ARCHITECT.LayerShortcuts_Settings_Label_TableKey": "Key",
 	"DF_ARCHITECT.LayerShortcuts_Settings_Label_TableMods": "Modifiers",
-	"DF_ARCHITECT.LayerShortcuts_Settings_Label_Warning": "Beware <code>Ctrl+W</code> on Chromium browsers (Chrome, Edge, Brave). This combo will close the browser."
+	"DF_ARCHITECT.LayerShortcuts_Settings_Label_Warning": "Beware <code>Ctrl+W</code> on Chromium browsers (Chrome, Edge, Brave). This combo will close the browser.",
+
+	"DF_ARCHITECT.AltGridSnap_Setting_EnabledName": "Show Alternate Grid Snap Toggle",
+	"DF_ARCHITECT.AltGridSnap_Setting_EnabledHint": "Show the toggle button alternate grid snapping to the center of boxes instead of corners.",
+	"DF_ARCHITECT.AltGridSnap_Label": "Alternate Grid Snap"
 }
