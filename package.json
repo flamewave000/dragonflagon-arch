@@ -17,6 +17,7 @@
 		"devwatch": "npx gulp devWatch",
 		"devclean": "npx gulp devClean",
 		"release": "npx gulp zip",
+		"launch": "sudo ./launch-foundry `which node` /var/www/foundryvtt /var/www/foundrydata",
 		"tag": "git tag -d ${npm_package_name}_${npm_package_version} 2>/dev/null ; git tag ${npm_package_name}_${npm_package_version} && git push -f origin ${npm_package_name}_${npm_package_version}"
 	},
 	"devDependencies": {

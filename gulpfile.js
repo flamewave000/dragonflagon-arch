@@ -2,7 +2,7 @@ const gulp = require('gulp');
 var fs = require('fs')
 const del = require('del');
 const ts = require('gulp-typescript');
-const sm = require('gulp-sourcemaps');
+const sourcemaps = require('gulp-sourcemaps');
 const zip = require('gulp-zip');
 const rename = require('gulp-rename');
 const minify = require('gulp-minify');
@@ -37,7 +37,6 @@ function desc(name, lambda) {
 	return lambda;
 }
 
-
 /**
  * Compile the source code into the distribution directory
  * @param {Boolean} keepSources Include the TypeScript SourceMaps
@@ -45,9 +44,14 @@ function desc(name, lambda) {
 function buildSource(keepSources, minifySources = false, output = null) {
 	return desc('build Source', () => {
 		var stream = gulp.src(SOURCE + GLOB);
-		if (keepSources) stream = stream.pipe(sm.init())
+		if (keepSources) stream = stream.pipe(sourcemaps.init())
 		stream = stream.pipe(ts.createProject("tsconfig.json")())
-		if (keepSources) stream = stream.pipe(sm.write())
+		if (keepSources) stream = stream.pipe(sourcemaps.write({
+			sourceRoot: file =>
+				'../'.repeat(file.path
+					.split('src/')[1]
+					.split('/').length - 1) || './'
+		}))
 		if (minifySources) stream = stream.pipe(minify({
 			ext: { min: '.js' },
 			mangle: false,
@@ -57,8 +61,9 @@ function buildSource(keepSources, minifySources = false, output = null) {
 		return stream.pipe(gulp.dest((output || DIST) + SOURCE));
 	});
 }
+
 exports.step_buildSourceDev = gulp.series(buildSource(true, false, DEV_DIST()));
-exports.step_buildSource = gulp.series(buildSource(false));
+exports.step_buildSource = gulp.series(buildSource(true));
 exports.step_buildSourceMin = gulp.series(buildSource(false, true));
 
 function copyDevDistToLocalDist() {
