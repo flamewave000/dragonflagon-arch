@@ -8,9 +8,15 @@ interface KeyMap {
 	ctrl: boolean;
 	shift: boolean;
 }
+interface HotSwap {
+	layer1: string;
+	layer2: string;
+	map: KeyMap;
+}
 export default class LayerShortcuts {
 	static PREF_MENU = "LayerShortcutsSettingsMenu";
 	static PREF_LAYER_ = "LayerShortcutsSettingsLayer-";
+	static PREF_LAYER_SWAP = "LayerShortcutsSettingsLayerSwap";
 
 	static init() {
 		game.settings.registerMenu(ARCHITECT.MOD_NAME, this.PREF_MENU, {
@@ -22,6 +28,30 @@ export default class LayerShortcuts {
 	}
 
 	static ready() {
+		// #region Register and bind the layer hot-swap Hotkey
+		game.settings.register<HotSwap>(ARCHITECT.MOD_NAME, this.PREF_LAYER_SWAP, {
+			scope: 'world',
+			type: Object as any as ConstructorOf<HotSwap>,
+			config: false,
+			default: {
+				layer1: 'walls',
+				layer2: 'lighting',
+				map: {
+					key: KEYMAP.KeyQ.key,
+					alt: true,
+					ctrl: false,
+					shift: false
+				}
+			}
+		});
+		const setting: HotSwap = game.settings.get(ARCHITECT.MOD_NAME, this.PREF_LAYER_SWAP);
+		Hotkeys.registerShortcut(setting.map.key, x => {
+			const layer = ui.controls.activeControl === setting.layer1 ? setting.layer2 : setting.layer1;
+			(ui.controls as any)._onClickLayer({ preventDefault: () => { }, currentTarget: { dataset: { control: layer } } })
+		}, setting.map);
+		// #endregion
+
+		// #region Register and bind the Hotkeys for the Scene Layers
 		var count = 0;
 		for (let layer of ui.controls.controls) {
 			game.settings.register<KeyMap>(ARCHITECT.MOD_NAME, this.PREF_LAYER_ + layer.name, {
@@ -37,16 +67,20 @@ export default class LayerShortcuts {
 			});
 			const setting = game.settings.get(ARCHITECT.MOD_NAME, this.PREF_LAYER_ + layer.name);
 			if (setting.key === '') continue;
-			const binding = Hotkeys.registerShortcut(setting.key, x => {
+			Hotkeys.registerShortcut(setting.key, x => {
 				// console.log("I've been called! " + layer.name);
 				(ui.controls as any)._onClickLayer({ preventDefault: function () { }, currentTarget: { dataset: { control: layer.name } } })
 			}, setting);
+			// Break if we have run out of numbers (likely due to too many mods adding extra layers)
+			if (count == 9) break;
 		}
+		// #endregion
 	}
 }
 
 
 interface RenderOptions {
+	hotswap: HotSwap,
 	layers: {
 		name: string,
 		label: string,
@@ -54,7 +88,7 @@ interface RenderOptions {
 	}[],
 	keys: {
 		key: string,
-		value: string
+		label: string
 	}[]
 }
 class LayerShortcutsSettings extends FormApplication<RenderOptions> {
@@ -63,18 +97,19 @@ class LayerShortcutsSettings extends FormApplication<RenderOptions> {
 		return mergeObject(super.defaultOptions, {
 			title: 'DF_ARCHITECT.ModName',
 			editable: true,
-			resizable: false,
+			resizable: true,
 			submitOnChange: false,
 			submitOnClose: false,
 			closeOnSubmit: true,
-			width: 425,
+			width: 525,
 			id: 'DFArchLSMenu',
 			template: 'modules/df-architect/templates/LayerShortcutsSettings.hbs'
 		});
 	}
 
 	getData(options?: Application.RenderOptions): RenderOptions {
-		const result = {
+		const result: RenderOptions = {
+			hotswap: game.settings.get(ARCHITECT.MOD_NAME, LayerShortcuts.PREF_LAYER_SWAP) as HotSwap,
 			layers: ui.controls.controls.map(x => {
 				const result = {
 					name: x.name,
@@ -90,10 +125,14 @@ class LayerShortcutsSettings extends FormApplication<RenderOptions> {
 
 	async _updateObject(event: Event, formData?: any) {
 		if (!formData) return;
-		const data = expandObject(formData) as Indexable<KeyMap>;
+		const data = expandObject(formData) as {
+			hotswap: HotSwap,
+			layers: Indexable<KeyMap>
+		};
 		ui.controls.controls.forEach(layer => {
-			game.settings.set(ARCHITECT.MOD_NAME, LayerShortcuts.PREF_LAYER_ + layer.name, data[layer.name]);
+			game.settings.set(ARCHITECT.MOD_NAME, LayerShortcuts.PREF_LAYER_ + layer.name, data.layers[layer.name]);
 		});
+		game.settings.set(ARCHITECT.MOD_NAME, LayerShortcuts.PREF_LAYER_SWAP, data.hotswap)
 		ARCHITECT.requestReload();
 	}
 

@@ -1,6 +1,6 @@
 declare global {
 	interface Map<K, V> {
-		getOrDefault(key: K, defaultValue: () => V): V;
+		getOrDefault<T extends V>(key: K, defaultValue: (() => T) | T): T;
 	}
 	interface String {
 		/** Localizes the string via the global `game.i18n.localize()` function. */
@@ -12,10 +12,10 @@ declare global {
 }
 
 export default function () {
-	Map.prototype.getOrDefault = function (key: any, defaultValue: () => any) {
-		var result = this.get(key);
+	Map.prototype.getOrDefault = function<T> (key: any, defaultValue: (() => T) | T): T {
+		var result: T = this.get(key);
 		if (result === undefined) {
-			result = defaultValue();
+			result = defaultValue instanceof Function ? defaultValue() : defaultValue;
 			this.set(key, result);
 		}
 		return result;

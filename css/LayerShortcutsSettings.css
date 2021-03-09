@@ -20,6 +20,8 @@
 }
 
 #DFArchLSMenu form h2,
+#DFArchLSMenu form h3,
+#DFArchLSMenu form p,
 #DFArchLSMenu form table {
 	flex: 0 0 100%;
 }
@@ -39,4 +41,16 @@
 
 #DFArchLSMenu form label>input {
 	vertical-align: middle;
+}
+
+#DFArchLSMenu .hotswap {
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: space-evenly;
+	align-items: baseline;
+}
+
+#DFArchLSMenu .hotswap>* {
+	flex: 0 0 auto;
+	margin: 0;
 }

@@ -11,30 +11,66 @@
 			<tr>
 				<td>{{localize layer.label}}</td>
 				<td>
-					<select name="{{layer.name}}.key" data-dtype="String">
+					<select name="layers.{{layer.name}}.key" data-dtype="String">
 						<option value="">---</option>
 						{{#each ../keys}}
-						<option value="{{key}}" {{#if (eq key layer.setting.key)}} selected{{/if}}>{{value}}</option>
+						<option value="{{key}}" {{#if (eq key layer.setting.key)}} selected{{/if}}>{{label}}</option>
 						{{/each}}
 					</select>
 				</td>
 				<td>
 					<label>
 						<span>Shift</span>
-						<input type="checkbox" name="{{layer.name}}.shift" {{#if layer.setting.shift}}checked{{/if}} />
+						<input type="checkbox" name="layers.{{layer.name}}.shift" {{#if layer.setting.shift}}checked{{/if}} />
 					</label>
 					<label>
 						<span>Ctrl</span>
-						<input type="checkbox" name="{{layer.name}}.ctrl" {{#if layer.setting.ctrl}}checked{{/if}} />
+						<input type="checkbox" name="layers.{{layer.name}}.ctrl" {{#if layer.setting.ctrl}}checked{{/if}} />
 					</label>
 					<label>
 						<span>Alt</span>
-						<input type="checkbox" name="{{layer.name}}.alt" {{#if layer.setting.alt}}checked{{/if}} />
+						<input type="checkbox" name="layers.{{layer.name}}.alt" {{#if layer.setting.alt}}checked{{/if}} />
 					</label>
 				</td>
 			</tr>
 			{{/each}}
 		</tbody>
+	</table>
+	<h3>Quick Swap Hotkey</h3>
+	<p>This Hotkey is for quickly swapping between two preset layers. Each time it is pressed, it will switch to the layer it is not on. If you are on a layer that is not included in this pair, you will be switched to Layer 1.</p>
+	<table>
+		<tr>
+			<td class="hotswap">
+				<select name="hotswap.layer1" data-dtype="String">
+					{{#each layers as | layer |}}
+					<option value="{{layer.name}}" {{#if (eq layer.name ../hotswap.layer1)}} selected{{/if}}>{{layer.label}}</option>
+					{{/each}}
+				</select>
+				<select name="hotswap.layer2" data-dtype="String">
+					{{#each layers as | layer |}}
+					<option value="{{layer.name}}" {{#if (eq layer.name ../hotswap.layer2)}} selected{{/if}}>{{layer.label}}</option>
+					{{/each}}
+				</select>
+				<select name="hotswap.map.key" data-dtype="String">
+					<option value="">---</option>
+					{{#each keys}}
+					<option value="{{key}}" {{#if (eq key ../hotswap.map.key)}} selected{{/if}}>{{label}}</option>
+					{{/each}}
+				</select>
+				<label>
+					<span>Shift</span>
+					<input type="checkbox" name="hotswap.map.shift" {{#if hotswap.map.shift}}checked{{/if}} />
+				</label>
+				<label>
+					<span>Ctrl</span>
+					<input type="checkbox" name="hotswap.map.ctrl" {{#if hotswap.map.ctrl}}checked{{/if}} />
+				</label>
+				<label>
+					<span>Alt</span>
+					<input type="checkbox" name="hotswap.map.alt" {{#if hotswap.map.alt}}checked{{/if}} />
+				</label>
+			</td>
+		</tr>
 	</table>
 	<blockquote>
 		{{{localize 'DF_ARCHITECT.LayerShortcuts_Settings_Label_Warning'}}}
