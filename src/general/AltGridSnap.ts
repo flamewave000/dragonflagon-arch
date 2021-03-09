@@ -18,7 +18,7 @@ export default class AltGridSnap {
 			hint: 'DF_ARCHITECT.AltGridSnap_Setting_EnabledHint',
 			type: Boolean,
 			default: true,
-			onChange: () => { ui.controls.initialize() }
+			onChange: () => { this._patchSquareGrid(); ui.controls.initialize() }
 		});
 		game.settings.register(ARCHITECT.MOD_NAME, this.PREF_TOGGLED, {
 			scope: 'client',
@@ -26,6 +26,8 @@ export default class AltGridSnap {
 			type: Boolean,
 			default: false
 		});
+
+		this._patchSquareGrid();
 
 		Hooks.on('getSceneControlButtons', (controls: SceneControl[]) => {
 			if (!this.enabled) return;
@@ -43,9 +45,6 @@ export default class AltGridSnap {
 				});
 			}
 		});
-
-		SquareGrid.prototype._DFArch_getSnappedPosition = SquareGrid.prototype.getSnappedPosition;
-		SquareGrid.prototype.getSnappedPosition = this._SquareGrid_getSnappedPosition;
 	}
 
 	static get enabled() {
@@ -58,24 +57,24 @@ export default class AltGridSnap {
 		game.settings.set(ARCHITECT.MOD_NAME, this.PREF_TOGGLED, value);
 	}
 
+	private static _patchSquareGrid() {
+		if(this.enabled) {
+			if(!SquareGrid.prototype._DFArch_getSnappedPosition) return;
+			SquareGrid.prototype.getSnappedPosition = SquareGrid.prototype._DFArch_getSnappedPosition;
+			delete SquareGrid.prototype._DFArch_getSnappedPosition;
+		}
+		else if (!SquareGrid.prototype._DFArch_getSnappedPosition) {
+			SquareGrid.prototype._DFArch_getSnappedPosition = SquareGrid.prototype.getSnappedPosition;
+			SquareGrid.prototype.getSnappedPosition = this._SquareGrid_getSnappedPosition;
+		}
+	}
+
 	private static _SquareGrid_getSnappedPosition(this: SquareGrid, x: number, y: number, interval: number | null): { x: number; y: number } {
-		if (!AltGridSnap.enabled || !AltGridSnap.toggled) return this._DFArch_getSnappedPosition(x, y, interval);
-		if (!interval) interval = 1;
-		const gs = (canvas as Canvas).dimensions.size;
-		const altGs = gs / (interval * 2);
-		x -= altGs;
-		y -= altGs;
-		let [x0, y0] = [(Math.round(x / gs) * gs), (Math.round(y / gs) * gs)];
-		let dx = altGs;
-		let dy = altGs;
-		let delta = gs / interval;
-		if (interval !== 1) {
-			dx += Math.round((x - x0) / delta) * delta;
-			dy += Math.round((y - y0) / delta) * delta;
+		if (!AltGridSnap.enabled || !AltGridSnap.toggled) {
+			const altGs = (canvas as Canvas).dimensions.size / (interval * 2);
+			const result = this._DFArch_getSnappedPosition(x - altGs, y - altGs, interval);
+			return { x: result.x + altGs, y: result.y + altGs };
 		}
-		return {
-			x: x0 + dx,
-			y: y0 + dy
-		}
+		return this._DFArch_getSnappedPosition(x, y, interval);
 	}
 }
