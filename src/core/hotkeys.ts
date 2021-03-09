@@ -1,11 +1,10 @@
-import KEYMAP from "../_data/keymap.js";
 
 interface HandlerEntry {
 	id: string;
 	handler: (id: string) => void;
 }
 
-export default class Hotkeys {
+export default class HOTKEYS {
 	private static _id_iterator = 0;
 	private static _handlers = new Map<number, Map<string, Array<HandlerEntry>>>();
 	private static _handled = new Set<string>();

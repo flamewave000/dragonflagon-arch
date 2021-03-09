@@ -1,4 +1,4 @@
-import ARCHITECT from "../architect.js";
+import SETTINGS from "../core/settings.js";
 
 declare global {
 	interface SquareGrid {
@@ -6,12 +6,12 @@ declare global {
 	}
 }
 
-export default class AltGridSnap {
+class _AltGridSnap {
 	static readonly PREF_ENABLED = 'AltGridSnapEnabled';
 	static readonly PREF_TOGGLED = 'AltGridSnapToggled';
 
-	static init() {
-		game.settings.register(ARCHITECT.MOD_NAME, this.PREF_ENABLED, {
+	init() {
+		SETTINGS.register(_AltGridSnap.PREF_ENABLED, {
 			scope: 'world',
 			config: true,
 			name: 'DF_ARCHITECT.AltGridSnap_Setting_EnabledName',
@@ -20,7 +20,7 @@ export default class AltGridSnap {
 			default: true,
 			onChange: () => { this._patchSquareGrid(); ui.controls.initialize() }
 		});
-		game.settings.register(ARCHITECT.MOD_NAME, this.PREF_TOGGLED, {
+		SETTINGS.register(_AltGridSnap.PREF_TOGGLED, {
 			scope: 'client',
 			config: false,
 			type: Boolean,
@@ -47,30 +47,30 @@ export default class AltGridSnap {
 		});
 	}
 
-	static get enabled() {
-		return game.settings.get(ARCHITECT.MOD_NAME, this.PREF_ENABLED);
+	get enabled() {
+		return SETTINGS.get(_AltGridSnap.PREF_ENABLED);
 	}
-	static get toggled() {
-		return game.settings.get(ARCHITECT.MOD_NAME, this.PREF_TOGGLED);
+	get toggled() {
+		return SETTINGS.get(_AltGridSnap.PREF_TOGGLED);
 	}
-	static set toggled(value: boolean) {
-		game.settings.set(ARCHITECT.MOD_NAME, this.PREF_TOGGLED, value);
+	set toggled(value: boolean) {
+		SETTINGS.set(_AltGridSnap.PREF_TOGGLED, value);
 	}
 
-	private static _patchSquareGrid() {
-		if(this.enabled) {
-			if(!SquareGrid.prototype._DFArch_getSnappedPosition) return;
-			SquareGrid.prototype.getSnappedPosition = SquareGrid.prototype._DFArch_getSnappedPosition;
-			delete SquareGrid.prototype._DFArch_getSnappedPosition;
-		}
-		else if (!SquareGrid.prototype._DFArch_getSnappedPosition) {
+	_patchSquareGrid() {
+		if (this.enabled) {
+			if (SquareGrid.prototype._DFArch_getSnappedPosition) return;
 			SquareGrid.prototype._DFArch_getSnappedPosition = SquareGrid.prototype.getSnappedPosition;
 			SquareGrid.prototype.getSnappedPosition = this._SquareGrid_getSnappedPosition;
 		}
+		else if (SquareGrid.prototype._DFArch_getSnappedPosition) {
+			SquareGrid.prototype.getSnappedPosition = SquareGrid.prototype._DFArch_getSnappedPosition;
+			delete SquareGrid.prototype._DFArch_getSnappedPosition;
+		}
 	}
 
-	private static _SquareGrid_getSnappedPosition(this: SquareGrid, x: number, y: number, interval: number | null): { x: number; y: number } {
-		if (!AltGridSnap.enabled || !AltGridSnap.toggled) {
+	_SquareGrid_getSnappedPosition(this: SquareGrid, x: number, y: number, interval: number | null): { x: number; y: number } {
+		if (AltGridSnap.enabled && AltGridSnap.toggled) {
 			const altGs = (canvas as Canvas).dimensions.size / (interval * 2);
 			const result = this._DFArch_getSnappedPosition(x - altGs, y - altGs, interval);
 			return { x: result.x + altGs, y: result.y + altGs };
@@ -78,3 +78,4 @@ export default class AltGridSnap {
 		return this._DFArch_getSnappedPosition(x, y, interval);
 	}
 }
+export const AltGridSnap = new _AltGridSnap();

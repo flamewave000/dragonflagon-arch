@@ -1,14 +1,13 @@
-import DECLARATIONS from './_declarations.js'; DECLARATIONS();
-import ARCHITECT from "./architect.js";
-import Hotkeys from "./general/Hotkeys.js";
-import LayerShortcuts from "./general/LayerShortcuts.js";
-import AltGridSnap from './general/AltGridSnap.js';
+import DECLARATIONS from './core/_declarations.js'; DECLARATIONS();
+import ARCHITECT from "./core/architect.js";
+import HOTKEYS from "./core/hotkeys.js";
+import { LayerShortcuts } from "./general/LayerShortcuts.js";
+import { AltGridSnap } from './general/AltGridSnap.js';
 
 
 Hooks.once('init', function () {
 	ARCHITECT.DrawArchitectGraphicToConsole();
-	Hotkeys.init();
-	LayerShortcuts.init();
+	HOTKEYS.init();
 	AltGridSnap.init();
 });
 
