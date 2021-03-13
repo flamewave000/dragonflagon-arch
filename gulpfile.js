@@ -10,6 +10,7 @@ const minify = require('gulp-minify');
 const tabify = require('gulp-tabify');
 const notify = require('gulp-notify');
 const stringify = require('json-stringify-pretty-compact');
+const rollup = require('gulp-better-rollup');
 
 const GLOB = '**/*';
 const DIST = 'dist/';
@@ -59,7 +60,7 @@ function buildSource(output = null) {
 		const minifySources = process.argv.includes('--min');
 		var stream = gulp.src(SOURCE + GLOB);
 		if (keepSources) stream = stream.pipe(sourcemaps.init())
-		stream = stream.pipe(ts.createProject("tsconfig.json")())
+		stream = stream.pipe(ts.createProject("tsconfig.json")());
 		if (minifySources)
 			stream = stream.pipe(minify({
 				ext: { min: '.js' },
@@ -182,7 +183,13 @@ exports.dev = gulp.series(
 exports.zip = gulp.series(
 	pdel([DIST + GLOB])
 	, gulp.parallel(
-		buildSource()
+		gulp.series(
+			buildSource(null, true)
+			, () => gulp.src(DIST + PACKAGE.main.replace('.ts', '.js')).pipe(rollup('es')).pipe(gulp.dest(DIST + '.temp/'))
+			, pdel(DIST + SOURCE)
+			, () => gulp.src(DIST + '.temp/' + GLOB).pipe(gulp.dest(DIST + SOURCE))
+			, pdel(DIST + '.temp/')
+		)
 		, buildManifest()
 		, outputLanguages()
 		, outputTemplates()
