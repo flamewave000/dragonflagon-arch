@@ -1,5 +1,6 @@
 const gulp = require('gulp');
-var fs = require('fs')
+const fs = require('fs')
+const path = require('path');
 const del = require('del');
 const ts = require('gulp-typescript');
 const sourcemaps = require('gulp-sourcemaps');
@@ -7,6 +8,7 @@ const zip = require('gulp-zip');
 const rename = require('gulp-rename');
 const minify = require('gulp-minify');
 const tabify = require('gulp-tabify');
+const notify = require('gulp-notify');
 const stringify = require('json-stringify-pretty-compact');
 
 const GLOB = '**/*';
@@ -26,6 +28,16 @@ console.log(DEV_DIST());
 String.prototype.replaceAll = function (pattern, replace) { return this.split(pattern).join(replace); }
 function pdel(patterns, options) { return desc(`deleting ${patterns}`, () => { return del(patterns, options); }); }
 function plog(message) { return desc('plog', (cb) => { cb(); console.log(message); }); }
+function pnotify(message, title = null) {
+	const options = {
+		message: message,
+		onLast: true,
+		icon: path.join(__dirname, '.assets', 'logo.png'),
+		wait: true
+	};
+	if (title) options.title = title;
+	return desc('notify', () => gulp.src('package.json').pipe(notify(options)));
+}
 /**
  * Sets the gulp name for a lambda expression
  * @param {string} name Name to be bound to the lambda
@@ -41,30 +53,32 @@ function desc(name, lambda) {
  * Compile the source code into the distribution directory
  * @param {Boolean} keepSources Include the TypeScript SourceMaps
  */
-function buildSource(keepSources, minifySources = false, output = null) {
+function buildSource(output = null) {
 	return desc('build Source', () => {
+		const keepSources = process.argv.includes('--sm');
+		const minifySources = process.argv.includes('--min');
 		var stream = gulp.src(SOURCE + GLOB);
 		if (keepSources) stream = stream.pipe(sourcemaps.init())
 		stream = stream.pipe(ts.createProject("tsconfig.json")())
+		if (minifySources)
+			stream = stream.pipe(minify({
+				ext: { min: '.js' },
+				mangle: false,
+				noSource: true
+			}));
 		if (keepSources) stream = stream.pipe(sourcemaps.write({
 			sourceRoot: file =>
 				'../'.repeat(file.path
 					.split('src/')[1]
 					.split('/').length - 1) || './'
 		}))
-		if (minifySources) stream = stream.pipe(minify({
-			ext: { min: '.js' },
-			mangle: false,
-			noSource: true
-		}));
-		else stream = stream.pipe(tabify(4, false));
+		if (!minifySources) stream = stream.pipe(tabify(4, false))
 		return stream.pipe(gulp.dest((output || DIST) + SOURCE));
 	});
 }
 
-exports.step_buildSourceDev = gulp.series(buildSource(true, false, DEV_DIST()));
-exports.step_buildSource = gulp.series(buildSource(true));
-exports.step_buildSourceMin = gulp.series(buildSource(false, true));
+exports.step_buildSourceDev = gulp.series(pdel(DEV_DIST() + SOURCE), buildSource(DEV_DIST()));
+exports.step_buildSource = gulp.series(pdel(DIST + SOURCE), buildSource());
 
 function copyDevDistToLocalDist() {
 	return gulp.src(DEV_DIST() + SOURCE + GLOB).pipe(gulp.dest(DIST + SOURCE));
@@ -135,7 +149,7 @@ exports.devClean = gulp.series(pdel([DEV_DIST()]));
 exports.default = gulp.series(
 	pdel([DIST])
 	, gulp.parallel(
-		buildSource(true, false)
+		buildSource()
 		, buildManifest()
 		, outputLanguages()
 		, outputTemplates()
@@ -143,6 +157,7 @@ exports.default = gulp.series(
 		, outputMetaFiles()
 	)
 	, plog('Build Complete')
+	, pnotify('Default distribution build completed.', 'Build Complete')
 );
 /**
  * Extends the default build task by copying the result to the Development Environment
@@ -150,7 +165,7 @@ exports.default = gulp.series(
 exports.dev = gulp.series(
 	pdel([DIST + GLOB, DEV_DIST() + GLOB], { force: true }),
 	gulp.parallel(
-		buildSource(true, false, DEV_DIST())
+		buildSource(DEV_DIST())
 		, buildManifest(DEV_DIST())
 		, outputLanguages(DEV_DIST())
 		, outputTemplates(DEV_DIST())
@@ -159,15 +174,15 @@ exports.dev = gulp.series(
 	)
 	, copyDevDistToLocalDist
 	// , outputDistToDevEnvironment
-	, plog('Dev Build Complete')
+	, pnotify('Development distribution build completed.', 'Dev Build Complete')
 );
 /**
  * Performs a default build and then zips the result into a bundle
  */
 exports.zip = gulp.series(
-	pdel([DIST])
+	pdel([DIST + GLOB])
 	, gulp.parallel(
-		buildSource(false, false)
+		buildSource()
 		, buildManifest()
 		, outputLanguages()
 		, outputTemplates()
@@ -176,14 +191,14 @@ exports.zip = gulp.series(
 	)
 	, compressDistribution()
 	, pdel([DIST])
-	, plog('Release Complete')
+	, pnotify('Production Release built and bundled.', 'Release Complete')
 );
 /**
  * Sets up a file watch on the project to detect any file changes and automatically rebuild those components.
  */
 exports.watch = function () {
 	exports.default();
-	gulp.watch(SOURCE + GLOB, gulp.series(pdel(DIST + SOURCE), buildSource(true, false)));
+	gulp.watch(SOURCE + GLOB, gulp.series(pdel(DIST + SOURCE), buildSource(), pnotify('Default distribution build completed.', 'Build Complete')));
 	gulp.watch([CSS + GLOB, 'module.json', 'package.json'], buildManifest());
 	gulp.watch(LANG + GLOB, gulp.series(pdel(DIST + LANG), outputLanguages()));
 	gulp.watch(TEMPLATES + GLOB, gulp.series(pdel(DIST + TEMPLATES), outputTemplates()));
@@ -197,7 +212,7 @@ exports.devWatch = function () {
 	const devDist = DEV_DIST();
 	console.log('Dev Directory: ' + devDist);
 	exports.dev();
-	gulp.watch(SOURCE + GLOB, gulp.series(pdel([devDist + SOURCE + GLOB, DIST + SOURCE + GLOB], { force: true }), buildSource(true, false, devDist), copyDevDistToLocalDist, plog('sources done.')));
+	gulp.watch(SOURCE + GLOB, gulp.series(pdel([devDist + SOURCE + GLOB, DIST + SOURCE + GLOB], { force: true }), buildSource(devDist), copyDevDistToLocalDist, pnotify('Development distribution build completed.', 'Dev Build Complete')));
 	gulp.watch([CSS + GLOB, 'module.json', 'package.json'], gulp.series(reloadPackage, buildManifest(devDist), plog('manifest done.')));
 	gulp.watch(LANG + GLOB, gulp.series(pdel(devDist + LANG + GLOB, { force: true }), outputLanguages(devDist), plog('langs done.')));
 	gulp.watch(TEMPLATES + GLOB, gulp.series(pdel(devDist + TEMPLATES + GLOB, { force: true }), outputTemplates(devDist), plog('templates done.')));

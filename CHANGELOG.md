@@ -1,5 +1,8 @@
 # DF Architect
 
+## Alpha Release v0.3.0 (2021-03-13)
+- Layer Hot Swap shortcut. You can select 2 layers that a hotkey can quickly swap between.
+
 ## Alpha Release v0.2.0 (2021-03-07)
 - Alternate Grid Snapping now works perfectly.
 - Added Toggle button to all scene control layers.

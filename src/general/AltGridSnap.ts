@@ -1,3 +1,4 @@
+import ARCHITECT from "../core/architect.js";
 import SETTINGS from "../core/settings.js";
 
 declare global {
@@ -57,25 +58,20 @@ class _AltGridSnap {
 		SETTINGS.set(_AltGridSnap.PREF_TOGGLED, value);
 	}
 
-	_patchSquareGrid() {
-		if (this.enabled) {
-			if (SquareGrid.prototype._DFArch_getSnappedPosition) return;
-			SquareGrid.prototype._DFArch_getSnappedPosition = SquareGrid.prototype.getSnappedPosition;
-			SquareGrid.prototype.getSnappedPosition = this._SquareGrid_getSnappedPosition;
-		}
-		else if (SquareGrid.prototype._DFArch_getSnappedPosition) {
-			SquareGrid.prototype.getSnappedPosition = SquareGrid.prototype._DFArch_getSnappedPosition;
-			delete SquareGrid.prototype._DFArch_getSnappedPosition;
-		}
+	private _patchSquareGrid() {
+		if (this.enabled)
+			libWrapper.register(ARCHITECT.MOD_NAME, 'SquareGrid.prototype.getSnappedPosition', this._SquareGrid_getSnappedPosition, 'WRAPPER');
+		else
+			libWrapper.unregister(ARCHITECT.MOD_NAME, 'SquareGrid.prototype.getSnappedPosition');
 	}
 
-	_SquareGrid_getSnappedPosition(this: SquareGrid, x: number, y: number, interval: number | null): { x: number; y: number } {
+	private _SquareGrid_getSnappedPosition(wrapped: Function, x: number, y: number, interval: number | null): { x: number; y: number } {
 		if (AltGridSnap.enabled && AltGridSnap.toggled) {
 			const altGs = (canvas as Canvas).dimensions.size / (interval * 2);
-			const result = this._DFArch_getSnappedPosition(x - altGs, y - altGs, interval);
+			const result = wrapped(x - altGs, y - altGs, interval);
 			return { x: result.x + altGs, y: result.y + altGs };
 		}
-		return this._DFArch_getSnappedPosition(x, y, interval);
+		return wrapped(x, y, interval);
 	}
 }
 export const AltGridSnap = new _AltGridSnap();
