@@ -6,6 +6,8 @@
 	"DF_ARCHITECT.ReloadRequired_Positive": "Reload Now",
 	"DF_ARCHITECT.ReloadRequired_Negative": "I'll Reload Myself",
 
+	"DF_ARCHITECT.Hotkeys_Settings_Title": "Keyboard Shortcuts",
+
 	"DF_ARCHITECT.LayerShortcuts_Settings_Title": "Layers Keyboard Shortcuts",
 	"DF_ARCHITECT.LayerShortcuts_Settings_Layer_Tokens": "Tokens: ",
 	"DF_ARCHITECT.LayerShortcuts_Settings_Layer_Measure": "Measure: ",
@@ -21,10 +23,13 @@
 	"DF_ARCHITECT.LayerShortcuts_Settings_Label_TableKey": "Key",
 	"DF_ARCHITECT.LayerShortcuts_Settings_Label_TableMods": "Modifiers",
 	"DF_ARCHITECT.LayerShortcuts_Settings_Label_Warning": "Beware <code>Ctrl+W</code> on Chromium browsers (Chrome, Edge, Brave). This combo will close the browser.",
+	"DF_ARCHITECT.LayerShortcuts_Settings_QuickSwap_Title": "Quick Swap Hotkey",
+	"DF_ARCHITECT.LayerShortcuts_Settings_QuickSwap_Info": "This Hotkey is for quickly swapping between two preset layers. Each time it is pressed, it will switch to the layer it is not on. If you are on a layer that is not included in this pair, you will be switched to Layer 1.",
 
 	"DF_ARCHITECT.AltGridSnap_Setting_EnabledName": "Show Alternate Grid Snap Toggle",
 	"DF_ARCHITECT.AltGridSnap_Setting_EnabledHint": "Show the toggle button alternate grid snapping to the center of boxes instead of corners.",
 	"DF_ARCHITECT.AltGridSnap_Label": "Alternate Grid Snap",
-
-	"DF_ARCHITECT.WallCtrlInvert_Label": "Lock Wall Chaining"
+	
+	"DF_ARCHITECT.WallCtrlInvert_Label": "Lock Wall Chaining",
+	"DF_ARCHITECT.WallCtrlInvert_Setting_Hotkey": "Toggle chain lock: "
 }

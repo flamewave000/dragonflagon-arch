@@ -1,56 +1,56 @@
-#DFArchLSMenu select {
+#DFArchHKMenu select {
 	margin-left: 0.5em;
 }
 
-#DFArchLSMenu tr td {
+#DFArchHKMenu tr td {
 	text-align: center;
 }
 
-#DFArchLSMenu tr td:first-child {
+#DFArchHKMenu tr td:first-child {
 	text-align: right;
 }
 
-#DFArchLSMenu form {
+#DFArchHKMenu form {
 	display: flex;
 	flex-flow: row wrap;
 }
 
-#DFArchLSMenu form input {
+#DFArchHKMenu form input {
 	margin: 0;
 }
 
-#DFArchLSMenu form h2,
-#DFArchLSMenu form h3,
-#DFArchLSMenu form p,
-#DFArchLSMenu form table {
+#DFArchHKMenu form h2,
+#DFArchHKMenu form h3,
+#DFArchHKMenu form p,
+#DFArchHKMenu form table {
 	flex: 0 0 100%;
 }
 
-#DFArchLSMenu form button {
+#DFArchHKMenu form button {
 	flex: 1 0;
 }
 
-#DFArchLSMenu form label {
+#DFArchHKMenu form label {
 	display: inline-block;
 	margin: 0 0.375em;
 }
 
-#DFArchLSMenu form label>span {
+#DFArchHKMenu form label>span {
 	vertical-align: middle;
 }
 
-#DFArchLSMenu form label>input {
+#DFArchHKMenu form label>input {
 	vertical-align: middle;
 }
 
-#DFArchLSMenu .hotswap {
+#DFArchHKMenu .hotswap {
 	display: flex;
 	flex-flow: row nowrap;
 	justify-content: space-evenly;
 	align-items: baseline;
 }
 
-#DFArchLSMenu .hotswap>* {
+#DFArchHKMenu .hotswap>* {
 	flex: 0 0 auto;
 	margin: 0;
 }

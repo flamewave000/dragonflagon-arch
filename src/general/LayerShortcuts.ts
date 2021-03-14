@@ -1,13 +1,7 @@
 import SETTINGS from "../core/settings.js";
 import KEYMAP from "../_data/keymap.js";
-import HOTKEYS from "../core/hotkeys.js";
+import { HOTKEYS, KeyMap } from "../core/hotkeys.js";
 
-export interface KeyMap {
-	key: string;
-	alt: boolean;
-	ctrl: boolean;
-	shift: boolean;
-}
 export interface HotSwap {
 	layer1: string;
 	layer2: string;
@@ -53,7 +47,7 @@ class _LayerShortcuts {
 				}
 			}
 		});
-		const setting: HotSwap = SETTINGS.get(_LayerShortcuts.PREF_LAYER_SWAP);
+		const setting: HotSwap = this.hotSwap;
 		HOTKEYS.registerShortcut(setting.map.key, x => {
 			const layer = ui.controls.activeControl === setting.layer1 ? setting.layer2 : setting.layer1;
 			(ui.controls as any)._onClickLayer({ preventDefault: () => { }, currentTarget: { dataset: { control: layer } } })
@@ -74,10 +68,9 @@ class _LayerShortcuts {
 					shift: false
 				} as KeyMap
 			});
-			const setting: KeyMap = SETTINGS.get(_LayerShortcuts.PREF_LAYER_ + layer.name);
+			const setting: KeyMap = this.getLayerSetting(layer.name);
 			if (setting.key === '') continue;
-			HOTKEYS.registerShortcut(setting.key, x => {
-				// console.log("I've been called! " + layer.name);
+			HOTKEYS.registerShortcut(setting.key, _ => {
 				(ui.controls as any)._onClickLayer({ preventDefault: function () { }, currentTarget: { dataset: { control: layer.name } } })
 			}, setting);
 			// Break if we have run out of numbers (likely due to too many mods adding extra layers)

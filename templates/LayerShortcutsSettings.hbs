@@ -36,8 +36,8 @@
 			{{/each}}
 		</tbody>
 	</table>
-	<h3>Quick Swap Hotkey</h3>
-	<p>This Hotkey is for quickly swapping between two preset layers. Each time it is pressed, it will switch to the layer it is not on. If you are on a layer that is not included in this pair, you will be switched to Layer 1.</p>
+	<h3>{{localize 'DF_ARCHITECT.LayerShortcuts_Settings_QuickSwap_Title'}}</h3>
+	<p>{{localize 'DF_ARCHITECT.LayerShortcuts_Settings_QuickSwap_Info'}}</p>
 	<table>
 		<tr>
 			<td class="hotswap">
@@ -72,9 +72,38 @@
 			</td>
 		</tr>
 	</table>
-	<blockquote>
-		{{{localize 'DF_ARCHITECT.LayerShortcuts_Settings_Label_Warning'}}}
-	</blockquote>
+	<blockquote>{{{localize 'DF_ARCHITECT.LayerShortcuts_Settings_Label_Warning'}}}</blockquote>
+	<h2>{{localize 'DF_ARCHITECT.WallCtrlInvert_Label'}}</h2>
+	<table>
+		<tbody>
+			<tr>
+				<td>{{localize 'DF_ARCHITECT.WallCtrlInvert_Setting_Hotkey'}}</td>
+				<td>
+					<select name="wallCtrlInvert.key" data-dtype="String">
+						<option value="">---</option>
+						{{#each keys}}
+						<option value="{{key}}" {{#if (eq key ../wallCtrlInvert.key)}} selected{{/if}}>{{label}}</option>
+						{{/each}}
+					</select>
+				</td>
+				<td>
+					<label>
+						<span>Shift</span>
+						<input type="checkbox" name="wallCtrlInvert.shift" {{#if wallCtrlInvert.shift}}checked{{/if}} />
+					</label>
+					<label>
+						<span>Ctrl</span>
+						<input type="checkbox" name="wallCtrlInvert.ctrl" {{#if wallCtrlInvert.ctrl}}checked{{/if}} />
+					</label>
+					<label>
+						<span>Alt</span>
+						<input type="checkbox" name="wallCtrlInvert.alt" {{#if wallCtrlInvert.alt}}checked{{/if}} />
+					</label>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
 	<button id="reset"><i class="fas fa-redo"></i> {{localize 'DF_ARCHITECT.LayerShortcuts_Settings_Reset'}}</button>
 	<button type="submit"><i class="fas fa-save"></i> {{localize 'DF_ARCHITECT.LayerShortcuts_Settings_Save'}}</button>
 </form>

@@ -4,7 +4,14 @@ interface HandlerEntry {
 	handler: (id: string) => void;
 }
 
-export default class HOTKEYS {
+export interface KeyMap {
+	key: string;
+	alt: boolean;
+	ctrl: boolean;
+	shift: boolean;
+}
+
+export class HOTKEYS {
 	private static _id_iterator = 0;
 	private static _handlers = new Map<number, Map<string, Array<HandlerEntry>>>();
 	private static _handled = new Set<string>();

@@ -1,4 +1,6 @@
+import { KeyMap, HOTKEYS } from "../core/hotkeys.js";
 import SETTINGS from "../core/settings.js";
+import KEYMAP from "../_data/keymap.js";
 
 
 interface KeyboardCallbacks {
@@ -15,13 +17,17 @@ interface KeyboardCallbacks {
 }
 
 class _WallCtrlInvert {
-	static PREF_ENABLED = 'WallCtrlInvert-Enabled';
+	static readonly PREF_ENABLED = 'WallCtrlInvert-Enabled';
+	static readonly PREF_HOTKEY = 'WallCtrlInvert-Hotkey';
 
 	private _originalCallbacks: KeyboardCallbacks = null;
 	private _overrideCallbacks: KeyboardCallbacks = {} as KeyboardCallbacks;
 
 	get enabled(): boolean { return SETTINGS.get(_WallCtrlInvert.PREF_ENABLED) }
 	set enabled(value: boolean) { SETTINGS.set(_WallCtrlInvert.PREF_ENABLED, value) }
+	get hotkey(): KeyMap { return SETTINGS.get(_WallCtrlInvert.PREF_HOTKEY); }
+	set hotkey(value: KeyMap) { SETTINGS.set(_WallCtrlInvert.PREF_HOTKEY, value); }
+	get hotkeyDefault(): KeyMap { return SETTINGS.default(_WallCtrlInvert.PREF_HOTKEY); }
 
 	init() {
 		SETTINGS.register(_WallCtrlInvert.PREF_ENABLED, {
@@ -31,6 +37,24 @@ class _WallCtrlInvert {
 			default: false,
 			onChange: () => this._patchWallsLayer()
 		});
+		SETTINGS.register<KeyMap>(_WallCtrlInvert.PREF_HOTKEY, {
+			scope: 'world',
+			type: SETTINGS.typeOf<KeyMap>(),
+			config: false,
+			default: {
+				key: KEYMAP.KeyC.key,
+				alt: true,
+				ctrl: false,
+				shift: false
+			}
+		});
+
+		const setting: KeyMap = this.hotkey;
+		HOTKEYS.registerShortcut(setting.key, async x => {
+			await SETTINGS.set(_WallCtrlInvert.PREF_ENABLED, !this.enabled)
+			this._patchWallsLayer();
+			ui.controls.initialize();
+		}, setting);
 
 		Hooks.on('getSceneControlButtons', (controls: SceneControl[]) => {
 			const isGM = game.user.isGM;
