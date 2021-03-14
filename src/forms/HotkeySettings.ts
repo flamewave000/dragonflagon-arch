@@ -3,15 +3,21 @@ import KEYMAP from "../_data/keymap.js";
 import { HotSwap, LayerShortcuts } from "../general/LayerShortcuts.js";
 import { WallCtrlInvert } from "../walls/WallCtrlInvert.js";
 import { KeyMap } from '../core/hotkeys.js';
+import { WallShortcuts } from "../walls/WallShortcuts.js";
 
 
 interface RenderOptions {
 	hotswap: HotSwap,
 	wallCtrlInvert: KeyMap,
+	walls: {
+		name: string,
+		label: string,
+		map: KeyMap
+	}[],
 	layers: {
 		name: string,
 		label: string,
-		setting: KeyMap
+		map: KeyMap
 	}[],
 	keys: {
 		key: string,
@@ -47,11 +53,12 @@ export default class HotkeyConfig extends FormApplication<RenderOptions> {
 		const result: RenderOptions = {
 			hotswap: LayerShortcuts.hotSwap,
 			wallCtrlInvert: WallCtrlInvert.hotkey,
+			walls: WallShortcuts.getWallSettings(),
 			layers: ui.controls.controls.map(x => {
 				const result = {
 					name: x.name,
 					label: x.name.capitalize(),
-					setting: LayerShortcuts.getLayerSetting(x.name)
+					map: LayerShortcuts.getLayerSetting(x.name)
 				};
 				return result;
 			}),

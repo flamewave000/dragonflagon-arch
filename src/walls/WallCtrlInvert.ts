@@ -50,11 +50,11 @@ class _WallCtrlInvert {
 		});
 
 		const setting: KeyMap = this.hotkey;
-		HOTKEYS.registerShortcut(setting.key, async x => {
+		HOTKEYS.registerShortcut(setting, async x => {
 			await SETTINGS.set(_WallCtrlInvert.PREF_ENABLED, !this.enabled)
 			this._patchWallsLayer();
 			ui.controls.initialize();
-		}, setting);
+		});
 
 		Hooks.on('getSceneControlButtons', (controls: SceneControl[]) => {
 			const isGM = game.user.isGM;

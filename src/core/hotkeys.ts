@@ -72,19 +72,18 @@ export class HOTKEYS {
 
 	/**
 	 * Register a Hotkey handler.
-	 * @param key Keyboard key to be listened for.
+	 * @param keyMap Keyboard key to be listened for.
 	 * @param handler Callback to be executed when ever the hotkey is pressed.
 	 * @param shift Require Shift Key modifier.
 	 * @param alt Require Alt Key modifier.
 	 * @param ctrl Require Ctrl Key modifier.
 	 * @returns The ID for the registration. Used for De-Registration.
 	 */
-	static registerShortcut(key: string, handler: (id: string) => void, { shift, alt, ctrl }:
-		{ shift?: boolean, alt?: boolean, ctrl?: boolean } = {}): string {
-		const metaKey = (alt ? 0x1 : 0) | (ctrl ? 0x2 : 0) | (shift ? 0x4 : 0);
+	static registerShortcut(keyMap: Partial<KeyMap>, handler: (id: string) => void): string {
+		const metaKey = (keyMap.alt ? 0x1 : 0) | (keyMap.ctrl ? 0x2 : 0) | (keyMap.shift ? 0x4 : 0);
 		const metaHandlers = this._handlers.getOrDefault(metaKey, () => new Map());
-		const eventHandlers = metaHandlers.getOrDefault(key, () => new Array());
-		const id = this._genId(metaKey, key);
+		const eventHandlers = metaHandlers.getOrDefault(keyMap.key, () => new Array());
+		const id = this._genId(metaKey, keyMap.key);
 		eventHandlers.push({ id: id, handler: handler })
 		return id;
 	}

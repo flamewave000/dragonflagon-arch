@@ -48,10 +48,10 @@ class _LayerShortcuts {
 			}
 		});
 		const setting: HotSwap = this.hotSwap;
-		HOTKEYS.registerShortcut(setting.map.key, x => {
+		HOTKEYS.registerShortcut(setting.map, x => {
 			const layer = ui.controls.activeControl === setting.layer1 ? setting.layer2 : setting.layer1;
 			(ui.controls as any)._onClickLayer({ preventDefault: () => { }, currentTarget: { dataset: { control: layer } } })
-		}, setting.map);
+		});
 		// #endregion
 
 		// #region Register and bind the Hotkeys for the Scene Layers
@@ -70,9 +70,9 @@ class _LayerShortcuts {
 			});
 			const setting: KeyMap = this.getLayerSetting(layer.name);
 			if (setting.key === '') continue;
-			HOTKEYS.registerShortcut(setting.key, _ => {
+			HOTKEYS.registerShortcut(setting, _ => {
 				(ui.controls as any)._onClickLayer({ preventDefault: function () { }, currentTarget: { dataset: { control: layer.name } } })
-			}, setting);
+			});
 			// Break if we have run out of numbers (likely due to too many mods adding extra layers)
 			if (count == 9) break;
 		}
