@@ -11,6 +11,9 @@ const tabify = require('gulp-tabify');
 const notify = require('gulp-notify');
 const stringify = require('json-stringify-pretty-compact');
 const rollup = require('gulp-better-rollup');
+const replace = require('gulp-replace');
+const cleanCss = require('gulp-clean-css');
+const jsonminify = require('gulp-jsonminify');
 
 const GLOB = '**/*';
 const DIST = 'dist/';
@@ -113,9 +116,9 @@ function buildManifest(output = null) {
 }
 exports.step_buildManifest = buildManifest();
 
-function outputLanguages(output = null) { return desc('output Languages', () => gulp.src(LANG + GLOB).pipe(gulp.dest((output || DIST) + LANG))); }
-function outputTemplates(output = null) { return desc('output Templates', () => gulp.src(TEMPLATES + GLOB).pipe(gulp.dest((output || DIST) + TEMPLATES))); }
-function outputStylesCSS(output = null) { return desc('output Styles CSS', () => gulp.src(CSS + GLOB).pipe(gulp.dest((output || DIST) + CSS))); }
+function outputLanguages(output = null) { return desc('output Languages', () => gulp.src(LANG + GLOB).pipe(jsonminify()).pipe(gulp.dest((output || DIST) + LANG))); }
+function outputTemplates(output = null) { return desc('output Templates', () => gulp.src(TEMPLATES + GLOB).pipe(replace(/\t/g, '')).pipe(replace(/\>\n\</g, '><')).pipe(gulp.dest((output || DIST) + TEMPLATES))); }
+function outputStylesCSS(output = null) { return desc('output Styles CSS', () => gulp.src(CSS + GLOB).pipe(cleanCss()).pipe(gulp.dest((output || DIST) + CSS))); }
 function outputMetaFiles(output = null) { return desc('output Meta Files', () => gulp.src(['LICENSE', 'README.md', 'CHANGELOG.md']).pipe(gulp.dest((output || DIST)))); }
 
 /**

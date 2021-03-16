@@ -1,56 +1,71 @@
+import ARCHITECT from "../core/architect.js";
 import SETTINGS from "../core/settings.js";
-import KEYMAP from "../_data/keymap.js";
-import { HOTKEYS, KeyMap } from "../core/hotkeys.js";
 
-export interface HotSwap {
-	layer1: string;
-	layer2: string;
-	map: KeyMap;
-}
 class _LayerShortcuts {
 	private static readonly PREF_LAYER_ = "LayerShortcutsSettingsLayer-";
-	private static readonly PREF_LAYER_SWAP = "LayerShortcutsSettingsLayerSwap";
-
-	get hotSwap(): HotSwap {
-		return SETTINGS.get(_LayerShortcuts.PREF_LAYER_SWAP);
-	}
-	get hotSwapDefault(): HotSwap {
-		return SETTINGS.default(_LayerShortcuts.PREF_LAYER_SWAP);
-	}
-	set hotSwap(value: HotSwap) {
-		SETTINGS.set(_LayerShortcuts.PREF_LAYER_SWAP, value);
-	}
-	getLayerSetting(name: string): KeyMap {
-		return SETTINGS.get(_LayerShortcuts.PREF_LAYER_ + name);
-	}
-	getLayerDefault(name: string): KeyMap {
-		return SETTINGS.default(_LayerShortcuts.PREF_LAYER_ + name);
-	}
-	setLayerSetting(name: string, value: KeyMap): void {
-		SETTINGS.set(_LayerShortcuts.PREF_LAYER_ + name, value);
-	}
-
+	private static readonly PREF_LAYER_SWAP_MAP = "LayerShortcutsSettingsLayer-SwapMap";
+	private static readonly PREF_LAYER_SWAP_LAYER1 = "LayerShortcutsSettingsLayer-SwapLayer1";
+	private static readonly PREF_LAYER_SWAP_LAYER2 = "LayerShortcutsSettingsLayer-SwapLayer2";
 	ready() {
 		// #region Register and bind the layer hot-swap Hotkey
-		SETTINGS.register<HotSwap>(_LayerShortcuts.PREF_LAYER_SWAP, {
+
+		const getLayers: () => Record<string, string> = () => {
+			const result: Record<string, string> = {};
+			ui.controls.controls
+				.map(x => [x.name, x.title])
+				.forEach(x => {
+					result[x[0]] = x[1];
+				})
+			return result;
+		}
+
+		SETTINGS.register<String>(_LayerShortcuts.PREF_LAYER_SWAP_LAYER1, {
+			name: 'DF_ARCHITECT.LayerShortcuts_Settings_QuickSwap_Layer1_Name',
+			hint: 'DF_ARCHITECT.LayerShortcuts_Settings_QuickSwap_Layer1_Hint',
+			choices: getLayers(),
 			scope: 'world',
-			type: Object as any as ConstructorOf<HotSwap>,
+			type: String,
+			config: true,
+			default: 'walls'
+		});
+		SETTINGS.register<String>(_LayerShortcuts.PREF_LAYER_SWAP_LAYER2, {
+			name: 'DF_ARCHITECT.LayerShortcuts_Settings_QuickSwap_Layer2_Name',
+			hint: 'DF_ARCHITECT.LayerShortcuts_Settings_QuickSwap_Layer2_Hint',
+			choices: getLayers(),
+			scope: 'world',
+			type: String,
+			config: true,
+			default: 'lighting'
+		});
+		SETTINGS.register<KeyMap>(_LayerShortcuts.PREF_LAYER_SWAP_MAP, {
+			scope: 'world',
+			type: SETTINGS.typeOf<KeyMap>(),
 			config: false,
 			default: {
-				layer1: 'walls',
-				layer2: 'lighting',
-				map: {
-					key: KEYMAP.KeyQ.key,
-					alt: true,
-					ctrl: false,
-					shift: false
-				}
+				key: Hotkeys.keys.KeyQ,
+				alt: true,
+				ctrl: false,
+				shift: false
 			}
 		});
-		const setting: HotSwap = this.hotSwap;
-		HOTKEYS.registerShortcut(setting.map, x => {
-			const layer = ui.controls.activeControl === setting.layer1 ? setting.layer2 : setting.layer1;
-			(ui.controls as any)._onClickLayer({ preventDefault: () => { }, currentTarget: { dataset: { control: layer } } })
+		Hotkeys.registerGroup({
+			name: `${ARCHITECT.MOD_NAME}.layers`,
+			label: 'DF_ARCHITECT.LayerShortcuts_Settings_Title',
+			description: 'DF_ARCHITECT.LayerShortcuts_Settings_Description'
+		});
+		Hotkeys.registerShortcut({
+			name: `${ARCHITECT.MOD_NAME}.layerHotSwap`,
+			label: 'DF_ARCHITECT.LayerShortcuts_Settings_QuickSwap_Title',
+			group: `${ARCHITECT.MOD_NAME}.layers`,
+			get: () => SETTINGS.get(_LayerShortcuts.PREF_LAYER_SWAP_MAP),
+			set: value => SETTINGS.set(_LayerShortcuts.PREF_LAYER_SWAP_MAP, value),
+			default: () => SETTINGS.default(_LayerShortcuts.PREF_LAYER_SWAP_MAP),
+			handle: _ => {
+				const layer1 = SETTINGS.get(_LayerShortcuts.PREF_LAYER_SWAP_LAYER1);
+				const layer2 = SETTINGS.get(_LayerShortcuts.PREF_LAYER_SWAP_LAYER2);
+				const layer = ui.controls.activeControl === layer1 ? layer2 : layer1;
+				(ui.controls as any)._onClickLayer({ preventDefault: () => { }, currentTarget: { dataset: { control: layer } } })
+			}
 		});
 		// #endregion
 
@@ -68,10 +83,16 @@ class _LayerShortcuts {
 					shift: false
 				} as KeyMap
 			});
-			const setting: KeyMap = this.getLayerSetting(layer.name);
-			if (setting.key === '') continue;
-			HOTKEYS.registerShortcut(setting, _ => {
-				(ui.controls as any)._onClickLayer({ preventDefault: function () { }, currentTarget: { dataset: { control: layer.name } } })
+			const prefName = _LayerShortcuts.PREF_LAYER_ + layer.name;
+			Hotkeys.registerShortcut({
+				name: `${ARCHITECT.MOD_NAME}.layer-${layer.name}`,
+				label: layer.title,
+				group: `${ARCHITECT.MOD_NAME}.layers`,
+				get: () => SETTINGS.get(prefName),
+				set: value => SETTINGS.set(prefName, value),
+				default: () => SETTINGS.default(prefName),
+				handle: _ =>
+					(ui.controls as any)._onClickLayer({ preventDefault: function () { }, currentTarget: { dataset: { control: layer.name } } })
 			});
 			// Break if we have run out of numbers (likely due to too many mods adding extra layers)
 			if (count == 9) break;

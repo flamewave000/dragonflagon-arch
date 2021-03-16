@@ -1,5 +1,9 @@
 # DF Architect
 
+## Alpha Release v0.3.1 (2021-03-15)
+- Removed internal Hotkeys implementation.
+- Integrated DF Hotkeys library dependency.
+
 ## Alpha Release v0.3.0 (2021-03-13)
 - Layer Hot Swap shortcut. You can select 2 layers that a hotkey can quickly swap between. Defaulted to `Alt + Q`.
 - Added Wall Chain Lock. This essentially inverts the Ctrl key behaviour.

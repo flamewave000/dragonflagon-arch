@@ -2,7 +2,7 @@
 	"name": "df-architect",
 	"title": "DF Architect",
 	"description": "Architect for FoundryVTT provides a major overhaul of the Walls and Lighting editing features.",
-	"version": "0.3.0a",
+	"version": "0.3.1a",
 	"license": "MIT",
 	"repository": {
 		"url": "https://github.com/flamewave000/dragonflagon-arch"
@@ -26,11 +26,14 @@
 		"del": "^6.0.0",
 		"gulp": "^4.0.2",
 		"gulp-better-rollup": "^4.0.1",
+		"gulp-clean-css": "^4.3.0",
 		"gulp-cli": "^2.3.0",
+		"gulp-jsonminify": "^1.1.0",
 		"gulp-minify": "^3.1.0",
 		"gulp-multi-dest": "^1.3.7",
 		"gulp-notify": "^3.2.0",
 		"gulp-rename": "^2.0.0",
+		"gulp-replace": "^1.0.0",
 		"gulp-sourcemaps": "^3.0.0",
 		"gulp-tabify": "0.0.2",
 		"gulp-typescript": "^6.0.0-alpha.1",

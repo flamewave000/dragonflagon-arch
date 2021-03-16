@@ -1,40 +1,23 @@
-import { HOTKEYS, KeyMap } from "../core/hotkeys.js";
+import ARCHITECT from "../core/architect.js";
 import SETTINGS from "../core/settings.js";
 
 
 class _WallShortcuts {
 	private static readonly PREF_WALL_ = 'WallShortcuts-';
-	static readonly TOOLS = ['walls', 'terrain', 'invisible', 'ethereal', 'doors', 'secret'];
-	private static readonly PREFS = _WallShortcuts.TOOLS.map(x => _WallShortcuts.PREF_WALL_ + x);
+	private static readonly WALL_TYPES = new Set(['walls', 'terrain', 'invisible', 'ethereal', 'doors', 'secret']);
 
-	getPref(index_or_name: number | string): KeyMap {
-		return typeof (index_or_name) === 'number'
-			? SETTINGS.get(_WallShortcuts.PREFS[index_or_name])
-			: SETTINGS.get(_WallShortcuts.PREF_WALL_ + index_or_name);
-	}
-	async setPref(index_or_name: number | string, value: KeyMap): Promise<KeyMap> {
-		return typeof (index_or_name) === 'number'
-			? await SETTINGS.set(_WallShortcuts.PREFS[index_or_name], value)
-			: await SETTINGS.set(_WallShortcuts.PREF_WALL_ + index_or_name, value);
-	}
-
-	getWallSettings(): { name: string, label: string, map: KeyMap }[] {
-		return _WallShortcuts.PREFS.map((el, idx) => {
-			const tool: ControlTool = (ui.controls.controls.find(x => x.name === 'walls')
-				.tools as ControlTool[]).find(x => x.name === _WallShortcuts.TOOLS[idx]);
-			return {
-				name: _WallShortcuts.TOOLS[idx],
-				label: tool.title.localize(),
-				map: this.getPref(idx)
-			};
+	ready() {
+		Hotkeys.registerGroup({
+			name: `${ARCHITECT.MOD_NAME}.walls`,
+			label: 'DF_ARCHITECT.WallShortcuts_Settings_Title',
+			description: 'DF_ARCHITECT.WallShortcuts_Settings_Description'
 		});
-	}
 
-	init() {
 		var counter = 0;
-		for (let pref of _WallShortcuts.PREFS) {
-			const index = counter;
-			SETTINGS.register<KeyMap>(pref, {
+		const tools = ui.controls.controls.find(x => x.name === 'walls').tools as ControlTool[];
+		const filteredTools = tools.filter(x => _WallShortcuts.WALL_TYPES.has(x.name));
+		for (let tool of filteredTools) {
+			SETTINGS.register<KeyMap>(_WallShortcuts.PREF_WALL_ + tool.name, {
 				scope: 'world',
 				type: SETTINGS.typeOf<KeyMap>(),
 				config: false,
@@ -46,11 +29,18 @@ class _WallShortcuts {
 				}
 			});
 
-			const setting = this.getPref(index);
-			HOTKEYS.registerShortcut(setting, async x => {
-				if (ui.controls.activeControl !== 'walls') return;
-				const toolName = _WallShortcuts.TOOLS[index];
-				(ui.controls as any)._onClickTool({ preventDefault: function () { }, currentTarget: { dataset: { tool: toolName } } })
+			const currentTool = tool;
+			Hotkeys.registerShortcut({
+				name: `${ARCHITECT.MOD_NAME}.type-${tool.name}`,
+				label: tool.title,
+				group: `${ARCHITECT.MOD_NAME}.walls`,
+				get: () => SETTINGS.get(_WallShortcuts.PREF_WALL_ + currentTool.name),
+				set: value => SETTINGS.set(_WallShortcuts.PREF_WALL_ + currentTool.name, value),
+				default: () => SETTINGS.default(_WallShortcuts.PREF_WALL_ + currentTool.name),
+				handle: _ => {
+					if (ui.controls.activeControl !== 'walls') return;
+					(ui.controls as any)._onClickTool({ preventDefault: function () { }, currentTarget: { dataset: { tool: currentTool.name } } })
+				}
 			});
 		}
 	}

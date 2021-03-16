@@ -8,7 +8,8 @@
 
 	"DF_ARCHITECT.Hotkeys_Settings_Title": "Keyboard Shortcuts",
 
-	"DF_ARCHITECT.LayerShortcuts_Settings_Title": "Layers Keyboard Shortcuts",
+	"DF_ARCHITECT.LayerShortcuts_Settings_Title": "DF Architect: Layers Keyboard Shortcuts",
+	"DF_ARCHITECT.LayerShortcuts_Settings_Description": "Shortcuts for switching between the canvas layers.",
 	"DF_ARCHITECT.LayerShortcuts_Settings_Layer_Tokens": "Tokens: ",
 	"DF_ARCHITECT.LayerShortcuts_Settings_Layer_Measure": "Measure: ",
 	"DF_ARCHITECT.LayerShortcuts_Settings_Layer_Tiles": "Tiles: ",
@@ -19,14 +20,15 @@
 	"DF_ARCHITECT.LayerShortcuts_Settings_Layer_Notes": "Notes: ",
 	"DF_ARCHITECT.LayerShortcuts_Settings_Reset": "Reset to Defaults",
 	"DF_ARCHITECT.LayerShortcuts_Settings_Save": "Save",
-	"DF_ARCHITECT.LayerShortcuts_Settings_Label_TableLayer": "Layer",
-	"DF_ARCHITECT.LayerShortcuts_Settings_Label_TableKey": "Key",
-	"DF_ARCHITECT.LayerShortcuts_Settings_Label_TableMods": "Modifiers",
-	"DF_ARCHITECT.LayerShortcuts_Settings_Label_Warning": "Beware <code>Ctrl+W</code> on Chromium browsers (Chrome, Edge, Brave). This combo will close the browser.",
-	"DF_ARCHITECT.LayerShortcuts_Settings_QuickSwap_Title": "Quick Swap Hotkey",
+	"DF_ARCHITECT.LayerShortcuts_Settings_QuickSwap_Title": "Layer Quick Swap",
 	"DF_ARCHITECT.LayerShortcuts_Settings_QuickSwap_Info": "This Hotkey is for quickly swapping between two preset layers. Each time it is pressed, it will switch to the layer it is not on. If you are on a layer that is not included in this pair, you will be switched to Layer 1.",
+	"DF_ARCHITECT.LayerShortcuts_Settings_QuickSwap_Layer1_Name": "Quick Swap Layer 1",
+	"DF_ARCHITECT.LayerShortcuts_Settings_QuickSwap_Layer1_Hint": "One of the two layers that will swap between when the Quick Swap hotkey is pressed.",
+	"DF_ARCHITECT.LayerShortcuts_Settings_QuickSwap_Layer2_Name": "Quick Swap Layer 2",
+	"DF_ARCHITECT.LayerShortcuts_Settings_QuickSwap_Layer2_Hint": "The second of the two layers that will swap between when the Quick Swap hotkey is pressed.",
 
-	"DF_ARCHITECT.WallShortcuts_Settings_Title": "Wall Types",
+	"DF_ARCHITECT.WallShortcuts_Settings_Title": "DF Architect: Wall Type Switching",
+	"DF_ARCHITECT.WallShortcuts_Settings_Description": "Hotkeys assigned to switch between the different wall types",
 	"DF_ARCHITECT.WallShortcuts_Settings_Label_WallType": "Wall Type",
 
 	"DF_ARCHITECT.AltGridSnap_Setting_EnabledName": "Show Alternate Grid Snap Toggle",

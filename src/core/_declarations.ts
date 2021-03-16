@@ -1,3 +1,4 @@
+
 declare global {
 	interface Map<K, V> {
 		getOrDefault<T extends V>(key: K, defaultValue: (() => T) | T): T;
