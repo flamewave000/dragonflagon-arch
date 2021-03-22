@@ -3,7 +3,6 @@ import SETTINGS from "../core/settings.js";
 
 class _LayerShortcuts {
 	private static readonly PREF_LAYER_ = "LayerShortcutsSettingsLayer-";
-	private static readonly PREF_LAYER_SWAP_MAP = "LayerShortcutsSettingsLayer-SwapMap";
 	private static readonly PREF_LAYER_SWAP_LAYER1 = "LayerShortcutsSettingsLayer-SwapLayer1";
 	private static readonly PREF_LAYER_SWAP_LAYER2 = "LayerShortcutsSettingsLayer-SwapLayer2";
 	ready() {
@@ -37,17 +36,6 @@ class _LayerShortcuts {
 			config: true,
 			default: 'lighting'
 		});
-		SETTINGS.register<KeyMap>(_LayerShortcuts.PREF_LAYER_SWAP_MAP, {
-			scope: 'world',
-			type: SETTINGS.typeOf<KeyMap>(),
-			config: false,
-			default: {
-				key: Hotkeys.keys.KeyQ,
-				alt: true,
-				ctrl: false,
-				shift: false
-			}
-		});
 		Hotkeys.registerGroup({
 			name: `${ARCHITECT.MOD_NAME}.layers`,
 			label: 'DF_ARCHITECT.LayerShortcuts_Settings_Title',
@@ -57,10 +45,13 @@ class _LayerShortcuts {
 			name: `${ARCHITECT.MOD_NAME}.layerHotSwap`,
 			label: 'DF_ARCHITECT.LayerShortcuts_Settings_QuickSwap_Title',
 			group: `${ARCHITECT.MOD_NAME}.layers`,
-			get: () => SETTINGS.get(_LayerShortcuts.PREF_LAYER_SWAP_MAP),
-			set: value => SETTINGS.set(_LayerShortcuts.PREF_LAYER_SWAP_MAP, value),
-			default: () => SETTINGS.default(_LayerShortcuts.PREF_LAYER_SWAP_MAP),
-			handle: _ => {
+			default: {
+				key: Hotkeys.keys.KeyQ,
+				alt: true,
+				ctrl: false,
+				shift: false
+			},
+			onKeyDown: _ => {
 				const layer1 = SETTINGS.get(_LayerShortcuts.PREF_LAYER_SWAP_LAYER1);
 				const layer2 = SETTINGS.get(_LayerShortcuts.PREF_LAYER_SWAP_LAYER2);
 				const layer = ui.controls.activeControl === layer1 ? layer2 : layer1;
@@ -91,7 +82,7 @@ class _LayerShortcuts {
 				get: () => SETTINGS.get(prefName),
 				set: value => SETTINGS.set(prefName, value),
 				default: () => SETTINGS.default(prefName),
-				handle: _ =>
+				onKeyDown: _ =>
 					(ui.controls as any)._onClickLayer({ preventDefault: function () { }, currentTarget: { dataset: { control: layer.name } } })
 			});
 			// Break if we have run out of numbers (likely due to too many mods adding extra layers)

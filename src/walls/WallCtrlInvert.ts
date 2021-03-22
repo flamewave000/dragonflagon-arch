@@ -2,22 +2,10 @@ import ARCHITECT from "../core/architect.js";
 import SETTINGS from "../core/settings.js";
 
 
-interface KeyboardCallbacks {
-	[key: string]: any
-	clickLeft(event: PIXI.InteractionEvent): void
-	clickLeft2(event: PIXI.InteractionEvent): void
-	clickRight(event: PIXI.InteractionEvent): void
-	dragLeftStart(event: PIXI.InteractionEvent): void
-	dragLeftMove(event: PIXI.InteractionEvent): void
-	dragLeftDrop(event: PIXI.InteractionEvent): void
-	dragLeftCancel(event: PIXI.InteractionEvent): void
-	dragRightMove(event: PIXI.InteractionEvent): void
-	dragRightDrop(event: PIXI.InteractionEvent): void
-}
+declare type KeyboardCallbacks = Record<MouseInteractionManager.EventNames, (event: PIXI.InteractionEvent | Event) => unknown>;
 
 class _WallCtrlInvert {
 	static readonly PREF_ENABLED = 'WallCtrlInvert-Enabled';
-	static readonly PREF_HOTKEY = 'WallCtrlInvert-Hotkey';
 
 	private _originalCallbacks: KeyboardCallbacks = null;
 	private _overrideCallbacks: KeyboardCallbacks = {} as KeyboardCallbacks;
@@ -33,25 +21,17 @@ class _WallCtrlInvert {
 			default: false,
 			onChange: () => this._patchWallsLayer()
 		});
-		SETTINGS.register<KeyMap>(_WallCtrlInvert.PREF_HOTKEY, {
-			scope: 'world',
-			type: SETTINGS.typeOf<KeyMap>(),
-			config: false,
+
+		Hotkeys.registerShortcut({
+			name: `${ARCHITECT.MOD_NAME}.ctrlInvert`,
+			label: 'DF_ARCHITECT.WallCtrlInvert_Label',
 			default: {
 				key: Hotkeys.keys.KeyC,
 				alt: true,
 				ctrl: false,
 				shift: false
-			}
-		});
-
-		Hotkeys.registerShortcut({
-			name: `${ARCHITECT.MOD_NAME}.ctrlInvert`,
-			label: 'DF_ARCHITECT.WallCtrlInvert_Label',
-			get: () => SETTINGS.get(_WallCtrlInvert.PREF_HOTKEY),
-			set: value => SETTINGS.set(_WallCtrlInvert.PREF_HOTKEY, value),
-			default: SETTINGS.default(_WallCtrlInvert.PREF_HOTKEY),
-			handle: async _ => {
+			},
+			onKeyDown: async _ => {
 				await SETTINGS.set(_WallCtrlInvert.PREF_ENABLED, !this.enabled)
 				this._patchWallsLayer();
 				ui.controls.initialize();
@@ -92,10 +72,10 @@ class _WallCtrlInvert {
 		if (!this._originalCallbacks) {
 			this._originalCallbacks = mim.callbacks as KeyboardCallbacks;
 			for (let key of Object.keys(this._originalCallbacks)) {
-				if (this._originalCallbacks[key] == null)
-					this._overrideCallbacks[key] = null
+				if ((<any>this._originalCallbacks)[key] == null)
+					(<any>this._overrideCallbacks)[key] = null
 				else
-					this._overrideCallbacks[key] = this.wrap(this._originalCallbacks[key]);
+				(<any>this._overrideCallbacks)[key] = this.wrap((<any>this._originalCallbacks)[key]);
 			}
 		}
 		mim.callbacks = this.enabled ? this._overrideCallbacks : this._originalCallbacks;

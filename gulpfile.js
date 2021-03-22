@@ -1,5 +1,5 @@
 const gulp = require('gulp');
-const fs = require('fs')
+const fs = require('fs');
 const path = require('path');
 const del = require('del');
 const ts = require('gulp-typescript');
@@ -177,7 +177,6 @@ exports.dev = gulp.series(
 		, outputMetaFiles(DEV_DIST())
 	)
 	, copyDevDistToLocalDist
-	// , outputDistToDevEnvironment
 	, pnotify('Development distribution build completed.', 'Dev Build Complete')
 );
 /**

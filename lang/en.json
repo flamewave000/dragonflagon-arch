@@ -37,5 +37,10 @@
 	
 	"DF_ARCHITECT.WallCtrlInvert_Label": "Lock Wall Chaining",
 	"DF_ARCHITECT.WallCtrlInvert_Settings_Title": "Wall Chaining",
-	"DF_ARCHITECT.WallCtrlInvert_Setting_Hotkey": "Toggle chain lock: "
+	"DF_ARCHITECT.WallCtrlInvert_Setting_Hotkey": "Toggle chain lock: ",
+
+	"DF_ARCHITECT.WallBoxPlacer_Label": "Draw walls along a square",
+
+	"DF_ARCHITECT.WallJoinSplit_Split_Label": "Split the selected walls into two walls each",
+	"DF_ARCHITECT.WallJoinSplit_Join_Label": "Merge the selected line of walls into a single wall"
 }

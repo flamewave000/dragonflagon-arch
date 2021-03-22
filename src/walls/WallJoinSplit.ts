@@ -1,0 +1,74 @@
+import SETTINGS from "../core/settings.js";
+
+class _WallJoinSplit {
+	static readonly PREF_ENABLED = 'WallJoinSplit-Enabled';
+	get enabled(): boolean { return SETTINGS.get(_WallJoinSplit.PREF_ENABLED) }
+	set enabled(value: boolean) { SETTINGS.set(_WallJoinSplit.PREF_ENABLED, value) }
+	init() {
+		Hooks.on('getSceneControlButtons', (controls: SceneControl[]) => {
+			const isGM = game.user.isGM;
+			const wallsControls = controls.find(x => x.name === 'walls');
+			wallsControls.tools.splice(wallsControls.tools.findIndex(x => x.name === 'clone') + 1, 0, {
+				icon: 'df df-alt-split',
+				name: 'split',
+				title: 'DF_ARCHITECT.WallJoinSplit_Split_Label',
+				button: true,
+				visible: isGM,
+				onClick: this._splitWalls.bind(this)
+			}, {
+				icon: 'df df-alt-join',
+				name: 'join',
+				title: 'DF_ARCHITECT.WallJoinSplit_Join_Label',
+				button: true,
+				visible: isGM,
+				onClick: this._joinWalls.bind(this)
+			});
+		});
+	}
+
+	private async _splitWalls() {
+		const layer = <WallsLayer>(<Canvas>canvas).getLayer('WallsLayer');
+		const walls = layer.controlled;
+		const newWalls: Wall.Data[] = [];
+		for (let wall of walls) {
+			const [x1, y1, x2, y2] = wall.data.c;
+			var midX = (x1 + x2) / 2;
+			var midY = (y1 + y2) / 2;
+			//@ts-expect-error
+			[midX, midY] = layer._getWallEndpointCoordinates(new PIXI.Point(midX, midY));
+			const wall1 = duplicate(wall.data) as Wall.Data;
+			wall1.c = [x1, y1, midX, midY];
+			delete wall1._id;
+			const wall2 = duplicate(wall.data) as Wall.Data;
+			wall2.c = [midX, midY, x2, y2];
+			delete wall2._id;
+			newWalls.push(wall1, wall2)
+		}
+		await layer.deleteMany(walls.map(x => x.id));
+		await layer.createMany(newWalls);
+	}
+	private async _joinWalls() {
+		const points = new Map<string, Wall[]>();
+		const layer = <WallsLayer>(<Canvas>canvas).getLayer('WallsLayer');
+		const walls = layer.controlled;
+		for (let wall of walls) {
+			const [x1, y1, x2, y2] = wall.data.c;
+			//@ts-expect-error
+			points.getOrDefault(JSON.stringify(layer._getWallEndpointCoordinates(new PIXI.Point(x1, y1))), []).push(wall);
+			//@ts-expect-error
+			points.getOrDefault(JSON.stringify(layer._getWallEndpointCoordinates(new PIXI.Point(x2, y2))), []).push(wall);
+		}
+		if ([...points.values()].reduce((r, x) => x.length != 2 ? r + 1 : r, 0) > 2) {
+			ui.notifications.error('Selected walls are disjointed. Make sure they are a single line of connected walls.');
+			return;
+		}
+		const endpoints = [...points.entries()].filter(x => x[1].length == 1);
+		const wallData = duplicate(endpoints[0][1][0].data) as Wall.Data;
+		delete wallData._id;
+		wallData.c = endpoints.reduce((r, x) => r.concat(JSON.parse(x[0])), [] as number[]) as [number, number, number, number];
+		await layer.deleteMany(walls.map(x => x.id));
+		await Wall.create(wallData);
+	}
+}
+
+export const WallJoinSplit = new _WallJoinSplit();

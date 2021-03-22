@@ -1,5 +1,9 @@
 # DF Architect
 
+## Alpha Release v0.4.0 (2021-03-22)
+- Added Wall Splitting
+- Added Wall Joining
+
 ## Alpha Release v0.3.1 (2021-03-15)
 - Removed internal Hotkeys implementation.
 - Integrated DF Hotkeys library dependency.
