@@ -12,6 +12,7 @@
 	"languages": [
 		{ "lang": "en", "name": "English", "path": "lang/en.json" }
 	],
+	"bugs":		"https://github.com/flamewave000/dragonflagon-arch/issues/new/choose",
 	"url":		"https://github.com/flamewave000/dragonflagon-arch",
 	"license":	"https://github.com/flamewave000/dragonflagon-arch/blob/master/LICENSE",
 	"manifest":	"https://dragonflagon.cafe/mods/man/{{name}}",

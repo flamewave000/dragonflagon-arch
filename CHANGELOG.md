@@ -1,5 +1,10 @@
 # DF Architect
 
+## Alpha Release v0.5.0 (2021-03-28)
+- Added light source crosshairs when holding Shift key.
+- Added Bug Reporter integration in manifest.
+- Added soft-dependency on "lib - Color Settings".
+
 ## Alpha Release v0.4.0 (2021-03-22)
 - Added Wall Splitting
 - Added Wall Joining

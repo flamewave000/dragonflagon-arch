@@ -1,6 +1,9 @@
 {
 	"DF_ARCHITECT.ModName": "Dragon Flagon Architect",
 
+	"DF_ARCHITECT.ErrorColourSettingsMissing": "DF Architect: It is recomended you use the \"lib - ColorSettings\" module",
+	"DF_ARCHITECT.ErrorLibWrapperMissing": "DF Architect: 'libWrapper' module required. Please install and activate 'libWrapper'.",
+
 	"DF_ARCHITECT.ReloadRequired_Title": "Reload Required",
 	"DF_ARCHITECT.ReloadRequired_Content": "<p>A reload is required for your changes to go into effect.</p>",
 	"DF_ARCHITECT.ReloadRequired_Positive": "Reload Now",
@@ -42,5 +45,10 @@
 	"DF_ARCHITECT.WallBoxPlacer_Label": "Draw walls along a square",
 
 	"DF_ARCHITECT.WallJoinSplit_Split_Label": "Split the selected walls into two walls each",
-	"DF_ARCHITECT.WallJoinSplit_Join_Label": "Merge the selected line of walls into a single wall"
+	"DF_ARCHITECT.WallJoinSplit_Join_Label": "Merge the selected line of walls into a single wall",
+
+	"DF_ARCHITECT.AltLightOrigin_Settings_Colour1_Name": "Lights: Crosshair Colour",
+	"DF_ARCHITECT.AltLightOrigin_Settings_Colour1_Hint": "The colour of the crosshairs that display when you hold Shift while moving a light source.",
+	"DF_ARCHITECT.AltLightOrigin_Settings_Colour2_Name": "Lights: Alternative Crosshair Colour",
+	"DF_ARCHITECT.AltLightOrigin_Settings_Colour2_Hint": "The alternate colour of the crosshairs that display when you hold Shift+Alt while moving a light source."
 }
