@@ -50,5 +50,7 @@
 	"DF_ARCHITECT.AltLightOrigin_Settings_Colour1_Name": "Lights: Crosshair Colour",
 	"DF_ARCHITECT.AltLightOrigin_Settings_Colour1_Hint": "The colour of the crosshairs that display when you hold Shift while moving a light source.",
 	"DF_ARCHITECT.AltLightOrigin_Settings_Colour2_Name": "Lights: Alternative Crosshair Colour",
-	"DF_ARCHITECT.AltLightOrigin_Settings_Colour2_Hint": "The alternate colour of the crosshairs that display when you hold Shift+Alt while moving a light source."
+	"DF_ARCHITECT.AltLightOrigin_Settings_Colour2_Hint": "The alternate colour of the crosshairs that display when you hold Shift+Alt while moving a light source.",
+
+	"DF_ARCHITECT.QuickColourPicker_EyeDrop_Title": "Pick a colour from the map"
 }

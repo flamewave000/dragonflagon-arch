@@ -20,6 +20,15 @@ class _AltLightOrigin {
 	deregister(control: AltLightControlIcon) {
 		this._controls.delete(control);
 	}
+	init() {
+		libWrapper.register(ARCHITECT.MOD_NAME, 'AmbientLight.prototype._drawControlIcon', () => {
+			const size = Math.max(Math.round(((<Canvas>canvas).dimensions.size * 0.5) / 20) * 20, 40);
+			let icon = new AltLightControlIcon(this, { texture: CONFIG.controlIcons.light, size: size });
+			icon.x -= (size * 0.5);
+			icon.y -= (size * 0.5);
+			return icon;
+		}, 'OVERRIDE');
+	}
 	ready() {
 		if (!game.modules.get('colorsettings')?.active) {
 			console.warn('Missing colorsettings module dependency');
@@ -73,14 +82,6 @@ class _AltLightOrigin {
 				window.removeEventListener(_AltLightOrigin.KEYEVENT_UP, this._keyEventHandler.bind(this));
 			}
 		});
-
-		libWrapper.register(ARCHITECT.MOD_NAME, 'AmbientLight.prototype._drawControlIcon', () => {
-			const size = Math.max(Math.round(((<Canvas>canvas).dimensions.size * 0.5) / 20) * 20, 40);
-			let icon = new AltLightControlIcon(this, { texture: CONFIG.controlIcons.light, size: size });
-			icon.x -= (size * 0.5);
-			icon.y -= (size * 0.5);
-			return icon;
-		}, 'OVERRIDE');
 	}
 
 	private _keyEventHandler(event: KeyboardEvent) {
@@ -110,11 +111,10 @@ class AltLightControlIcon extends ControlIcon {
 		super({ texture, size, borderColor, tint });
 		this.altLightOrigin = altLightOrigin;
 		altLightOrigin.register(this);
-		console.debug('created');
 	}
 	/** @override */
 	async draw() {
-		if (!this.altLightOrigin.showCrosshairs) {
+		if (!this.altLightOrigin?.showCrosshairs) {
 			this.icon.alpha = 1;
 			return super.draw();
 		}

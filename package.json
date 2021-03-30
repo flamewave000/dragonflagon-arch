@@ -2,7 +2,7 @@
 	"name": "df-architect",
 	"title": "DF Architect",
 	"description": "Architect for FoundryVTT provides a major overhaul of the Walls and Lighting editing features.",
-	"version": "0.5.0a",
+	"version": "0.6.0a",
 	"license": "MIT",
 	"repository": {
 		"url": "https://github.com/flamewave000/dragonflagon-arch"

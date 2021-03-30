@@ -1,5 +1,8 @@
 # DF Architect
 
+## Alpha Release v0.6.0 (2021-03-29)
+- Quick colour picker eyedrop tool for Light Sources.
+
 ## Alpha Release v0.5.0 (2021-03-28)
 - Added light source crosshairs when holding Shift key.
 - Added Bug Reporter integration in manifest.

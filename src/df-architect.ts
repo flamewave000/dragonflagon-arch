@@ -9,6 +9,7 @@ import { WallCtrlInvert } from './walls/WallCtrlInvert.js';
 import { WallShortcuts } from './walls/WallShortcuts.js';
 import { WallJoinSplit } from './walls/WallJoinSplit.js';
 import { AltLightOrigin } from './lights/AltLightOrigin.js';
+import { QuickColourPicker } from './lights/QuickColourPicker.js';
 
 Hooks.once('init', function () {
 	if (!game.modules.get('lib-wrapper')?.active) return;
@@ -17,10 +18,12 @@ Hooks.once('init', function () {
 	AltGridSnap.init();
 	WallCtrlInvert.init();
 	WallJoinSplit.init();
+	AltLightOrigin.init();
 });
 
 Hooks.once('setup', function () {
 	if (!game.modules.get('lib-wrapper')?.active) return;
+	QuickColourPicker.setup();
 });
 
 Hooks.once('ready', function () {
@@ -35,4 +38,5 @@ Hooks.once('ready', function () {
 	WallShortcuts.ready();
 	WallCtrlInvert.ready();
 	AltLightOrigin.ready();
+	QuickColourPicker.ready();
 });
