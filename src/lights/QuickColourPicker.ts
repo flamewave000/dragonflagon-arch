@@ -1,38 +1,9 @@
-import ARCHITECT from "../core/architect.js";
-
-class PIXIAppOverride extends PIXI.Application {
-	constructor(options?: {
-		autoStart?: boolean;
-		width?: number;
-		height?: number;
-		view?: HTMLCanvasElement;
-		transparent?: boolean;
-		autoDensity?: boolean;
-		antialias?: boolean;
-		preserveDrawingBuffer?: boolean;
-		resolution?: number;
-		forceCanvas?: boolean;
-		backgroundColor?: number;
-		clearBeforeRender?: boolean;
-		powerPreference?: string;
-		sharedTicker?: boolean;
-		sharedLoader?: boolean;
-		resizeTo?: Window | HTMLElement;
-	}) {
-		// Only enable the `preserveDrawingBuffer` if we are the GM
-		if (game.user.isGM)
-			super(mergeObject(options, { preserveDrawingBuffer: game.user.isGM }));
-		else
-			super(options);
-	}
-}
-
 
 class _QuickColourPicker {
 	private readonly SIZE = 5;
 	private readonly HALF_SIZE = Math.trunc(this.SIZE / 2);
 	private rows: NodeListOf<HTMLTableRowElement>;
-	private pixels: Uint8Array = new Uint8Array(this.SIZE * this.SIZE * 4);
+	private pixels: Uint8Array = null;
 	private colour: string;
 	private currentApp: LightConfig;
 	private enabled = false;
@@ -45,10 +16,6 @@ class _QuickColourPicker {
 	constructor() {
 		this.rows = this.html.querySelectorAll('tr');
 	}
-
-	setup() {
-		PIXI.Application = PIXIAppOverride;
-	}
 	ready() {
 		document.addEventListener('mousemove', this._handleMouseMove.bind(this));
 		document.addEventListener('mousedown', this._handleMouseDown.bind(this));
@@ -58,6 +25,7 @@ class _QuickColourPicker {
 			const button = $(`<button style="flex:0 0" title="${game.i18n.localize('DF_ARCHITECT.QuickColourPicker_EyeDrop_Title')}"><i class="fas fa-eye-dropper"></i></button>`);
 			button.on('click', async (event: Event) => {
 				event.preventDefault();
+				this.pixels = new Uint8Array(this.SIZE * this.SIZE * 4);
 				document.body.appendChild(this.html);
 				await app.minimize();
 				this.enabled = true;
@@ -89,6 +57,7 @@ class _QuickColourPicker {
 		}
 		if (event.button !== 0) return;
 		this.enabled = false;
+		this.pixels = null;
 		$(this.html).remove();
 		$(document.body).css('cursor', '');
 		this.currentApp.element.find('input[name="tintColor"]').val(this.colour);

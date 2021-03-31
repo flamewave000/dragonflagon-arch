@@ -52,5 +52,9 @@
 	"DF_ARCHITECT.AltLightOrigin_Settings_Colour2_Name": "Lights: Alternative Crosshair Colour",
 	"DF_ARCHITECT.AltLightOrigin_Settings_Colour2_Hint": "The alternate colour of the crosshairs that display when you hold Shift+Alt while moving a light source.",
 
-	"DF_ARCHITECT.QuickColourPicker_EyeDrop_Title": "Pick a colour from the map"
+	"DF_ARCHITECT.QuickColourPicker_EyeDrop_Title": "Pick a colour from the map",
+
+	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_Label": "Capture Current Game Board View",
+	"DF_ARCHITECT.CaptureGameScreen_Setting_AllowPC_Name": "Allow Players to Capture Canvas",
+	"DF_ARCHITECT.CaptureGameScreen_Setting_AllowPC_Hint": "Allow players to capture the current game board canvas."
 }
