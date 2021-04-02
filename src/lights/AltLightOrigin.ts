@@ -33,7 +33,7 @@ class _AltLightOrigin {
 		if (!game.modules.get('colorsettings')?.active) {
 			console.warn('Missing colorsettings module dependency');
 			if (game.user.isGM)
-				ui.notifications.info(game.i18n.localize('DF_ARCHITECT.ErrorColourSettingsMissing'));
+				ui.notifications.info('DF_ARCHITECT.ErrorColourSettingsMissing'.localize());
 			SETTINGS.register(_AltLightOrigin.PREF_COLOUR1, {
 				name: 'DF_ARCHITECT.AltLightOrigin_Settings_Colour1_Name',
 				hint: 'DF_ARCHITECT.AltLightOrigin_Settings_Colour1_Hint',

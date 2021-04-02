@@ -33,7 +33,7 @@ Hooks.once('ready', function () {
 	if (!game.modules.get('lib-wrapper')?.active) {
 		console.error('Missing libWrapper module dependency');
 		if (game.user.isGM)
-			ui.notifications.error(game.i18n.localize('DF_ARCHITECT.ErrorLibWrapperMissing'));
+			ui.notifications.error('DF_ARCHITECT.ErrorLibWrapperMissing'.localize());
 		return;
 	}
 
@@ -42,5 +42,4 @@ Hooks.once('ready', function () {
 	WallCtrlInvert.ready();
 	AltLightOrigin.ready();
 	QuickColourPicker.ready();
-	CaptureGameScreen.ready();
 });

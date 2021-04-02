@@ -1,5 +1,8 @@
 # DF Architect
 
+## Alpha Release v0.7.0 (2021-03-)
+- Added canvas image capture. What ever the canvas currently looks like, you can capture that image and save it to a file.
+
 ## Alpha Release v0.6.0 (2021-03-29)
 - Quick colour picker eyedrop tool for Light Sources.
 

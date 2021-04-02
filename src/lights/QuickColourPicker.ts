@@ -22,7 +22,7 @@ class _QuickColourPicker {
 		document.addEventListener('mouseup', this._handleMouseDown.bind(this));
 		Hooks.on('renderLightConfig', (app: LightConfig, html: HTMLElement, data: any) => {
 			this.currentApp = app;
-			const button = $(`<button style="flex:0 0" title="${game.i18n.localize('DF_ARCHITECT.QuickColourPicker_EyeDrop_Title')}"><i class="fas fa-eye-dropper"></i></button>`);
+			const button = $(`<button style="flex:0 0" title="${'DF_ARCHITECT.QuickColourPicker_EyeDrop_Title'.localize()}"><i class="fas fa-eye-dropper"></i></button>`);
 			button.on('click', async (event: Event) => {
 				event.preventDefault();
 				this.pixels = new Uint8Array(this.SIZE * this.SIZE * 4);

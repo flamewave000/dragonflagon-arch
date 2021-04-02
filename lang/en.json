@@ -54,7 +54,17 @@
 
 	"DF_ARCHITECT.QuickColourPicker_EyeDrop_Title": "Pick a colour from the map",
 
-	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_Label": "Capture Current Game Board View",
+	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_Label": "Save Game Board Image",
 	"DF_ARCHITECT.CaptureGameScreen_Setting_AllowPC_Name": "Allow Players to Capture Canvas",
-	"DF_ARCHITECT.CaptureGameScreen_Setting_AllowPC_Hint": "Allow players to capture the current game board canvas."
+	"DF_ARCHITECT.CaptureGameScreen_Setting_AllowPC_Hint": "Allow players to capture the current game board canvas.",
+	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_ContinueButton": "Capture Image",
+	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_CancelButton": "Cancel",
+	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_Target": "What portion would you like to capture?",
+	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_Target_Current": "Current View",
+	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_Target_All": "Entire Canvas",
+	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_Format": "Select a file format",
+	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_FormatPNG": "PNG",
+	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_FormatJPG": "JPEG",
+	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_FormatWEB": "WebP (Chrome Only)",
+	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_Compression": "The quality level for JPEG and WebP"
 }
