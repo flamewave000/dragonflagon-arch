@@ -1,6 +1,9 @@
 # DF Architect
 
-## Alpha Release v0.7.0 (2021-03-)
+## Alpha Release v0.7.1 (2021-04-03)
+- Fixed tile drag+drop issue with Alt Grid snap enabled.
+
+## Alpha Release v0.7.0 (2021-04-02)
 - Added canvas image capture. What ever the canvas currently looks like, you can capture that image and save it to a file.
 
 ## Alpha Release v0.6.0 (2021-03-29)

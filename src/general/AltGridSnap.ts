@@ -67,6 +67,7 @@ class _AltGridSnap {
 
 	private _SquareGrid_getSnappedPosition(wrapped: Function, x: number, y: number, interval: number | null): { x: number; y: number } {
 		if (AltGridSnap.enabled && AltGridSnap.toggled) {
+			if (!interval) interval = 1;
 			const altGs = (canvas as Canvas).dimensions.size / (interval * 2);
 			const result = wrapped(x - altGs, y - altGs, interval);
 			return { x: result.x + altGs, y: result.y + altGs };
