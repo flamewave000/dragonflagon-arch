@@ -116,6 +116,7 @@ class AltLightControlIcon extends ControlIcon {
 	async draw() {
 		if (!this.altLightOrigin?.showCrosshairs) {
 			this.icon.alpha = 1;
+			if (!this.icon.texture) return this;
 			return super.draw();
 		}
 		this.icon.alpha = 0;

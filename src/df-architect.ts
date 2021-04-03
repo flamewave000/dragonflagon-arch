@@ -12,6 +12,7 @@ import { WallJoinSplit } from './walls/WallJoinSplit.js';
 import { AltLightOrigin } from './lights/AltLightOrigin.js';
 import { QuickColourPicker } from './lights/QuickColourPicker.js';
 import CaptureGameScreen from './general/CaptureGameScreen.js';
+import { LightTemplate } from './lights/LightTemplate.js';
 
 Hooks.once('init', function () {
 	if (!game.modules.get('lib-wrapper')?.active) return;
@@ -22,6 +23,7 @@ Hooks.once('init', function () {
 	WallJoinSplit.init();
 	AltLightOrigin.init();
 	CaptureGameScreen.init();
+	LightTemplate.init();
 });
 
 Hooks.once('setup', function () {
