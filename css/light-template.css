@@ -2,17 +2,16 @@
 	position: absolute;
 	background: rgba(0, 0, 0, 0.25);
 	display: grid;
-	grid-template-columns: 1fr 1fr auto;
+	grid-template-columns: auto 1fr 1fr auto;
 	width: fit-content;
 	padding: 1em;
 }
 
 #dfarch-cur-light-template h1 {
 	color: #fff;
-	flex: 1 0;
 	font-size: medium;
-	grid-column-start: 1;
-	grid-column-end: 3;
+	grid-column-start: 2;
+	grid-column-end: 4;
 	text-align: center;
 }
 
@@ -21,7 +20,7 @@
 	font-size: small;
 	text-decoration: none;
 	text-align: right;
-	grid-column: 1;
+	grid-column: 2;
 	border: none;
 	margin: 0;
 	padding: 0.25em;
@@ -30,11 +29,15 @@
 #dfarch-cur-light-template p {
 	color: #fff;
 	font-size: small;
-	grid-column: 2;
+	grid-column: 3;
 	margin: 0;
 	padding: 0.25em;
 }
-#dfarch-cur-light-template a {
-	grid-column: 3;
+#dfarch-cur-light-template a:first-of-type {
+	grid-column: 1;
+	color: #fff;
+}
+#dfarch-cur-light-template a:last-of-type {
+	grid-column: 4;
 	color: #fff;
 }

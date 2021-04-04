@@ -9,6 +9,10 @@ class _LightTemplates {
 	private static readonly FLAG_IS_TEMPLATE = 'isLightTemplate';
 
 	private _currentActiveTemplate: string | null = null;
+	get currentTemplate(): Partial<AmbientLight.Data> | null {
+		if (this._currentActiveTemplate === null) return null;
+		return this._extractLightDataFromMacroCommand(game.macros.get(this._currentActiveTemplate).data.command);
+	}
 
 	init() {
 		Hooks.on('renderLightConfig', this._renderLightConfig.bind(this));
@@ -30,6 +34,11 @@ class _LightTemplates {
 			this.deactivate();
 		}
 
+		// Activate the lighting layer if we are not on it already
+		if (ui.controls.activeControl !== 'lighting') {
+			$('li.scene-control[data-control="lighting"]').trigger('click');
+		}
+
 		const lightTypes = Object.entries(CONST.SOURCE_TYPES).reduce((obj: { [key: string]: string }, e) => {
 			obj[e[1]] = `LIGHT.Type${e[0].titleCase()}`;
 			return obj;
@@ -44,7 +53,10 @@ class _LightTemplates {
 		const rect = $('#controls .active .control-tools')[0].getBoundingClientRect();
 		templateHtml.css('left', rect.right + 10 + 'px');
 		templateHtml.css('top', rect.top + 'px');
-		templateHtml.find('a').on('click', this.deactivate.bind(this));
+		const buttons = templateHtml.find('a');
+		buttons.first().on('click', () => game.macros.get(macroId).sheet.render(true));
+		buttons.last().on('click', this.deactivate.bind(this));
+
 		this._currentActiveTemplate = macroId;
 		templateHtml.appendTo(document.body);
 	}
@@ -82,9 +94,7 @@ ${'DF_ARCHITECT.LightTemplate_CreateTemplate_Button'.localize()}
 			return obj;
 		}, {});
 
-		const command = (data.entity as Macro.Data).command;
-
-		const lightData = JSON.parse(/const ld=(.+);/.exec(command)[1]) as Partial<AmbientLight.Data>;
+		const lightData = this._extractLightDataFromMacroCommand((data.entity as Macro.Data).command);
 		const htmlData = {
 			object: duplicate(lightData),
 			lightTypes: lightTypes,
@@ -112,6 +122,11 @@ ${'DF_ARCHITECT.LightTemplate_CreateTemplate_Button'.localize()}
 				name: name,
 				img: img
 			});
+			// If we are editing the currently selected light template
+			if (this._currentActiveTemplate === macro.id) {
+				// Update the UI
+				await this.activate(macro.id, formData);
+			}
 		}
 
 		// Resizes the config menu to accommodate the new elements.
@@ -198,6 +213,58 @@ ${'DF_ARCHITECT.LightTemplate_CreateTemplate_Button'.localize()}
 				}
 			},
 		]);
+	}
+
+	private _extractLightDataFromMacroCommand(commandString: string): Partial<AmbientLight.Data> {
+		return JSON.parse(/const ld=(.+);/.exec(commandString)[1]) as Partial<AmbientLight.Data>
+	}
+}
+
+
+export class LightingLayerOverride {
+	static ready() {
+		libWrapper.register(ARCHITECT.MOD_NAME, 'LightingLayer.prototype._onDragLeftStart',
+			this._onDragLeftStart.bind((<LightingLayer>(<Canvas>canvas).getLayer('LightingLayer'))),
+			'MIXED');
+		libWrapper.register(ARCHITECT.MOD_NAME, 'LightingLayer.prototype._onClickLeft',
+			this._onClickLeft.bind((<LightingLayer>(<Canvas>canvas).getLayer('LightingLayer'))),
+			'MIXED');
+		libWrapper.register(ARCHITECT.MOD_NAME, 'LightingLayer.prototype._onClickRight',
+			this._onClickRight.bind((<LightingLayer>(<Canvas>canvas).getLayer('LightingLayer'))),
+			'MIXED');
+	}
+
+	static _onClickLeft(this: LightingLayer, wrapper: Function, event: PIXI.InteractionEvent) {
+		const templateData = LightTemplates.currentTemplate;
+		// If we do not have an active template, pass through to original function
+		if (templateData === null || !event.data.originalEvent.ctrlKey)
+			return wrapper(event);
+		const origin: { x: number, y: number } = (<any>event.data).origin;
+		AmbientLight.create(mergeObject(templateData, { x: origin.x, y: origin.y }));
+	}
+
+	static _onClickRight(this: LightingLayer, wrapper: Function, event: PIXI.InteractionEvent) {
+		const templateData = LightTemplates.currentTemplate;
+		// If we do not have an active template, pass through to original function
+		if (templateData === null || !event.data.originalEvent.ctrlKey)
+			return wrapper(event);
+		LightTemplates.deactivate();
+	}
+
+	static _onDragLeftStart(this: LightingLayer, wrapper: Function, event: PIXI.InteractionEvent) {
+		const templateData = LightTemplates.currentTemplate;
+		// If we do not have an active template, pass through to original function
+		if (templateData === null)
+			return wrapper(event);
+		// @ts-ignore
+		// PlaceablesLayer.prototype._onDragLeftStart(event);
+		const origin: { x: number, y: number } = (<any>event.data).origin;
+		// Create the preview source
+		const preview = new AmbientLight(mergeObject(templateData, { x: origin.x, y: origin.y }));
+		(<any>event.data).preview = this.preview.addChild(preview);
+		this.sources.set(preview.sourceId, preview.source);
+		this.deactivateAnimation();
+		return preview.draw();
 	}
 }
 

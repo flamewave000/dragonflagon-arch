@@ -1,5 +1,8 @@
 # DF Architect
 
+## Alpha Release v0.8.0 (2021-03-03)
+- Light Templates! You can now create, edit, and place templated lights!
+
 ## Alpha Release v0.7.1 (2021-04-03)
 - Fixed tile drag+drop issue with Alt Grid snap enabled.
 
