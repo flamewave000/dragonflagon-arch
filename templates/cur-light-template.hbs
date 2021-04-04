@@ -1,0 +1,25 @@
+<div id="dfarch-cur-light-template">
+	<h1>{{name}}</h1><a class="button"><i class="fas fa-times"></i></a>
+	<h2>{{localize "LIGHT.LightType"}}:</h2>
+	<p>{{localize lightType}}</p>
+	<h2>{{localize "LIGHT.LightDim" }}:</h2>
+	<p>{{data.dim}}</p>
+	<h2>{{localize "LIGHT.LightBright" }}:</h2>
+	<p>{{data.bright}}</p>
+	<h2>{{localize "LIGHT.LightAngle" }}:</h2>
+	<p>{{data.angle}}</p>
+	<h2>{{localize "LIGHT.LightRotation" }}:</h2>
+	<p>{{data.rotation}}</p>
+	<h2>{{ localize 'LIGHT.DarknessThreshold' }}:</h2>
+	<p>{{data.darknessThreshold}}</p>
+	<h2>{{ localize "LIGHT.LightColor" }}:</h2>
+	<p style="background-color:{{data.tintColor}};color:#fff">{{data.tintColor}}</p>
+	<h2>{{ localize "LIGHT.LightAlpha" }}:</h2>
+	<p>{{colorIntensity}}</p>
+	<h2>{{localize "LIGHT.AnimationType"}}:</h2>
+	<p>{{localize animationType}}</p>
+	<h2>{{localize "LIGHT.AnimationSpeed"}}:</h2>
+	<p>{{data.lightAnimation.speed}}</p>
+	<h2>{{localize "LIGHT.AnimationIntensity"}}:</h2>
+	<p>{{data.lightAnimation.intensity}}</p>
+</div>

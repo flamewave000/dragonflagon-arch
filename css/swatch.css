@@ -1,0 +1,47 @@
+:root {
+	--dfarch-border: #fff;
+}
+
+#swatch {
+	width: max-content;
+	height: max-content;
+	position: relative;
+	border: 2px solid rgb(0, 0, 0);
+	border-radius: 50%;
+	overflow: hidden;
+}
+
+#swatch table {
+	padding: 0;
+	margin: 0;
+	border: none;
+}
+
+#swatch td {
+	width: 15px;
+	height: 15px;
+	background: #fff0;
+	/* border-right: thin dotted #000; */
+	/* border-bottom: thin dotted #000; */
+}
+
+#swatch tr td:last-child {
+	border-right: none;
+}
+
+#swatch tr:last-child td {
+	border-bottom: none;
+}
+
+/* #swatch td:nth-child(3) {
+	border-left: thin solid #fff;
+	border-right: thin solid #fff;
+}
+
+#swatch tr:nth-child(3) td {
+	border-top: thin solid #fff;
+	border-bottom: thin solid #fff;
+} */
+#swatch tr:nth-child(3) td:nth-child(3) {
+	border: thin solid var(--dfarch-border);
+}
