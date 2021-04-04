@@ -1,6 +1,15 @@
 # DF Architect
 
-## Alpha Release v0.8.0 (2021-03-03)
+## Alpha Release v0.9.0 (2021-04-04)
+- General code cleanup on light templates.
+- Some styling adjustments to the active template dialog.
+- You can now create a light template directly from the Macro Directory.
+- Standard Light Template Compendiums:
+	- Light Templates: D&D5e
+	- Light Templates: Pathfinder 1E
+	- Light Templates: Pathfinder 2E
+
+## Alpha Release v0.8.0 (2021-04-03)
 - Light Templates! You can now create, edit, and place templated lights!
 
 ## Alpha Release v0.7.1 (2021-04-03)

@@ -1,7 +1,8 @@
 <div id="dfarch-cur-light-template">
 	<a class="button" title="Edit Template"><i class="fas fa-pencil-alt"></i></a>
-	<h1>{{name}}</h1>
+	<h2 style="text-align:center;grid-column-end:4">{{localize 'DF_ARCHITECT.LightTemplate_CurrentTemplate_Label'}}</h2>
 	<a class="button" title="Stop Placing Template"><i class="fas fa-times"></i></a>
+	<h1>{{name}}</h1>
 	<h2>{{localize "LIGHT.LightType"}}:</h2>
 	<p>{{localize lightType}}</p>
 	<h2>{{localize "LIGHT.LightDim" }}:</h2>
@@ -15,7 +16,7 @@
 	<h2>{{ localize 'LIGHT.DarknessThreshold' }}:</h2>
 	<p>{{data.darknessThreshold}}</p>
 	<h2>{{ localize "LIGHT.LightColor" }}:</h2>
-	<p style="background-color:{{data.tintColor}};color:#fff">{{data.tintColor}}</p>
+	<p style="padding:0"><code style="padding:0.25em;background-color:{{tintColorValue}};color:#{{#if tintIsDark}}fff{{else}}000{{/if}}">{{tintColorLabel}}</code></p>
 	<h2>{{ localize "LIGHT.LightAlpha" }}:</h2>
 	<p>{{colorIntensity}}</p>
 	<h2>{{localize "LIGHT.AnimationType"}}:</h2>

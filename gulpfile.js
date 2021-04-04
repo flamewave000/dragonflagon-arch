@@ -20,6 +20,7 @@ const DIST = 'dist/';
 const BUNDLE = 'bundle/';
 const SOURCE = 'src/';
 const LANG = 'lang/';
+const PACKS = 'packs/';
 const TEMPLATES = 'templates/';
 const CSS = 'css/';
 
@@ -120,6 +121,7 @@ function outputLanguages(output = null) { return desc('output Languages', () => 
 function outputTemplates(output = null) { return desc('output Templates', () => gulp.src(TEMPLATES + GLOB).pipe(replace(/\t/g, '')).pipe(replace(/\>\n\</g, '><')).pipe(gulp.dest((output || DIST) + TEMPLATES))); }
 function outputStylesCSS(output = null) { return desc('output Styles CSS', () => gulp.src(CSS + GLOB).pipe(cleanCss()).pipe(gulp.dest((output || DIST) + CSS))); }
 function outputMetaFiles(output = null) { return desc('output Meta Files', () => gulp.src(['LICENSE', 'README.md', 'CHANGELOG.md']).pipe(gulp.dest((output || DIST)))); }
+function outputPackFiles(output = null) { return desc('output Meta Files', () => gulp.src(PACKS + GLOB).pipe(gulp.dest((output || DIST) + PACKS))); }
 
 /**
  * Copy files to module named directory and then compress that folder into a zip
@@ -159,6 +161,7 @@ exports.default = gulp.series(
 		, outputTemplates()
 		, outputStylesCSS()
 		, outputMetaFiles()
+		, outputPackFiles()
 	)
 	, plog('Build Complete')
 	, pnotify('Default distribution build completed.', 'Build Complete')
@@ -175,6 +178,7 @@ exports.dev = gulp.series(
 		, outputTemplates(DEV_DIST())
 		, outputStylesCSS(DEV_DIST())
 		, outputMetaFiles(DEV_DIST())
+		, outputPackFiles(DEV_DIST())
 	)
 	, copyDevDistToLocalDist
 	, pnotify('Development distribution build completed.', 'Dev Build Complete')
@@ -197,6 +201,7 @@ exports.zip = gulp.series(
 		, outputTemplates()
 		, outputStylesCSS()
 		, outputMetaFiles()
+		, outputPackFiles()
 	)
 	, compressDistribution()
 	, pdel([DIST])
@@ -213,6 +218,7 @@ exports.watch = function () {
 	gulp.watch(TEMPLATES + GLOB, gulp.series(pdel(DIST + TEMPLATES), outputTemplates()));
 	gulp.watch(CSS + GLOB, gulp.series(pdel(DIST + CSS), outputStylesCSS()));
 	gulp.watch(['LICENSE', 'README.md', 'CHANGELOG.md'], outputMetaFiles());
+	gulp.watch(PACKS + GLOB, outputPackFiles());
 }
 /**
  * Sets up a file watch on the project to detect any file changes and automatically rebuild those components, and then copy them to the Development Environment.
@@ -227,4 +233,5 @@ exports.devWatch = function () {
 	gulp.watch(TEMPLATES + GLOB, gulp.series(pdel(devDist + TEMPLATES + GLOB, { force: true }), outputTemplates(devDist), plog('templates done.')));
 	gulp.watch(CSS + GLOB, gulp.series(pdel(devDist + CSS + GLOB, { force: true }), outputStylesCSS(devDist), plog('css done.')));
 	gulp.watch(['LICENSE', 'README.md', 'CHANGELOG.md'], gulp.series(outputMetaFiles(devDist), plog('metas done.')));
+	gulp.watch(PACKS + GLOB, gulp.series(outputPackFiles(devDist), plog('compendiums done.')));
 }

@@ -68,6 +68,8 @@
 	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_FormatWEB": "WebP (Chrome Only)",
 	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_Compression": "The quality level for JPEG and WebP",
 
-	"DF_ARCHITECT.LightTemplate_CreateTemplate_Button": "Create Template from this Light",
-	"DF_ARCHITECT.LightTemplate_EditTemplate_Label": "Edit Light Template"
+	"DF_ARCHITECT.LightTemplate_CreateTemplateButton_LightConfig": "Create Template from this Light",
+	"DF_ARCHITECT.LightTemplate_CreateTemplateButton_MacroDirectory": "Create Light Template",
+	"DF_ARCHITECT.LightTemplate_EditTemplate_Label": "Edit Light Template",
+	"DF_ARCHITECT.LightTemplate_CurrentTemplate_Label": "Current Active Template"
 }

@@ -1,10 +1,12 @@
 #dfarch-cur-light-template {
 	position: absolute;
-	background: rgba(0, 0, 0, 0.25);
+	background: rgba(0, 0, 0, 0.5);
 	display: grid;
 	grid-template-columns: auto 1fr 1fr auto;
 	width: fit-content;
 	padding: 1em;
+	border: thin solid #000;
+	border-radius: 16px;
 }
 
 #dfarch-cur-light-template h1 {
@@ -33,10 +35,12 @@
 	margin: 0;
 	padding: 0.25em;
 }
+
 #dfarch-cur-light-template a:first-of-type {
 	grid-column: 1;
 	color: #fff;
 }
+
 #dfarch-cur-light-template a:last-of-type {
 	grid-column: 4;
 	color: #fff;

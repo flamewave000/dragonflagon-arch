@@ -12,6 +12,29 @@
 	"languages": [
 		{ "lang": "en", "name": "English", "path": "lang/en.json" }
 	],
+	"packs": [
+		{
+			"name": "lights-dnd5e",
+			"label": "Light Templates: D&D5e",
+			"path": "packs/lights-dnd5e.db",
+			"entity": "Macro",
+			"module": "{{name}}"
+		},
+		{
+			"name": "lights-pf1e",
+			"label": "Light Templates: Pathfinder 1E",
+			"path": "packs/lights-pf1e.db",
+			"entity": "Macro",
+			"module": "{{name}}"
+		},
+		{
+			"name": "lights-pf2e",
+			"label": "Light Templates: Pathfinder 2E",
+			"path": "packs/lights-pf2e.db",
+			"entity": "Macro",
+			"module": "{{name}}"
+		}
+	],
 	"bugs":		"https://github.com/flamewave000/dragonflagon-arch/issues/new/choose",
 	"url":		"https://github.com/flamewave000/dragonflagon-arch",
 	"license":	"https://github.com/flamewave000/dragonflagon-arch/blob/master/LICENSE",
