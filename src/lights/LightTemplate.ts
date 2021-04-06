@@ -1,4 +1,5 @@
 import ARCHITECT from "../core/architect.js";
+import { QuickColourPicker } from "./QuickColourPicker.js";
 
 declare global {
 	class MacroConfig extends BaseEntitySheet { }
@@ -140,6 +141,14 @@ ${'DF_ARCHITECT.LightTemplate_CreateTemplateButton_LightConfig'.localize()}
 		// Render the form html
 		html.find('header.sheet-header')
 			.after(await renderTemplate(`modules/${ARCHITECT.MOD_NAME}/templates/light-template.hbs`, htmlData));
+
+
+		html.find('button.eyedropper').on('click', async (event: JQuery.ClickEvent) => {
+			event.preventDefault();
+			const colour = await QuickColourPicker.requestColourPick(app);
+			app.element.find('input[name="tintColor"]').val(colour);
+			app.element.find('input[data-edit="tintColor"]').val(colour);
+		});
 
 		// @ts-ignore
 		// Replace the MacroConfig's update function with our own
