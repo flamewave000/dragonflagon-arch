@@ -45,7 +45,12 @@ class _WallJoinSplit {
 			newWalls.push(wall1, wall2)
 		}
 		await layer.deleteMany(walls.map(x => x.id));
-		await layer.createMany(newWalls);
+		const wallObjects = (await layer.createMany(newWalls)) as any as Wall.Data[];
+		for (let o of wallObjects) {
+			const wall = layer.get(o._id);
+			if (!wall.visible || !wall.can(game.user, "control")) continue;
+			wall.control({ releaseOthers: false });
+		}
 	}
 	private async _joinWalls() {
 		const points = new Map<string, Wall[]>();
@@ -67,7 +72,7 @@ class _WallJoinSplit {
 		delete wallData._id;
 		wallData.c = endpoints.reduce((r, x) => r.concat(JSON.parse(x[0])), [] as number[]) as [number, number, number, number];
 		await layer.deleteMany(walls.map(x => x.id));
-		await Wall.create(wallData);
+		Wall.create(wallData).then((x: void | Wall) => { if (x) x.control(); });
 	}
 }
 
