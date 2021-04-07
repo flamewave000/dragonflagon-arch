@@ -4,5 +4,12 @@
 		"**/.DS_Store": true,
 		"**/node_modules": true,
 		"**/package-lock.json": true
-	}
+	},
+	"cSpell.words": [
+		"FRMT",
+		"TRGT"
+	],
+	"cSpell.ignoreWords": [
+		"behaviour"
+	]
 }

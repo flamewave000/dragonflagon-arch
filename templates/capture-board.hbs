@@ -14,6 +14,29 @@
 	</select>
 	<h3>{{localize 'DF_ARCHITECT.CaptureGameScreen_ScreenCapture_Compression'}}</h3>
 	<output class="shrink">{{compression}}</output>
-	<input class="grow" id="compression" name="compression" type="range" min="0" max="1" step="0.01" value="{{compression}}">
-	<h3></h3>
+	<input class="grow" id="compression" name="compression" type="range" min="0" max="1" step="0.01"
+		value="{{compression}}">
+	<section>
+		<h3
+			onclick="$('.dfarch-capture-form i.fa-plus-square').toggle();$('.dfarch-capture-form i.fa-minus-square').toggle();$('.dfarch-capture-form section>div').slideToggle(200);$('.dfarch-capture-form span').slideToggle(200)">
+			<i class="far fa-plus-square"></i>
+			<i class="far fa-minus-square" style="display:none"></i>
+			Layer Filtering
+		</h3>
+		<div style="display:none">
+			{{#each layers}}
+			<input style="grid-row:{{add @index 1}};grid-column:1" type="checkbox" id="{{name}}-show" value="{{name}}" {{#if visible}}checked{{/if}}>
+			<label style="grid-row:{{add @index 1}};grid-column:2" for="{{name}}-show">{{label}}</label>
+			{{#if hasControls}}
+			<input style="grid-row:{{add @index 1}};grid-column:3" type="checkbox" id="{{name}}-controls" value="{{name}}" {{#if active}}checked{{/if}}>
+			<label style="grid-row:{{add @index 1}};grid-column:4" for="{{name}}-controls">{{localize 'Show Controls'}}</label>
+			{{/if}}
+			{{#if hasHidden}}
+			<input style="grid-row:{{add @index 1}};grid-column:3" type="checkbox" id="{{name}}-hidden" value="{{name}}">
+			<label style="grid-row:{{add @index 1}};grid-column:4" for="{{name}}-hidden">{{localize 'Show Hidden'}}</label>
+			{{/if}}
+			{{/each}}
+		</div>
+		<span style="display:block;height:150px">&nbsp;</span>
+	</section>
 </form>

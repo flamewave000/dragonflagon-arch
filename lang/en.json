@@ -71,5 +71,19 @@
 	"DF_ARCHITECT.LightTemplate_CreateTemplateButton_LightConfig": "Create Template from this Light",
 	"DF_ARCHITECT.LightTemplate_CreateTemplateButton_MacroDirectory": "Create Light Template",
 	"DF_ARCHITECT.LightTemplate_EditTemplate_Label": "Edit Light Template",
-	"DF_ARCHITECT.LightTemplate_CurrentTemplate_Label": "Current Active Template"
+	"DF_ARCHITECT.LightTemplate_CurrentTemplate_Label": "Current Active Template",
+
+	"LAYERS.BackgroundLayer": "Background Layer",
+	"LAYERS.TilesLayer": "Tiles Layer",
+	"LAYERS.DrawingsLayer": "Drawings Layer",
+	"LAYERS.GridLayer": "Grid Layer",
+	"LAYERS.WallsLayer": "Walls Layer",
+	"LAYERS.TemplateLayer": "Template Layer",
+	"LAYERS.NotesLayer": "Notes Layer",
+	"LAYERS.TokenLayer": "Token Layer",
+	"LAYERS.LightingLayer": "Lighting Layer",
+	"LAYERS.SoundsLayer": "Sounds Layer",
+	"LAYERS.SightLayer": "Sight Layer",
+	"LAYERS.EffectsLayer": "Effects Layer",
+	"LAYERS.ControlsLayer": "Controls Layer"
 }
