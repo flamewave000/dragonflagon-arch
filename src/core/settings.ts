@@ -4,6 +4,7 @@ export default class SETTINGS {
 		this._MOD_NAME = moduleName;
 	}
 	static register<T>(key: string, config: ClientSettings.PartialData<T>) { game.settings.register(SETTINGS._MOD_NAME, key, config); }
+	static registerMenu(key: string, config: ClientSettings.PartialMenuSettings) { game.settings.registerMenu(SETTINGS._MOD_NAME, key, config); }
 	static get<T>(key: string): T { return game.settings.get(SETTINGS._MOD_NAME, key); }
 	static async set<T>(key: string, value: T): Promise<T> { return await game.settings.set(SETTINGS._MOD_NAME, key, value); }
 	static default<T>(key: string): T { return game.settings.settings.get(SETTINGS._MOD_NAME + '.' + key).default; }

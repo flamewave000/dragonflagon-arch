@@ -17,6 +17,16 @@ import { LightTemplateManager, LightingLayerOverride } from './lights/LightTempl
 Hooks.once('init', function () {
 	if (!game.modules.get('lib-wrapper')?.active) return;
 
+	SETTINGS.registerMenu('hotkeys', {
+		icon: 'fas fa-keyboard',
+		label: 'Architect Hotkey Bindings',
+		restricted: true,
+		type: Hotkeys.createConfig('DF Architect Hotkeys', [
+			`${ARCHITECT.MOD_NAME}\..+`,
+			{ group: 'general', hotkeys: [`${ARCHITECT.MOD_NAME}\..+`] }
+		]),
+	});
+
 	ARCHITECT.DrawArchitectGraphicToConsole();
 	AltGridSnap.init();
 	WallCtrlInvert.init();
