@@ -39,7 +39,7 @@ class _AltLightOrigin {
 				hint: 'DF_ARCHITECT.AltLightOrigin_Settings_Colour1_Hint',
 				scope: 'world',
 				config: true,
-				default: "#ff5500ff",
+				default: "#ffffffff",
 				type: String
 			});
 			SETTINGS.register(_AltLightOrigin.PREF_COLOUR2, {
@@ -58,7 +58,7 @@ class _AltLightOrigin {
 				hint: "DF_ARCHITECT.AltLightOrigin_Settings_Colour1_Hint",
 				label: "DF_ARCHITECT.AltLightOrigin_Settings_Colour1_Name",
 				restricted: true,
-				defaultColor: "#ff5500ff",
+				defaultColor: "#ffffffff",
 				scope: "world",
 			});
 			// @ts-ignore
@@ -67,7 +67,7 @@ class _AltLightOrigin {
 				hint: "DF_ARCHITECT.AltLightOrigin_Settings_Colour2_Hint",
 				label: "DF_ARCHITECT.AltLightOrigin_Settings_Colour2_Name",
 				restricted: true,
-				defaultColor: "#ffffffff",
+				defaultColor: "#ff5500ff",
 				scope: "world",
 			});
 		}
@@ -134,11 +134,12 @@ class AltLightControlIcon extends ControlIcon {
 		if (isNaN(colour))
 			colour = parseColour(SETTINGS.default(this.altLightOrigin.alternateColour ? _AltLightOrigin.PREF_COLOUR2 : _AltLightOrigin.PREF_COLOUR1));
 		this.bg.clear()
+			.lineStyle(1, colour, 1.0)
+			.moveTo(this.rect[0]-1, this.rect[1]-1)
+			.lineTo(this.rect[2]-1, this.rect[3]-1)
+			.moveTo(this.rect[2]-1, this.rect[1]-1)
+			.lineTo(this.rect[0]-1, this.rect[3]-1)
 			.lineStyle(2, colour, 1.0)
-			.moveTo(this.rect[0], this.rect[1])
-			.lineTo(this.rect[2], this.rect[3])
-			.moveTo(this.rect[2], this.rect[1])
-			.lineTo(this.rect[0], this.rect[3])
 			.drawEllipse(
 				this.rect[0] + (this.rect[2] / 2),
 				this.rect[1] + (this.rect[3] / 2),
