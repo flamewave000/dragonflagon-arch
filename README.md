@@ -8,9 +8,11 @@ Welcome to the great big Architect's Tool Suite. This module provides many many 
 
 I hate big walls of text, so I've done my best to provide some animated previews of what each feature does. I hope you enjoy what this module brings to your FoundryVTT experience!
 
-
+---
 
 **[![Become a patron](.assets/patreon-image.png)](https://www.patreon.com/bePatron?u=46113583) If you want to support me or just help me buy doggy treats! Also, you can keep up to date on what I'm working on with regular posts! I will be announcing any new modules or pre-releases there for anyone wanting to help me test things out!**
+
+---
 
 ## Dependencies
 
@@ -36,15 +38,11 @@ Grid snapping can be toggled to snap to box centers instead of intersections. Th
 
 Layers are now mapped to keyboard shortcuts for quick switching. This is fully customizable in the module's settings.
 
-> **Image**  
-> Show image of layer hotkeys
+![Layer Hotkeys](.assets\general-layer-hotkeys.png)
 
 ### Layer Quick Swap
 
 Two layers can be mapped to a hotkey that will quickly switch back and forth between them when pressed. For example, when you're working on walls and lighting, and want to quickly switch back and forth between those two layers.
-
-> **Video**  
-> Show simple video of quick switching between Walls and Lighting layers
 
 ### Canvas Capture
 
@@ -80,8 +78,7 @@ When placing walls, you can toggle this option (either with the new "Lock Wall C
 
 There now hotkeys for quickly switching to the different wall types.
 
-> **Image**  
-> Show image of the Wall Type hotkeys
+![Wall Type Hotkeys](.assets\walls-walltype-hotkeys.png)
 
 ### Wall Splitting
 
@@ -104,18 +101,13 @@ The selected contiguous wall segments will be joined into a single wall. Useful 
 
 You can now use an eyedropper from the Light Config dialog to quickly select a colour from the current map. Great for trying to match a light colour to a material in the map like lava, water, etc.
 
-> **Video**  
-> This one is simple, use the colour picker to grab the colour of the water
-> Then make the light be a sort of glow on the water for a cool effect.
+![Quick Colour Picker Demo Video](.assets\lights-colourpicker.gif)
 
 ### Show Light Origin
 
 If you are trying to perfectly place a light source, you're going to typically hold the Shift key to avoid snapping to the grid. Now when you hold the Shift key, the Light Source token will be replaced with a set of Crosshairs that point to the exact origin of the light source. By default the crosshairs are White, but if you also hold the Alt key, they will change to Orange (in case the white is difficult to see on your current map).
 
-> **Video**  
-> Get a statue image
-> Make its eyes glow red
-> Showing how the origin icon can help with perfectly placing a light
+![Show Light Origin Demo Video](.assets\lights-showorigin.gif)
 
 ### Light Templating
 
@@ -125,24 +117,20 @@ Light templates are stored in your Macros and can be easily placed onto the Hotb
 
 When a template is selected, you can `LeftClick + Drag` like normal to place a light using all of the settings, except the Dim/Bright range (as that is determined by how far you drag with your mouse). Alternatively you can `Ctrl + LeftClick` to place a light on your mouse pointer's current position. This will use all the configured settings, including the Dim/Bright range specified in the template.
 
-> **Video1**  
-> TODO: Add some lamp and torch images to the map I made
-> Create a Lamp Light
-> Create a template
-> Select Template
-> Ctrl+Click around map to place on all lamp images
->
-> **Video2**  
-> Duplicate the Lamp template
-> Rename to Torch and adjust range
-> Place Torch on hotbar
-> Select Torch
-> Place torches
+|Creating a Template from an existing Light Source|Duplicating and changing an existing Template|
+| :-: | :-: |
+|![Create Template Demo](.assets\lights-template-create.gif)|![Duplicate Template Demo](.assets\lights-template-duplicate.gif)|
+
+| Using a template by Click+Dragging to set range |
+| :---------------------------------------------: |
+|![Click + Drag Demo](.assets\lights-template-drag.gif)|
 
 #### Standard Light Templates
 
-A compendium of common light templates for D&D 5e, and Pathfinder 1e & 2e.
+A compendium of common light templates for D&D 5e, and Pathfinder 1e & 2e. (For PF1e&2e, not pictured are the Sunrods as well, which are alphabetically at the bottom of the list).
 
-> **Image**  
-> Just show an image of the 3 compendiums side-by-side
+These templates are both standard lights with pre-set Dim/Bright Ranges based on the respective rule systems. They also come with secondary pre-animated macros if you want a starting point. You can just import the macros and then edit them however you'd like (Such as adding tint colours).
 
+|D&D 5e Light Templates|Pathfinder 1e Light Templates|Pathfinder 2e Light Templates|
+|:-:|:-:|:-:|
+|![Light Template Compendium D&D5e](.assets\lights-template-comp-dnd5e.png)|![Light Template Compendium PF1e](.assets\lights-template-comp-pf1e.png)|![Light Template Compendium PF2e](.assets\lights-template-comp-pf2e.png)|
