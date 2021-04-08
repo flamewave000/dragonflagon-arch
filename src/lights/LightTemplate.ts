@@ -85,7 +85,7 @@ export class LightTemplateManager {
 		Hooks.on('renderMacroDirectory', (app: MacroDirectory, html: JQuery<HTMLElement>, data: any) => {
 			const createTemplateButton = $(`<button style="flex:unset"><i class="far fa-lightbulb"></i>
 ${'DF_ARCHITECT.LightTemplate_CreateTemplateButton_MacroDirectory'.localize()}</button>`);
-			createTemplateButton.appendTo('div.header-actions.action-buttons');
+			createTemplateButton.appendTo(html.find('div.header-actions.action-buttons'));
 			createTemplateButton.on('click', async () => await this._createTemplate({
 				t: 'l',
 				dim: 30,
