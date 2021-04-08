@@ -33,6 +33,7 @@ Hooks.once('init', function () {
 	WallJoinSplit.init();
 	AltLightOrigin.init();
 	CaptureGameScreen.init();
+	LightTemplateManager.init();
 });
 
 Hooks.once('setup', function () {

@@ -70,7 +70,9 @@
 
 	"DF_ARCHITECT.LightTemplate_CreateTemplateButton_LightConfig": "Create Template from this Light",
 	"DF_ARCHITECT.LightTemplate_CreateTemplateButton_MacroDirectory": "Create Light Template",
-	"DF_ARCHITECT.LightTemplate_EditTemplate_Label": "Edit Light Template",
+	"DF_ARCHITECT.LightTemplate_ContextMenu_Edit": "Edit Template",
+	"DF_ARCHITECT.LightTemplate_ContextMenu_Remove": "Remove Template",
+	"DF_ARCHITECT.LightTemplate_ContextMenu_Delete": "Delete Template",
 	"DF_ARCHITECT.LightTemplate_CurrentTemplate_Label": "Current Active Template",
 
 	"LAYERS.BackgroundLayer": "Background Layer",

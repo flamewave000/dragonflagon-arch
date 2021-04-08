@@ -74,6 +74,10 @@ export class LightTemplateManager {
 		}, {});
 	}
 
+	static init() {
+		libWrapper.register(ARCHITECT.MOD_NAME, 'Hotbar.prototype._contextMenu', this._contextMenu.bind(this), 'OVERRIDE');
+	}
+
 	static ready() {
 		if (!game.user.isGM) return;
 		Hooks.on('renderLightConfig', this._renderLightConfig.bind(this));
@@ -101,7 +105,6 @@ ${'DF_ARCHITECT.LightTemplate_CreateTemplateButton_MacroDirectory'.localize()}</
 				},
 			}));
 		});
-		libWrapper.register(ARCHITECT.MOD_NAME, 'Hotbar.prototype._contextMenu', this._contextMenu, 'OVERRIDE');
 	}
 
 	private static _renderLightConfig(app: LightConfig, html: JQuery<HTMLElement>, data: any) {
@@ -215,7 +218,27 @@ ${'DF_ARCHITECT.LightTemplate_CreateTemplateButton_LightConfig'.localize()}
 				callback: li => game.macros.get(li.data("macro-id")).sheet.render(true)
 			},
 			{
-				name: "DF_ARCHITECT.LightTemplate_EditTemplate_Label",
+				name: "MACRO.Remove", icon: '<i class="fas fa-times"></i>',
+				condition: li => !game.macros.get(li.data("macro-id")).getFlag(ARCHITECT.MOD_NAME, this.FLAG_IS_TEMPLATE),
+				callback: li => game.user.assignHotbarMacro(null, li.data("slot"))
+			},
+			{
+				name: "MACRO.Delete", icon: '<i class="fas fa-trash"></i>',
+				condition: li => {
+					const macro = game.macros.get(li.data("macro-id"));
+					return macro && !macro.getFlag(ARCHITECT.MOD_NAME, this.FLAG_IS_TEMPLATE) ? macro.owner : false;
+				},
+				callback: li => {
+					const macro = game.macros.get(li.data("macro-id"));
+					return Dialog.confirm({
+						title: `${game.i18n.localize("MACRO.Delete")} ${macro.name}`,
+						content: game.i18n.localize("MACRO.DeleteConfirm"),
+						yes: macro.delete.bind(macro)
+					});
+				}
+			},
+			{
+				name: "DF_ARCHITECT.LightTemplate_ContextMenu_Edit",
 				icon: '<i class="fas fa-edit"></i>',
 				condition: li => {
 					const macro = game.macros.get(li.data("macro-id"));
@@ -224,16 +247,17 @@ ${'DF_ARCHITECT.LightTemplate_CreateTemplateButton_LightConfig'.localize()}
 				callback: li => game.macros.get(li.data("macro-id")).sheet.render(true)
 			},
 			{
-				name: "MACRO.Remove",
+				name: "DF_ARCHITECT.LightTemplate_ContextMenu_Remove",
 				icon: '<i class="fas fa-times"></i>',
+				condition: li => game.macros.get(li.data("macro-id")).getFlag(ARCHITECT.MOD_NAME, this.FLAG_IS_TEMPLATE),
 				callback: li => game.user.assignHotbarMacro(null, li.data("slot"))
 			},
 			{
-				name: "MACRO.Delete",
+				name: "DF_ARCHITECT.LightTemplate_ContextMenu_Delete",
 				icon: '<i class="fas fa-trash"></i>',
 				condition: li => {
 					const macro = game.macros.get(li.data("macro-id"));
-					return macro ? macro.owner : false;
+					return macro && macro.getFlag(ARCHITECT.MOD_NAME, this.FLAG_IS_TEMPLATE) ? macro.owner : false;
 				},
 				callback: li => {
 					const macro = game.macros.get(li.data("macro-id"));
