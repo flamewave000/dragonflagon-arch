@@ -38,7 +38,7 @@ Grid snapping can be toggled to snap to box centers instead of intersections. Th
 
 Layers are now mapped to keyboard shortcuts for quick switching. This is fully customizable in the module's settings.
 
-![Layer Hotkeys](.assets\general-layer-hotkeys.png)
+![Layer Hotkeys](.assets/general-layer-hotkeys.png)
 
 ### Layer Quick Swap
 
@@ -78,7 +78,7 @@ When placing walls, you can toggle this option (either with the new "Lock Wall C
 
 There now hotkeys for quickly switching to the different wall types.
 
-![Wall Type Hotkeys](.assets\walls-walltype-hotkeys.png)
+![Wall Type Hotkeys](.assets/walls-walltype-hotkeys.png)
 
 ### Wall Splitting
 
@@ -101,13 +101,13 @@ The selected contiguous wall segments will be joined into a single wall. Useful 
 
 You can now use an eyedropper from the Light Config dialog to quickly select a colour from the current map. Great for trying to match a light colour to a material in the map like lava, water, etc.
 
-![Quick Colour Picker Demo Video](.assets\lights-colourpicker.gif)
+![Quick Colour Picker Demo Video](.assets/lights-colourpicker.gif)
 
 ### Show Light Origin
 
 If you are trying to perfectly place a light source, you're going to typically hold the Shift key to avoid snapping to the grid. Now when you hold the Shift key, the Light Source token will be replaced with a set of Crosshairs that point to the exact origin of the light source. By default the crosshairs are White, but if you also hold the Alt key, they will change to Orange (in case the white is difficult to see on your current map).
 
-![Show Light Origin Demo Video](.assets\lights-showorigin.gif)
+![Show Light Origin Demo Video](.assets/lights-showorigin.gif)
 
 ### Light Templating
 
@@ -119,11 +119,11 @@ When a template is selected, you can `LeftClick + Drag` like normal to place a l
 
 |Creating a Template from an existing Light Source|Duplicating and changing an existing Template|
 | :-: | :-: |
-|![Create Template Demo](.assets\lights-template-create.gif)|![Duplicate Template Demo](.assets\lights-template-duplicate.gif)|
+|![Create Template Demo](.assets/lights-template-create.gif)|![Duplicate Template Demo](.assets/lights-template-duplicate.gif)|
 
 | Using a template by Click+Dragging to set range |
 | :---------------------------------------------: |
-|![Click + Drag Demo](.assets\lights-template-drag.gif)|
+|![Click + Drag Demo](.assets/lights-template-drag.gif)|
 
 #### Standard Light Templates
 
@@ -133,4 +133,4 @@ These templates are both standard lights with pre-set Dim/Bright Ranges based on
 
 |D&D 5e Light Templates|Pathfinder 1e Light Templates|Pathfinder 2e Light Templates|
 |:-:|:-:|:-:|
-|![Light Template Compendium D&D5e](.assets\lights-template-comp-dnd5e.png)|![Light Template Compendium PF1e](.assets\lights-template-comp-pf1e.png)|![Light Template Compendium PF2e](.assets\lights-template-comp-pf2e.png)|
+|![Light Template Compendium D&D5e](.assets/lights-template-comp-dnd5e.png)|![Light Template Compendium PF1e](.assets/lights-template-comp-pf1e.png)|![Light Template Compendium PF2e](.assets/lights-template-comp-pf2e.png)|
