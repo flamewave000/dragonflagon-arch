@@ -8,10 +8,23 @@ declare global {
 }
 
 class _AltGridSnap {
-	static readonly PREF_ENABLED = 'AltGridSnapEnabled';
-	static readonly PREF_TOGGLED = 'AltGridSnapToggled';
+	static readonly PREF_ENABLED = 'AltGridSnap.Enabled';
+	static readonly PREF_TOGGLED = 'AltGridSnap.Toggled';
+	static readonly PREF_PLACE_ON_CONTROL_BAR = 'AltGridSnap.PlaceOnControlBar';
 
 	init() {
+		SETTINGS.register(_AltGridSnap.PREF_TOGGLED, {
+			scope: 'client',
+			config: false,
+			type: Boolean,
+			default: false,
+			onChange: (value: Boolean) => {
+				if (!SETTINGS.get(_AltGridSnap.PREF_PLACE_ON_CONTROL_BAR)) return;
+				const button = $('ol#controls>li#df-arch-altSnap');
+				if (value) button.addClass('active');
+				else button.removeClass('active');
+			}
+		});
 		SETTINGS.register(_AltGridSnap.PREF_ENABLED, {
 			scope: 'world',
 			config: true,
@@ -21,17 +34,31 @@ class _AltGridSnap {
 			default: true,
 			onChange: () => { this._patchSquareGrid(); ui.controls.initialize() }
 		});
-		SETTINGS.register(_AltGridSnap.PREF_TOGGLED, {
+		SETTINGS.register(_AltGridSnap.PREF_PLACE_ON_CONTROL_BAR, {
 			scope: 'client',
-			config: false,
+			config: true,
+			name: 'DF_ARCHITECT.AltGridSnap_Setting_PlaceOnControlBarName',
+			hint: 'DF_ARCHITECT.AltGridSnap_Setting_PlaceOnControlBarHint',
 			type: Boolean,
-			default: false
+			default: false,
+			onChange: () => { ui.controls.initialize(); ui.controls.render(true) }
+		});
+
+		Hotkeys.registerShortcut({
+			name: ARCHITECT.MOD_NAME + '.AltSnapGrid.Toggle',
+			label: 'DF_ARCHITECT.AltGridSnap_Hotkey_Toggle',
+			default: { key: Hotkeys.keys.KeyS, alt: true, ctrl: false, shift: false },
+			onKeyDown: () => {
+				if (this.enabled)
+					this.toggled = !this.toggled;
+			}
 		});
 
 		this._patchSquareGrid();
 
 		Hooks.on('getSceneControlButtons', (controls: SceneControl[]) => {
 			if (!this.enabled) return;
+			if (SETTINGS.get(_AltGridSnap.PREF_PLACE_ON_CONTROL_BAR)) return;
 			const isGM = game.user.isGM;
 			const enabled = this.toggled;
 			for (let control of controls) {
@@ -45,6 +72,16 @@ class _AltGridSnap {
 					onClick: (toggled: boolean) => { this.toggled = toggled }
 				});
 			}
+		});
+		Hooks.on('renderSceneControls', (app: SceneControls, html: JQuery<HTMLElement>, data: any) => {
+			if (!SETTINGS.get(_AltGridSnap.PREF_PLACE_ON_CONTROL_BAR)) return;
+			const button = $(`
+<li class="control-tool toggle" id="df-arch-altSnap" style="line-height:0" title="${'DF_ARCHITECT.AltGridSnap_Label'.localize()}">
+	<i class="df df-alt-snap"></i>
+</li>`);
+			button.on('click', () => this.toggled = !button.hasClass('active'))
+			if (this.toggled) button.addClass('active');
+			html.append(button);
 		});
 	}
 

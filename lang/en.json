@@ -35,8 +35,11 @@
 	"DF_ARCHITECT.WallShortcuts_Settings_Label_WallType": "Wall Type",
 
 	"DF_ARCHITECT.AltGridSnap_Setting_EnabledName": "Show Alternate Grid Snap Toggle",
-	"DF_ARCHITECT.AltGridSnap_Setting_EnabledHint": "Show the toggle button alternate grid snapping to the center of boxes instead of corners.",
+	"DF_ARCHITECT.AltGridSnap_Setting_EnabledHint": "Show the toggle button for enabling alternate grid snapping to the center of boxes instead of corners.",
+	"DF_ARCHITECT.AltGridSnap_Setting_PlaceOnControlBarName": "Place on Main Control Bar",
+	"DF_ARCHITECT.AltGridSnap_Setting_PlaceOnControlBarHint": "Place the Alternate Grid Snap Toggle button on the main Controls Bar instead of the Tools bars.",
 	"DF_ARCHITECT.AltGridSnap_Label": "Alternate Grid Snap",
+	"DF_ARCHITECT.AltGridSnap_Hotkey_Toggle": "Toggle Alternate Grid Snapping",
 	
 	"DF_ARCHITECT.WallCtrlInvert_Label": "Lock Wall Chaining",
 	"DF_ARCHITECT.WallCtrlInvert_Settings_Title": "Wall Chaining",
