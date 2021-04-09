@@ -35,7 +35,7 @@ class _WallJoinSplit {
 			var midX = (x1 + x2) / 2;
 			var midY = (y1 + y2) / 2;
 			//@ts-expect-error
-			[midX, midY] = layer._getWallEndpointCoordinates(new PIXI.Point(midX, midY));
+			[midX, midY] = layer._getWallEndpointCoordinates(new PIXI.Point(midX, midY), {snap:false});
 			const wall1 = duplicate(wall.data) as Wall.Data;
 			wall1.c = [x1, y1, midX, midY];
 			delete wall1._id;
@@ -59,9 +59,9 @@ class _WallJoinSplit {
 		for (let wall of walls) {
 			const [x1, y1, x2, y2] = wall.data.c;
 			//@ts-expect-error
-			points.getOrDefault(JSON.stringify(layer._getWallEndpointCoordinates(new PIXI.Point(x1, y1))), []).push(wall);
+			points.getOrDefault(JSON.stringify(layer._getWallEndpointCoordinates(new PIXI.Point(x1, y1), {snap:false})), []).push(wall);
 			//@ts-expect-error
-			points.getOrDefault(JSON.stringify(layer._getWallEndpointCoordinates(new PIXI.Point(x2, y2))), []).push(wall);
+			points.getOrDefault(JSON.stringify(layer._getWallEndpointCoordinates(new PIXI.Point(x2, y2), {snap:false})), []).push(wall);
 		}
 		if ([...points.values()].reduce((r, x) => x.length != 2 ? r + 1 : r, 0) > 2) {
 			ui.notifications.error('Selected walls are disjointed. Make sure they are a single line of connected walls.');

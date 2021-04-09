@@ -84,16 +84,11 @@ There now hotkeys for quickly switching to the different wall types.
 
 Each selected wall segment will be divided into 2 wall segments. This can be very useful in conjunction with modules like the [Multiple Wall Point Mover (MWPM)](https://foundryvtt.com/packages/mwpm) module to quickly split a wall in two and move that joint to another place on the map.
 
-> **Video ** 
-> Show some walls on a map and click the split button a couple of times
-
 ### Wall Joining
 
 The selected contiguous wall segments will be joined into a single wall. Useful when you have a couple of chained walls that really could just be one.
 
-> **Video**  
-> Show some walls in an arc on a map and some of them join them.
-> Maybe show an overly complex section on a curved wall and join the section
+![Wall Joining and Splitting Demo](.assets/walls-join-split.gif)
 
 ## Lighting Features
 
