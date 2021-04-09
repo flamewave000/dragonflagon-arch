@@ -6,6 +6,9 @@
 	<input class="shrink" type="radio" value="all" id="all" name="target" {{#if all}}checked{{/if}}>
 	<label class="grow" for="all">{{localize 'DF_ARCHITECT.CaptureGameScreen_ScreenCapture_Target_All'}}</label>
 	<div></div>
+	<input class="shrink" type="checkbox" id="padding" name="padding"/>
+	<label class="grow" for="padding">{{localize 'DF_ARCHITECT.CaptureGameScreen_ScreenCapture_KeepPadding'}}</label>
+	<div></div>
 	<h3>{{localize 'DF_ARCHITECT.CaptureGameScreen_ScreenCapture_Format'}}</h3>
 	<select name="format" id="format">
 		<option value="png" {{#if png}}selected{{/if}}>{{localize 'DF_ARCHITECT.CaptureGameScreen_ScreenCapture_FormatPNG'}}</option>

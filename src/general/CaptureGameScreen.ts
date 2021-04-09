@@ -106,6 +106,7 @@ export default class CaptureGameScreen {
 			});
 		}
 		var cleanupHandled = false;
+		var keepPadding = false;
 		const dialog = new Dialog({
 			title: 'DF_ARCHITECT.CaptureGameScreen_ScreenCapture_Label'.localize(),
 			content: await renderTemplate(`modules/${ARCHITECT.MOD_NAME}/templates/capture-board.hbs`, data),
@@ -127,6 +128,7 @@ export default class CaptureGameScreen {
 							if ((<HTMLInputElement>element).checked)
 								target = $(element).val() as string;
 						});
+						keepPadding = (<HTMLInputElement>html.find('input[name="padding"]')[0]).checked;
 						const compression: number = parseFloat(html.find('#compression').val() as string);
 						const call = target === 'all' ? this.captureCanvas : this.captureView;
 						const format: string = html.find('#format').val() as string;
@@ -136,13 +138,13 @@ export default class CaptureGameScreen {
 						await dialog.close();
 						switch (format) {
 							case "png":
-								await call('image/png', 'png', compression);
+								await call('image/png', 'png', compression, keepPadding);
 								break;
 							case "jpeg":
-								await call('image/jpeg', 'jpg', compression);
+								await call('image/jpeg', 'jpg', compression, keepPadding);
 								break;
 							case "webp":
-								await call('image/webp', 'webp', compression);
+								await call('image/webp', 'webp', compression, keepPadding);
 								break;
 						}
 						this.cleanupLayers(hiddenItemsSnapshot);
@@ -250,7 +252,7 @@ export default class CaptureGameScreen {
 		});
 	}
 
-	static async captureCanvas(format: string, extension: string, compression: number): Promise<void> {
+	static async captureCanvas(format: string, extension: string, compression: number, keepPadding: boolean = false): Promise<void> {
 		return new Promise((res, _) => {
 			canvas = <Canvas>canvas;
 			// Save the previous orientation of the canvas stage
@@ -264,16 +266,34 @@ export default class CaptureGameScreen {
 			element.appendTo(document.body);
 			// Calculate dimension adjustments for offseting coordinates relative to the body
 			const body = $(document.body);
-			const widthAdjust = (body.width() - canvas.scene.data.width) / 2;
-			const heightAdjust = (body.height() - canvas.scene.data.height) / 2;
+
+			var padW = 0;
+			var padH = 0;
+			if (keepPadding) {
+				padW = canvas.scene.data.padding * canvas.scene.data.width;
+				padH = canvas.scene.data.padding * canvas.scene.data.height;
+				// If we are slightly off, round to nearest grid size.
+				if ((padW % canvas.grid.size) !== 0)
+					padW = (Math.trunc(padW / canvas.grid.size) + 1) * canvas.grid.size;
+				if ((padH % canvas.grid.size) !== 0)
+					padH = (Math.trunc(padH / canvas.grid.size) + 1) * canvas.grid.size;
+				padW *= 2;
+				padH *= 2;
+			}
+
+			const canvasW = padW + canvas.scene.data.width;
+			const canvasH = padH + canvas.scene.data.height;
+
+			const widthAdjust = (body.width() - canvasW) / 2;
+			const heightAdjust = (body.height() - canvasH) / 2;
 			// Update the orientation of the canvas stage
-			canvas.app.renderer.resize(canvas.scene.data.width, canvas.scene.data.height);
+			canvas.app.renderer.resize(canvasW, canvasH);
 			canvas.stage.scale.set(1);
 			canvas.stage.pivot.set((canvas.app.stage.width / 2) + widthAdjust, (canvas.app.stage.height / 2) + heightAdjust);
 			// Update the canvas element dimensions
 			const canvasElement = $('canvas#board');
-			canvasElement.css('width', canvas.scene.data.width + 'px');
-			canvasElement.css('height', canvas.scene.data.height + 'px');
+			canvasElement.css('width', canvasW + 'px');
+			canvasElement.css('height', canvasH + 'px');
 			setTimeout(() => {
 				canvas = <Canvas>canvas;
 				// Collect the Image Data
