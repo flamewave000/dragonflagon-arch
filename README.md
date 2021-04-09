@@ -44,11 +44,9 @@ The `app` parameter is optional, and is mostly used as an easy way to have the e
 
 ### Alternate Grid Snap
 
-Grid snapping can be toggled to snap to box centers instead of intersections. This is useful for placing walls or similar inbetween the usual snap points without having to hold `Shift` and avoid not getting the walls ends lined up right.
+Grid snapping can be toggled to snap to box centers instead of intersections. This is useful for placing walls or similar in-between the usual snap points without having to hold `Shift` and avoid not getting the walls ends lined up right.
 
-> **Video**  
-> Show placing a wall along curve that won't align right.
-> Switch to AltSnap and place wall where you want it
+![Alternate Grid Snap Demo](.assets/general-alt-grid-snap.gif)
 
 ### Layer Hotkeys
 
