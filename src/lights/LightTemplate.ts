@@ -142,8 +142,9 @@ ${'DF_ARCHITECT.LightTemplate_CreateTemplateButton_LightConfig'.localize()}
 		}
 
 		// Render the form html
-		html.find('header.sheet-header')
-			.after(await renderTemplate(`modules/${ARCHITECT.MOD_NAME}/templates/light-template.hbs`, htmlData));
+		const content = $(await renderTemplate(`modules/${ARCHITECT.MOD_NAME}/templates/light-template.hbs`, htmlData));
+		content.find('button.execute').on('click', () => LightTemplates.activate(macro.id));
+		html.find('header.sheet-header').after(content);
 
 
 		html.find('button.eyedropper').on('click', async (event: JQuery.ClickEvent) => {

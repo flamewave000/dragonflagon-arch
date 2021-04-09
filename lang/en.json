@@ -77,6 +77,10 @@
 	"DF_ARCHITECT.LightTemplate_ContextMenu_Remove": "Remove Template",
 	"DF_ARCHITECT.LightTemplate_ContextMenu_Delete": "Delete Template",
 	"DF_ARCHITECT.LightTemplate_CurrentTemplate_Label": "Current Active Template",
+	"DF_ARCHITECT.LightTemplate_CurrentTemplate_EditButton": "Edit Template",
+	"DF_ARCHITECT.LightTemplate_CurrentTemplate_ExitButton": "Stop Placing Template",
+	"DF_ARCHITECT.LightTemplate_TemplateConfig_SaveButton": "Save Template",
+	"DF_ARCHITECT.LightTemplate_TemplateConfig_UseButton": "Activate Template",
 
 	"LAYERS.BackgroundLayer": "Background Layer",
 	"LAYERS.TilesLayer": "Tiles Layer",
