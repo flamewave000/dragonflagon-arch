@@ -2,53 +2,65 @@
 class _QuickColourPicker {
 	private readonly SIZE = 5;
 	private readonly HALF_SIZE = Math.trunc(this.SIZE / 2);
+	private _BUTTON_HTML = '';
 	private _rows: NodeListOf<HTMLTableRowElement>;
 	private _pixels: Uint8Array = null;
-	private _colour: string;
+	private _colour: string | false;
 	private _currentApp: Application;
 	private _enabled = false;
-	private _promise: { res: (colour: string) => void, rej: () => void } = null;
+	private _promise: { res: (colour: string | false) => void } = null;
+	private _states: { id: number, minimized: boolean }[] = null;
 	private _html: HTMLElement = $(`<div id="swatch">
 	<table>
 		${('<tr>' + ('<td></td>'.repeat(this.SIZE)) + '</tr>').repeat(this.SIZE)}
 	</table>
 </div>`)[0];
+	private _docObserver = new MutationObserver(this._handleMutation);
 
 	constructor() {
 		this._rows = this._html.querySelectorAll('tr');
 	}
 	ready() {
+		this._BUTTON_HTML = `<button style="flex:0 0" class="df-arch-colourpicker" title="${'DF_ARCHITECT.QuickColourPicker_EyeDrop_Title'.localize()}"><i class="fas fa-eye-dropper"></i></button>`;
 		document.addEventListener('mousemove', this._handleMouseMove.bind(this));
-		document.addEventListener('mousedown', this._handleMouseDown.bind(this));
-		document.addEventListener('mouseup', this._handleMouseDown.bind(this));
-		Hooks.on('renderLightConfig', (app: LightConfig, html: HTMLElement, data: any) => {
-			const button = $(`<button style="flex:0 0" title="${'DF_ARCHITECT.QuickColourPicker_EyeDrop_Title'.localize()}"><i class="fas fa-eye-dropper"></i></button>`);
-			button.on('click', async (event: JQuery.ClickEvent) => {
-				event.preventDefault();
-				const colour = await this.requestColourPick(app);
-				this._currentApp.element.find('input[name="tintColor"]').val(colour);
-				this._currentApp.element.find('input[data-edit="tintColor"]').val(colour);
+		document.addEventListener('mousedown', this._handleMouseDownUp.bind(this));
+		document.addEventListener('mouseup', this._handleMouseDownUp.bind(this));
+		this._docObserver.observe(document.body, { childList: true })
+	}
+	private _handleMutation(mutations: MutationRecord[], observer: MutationObserver) {
+		for (let mutation of mutations) {
+			mutation.addedNodes.forEach(x => {
+				if (!(x instanceof HTMLElement)) return;
+				if (!x.classList.contains('window-app')) return;
+				const element = $(x);
+				const appId = parseInt(element.data('appid'));
+				if (isNaN(appId)) return;
+				const app = ui.windows[appId];
+				element.find('input[type="color"]').each((_, x) => {
+					const button = $(QuickColourPicker._BUTTON_HTML);
+					button.on('click', async (event: JQuery.ClickEvent) => {
+						event.preventDefault();
+						const colour = await QuickColourPicker.requestColourPick(app);
+						if (colour === false) return;
+						$(event.currentTarget).parent().find('input[type="color"]').val(colour);
+						$(event.currentTarget).parent().find('input.color').val(colour);
+					})
+					$(x).after(button);
+				})
 			});
-			const div = $('<div class="form-fields"></div>');
-			$(html).find('input[data-edit="tintColor"]').after(div);
-			$(html).find('input[name="tintColor"]').remove().appendTo(div);
-			$(html).find('input[data-edit="tintColor"]').remove().appendTo(div);
-			button.appendTo(div);
-		});
+		}
 	}
 
 	private _rightDownPosition = [0, 0];
 	private _ignoreRightClick = false;
-	private async _handleMouseDown(event: MouseEvent) {
+	private async _handleMouseDownUp(event: MouseEvent) {
 		if (!this._enabled) return;
 		if (event.button !== 0) {
 			if (event.button !== 2) return;
 			if (event.type === 'mouseup') {
 				if (this._ignoreRightClick) return;
-				this._enabled = false;
-				$(this._html).remove();
-				$(document.body).css('cursor', '');
-				await this._currentApp.maximize();
+				this._colour = false;
+				await this._completeColourRequest();
 			}
 			else {
 				this._rightDownPosition = [event.x, event.y];
@@ -57,16 +69,27 @@ class _QuickColourPicker {
 			}
 			return;
 		}
-		if (event.button !== 0) return;
+		await this._completeColourRequest();
+	}
+
+	private async _completeColourRequest() {
 		$(this._html).remove();
 		$(document.body).css('cursor', '');
-		this._promise.res(this._colour);
+		const result = this._colour;
+		const promise = this._promise;
 		this._promise = null;
 		this._colour = '';
 		this._enabled = false;
 		this._pixels = null;
-		await this._currentApp.maximize();
 		this._currentApp = null;
+		// Restore the windows that were not minimized previously
+		for (let state of this._states) {
+			if (state.minimized) continue;
+			ui.windows[state.id].maximize();
+		}
+		this._states = null;
+		promise.res(result);
+		this._currentApp?.bringToTop();
 	}
 
 	private _handleMouseMove(event: MouseEvent) {
@@ -103,15 +126,25 @@ class _QuickColourPicker {
 		this._html.style.top = event.y + 1 + 'px';
 	}
 
-	async requestColourPick(app: Application): Promise<string> {
-		return new Promise(async (res, rej) => {
-			if (this._promise != null)
-				this._promise.rej();
-			this._promise = { res, rej };
+	async requestColourPick(app?: Application): Promise<string | false> {
+		return new Promise(async (res, _) => {
+			if (this._promise != null) this._promise.res(false);
+			this._promise = { res };
 			this._currentApp = app;
 			this._pixels = new Uint8Array(this.SIZE * this.SIZE * 4);
 			document.body.appendChild(this._html);
-			await app.minimize();
+
+			// Minimize all of the current windows
+			if (this._states === null) {
+				const promises: Promise<void>[] = [];
+				this._states = [];
+				for (let window of Object.values(ui.windows)) {
+					this._states.push({ id: window.appId, minimized: (<any>window)._minimized })
+					promises.push(window.minimize());
+				}
+				await Promise.all(promises);
+			}
+
 			this._enabled = true;
 			$(document.body).css('cursor', 'crosshair');
 		});
@@ -119,3 +152,5 @@ class _QuickColourPicker {
 }
 
 export const QuickColourPicker = new _QuickColourPicker();
+//@ts-ignore
+window.EyeDropper = { getColor: _QuickColourPicker.prototype.requestColourPick.bind(QuickColourPicker) };

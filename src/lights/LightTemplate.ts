@@ -150,6 +150,7 @@ ${'DF_ARCHITECT.LightTemplate_CreateTemplateButton_LightConfig'.localize()}
 		html.find('button.eyedropper').on('click', async (event: JQuery.ClickEvent) => {
 			event.preventDefault();
 			const colour = await QuickColourPicker.requestColourPick(app);
+			if (colour === false) return;
 			app.element.find('input[name="tintColor"]').val(colour);
 			app.element.find('input[data-edit="tintColor"]').val(colour);
 		});

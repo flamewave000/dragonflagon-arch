@@ -26,6 +26,22 @@ I hate big walls of text, so I've done my best to provide some animated previews
 
 These are some of the general features that are available outside of the Game Board layers
 
+### Quick Colour Picker
+
+You can now use an eyedropper from any FoundryVTT Config dialog that has a colour selector to quickly select a colour from the current map. Great for trying to match a light colour to a material in the map like lava, water, etc.
+
+#### For Devs: You can use this feature!
+
+The eye dropper tool is available globally and can be used via this function
+
+```typescript
+await EyeDropper.getColor(app?: Application)
+```
+
+The `app` parameter is optional, and is mostly used as an easy way to have the eye dropper automatically refocus your application after it has completed its task of minimizing/maximizing all windows.
+
+![Quick Colour Picker Demo Video](.assets/lights-colourpicker.gif)
+
 ### Alternate Grid Snap
 
 Grid snapping can be toggled to snap to box centers instead of intersections. This is useful for placing walls or similar inbetween the usual snap points without having to hold `Shift` and avoid not getting the walls ends lined up right.
@@ -91,12 +107,6 @@ The selected contiguous wall segments will be joined into a single wall. Useful 
 ![Wall Joining and Splitting Demo](.assets/walls-join-split.gif)
 
 ## Lighting Features
-
-### Quick Colour Picker
-
-You can now use an eyedropper from the Light Config dialog to quickly select a colour from the current map. Great for trying to match a light colour to a material in the map like lava, water, etc.
-
-![Quick Colour Picker Demo Video](.assets/lights-colourpicker.gif)
 
 ### Show Light Origin
 
