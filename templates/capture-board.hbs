@@ -19,6 +19,7 @@
 	<output class="shrink">{{compression}}</output>
 	<input class="grow" id="compression" name="compression" type="range" min="0" max="1" step="0.01"
 		value="{{compression}}">
+	{{#if isGM}}
 	<section>
 		<h3
 			onclick="$('.dfarch-capture-form i.fa-plus-square').toggle();$('.dfarch-capture-form i.fa-minus-square').toggle();$('.dfarch-capture-form section>div').slideToggle(200);$('.dfarch-capture-form span').slideToggle(200)">
@@ -42,4 +43,5 @@
 		</div>
 		<span style="display:block;height:150px">&nbsp;</span>
 	</section>
+	{{/if}}
 </form>

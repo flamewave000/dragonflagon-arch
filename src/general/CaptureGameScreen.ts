@@ -84,6 +84,7 @@ export default class CaptureGameScreen {
 			}
 		};
 		const data = {
+			isGM: game.user.isGM,
 			compression: SETTINGS.get(this.PREF_COMP),
 			png: SETTINGS.get(this.PREF_FRMT) === 'png',
 			jpeg: SETTINGS.get(this.PREF_FRMT) === 'jpeg',
