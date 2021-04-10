@@ -1,7 +1,7 @@
 {
 	"DF_ARCHITECT.ModName": "Dragon Flagon Architect",
 
-	"DF_ARCHITECT.ErrorColourSettingsMissing": "DF Architect: It is recomended you use the \"lib - ColorSettings\" module",
+	"DF_ARCHITECT.ErrorColourSettingsMissing": "DF Architect: It is recommended you use the \"lib - ColorSettings\" module",
 	"DF_ARCHITECT.ErrorLibWrapperMissing": "DF Architect: 'libWrapper' module required. Please install and activate 'libWrapper'.",
 
 	"DF_ARCHITECT.ReloadRequired_Title": "Reload Required",

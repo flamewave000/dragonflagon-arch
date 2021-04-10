@@ -28,7 +28,9 @@ These are some of the general features that are available outside of the Game Bo
 
 ### Quick Colour Picker
 
-You can now use an eyedropper from any FoundryVTT Config dialog that has a colour selector to quickly select a colour from the current map. Great for trying to match a light colour to a material in the map like lava, water, etc.
+You can now use an eyedropper from any FoundryVTT Config dialog that has a colour selector to quickly select a colour from the current map. Great for trying to match a light colour to a material in the map like lava, water, etc. This will immediately minimize ALL open windows during the selection process. It will then restore all windows that were not previously minimized.
+
+**You can Cancel the Colour Picker with a single `Right + Click`**
 
 #### For Devs: You can use this feature!
 
@@ -38,7 +40,7 @@ The eye dropper tool is available globally and can be used via this function
 await EyeDropper.getColor(app?: Application)
 ```
 
-The `app` parameter is optional, and is mostly used as an easy way to have the eye dropper automatically refocus your application after it has completed its task of minimizing/maximizing all windows.
+The `app` parameter is optional, and is just used as an easy way to have the eye dropper automatically refocus your application after it has completed its task of minimizing/maximizing all windows.
 
 ![Quick Colour Picker Demo Video](.assets/lights-colourpicker.gif)
 
@@ -66,21 +68,43 @@ You can now capture the current scene's canvas. Kind of like a screenshot, but i
 
 Tokens, Tiles, and Drawings can be made "hidden" in FoundryVTT. By default, Canvas Capture will completely remove these items from the rendering. There is, however, an option to Show Hidden for each individual layer. This will render the hidden Tokens, Tiles, or Drawings to the final image.
 
-> **Video1**  
-> Go to Settings
-> Display Capture dialog
-> Select "Current View"
-> Press "Save"
-> Show still of saved image
->
-> **Video2** ⬅ I can record it all at once and just copy the beginning of the first video to use for the second  
-> Same as first
-> Select "Entire Canvas"
-> Press "Save"
-> Show still of saved image
->
-> **Video3**
-> Show live preview of layer filtering
+#### Capture Current View Demo
+
+|Demo|Result|
+|:-:|:-:|
+|![Capture current view demo](.assets/general-capture-cur.gif)|<img src=".assets/general-capture-cur.png" alt="Capture current view result image" style="zoom: 33%;" />|
+
+#### Capture Whole Canvas
+
+|Demo|Result|
+|:-:|:-:|
+|![Capture Whole Canvas no padding demo](.assets/general-capture-all.gif)|<img src=".assets/general-capture-all.png" alt="Capture Whole Canvas no padding result" style="zoom: 33%;" />|
+
+#### Capture Whole Canvas with Padding
+
+|Demo|Result|
+|:-:|:-:|
+|![Capture Whole Canvas with padding demo](.assets/general-capture-pad.gif)|<img src=".assets/general-capture-pad.png" alt="Capture Whole Canvas with padding result" style="zoom: 33%;" />|
+
+#### Capture Vision
+
+You can easily capture token vision by simply selecting the tokens you want to render the vision for. The black vision mask will be rendered out to the final image. You can also toggle the "Sight Layer" in the [Layer Filters](#Layer-Filtering-GM-Only) demoed below, which will remove the vision occlusion layer.
+
+<img src=".assets/general-capture-sight.png" style="zoom:33%;" />
+
+#### Layer Filtering (GM Only)
+
+This is a very complex feature that allows you to do some really awesome layer filtering. Don't want to show tiles? No problem, just uncheck that layer. You can also show the "controls" for certain layers, such as showing the walls, light icons, and sound icons that normally only show when you're on those layers.
+
+Also, when you have Hidden Tokens/Tiles/Drawings, those will be default not be rendered. In here you can enable "Show Hidden" for the specific layers that have hideable objects. This will then render those items to the final image at a full opacity (not the half transparent they're usually like).
+
+**All changes made here will be automatically reverted after the Save Gameboard dialog closes**
+
+|Demo|Result|
+|:-:|:-:|
+|![Layer filtering demo](.assets/general-capture-filter.gif)|<img src=".assets/general-capture-filter.png" alt="Layer filtering result" style="zoom: 33%;" />|
+
+
 
 ## Walls Features
 
@@ -119,6 +143,8 @@ Saving and sharing of light templates. You want to place a D&D 5e torch, you can
 Light templates are stored in your Macros and can be easily placed onto the Hotbar at the bottom of the screen. Clicking the macro will automatically switch you to the Lighting Layer and activate that template (indicated by the dialog that appears on the left of the screen). This dialog displays the current configuration of the light template, and also has Edit and Cancel buttons for editing the current template, or clearing the current template selection.
 
 When a template is selected, you can `LeftClick + Drag` like normal to place a light using all of the settings, except the Dim/Bright range (as that is determined by how far you drag with your mouse). Alternatively you can `Ctrl + LeftClick` to place a light on your mouse pointer's current position. This will use all the configured settings, including the Dim/Bright range specified in the template.
+
+You can also cancel the current template by either clicking the `X` on the template window, or `Ctrl + RightClick` anywhere on the gameboard.
 
 |Creating a Template from an existing Light Source|Duplicating and changing an existing Template|
 | :-: | :-: |

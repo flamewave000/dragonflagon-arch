@@ -1,5 +1,18 @@
 # DF Architect
 
+## Release v1.0.0(2021-04-09)
+- Wall Split/Join: Auto select resulting walls.
+- Wall Split/Join: No longer Grid Snapping.
+- Canvas Capture: Added layer filtering.
+- Canvas Capture: Added option to include padding in the Whole Canvas capture.
+- Light Origin: Swapped default colours.
+- Light Origin: Correct alignment.
+- Added Hotkeys menu to DF Architect settings.
+- Light Templates: Macro Directory erroneously adding buttons to sidebar.
+- Alt Grid Snap: Added option to move the button from the tools column to the bottom of the controls column.
+- Colour Picker: Now generic and API is exposed for other modules to use.
+- ReadMe Finally finished!
+
 ## Alpha Release v0.9.0 (2021-04-04)
 - General code cleanup on light templates.
 - Some styling adjustments to the active template dialog.

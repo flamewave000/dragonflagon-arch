@@ -41,5 +41,23 @@
 	"manifest":	"https://dragonflagon.cafe/mods/man/{{name}}",
 	"download":	"https://dragonflagon.cafe/mods/pak/{{name}}",
 	"readme":	"https://github.com/flamewave000/dragonflagon-arch/blob/master/README.md",
-	"changelog":"https://github.com/flamewave000/dragonflagon-arch/blob/master/CHANGELOG.md"
+	"changelog":"https://github.com/flamewave000/dragonflagon-arch/blob/master/CHANGELOG.md",
+	"manifestPlusVersion": "1.0.0",
+	"authors": [ { "name": "flamewave000", "discord": "flamewave000#6766", "url": "https://github.com/flamewave000" } ],
+	"media": [
+		{ "type": "cover", "url": "https://raw.githubusercontent.com/flamewave000/dragonflagon-arch/master/.assets/github-banner.png" },
+		{ "type": "icon", "url": "https://raw.githubusercontent.com/flamewave000/dragonflagon-arch/master/.assets/logo.png" },
+		{ "type": "screenshot", "url": "https://raw.githubusercontent.com/flamewave000/dragonflagon-arch/master/.assets/general-alt-grid-snap.gif" },
+		{ "type": "screenshot", "url": "https://raw.githubusercontent.com/flamewave000/dragonflagon-arch/master/.assets/general-capture-cur.gif" },
+		{ "type": "screenshot", "url": "https://raw.githubusercontent.com/flamewave000/dragonflagon-arch/master/.assets/general-capture-all.gif" },
+		{ "type": "screenshot", "url": "https://raw.githubusercontent.com/flamewave000/dragonflagon-arch/master/.assets/general-capture-pad.gif" },
+		{ "type": "screenshot", "url": "https://raw.githubusercontent.com/flamewave000/dragonflagon-arch/master/.assets/general-capture-filter.gif" },
+		{ "type": "screenshot", "url": "https://raw.githubusercontent.com/flamewave000/dragonflagon-arch/master/.assets/general-capture-sight.gif" },
+		{ "type": "screenshot", "url": "https://raw.githubusercontent.com/flamewave000/dragonflagon-arch/master/.assets/lights-colourpicker.gif" },
+		{ "type": "screenshot", "url": "https://raw.githubusercontent.com/flamewave000/dragonflagon-arch/master/.assets/lights-showorigin.gif" },
+		{ "type": "screenshot", "url": "https://raw.githubusercontent.com/flamewave000/dragonflagon-arch/master/.assets/lights-template-create.gif" },
+		{ "type": "screenshot", "url": "https://raw.githubusercontent.com/flamewave000/dragonflagon-arch/master/.assets/lights-template-drag.gif" },
+		{ "type": "screenshot", "url": "https://raw.githubusercontent.com/flamewave000/dragonflagon-arch/master/.assets/lights-template-duplicate.gif" },
+		{ "type": "screenshot", "url": "https://raw.githubusercontent.com/flamewave000/dragonflagon-arch/master/.assets/walls-join-split.gif" }
+	]
 }
