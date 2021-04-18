@@ -107,7 +107,6 @@ export default class CaptureGameScreen {
 			});
 		}
 		var cleanupHandled = false;
-		var keepPadding = false;
 		const dialog = new Dialog({
 			title: 'DF_ARCHITECT.CaptureGameScreen_ScreenCapture_Label'.localize(),
 			content: await renderTemplate(`modules/${ARCHITECT.MOD_NAME}/templates/capture-board.hbs`, data),
@@ -129,23 +128,24 @@ export default class CaptureGameScreen {
 							if ((<HTMLInputElement>element).checked)
 								target = $(element).val() as string;
 						});
-						keepPadding = (<HTMLInputElement>html.find('input[name="padding"]')[0]).checked;
+						const keepPadding = (<HTMLInputElement>html.find('input[name="padding"]')[0]).checked;
 						const compression: number = parseFloat(html.find('#compression').val() as string);
 						const call = target === 'all' ? this.captureCanvas : this.captureView;
 						const format: string = html.find('#format').val() as string;
+						const split: [number, number] = [parseInt(<string>html.find('#split-h').val()), parseInt(<string>html.find('#split-v').val())];
 						SETTINGS.set(this.PREF_COMP, compression);
 						SETTINGS.set(this.PREF_FRMT, format);
 						SETTINGS.set(this.PREF_TRGT, target);
 						await dialog.close();
 						switch (format) {
 							case "png":
-								await call('image/png', 'png', compression, keepPadding);
+								await call('image/png', 'png', compression, keepPadding, split);
 								break;
 							case "jpeg":
-								await call('image/jpeg', 'jpg', compression, keepPadding);
+								await call('image/jpeg', 'jpg', compression, keepPadding, split);
 								break;
 							case "webp":
-								await call('image/webp', 'webp', compression, keepPadding);
+								await call('image/webp', 'webp', compression, keepPadding, split);
 								break;
 						}
 						this.cleanupLayers(hiddenItemsSnapshot);
@@ -253,8 +253,10 @@ export default class CaptureGameScreen {
 		});
 	}
 
-	static async captureCanvas(format: string, extension: string, compression: number, keepPadding: boolean = false): Promise<void> {
-		return new Promise((res, _) => {
+	static async captureCanvas(format: string, extension: string, compression: number, keepPadding: boolean = false, split: [number, number] = [1, 1]): Promise<void> {
+		if (isNaN(split[0])) split[0] = 1;
+		if (isNaN(split[1])) split[1] = 1;
+		return new Promise(async (res, _) => {
 			canvas = <Canvas>canvas;
 			// Save the previous orientation of the canvas stage
 			const origX = canvas.stage.pivot.x;
@@ -270,49 +272,80 @@ export default class CaptureGameScreen {
 
 			var padW = 0;
 			var padH = 0;
-			if (keepPadding) {
-				padW = canvas.scene.data.padding * canvas.scene.data.width;
-				padH = canvas.scene.data.padding * canvas.scene.data.height;
-				// If we are slightly off, round to nearest grid size.
-				if ((padW % canvas.grid.size) !== 0)
-					padW = (Math.trunc(padW / canvas.grid.size) + 1) * canvas.grid.size;
-				if ((padH % canvas.grid.size) !== 0)
-					padH = (Math.trunc(padH / canvas.grid.size) + 1) * canvas.grid.size;
-				padW *= 2;
-				padH *= 2;
-			}
+			padW = canvas.scene.data.padding * canvas.scene.data.width;
+			padH = canvas.scene.data.padding * canvas.scene.data.height;
+			// If we are slightly off, round to nearest grid size.
+			if ((padW % canvas.grid.size) !== 0)
+				padW = (Math.trunc(padW / canvas.grid.size) + 1) * canvas.grid.size;
+			if ((padH % canvas.grid.size) !== 0)
+				padH = (Math.trunc(padH / canvas.grid.size) + 1) * canvas.grid.size;
 
-			const canvasW = padW + canvas.scene.data.width;
-			const canvasH = padH + canvas.scene.data.height;
+			const canvasW = (keepPadding ? padW * 2 : 0) + canvas.scene.data.width;
+			const canvasH = (keepPadding ? padH * 2 : 0) + canvas.scene.data.height;
 
 			const widthAdjust = (body.width() - canvasW) / 2;
 			const heightAdjust = (body.height() - canvasH) / 2;
-			// Update the orientation of the canvas stage
-			canvas.app.renderer.resize(canvasW, canvasH);
-			canvas.stage.scale.set(1);
-			canvas.stage.pivot.set((canvas.app.stage.width / 2) + widthAdjust, (canvas.app.stage.height / 2) + heightAdjust);
-			// Update the canvas element dimensions
+
+			const widthChunk = Math.ceil(canvasW / split[0]);
+			const widthExtra = canvasW - (widthChunk * (split[0] - 1));
+			const heightChunk = Math.ceil(canvasH / split[1]);
+			const heightExtra = canvasH - (heightChunk * (split[1] - 1));
+
 			const canvasElement = $('canvas#board');
-			canvasElement.css('width', canvasW + 'px');
-			canvasElement.css('height', canvasH + 'px');
+			// Create a virtual link to virtually click for the download
+			const link = document.createElement('a');
+			const linkDate = new Date().toISOString().replace(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}).+/, '$1$2$3-$4$5$6');
+			const images: string[] = [];
+			for (let cy = 0; cy < split[1]; cy++) {
+				const indexH = cy;
+				for (let cx = 0; cx < split[0]; cx++) {
+					const indexW = cx;
+					await new Promise((resolve, _) => {
+						canvas = <Canvas>canvas;
+						var width = 0;
+						var height = 0;
+						var x = widthAdjust + (keepPadding ? 0 : padW) + (widthChunk * (indexW + (split[0] / 2)));
+						var y = heightAdjust + (keepPadding ? 0 : padH) + (heightChunk * (indexH + (split[1] / 2)));
+						if (split[0] > 1 && indexW == split[0] - 1) {
+							width = widthExtra;
+							x -= (widthChunk - widthExtra) / 2;
+						} else width = widthChunk;
+						if (split[1] > 1 && indexH == split[1] - 1) {
+							height = heightExtra;
+							y -= (heightChunk - heightExtra) / 2;
+						} else height = heightChunk;
+						// Update the orientation of the canvas stage
+						canvas.app.renderer.resize(width, height);
+						canvas.stage.scale.set(1);
+						canvas.stage.pivot.set(x, y);
+						// Update the canvas element dimensions
+						canvasElement.css('width', width + 'px');
+						canvasElement.css('height', height + 'px');
+						setTimeout(() => {
+							// Collect the Image Data
+							images.push((<Canvas>canvas).app.renderer.context.renderer.extract.base64(null, format, compression));
+							resolve(undefined);
+						}, 100);
+					});
+				}
+			}
+			// Reset the canvas dimensions
+			canvasElement.css('width', origW + 'px');
+			canvasElement.css('height', origH + 'px');
+			// Reset the orientation of the canvas stage
+			canvas.app.renderer.resize(origW, origH);
+			canvas.stage.scale.set(origS);
+			canvas.stage.pivot.set(origX, origY);
+			// Remove the overlay after the canvas has had a chance to re-render
 			setTimeout(() => {
-				canvas = <Canvas>canvas;
-				// Collect the Image Data
-				const imageData = canvas.app.renderer.context.renderer.extract.base64(null, format, compression);
-				// Reset the canvas dimensions
-				canvasElement.css('width', origW + 'px');
-				canvasElement.css('height', origH + 'px');
-				// Reset the orientation of the canvas stage
-				canvas.app.renderer.resize(origW, origH);
-				canvas.stage.scale.set(origS);
-				canvas.stage.pivot.set(origX, origY);
-				// Create a virtual link to virtually click for the download
-				const link = document.createElement('a');
-				link.href = imageData;
-				link.download = `screenshot-${new Date().toISOString().replace(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}).+/, '$1$2$3-$4$5$6')}.${extension}`;
-				link.click();
-				// Remove the overlay after the canvas has had a chance to re-render
-				setTimeout(() => { element.remove(); res(); }, 100);
+				// Serve up the images as downloads
+				for (let c = 0; c < images.length; c++) {
+					link.href = images[c];
+					link.download = `screenshot${images.length > 1 ? '_' + (c + 1) : ''}-${linkDate}.${extension}`;
+					link.click();
+				}
+				element.remove();
+				res();
 			}, 100);
 		});
 	}

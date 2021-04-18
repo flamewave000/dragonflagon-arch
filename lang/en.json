@@ -71,6 +71,7 @@
 	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_FormatWEB": "WebP (Chrome Only)",
 	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_Compression": "The quality level for JPEG and WebP",
 	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_KeepPadding": "(Entire Canvas Only) Include Padding",
+	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_SplitImageNote": "(Entire Canvas Only) If the image does not render properly (ie. parts missing), the game board is too large for the GPU. You can increase these values to split the game board into multiple images vertically and horizontally. You can then stitch them together in any image editor of your choice.",
 
 	"DF_ARCHITECT.LightTemplate_CreateTemplateButton_LightConfig": "Create Template from this Light",
 	"DF_ARCHITECT.LightTemplate_CreateTemplateButton_MacroDirectory": "Create Light Template",

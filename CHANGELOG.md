@@ -3,6 +3,7 @@
 ## Release v1.1.0 (2021-04-18)
 - Fixed on-load crash when AltGridSnap is disabled.
 - Fixed permission hole where players could switch to GM only layers via the layer hotkeys. Removed the layer hotkeys for non-GMs.
+- Added ability to split a canvas render into parts in order to deal with overly large maps that are too big for the GPU.
 
 ## Release v1.0.0 (2021-04-09)
 - Wall Split/Join: Auto select resulting walls.

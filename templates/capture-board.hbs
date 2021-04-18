@@ -8,6 +8,11 @@
 	<div></div>
 	<input class="shrink" type="checkbox" id="padding" name="padding"/>
 	<label class="grow" for="padding">{{localize 'DF_ARCHITECT.CaptureGameScreen_ScreenCapture_KeepPadding'}}</label>
+	<div><p>{{localize 'DF_ARCHITECT.CaptureGameScreen_ScreenCapture_SplitImageNote'}}</p></div>
+	<input class="shrink" style="width:50px;margin-right:0.25em" id="split-h" type="number" min="1" max="8" step="1" value="1"/>
+	<label class="shrink" for="split-h">horizontal</label>
+	<input class="shrink" style="width:50px;margin-right:0.25em;margin-left:1em" id="split-v" type="number" min="1" max="8" step="1" value="1"/>
+	<label class="shrink" for="split-v">vertical</label>
 	<div></div>
 	<h3>{{localize 'DF_ARCHITECT.CaptureGameScreen_ScreenCapture_Format'}}</h3>
 	<select name="format" id="format">
