@@ -1,6 +1,10 @@
 # DF Architect
 
-## Release v1.0.0(2021-04-09)
+## Release v1.1.0 (2021-04-18)
+- Fixed on-load crash when AltGridSnap is disabled.
+- Fixed permission hole where players could switch to GM only layers via the layer hotkeys. Removed the layer hotkeys for non-GMs.
+
+## Release v1.0.0 (2021-04-09)
 - Wall Split/Join: Auto select resulting walls.
 - Wall Split/Join: No longer Grid Snapping.
 - Canvas Capture: Added layer filtering.

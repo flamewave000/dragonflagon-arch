@@ -54,7 +54,8 @@ class _AltGridSnap {
 			}
 		});
 
-		this._patchSquareGrid();
+		if (this.enabled)
+			this._patchSquareGrid();
 
 		Hooks.on('getSceneControlButtons', (controls: SceneControl[]) => {
 			if (!this.enabled) return;

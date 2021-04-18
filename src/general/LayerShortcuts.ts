@@ -6,8 +6,10 @@ class _LayerShortcuts {
 	private static readonly PREF_LAYER_SWAP_LAYER1 = "LayerShortcutsSettingsLayer-SwapLayer1";
 	private static readonly PREF_LAYER_SWAP_LAYER2 = "LayerShortcutsSettingsLayer-SwapLayer2";
 	ready() {
-		// #region Register and bind the layer hot-swap Hotkey
+		// Do not register shortcuts if we are not a GM
+		if (!game.user.isGM) return;
 
+		// #region Register and bind the layer hot-swap Hotkey
 		const getLayers: () => Record<string, string> = () => {
 			const result: Record<string, string> = {};
 			ui.controls.controls
