@@ -95,8 +95,8 @@
 	"LAYERS.TemplateLayer": "Capa de plantillas",
 	"LAYERS.NotesLayer": "Capa de notas",
 	"LAYERS.TokenLayer": "Capa de iconos",
-	"LAYERS.LightingLayer": "Capa de fuentes de luz",
-	"LAYERS.SoundsLayer": "Capa de audio",
+	"LAYERS.LightingLayer": "Capa de iluminación",
+	"LAYERS.SoundsLayer": "Capa de sonidos",
 	"LAYERS.SightLayer": "Capa de visión",
 	"LAYERS.EffectsLayer": "Capa de efectos",
 	"LAYERS.ControlsLayer": "Capa de controles"
