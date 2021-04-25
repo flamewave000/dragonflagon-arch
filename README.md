@@ -10,6 +10,7 @@ I hate big walls of text, so I've done my best to provide some animated previews
 
 ## Contributions
 - This module was Commissioned by Anathema.
+- Spanish Localization - Courtesy of [lozalojo](https://github.com/lozalojo)
 
 ---
 
