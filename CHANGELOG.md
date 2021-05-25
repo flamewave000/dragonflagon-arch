@@ -1,5 +1,8 @@
 # DF Architect
 
+## Release 2.0.0 (2021-05-)
+- Now when you have walls selected, you can hold the Ctrl Key while clicking a wall type in the Scene Controls to instantly change the selected walls to that wall type.
+
 ## Release v1.1.0 (2021-04-18)
 - Fixed on-load crash when AltGridSnap is disabled.
 - Fixed permission hole where players could switch to GM only layers via the layer hotkeys. Removed the layer hotkeys for non-GMs.

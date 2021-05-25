@@ -13,6 +13,7 @@ import { AltLightOrigin } from './lights/AltLightOrigin.js';
 import { QuickColourPicker } from './lights/QuickColourPicker.js';
 import CaptureGameScreen from './general/CaptureGameScreen.js';
 import { LightTemplateManager, LightingLayerOverride } from './lights/LightTemplate.js';
+import { WallChangeType } from './walls/WallChangeType.js';
 
 Hooks.once('init', function () {
 	if (!game.modules.get('lib-wrapper')?.active) return;
@@ -52,6 +53,7 @@ Hooks.once('ready', function () {
 	LayerShortcuts.ready();
 	WallShortcuts.ready();
 	WallCtrlInvert.ready();
+	WallChangeType.ready();
 	AltLightOrigin.ready();
 	QuickColourPicker.ready();
 	LightTemplateManager.ready();

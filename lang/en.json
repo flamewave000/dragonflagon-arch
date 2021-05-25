@@ -50,6 +50,11 @@
 	"DF_ARCHITECT.WallJoinSplit_Split_Label": "Split the selected walls into two walls each",
 	"DF_ARCHITECT.WallJoinSplit_Join_Label": "Merge the selected line of walls into a single wall",
 
+	"DF_ARCHITECT.WallChangeType_Setting_MetaKeyName": "Quick Wall Change Key",
+	"DF_ARCHITECT.WallChangeType_Setting_MetaKeyHint": "Which key would you like to hold down when clicking a wall type control to change the current selection of walls to that wall type?",
+	"DF_ARCHITECT.WallChangeType_Setting_MetaKey_OptionAlt": "Alt Key",
+	"DF_ARCHITECT.WallChangeType_Setting_MetaKey_OptionCtrl": "Ctrl Key",
+
 	"DF_ARCHITECT.AltLightOrigin_Settings_Colour1_Name": "Lights: Crosshair Colour",
 	"DF_ARCHITECT.AltLightOrigin_Settings_Colour1_Hint": "The colour of the crosshairs that display when you hold Shift while moving a light source.",
 	"DF_ARCHITECT.AltLightOrigin_Settings_Colour2_Name": "Lights: Alternative Crosshair Colour",
