@@ -2,6 +2,7 @@ import ARCHITECT from "../core/architect.js";
 import SETTINGS from "../core/settings.js";
 
 export default class CaptureGameScreen {
+	private static readonly WARNING_SIZE = 5120 * 5120;
 	static readonly PREF_ALLOW_PC = 'CaptureGameScreen.AllowPC';
 	static readonly PREF_COMP = 'CaptureGameScreen.Compression';
 	static readonly PREF_FRMT = 'CaptureGameScreen.Format';
@@ -265,7 +266,7 @@ export default class CaptureGameScreen {
 			const origW = canvas.app.renderer.width;
 			const origH = canvas.app.renderer.height;
 			// Create an overlay element to be temporarily displayed
-			const element = $(`<div id="dfarch-temp-overlay"><h1>Capturing Canvas...</h1></div>`);
+			const element = $(`<div id="dfarch-temp-overlay"><h1>Capturing Canvas...</h1><div class="dfarch-dual-ring"></div></div>`);
 			element.appendTo(document.body);
 			// Calculate dimension adjustments for offseting coordinates relative to the body
 			const body = $(document.body);
@@ -291,6 +292,20 @@ export default class CaptureGameScreen {
 			const heightChunk = Math.ceil(canvasH / split[1]);
 			const heightExtra = canvasH - (heightChunk * (split[1] - 1));
 
+			const pixelCount = (keepPadding ? padW + widthChunk : widthChunk) * (keepPadding ? padH + heightChunk : heightChunk);
+			if (pixelCount > CaptureGameScreen.WARNING_SIZE) {
+				const confirmed = await Dialog.confirm({
+					title: 'DF_ARCHITECT.CaptureGameScreen_ScreenCapture_WarningConfirmTitle'.localize(),
+					content: 'DF_ARCHITECT.CaptureGameScreen_ScreenCapture_WarningConfirmContent'.localize(),
+					defaultYes: true,
+				});
+				if (!confirmed) {
+					element.remove();
+					res();
+					return;
+				}
+			}
+
 			const canvasElement = $('canvas#board');
 			// Create a virtual link to virtually click for the download
 			const link = document.createElement('a');
@@ -300,7 +315,7 @@ export default class CaptureGameScreen {
 				const indexH = cy;
 				for (let cx = 0; cx < split[0]; cx++) {
 					const indexW = cx;
-					await new Promise((resolve, _) => {
+					await new Promise((resolve, reject) => {
 						canvas = <Canvas>canvas;
 						var width = 0;
 						var height = 0;
@@ -323,8 +338,12 @@ export default class CaptureGameScreen {
 						canvasElement.css('height', height + 'px');
 						setTimeout(() => {
 							// Collect the Image Data
-							images.push((<Canvas>canvas).app.renderer.context.renderer.extract.base64(null, format, compression));
-							resolve(undefined);
+							try {
+								images.push((<Canvas>canvas).app.renderer.context.renderer.extract.base64(null, format, compression));
+								resolve(undefined);
+							} catch (e) {
+								reject(e);
+							}
 						}, 100);
 					});
 				}

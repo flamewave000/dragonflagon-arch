@@ -77,6 +77,8 @@
 	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_Compression": "The quality level for JPEG and WebP",
 	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_KeepPadding": "(Entire Canvas Only) Include Padding",
 	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_SplitImageNote": "(Entire Canvas Only) If the image does not render properly (ie. parts missing), the game board is too large for the GPU. You can increase these values to split the game board into multiple images vertically and horizontally. You can then stitch them together in any image editor of your choice.",
+	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_WarningConfirmTitle": "Very Large Image",
+	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_WarningConfirmContent": "<p>You are attempting to capture a very large image. You may want to split the image up.<br>Depending on your GPU, the rendering may fail and result in an image with only a portion of it drawn, the rest left blank.</p>",
 
 	"DF_ARCHITECT.LightTemplate_CreateTemplateButton_LightConfig": "Create Template from this Light",
 	"DF_ARCHITECT.LightTemplate_CreateTemplateButton_MacroDirectory": "Create Light Template",
