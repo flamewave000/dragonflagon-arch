@@ -21,7 +21,7 @@ class _QuickColourPicker {
 		this._rows = this._html.querySelectorAll('tr');
 	}
 	ready() {
-		this._BUTTON_HTML = `<button style="flex:0 0" class="df-arch-colourpicker" title="${'DF_ARCHITECT.QuickColourPicker_EyeDrop_Title'.localize()}"><i class="fas fa-eye-dropper"></i></button>`;
+		this._BUTTON_HTML = `<button type="button" tabindex="-1" style="flex:0 0" class="df-arch-colourpicker" title="${'DF_ARCHITECT.QuickColourPicker_EyeDrop_Title'.localize()}"><i class="fas fa-eye-dropper"></i></button>`;
 		document.addEventListener('mousemove', this._handleMouseMove.bind(this));
 		document.addEventListener('mousedown', this._handleMouseDownUp.bind(this));
 		document.addEventListener('mouseup', this._handleMouseDownUp.bind(this));
