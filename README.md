@@ -116,6 +116,12 @@ Also, when you have Hidden Tokens/Tiles/Drawings, those will be default not be r
 
 When placing walls, you can toggle this option (either with the new "Lock Wall Chaining" button or `Alt + C` hotkey). This will make wall chaining occur without having to hold down the Ctrl key. Instead you hold the Ctrl key to start a new wall without chaining. This is a simple addition to help alleviate stress on your finger that normally has to hold that Ctrl key down when doing a long wall chain.
 
+### Auto-Snap Wall Endpoint
+
+You can now hold the `Alt` key while dragging a wall endpoint to display a circle around the point. When you drop the endpoint with the `Alt` key still pressed, the endpoint will automatically snap to the nearest wall that has an end inside the circle. This is great for dealing with walls that are not grid aligned.
+
+![Wall Auto-Snap](.assets/walls-alt-snap.gif)
+
 ### Wall Type Hotkey
 
 There now hotkeys for quickly switching to the different wall types.

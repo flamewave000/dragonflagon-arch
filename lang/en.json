@@ -55,6 +55,9 @@
 	"DF_ARCHITECT.WallChangeType_Setting_MetaKey_OptionAlt": "Alt Key",
 	"DF_ARCHITECT.WallChangeType_Setting_MetaKey_OptionCtrl": "Ctrl Key",
 
+	"DF_ARCHITECT.WallAltDrop_Setting_DistanceName": "Wall Drop Auto-Snap",
+	"DF_ARCHITECT.WallAltDrop_Setting_DistanceHint": "The pixel distance a wall endpoint needs to be to auto-snap the currently dragging wall endpoint to that same position.",
+
 	"DF_ARCHITECT.AltLightOrigin_Settings_Colour1_Name": "Lights: Crosshair Colour",
 	"DF_ARCHITECT.AltLightOrigin_Settings_Colour1_Hint": "The colour of the crosshairs that display when you hold Shift while moving a light source.",
 	"DF_ARCHITECT.AltLightOrigin_Settings_Colour2_Name": "Lights: Alternative Crosshair Colour",
