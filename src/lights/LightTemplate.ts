@@ -2,7 +2,7 @@ import ARCHITECT from "../core/architect.js";
 import { QuickColourPicker } from "./QuickColourPicker.js";
 
 declare global {
-	class MacroConfig extends BaseEntitySheet { }
+	// class MacroConfig extends BaseEntitySheet { }
 	const LightTemplates: _LightTemplates;
 }
 
@@ -82,7 +82,7 @@ export class LightTemplateManager {
 		if (!game.user.isGM) return;
 		Hooks.on('renderLightConfig', this._renderLightConfig.bind(this));
 		Hooks.on('renderMacroConfig', this._renderMacroConfig.bind(this));
-		Hooks.on('renderSceneControls', controls => {
+		Hooks.on('renderSceneControls', (controls: SceneControls) => {
 			if (game.user.isGM && controls.activeControl !== 'lighting')
 				LightTemplates.deactivate();
 		});
@@ -251,7 +251,7 @@ ${'DF_ARCHITECT.LightTemplate_CreateTemplateButton_LightConfig'.localize()}
 			{
 				name: "DF_ARCHITECT.LightTemplate_ContextMenu_Remove",
 				icon: '<i class="fas fa-times"></i>',
-				condition: li => game.macros.get(li.data("macro-id")).getFlag(ARCHITECT.MOD_NAME, this.FLAG_IS_TEMPLATE),
+				condition: li => <boolean>game.macros.get(li.data("macro-id")).getFlag(ARCHITECT.MOD_NAME, this.FLAG_IS_TEMPLATE),
 				callback: li => game.user.assignHotbarMacro(null, li.data("slot"))
 			},
 			{

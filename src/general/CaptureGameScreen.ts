@@ -56,7 +56,7 @@ export default class CaptureGameScreen {
 			layer.renderable = true;
 			layer.deactivate();
 			if (layer.name === 'NotesLayer') {
-				const isToggled = game.settings.get("core", (<any>layer.constructor).TOGGLE_SETTING);
+				const isToggled = <boolean>game.settings.get("core", (<any>layer.constructor).TOGGLE_SETTING);
 				if ((<PlaceablesLayer>layer).objects) {
 					(<PlaceablesLayer>layer).objects.visible = isToggled;
 					(<PlaceablesLayer>layer).placeables.forEach(p => p.controlIcon.visible = isToggled);

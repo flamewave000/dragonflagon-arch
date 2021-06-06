@@ -22,17 +22,17 @@ class _WallChangeType {
 			wrapper(event);
 			if (SETTINGS.get(_WallChangeType.META_KEY) === 'ctrl' && !event.ctrlKey) return;
 			else if (SETTINGS.get(_WallChangeType.META_KEY) === 'alt' && !event.altKey) return;
-			const wallData = (<any>canvas.walls)._getWallDataFromActiveTool(game.activeTool) as Partial<Wall.Data>;
+			const wallData = (<Canvas>canvas).walls._getWallDataFromActiveTool(game.activeTool) as Partial<Wall.Data>;
 			if (wallData.door === undefined)
 				wallData.door = 0;
 			else if (wallData.ds === undefined)
 				wallData.ds = 0;
-			if (canvas.walls.controlled.length === 1) {
-				await canvas.walls.controlled[0].update(wallData);
+			if ((<Canvas>canvas).walls.controlled.length === 1) {
+				await (<Canvas>canvas).walls.controlled[0].update(wallData);
 				return;
 			}
-			const updateData = (<Wall[]>canvas.walls.controlled).map(it => mergeObject(it.data, wallData, { inplace: false }));
-			await canvas.scene.updateEmbeddedEntity("Wall", updateData);
+			const updateData = (<Wall[]>(<Canvas>canvas).walls.controlled).map(it => mergeObject(it.data, wallData, { inplace: false }));
+			await (<Canvas>canvas).scene.updateEmbeddedEntity("Wall", updateData);
 		}, 'WRAPPER');
 	}
 }

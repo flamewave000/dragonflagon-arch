@@ -72,7 +72,7 @@ class _AltLightOrigin {
 			});
 		}
 
-		Hooks.on('renderSceneControls', controls => {
+		Hooks.on('renderSceneControls', (controls: SceneControls) => {
 			if (controls.activeControl === _AltLightOrigin.LIGHTING_LAYER) {
 				window.addEventListener(_AltLightOrigin.KEYEVENT_DOWN, this._keyEventHandler.bind(this));
 				window.addEventListener(_AltLightOrigin.KEYEVENT_UP, this._keyEventHandler.bind(this));
