@@ -6,12 +6,12 @@
 	<input class="shrink" type="radio" value="all" id="all" name="target" {{#if all}}checked{{/if}}>
 	<label class="grow" for="all">{{localize 'DF_ARCHITECT.CaptureGameScreen_ScreenCapture_Target_All'}}</label>
 	<div></div>
-	<input class="shrink" type="checkbox" id="padding" name="padding"/>
+	<input class="shrink" type="checkbox" id="padding" name="padding" {{#if pads}}checked{{/if}}/>
 	<label class="grow" for="padding">{{localize 'DF_ARCHITECT.CaptureGameScreen_ScreenCapture_KeepPadding'}}</label>
 	<div><p>{{localize 'DF_ARCHITECT.CaptureGameScreen_ScreenCapture_SplitImageNote'}}</p></div>
-	<input class="shrink" style="width:50px;margin-right:0.25em" id="split-h" type="number" min="1" max="8" step="1" value="1"/>
+	<input class="shrink" style="width:50px;margin-right:0.25em" id="split-h" type="number" min="1" max="8" step="1" value="{{hori}}"/>
 	<label class="shrink" for="split-h">horizontal</label>
-	<input class="shrink" style="width:50px;margin-right:0.25em;margin-left:1em" id="split-v" type="number" min="1" max="8" step="1" value="1"/>
+	<input class="shrink" style="width:50px;margin-right:0.25em;margin-left:1em" id="split-v" type="number" min="1" max="8" step="1" value="{{vert}}"/>
 	<label class="shrink" for="split-v">vertical</label>
 	<div></div>
 	<h3>{{localize 'DF_ARCHITECT.CaptureGameScreen_ScreenCapture_Format'}}</h3>
@@ -34,18 +34,19 @@
 		</h3>
 		<div style="display:none">
 			{{#each layers}}
-			<input style="grid-row:{{add @index 1}};grid-column:1" type="checkbox" id="{{name}}-show" value="{{name}}" {{#if visible}}checked{{/if}}>
+			<input style="grid-row:{{add @index 1}};grid-column:1" type="checkbox" id="{{name}}-show" value="{{name}}" {{#if filter.s}}checked{{/if}}>
 			<label style="grid-row:{{add @index 1}};grid-column:2" for="{{name}}-show">{{label}}</label>
 			{{#if hasControls}}
-			<input style="grid-row:{{add @index 1}};grid-column:3" type="checkbox" id="{{name}}-controls" value="{{name}}" {{#if active}}checked{{/if}}>
+			<input style="grid-row:{{add @index 1}};grid-column:3" type="checkbox" id="{{name}}-controls" value="{{name}}" {{#if (or active filter.c)}}checked{{/if}}>
 			<label style="grid-row:{{add @index 1}};grid-column:4" for="{{name}}-controls">{{localize 'Show Controls'}}</label>
 			{{/if}}
 			{{#if hasHidden}}
-			<input style="grid-row:{{add @index 1}};grid-column:3" type="checkbox" id="{{name}}-hidden" value="{{name}}">
+			<input style="grid-row:{{add @index 1}};grid-column:3" type="checkbox" id="{{name}}-hidden" value="{{name}}" {{#if filter.h}}checked{{/if}}>
 			<label style="grid-row:{{add @index 1}};grid-column:4" for="{{name}}-hidden">{{localize 'Show Hidden'}}</label>
 			{{/if}}
 			{{/each}}
 		</div>
+		<button id="filter-reset"><i class="fas fa-redo-alt"></i> Reset Filters</button>
 		<span style="display:block;height:150px">&nbsp;</span>
 	</section>
 	{{/if}}

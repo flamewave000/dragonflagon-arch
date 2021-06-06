@@ -1,12 +1,28 @@
 import ARCHITECT from "../core/architect.js";
 import SETTINGS from "../core/settings.js";
 
+interface LayerFilter {
+	s: boolean;  // show layer
+	h?: boolean; // show hidden elements
+	c?: boolean; // show controls
+}
+
 export default class CaptureGameScreen {
 	private static readonly WARNING_SIZE = 5120 * 5120;
 	static readonly PREF_ALLOW_PC = 'CaptureGameScreen.AllowPC';
 	static readonly PREF_COMP = 'CaptureGameScreen.Compression';
 	static readonly PREF_FRMT = 'CaptureGameScreen.Format';
 	static readonly PREF_TRGT = 'CaptureGameScreen.Target';
+	static readonly PREF_HORI = 'CaptureGameScreen.Horizontal';
+	static readonly PREF_VERT = 'CaptureGameScreen.Vertical';
+	static readonly PREF_PADS = 'CaptureGameScreen.Padding';
+	static readonly PREF_LYRS = 'CaptureGameScreen.Layers';
+	private static _layerFilters: { [key: string]: LayerFilter };
+	private static _getLayerFilter(key: string): LayerFilter {
+		if (!this._layerFilters[key])
+			this._layerFilters[key] = { s: true };
+		return this._layerFilters[key];
+	}
 	static init() {
 		SETTINGS.register(this.PREF_ALLOW_PC, {
 			name: 'DF_ARCHITECT.CaptureGameScreen_Setting_AllowPC_Name',
@@ -34,6 +50,32 @@ export default class CaptureGameScreen {
 			type: String,
 			default: 'all',
 		});
+		SETTINGS.register(this.PREF_HORI, {
+			scope: 'client',
+			config: false,
+			type: Number,
+			default: 1,
+		});
+		SETTINGS.register(this.PREF_VERT, {
+			scope: 'client',
+			config: false,
+			type: Number,
+			default: 1,
+		});
+		SETTINGS.register(this.PREF_PADS, {
+			scope: 'client',
+			config: false,
+			type: Boolean,
+			default: false,
+		});
+		SETTINGS.register(this.PREF_LYRS, {
+			scope: 'client',
+			config: false,
+			type: Object,
+			default: {},
+		});
+
+		this._layerFilters = SETTINGS.get(this.PREF_LYRS);
 
 		Hooks.on('renderSettings', (settings: Settings, html: JQuery<HTMLElement>, data: {}) => {
 			if (!SETTINGS.get(this.PREF_ALLOW_PC) && !game.user.isGM) return;
@@ -79,9 +121,9 @@ export default class CaptureGameScreen {
 			return {
 				label, name: layer.name,
 				active: layer.name !== 'NotesLayer' ? layer._active : layer._active || game.settings.get("core", (<any>layer.constructor).TOGGLE_SETTING),
-				visible: layer.renderable,
 				hasControls: layersWithInvisiblePlaceables.includes(layer.name),
-				hasHidden: layersWithHiddenPlaceables.includes(layer.name)
+				hasHidden: layersWithHiddenPlaceables.includes(layer.name),
+				filter: mergeObject({ s: true, h: false, c: false }, this._getLayerFilter(layer.name))
 			}
 		};
 		const data = {
@@ -91,6 +133,9 @@ export default class CaptureGameScreen {
 			jpeg: SETTINGS.get(this.PREF_FRMT) === 'jpeg',
 			webp: SETTINGS.get(this.PREF_FRMT) === 'webp',
 			all: SETTINGS.get(this.PREF_TRGT) === 'all',
+			hori: SETTINGS.get(this.PREF_HORI),
+			vert: SETTINGS.get(this.PREF_VERT),
+			pads: SETTINGS.get(this.PREF_PADS),
 			layers: (<Canvas>canvas).layers.map(x => layerToConfig(x))
 		};
 
@@ -134,9 +179,13 @@ export default class CaptureGameScreen {
 						const call = target === 'all' ? this.captureCanvas : this.captureView;
 						const format: string = html.find('#format').val() as string;
 						const split: [number, number] = [parseInt(<string>html.find('#split-h').val()), parseInt(<string>html.find('#split-v').val())];
-						SETTINGS.set(this.PREF_COMP, compression);
-						SETTINGS.set(this.PREF_FRMT, format);
-						SETTINGS.set(this.PREF_TRGT, target);
+						await Promise.all([
+							SETTINGS.set(this.PREF_COMP, compression),
+							SETTINGS.set(this.PREF_FRMT, format),
+							SETTINGS.set(this.PREF_TRGT, target),
+							SETTINGS.set(this.PREF_PADS, keepPadding),
+							SETTINGS.set(this.PREF_HORI, split[0]),
+							SETTINGS.set(this.PREF_VERT, split[1])]);
 						await dialog.close();
 						switch (format) {
 							case "png":
@@ -158,83 +207,126 @@ export default class CaptureGameScreen {
 				const compression = html.find('#compression');
 				const output = html.find('output');
 				compression.on('change', () => output.html(<string>compression.val()));
-				html.find('.dfarch-capture-form section>div>input').on('change', (event: Event) => {
+				html.find('#filter-reset').on('click', (e: Event) => {
+					e.preventDefault();
+					Object.entries(this._layerFilters).forEach((layerFilter) => {
+						var [layer, filter] = layerFilter;
+						if (!filter.s) {
+							this.toggleLayer(layer, true);
+							filter.s = true;
+						}
+						if (!!filter.h) {
+							this.toggleHidden(layer, false);
+							filter.h = false;
+						}
+						if (!!filter.c) {
+							this.toggleControls(layer, false);
+							filter.c = false;
+						}
+					});
+					html.find('.dfarch-capture-form section>div>input').each((_, e: HTMLElement) => {
+						const element = <HTMLInputElement>e;
+						if (element.id.endsWith('-show')) element.checked = true;
+						else element.checked = false;
+					});
+				})
+				html.find('.dfarch-capture-form section>div>input').on('change', async (event: Event) => {
 					const element = <HTMLInputElement>event.currentTarget;
-					canvas = <Canvas>canvas;
-					const layer = <PlaceablesLayer>canvas.getLayer(element.value);
 					if (element.id.endsWith('-show')) {
-						(<Canvas>canvas).getLayer(element.value).renderable = element.checked;
-						return;
+						this._getLayerFilter(element.value).s = element.checked;
+						this.toggleLayer(element.value, element.checked);
 					}
 					else if (element.id.endsWith('-hidden')) {
-						(layer.objects.children as PlaceableObject[]).forEach(x => {
-							if (!x.data.flags.df_arch_hidden) return;
-							x.renderable = element.checked;
-						});
+						this._getLayerFilter(element.value).h = element.checked;
+						this.toggleHidden(element.value, element.checked);
 					}
 					else {
-						// The Template Layer has specialized activation to always show template frame.
-						if (layer.name === 'TemplateLayer') {
-							if (element.checked) {
-								if (layer.objects) {
-									layer.placeables.forEach(p => {
-										try {
-											p.controlIcon.visible = true;
-											(<MeasuredTemplate>p).ruler.visible = true;
-										} catch (err) {
-											console.error(err);
-										}
-									});
-								}
-							} else {
-								if (layer.objects) {
-									layer.objects.visible = true;
-									layer.placeables.forEach(p => {
-										try {
-											p.controlIcon.visible = false;
-											(<MeasuredTemplate>p).ruler.visible = false;
-										} catch (err) {
-											console.error(err);
-										}
-									});
-								}
-							}
-						}
-						// The Notes Layer has specialized activation when the note pins are toggled on.
-						else if (layer.name === 'NotesLayer') {
-							if (element.checked) {
-								if (layer.objects) {
-									layer._active = true;
-									layer.objects.visible = true;
-									layer.placeables.forEach(p => p.controlIcon.visible = true);
-								}
-							} else {
-								if (layer.objects) {
-									layer._active = false;
-									layer.objects.visible = false;
-									layer.placeables.forEach(p => p.controlIcon.visible = false);
-								}
-							}
-						}
-						// All the other Placeable layers act with the same default behaviour
-						else {
-							if (element.checked) {
-								layer._active = true;
-								layer.objects.visible = true;
-								layer.placeables.forEach(l => l.refresh());
-							} else {
-								layer._active = false;
-								layer.objects.visible = false;
-								layer.releaseAll();
-								layer.placeables.forEach(l => l.refresh());
-								if (layer.preview) layer.preview.removeChildren();
-							}
-						}
+						this._getLayerFilter(element.value).c = element.checked;
+						this.toggleControls(element.value, element.checked);
 					}
+					await SETTINGS.set(this.PREF_LYRS, this._layerFilters);
+				});
+				Object.entries(this._layerFilters).forEach((layerFilter) => {
+					var [layer, filter] = layerFilter;
+					this.toggleLayer(layer, filter.s);
+					if (!!filter.h) this.toggleHidden(layer, true);
+					if (!!filter.c) this.toggleControls(layer, true);
 				});
 			}
 		});
 		dialog.render(true);
+	}
+
+	static toggleLayer(layerName: string, show: boolean) {
+		(<Canvas>canvas).getLayer(layerName).renderable = show;
+	}
+	static toggleHidden(layerName: string, show: boolean) {
+		const layer = <PlaceablesLayer>canvas.getLayer(layerName);
+		(layer.objects.children as PlaceableObject[]).forEach(x => {
+			if (!x.data.flags.df_arch_hidden) return;
+			x.renderable = show;
+		});
+	}
+	static toggleControls(layerName: string, show: boolean) {
+		const layer = <PlaceablesLayer>canvas.getLayer(layerName);
+		this._getLayerFilter(layerName).c = show;
+		// The Template Layer has specialized activation to always show template frame.
+		if (layer.name === 'TemplateLayer') {
+			if (show) {
+				if (layer.objects) {
+					layer.placeables.forEach(p => {
+						try {
+							p.controlIcon.visible = true;
+							(<MeasuredTemplate>p).ruler.visible = true;
+						} catch (err) {
+							console.error(err);
+						}
+					});
+				}
+			} else {
+				if (layer.objects) {
+					layer.objects.visible = true;
+					layer.placeables.forEach(p => {
+						try {
+							p.controlIcon.visible = false;
+							(<MeasuredTemplate>p).ruler.visible = false;
+						} catch (err) {
+							console.error(err);
+						}
+					});
+				}
+			}
+		}
+		// The Notes Layer has specialized activation when the note pins are toggled on.
+		else if (layer.name === 'NotesLayer') {
+			if (show) {
+				if (layer.objects) {
+					layer._active = true;
+					layer.objects.visible = true;
+					layer.placeables.forEach(p => p.controlIcon.visible = true);
+				}
+			} else {
+				if (layer.objects) {
+					layer._active = false;
+					layer.objects.visible = false;
+					layer.placeables.forEach(p => p.controlIcon.visible = false);
+				}
+			}
+		}
+		// All the other Placeable layers act with the same default behaviour
+		else {
+			if (show) {
+				layer._active = true;
+				layer.objects.visible = true;
+				layer.placeables.forEach(l => l.refresh());
+			} else {
+				layer._active = false;
+				layer.objects.visible = false;
+				layer.releaseAll();
+				layer.placeables.forEach(l => l.refresh());
+				if (layer.preview) layer.preview.removeChildren();
+			}
+		}
 	}
 
 	static async captureView(format: string, extension: string, compression: number): Promise<void> {

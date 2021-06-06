@@ -5,6 +5,7 @@
 - Added Dark Light placement while holding Alt key.
 - Now when you have walls selected, you can hold the Ctrl Key while clicking a wall type in the Scene Controls to instantly change the selected walls to that wall type.
 - ColorSettings library is now a hard dependency.
+- Canvas Capture now preserves the filter and settings selections between uses.
 - Fixed Colour Picker so it no longer activates when you hit Enter in a config form.
 - Fixed the Capture Canvas so it will no longer deadlock if an exception occurs during the extraction. Also added a warning dialog if the entire canvas is over 100MB in memory size.
 - Spanish Localization - Courtesy of [lozalojo](https://github.com/lozalojo)
