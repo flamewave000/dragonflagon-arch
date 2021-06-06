@@ -320,8 +320,9 @@ export class LightingLayerOverride {
 		if (templateData === null)
 			return wrapper(event);
 		const origin: { x: number, y: number } = (<any>event.data).origin;
-		// Create the preview source from the Template Data
-		const preview = new AmbientLight(mergeObject(templateData, { x: origin.x, y: origin.y }));
+		// Create the preview source
+		const doc = new AmbientLightDocument(mergeObject(templateData, { x: origin.x, y: origin.y, dim: 0, bright: 0 }), { parent: canvas.scene });
+		const preview = new AmbientLight(doc);
 		(<any>event.data).preview = this.preview.addChild(preview);
 		this.sources.set(preview.sourceId, preview.source);
 		this.deactivateAnimation();

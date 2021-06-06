@@ -94,8 +94,8 @@
 	"DF_ARCHITECT.LightTemplate_TemplateConfig_SaveButton": "Save Template",
 	"DF_ARCHITECT.LightTemplate_TemplateConfig_UseButton": "Activate Template",
 
-	"LAYERS.BackgroundLayer": "Background Layer",
-	"LAYERS.TilesLayer": "Tiles Layer",
+	"LAYERS.BackgroundLayer": "Background/Tiles Layer",
+	"LAYERS.ForegroundLayer": "Foreground/Roofs Layer",
 	"LAYERS.DrawingsLayer": "Drawings Layer",
 	"LAYERS.GridLayer": "Grid Layer",
 	"LAYERS.WallsLayer": "Walls Layer",

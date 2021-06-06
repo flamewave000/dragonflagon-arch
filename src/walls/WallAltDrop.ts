@@ -63,7 +63,7 @@ class _WallAltDrop {
 		// If Alt is not pressed, or no wall is bound, return
 		if (!event.data.originalEvent.altKey || (!data.preview && !data.object)) return;
 		if (data.preview) {
-			data.preview = await new Promise((res, _) => {
+			data.preview = await new Promise<Wall>((res, _) => {
 				var counter = 0;
 				const waiter = () => {
 					counter += 100;
@@ -72,7 +72,7 @@ class _WallAltDrop {
 						else setTimeout(waiter, 100);
 						return;
 					}
-					res(new Wall(game.scenes.active.data.walls.find(x => x._id === (<Canvas>canvas).walls.last.id), game.scenes.active));
+					res(game.scenes.active.data.walls.find(x => x.id === (<Canvas>canvas).walls.last.id).object);
 				}
 				setTimeout(waiter, 100);
 			});
@@ -100,10 +100,10 @@ class _WallAltDrop {
 		// If we are controlling more than one wall, ignore it
 		if (!newWall && wallsLayer.controlled.length != 1) return null;
 		const wall = newWall || wallsLayer.controlled[0];
-		const walls = game.scenes.active.data.walls.filter(x => x._id != wall.data._id);
+		const walls = game.scenes.active.data.walls.filter(x => x.id != wall.data._id);
 		const radius: number = SETTINGS.get(_WallAltDrop.DISTANCE);
 		const closestPoints = walls.map(wall => {
-			const [x, y] = WallsLayer.getClosestEndpoint(dest, <Wall>{ data: wall })
+			const [x, y] = WallsLayer.getClosestEndpoint(dest, <Wall>(<any>wall).object)
 			return { dist: Math.hypot(x - dest.x, y - dest.y), point: { x, y } };
 		}).filter(x => x.dist <= radius).sort((a, b) => a.dist - b.dist);
 		// If there are no points nearby

@@ -66,12 +66,12 @@ export default class CaptureGameScreen {
 		}
 		const controlName = ui.controls.activeControl;
 		const control = ui.controls.controls.find(c => c.name === controlName);
-		if (control && control.layer) (<Canvas>canvas).getLayer(control.layer).activate();
+		if (control && control.layer) canvas[control.layer].activate();
 	}
 
 	static async promptForCapture() {
 		const layersWithInvisiblePlaceables = ['WallsLayer', 'LightingLayer', 'SoundsLayer', 'TemplateLayer', 'NotesLayer'];
-		const layersWithHiddenPlaceables = ['TilesLayer', 'TokenLayer', 'DrawingsLayer'];
+		const layersWithHiddenPlaceables = ['BackgroundLayer', 'TokenLayer', 'DrawingsLayer', 'ForegroundLayer'];
 		const layerToConfig = (layer: CanvasLayer): any => {
 			var label = ('LAYERS.' + layer.name).localize();
 			if (label.startsWith('LAYERS.'))
