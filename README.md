@@ -146,6 +146,12 @@ If you are trying to perfectly place a light source, you're going to typically h
 
 ![Show Light Origin Demo Video](.assets/lights-showorigin.gif)
 
+### Hold Alt for Darkness (Negative Light Radius)
+
+If you hold the `Alt` key while dragging out a new light, it will use a negative radius instead and create a patch of darkness. You will also find a button in the Light Config for quickly switching a light's radius between positive and negative (Light / Dark).
+
+![Dark Light](.assets/lights-alt-dark.gif)
+
 ### Light Templating
 
 Saving and sharing of light templates. You want to place a D&D 5e torch, you can just save the light source as a template to be placed onto the lighting layer at any time.

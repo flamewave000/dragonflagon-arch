@@ -1,10 +1,11 @@
 # DF Architect
 
 ## Release 2.0.0 (2021-06-)
+- Added Wall Endpoint Auto-Snapping when dropping a wall with the Alt key held.
+- Added Dark Light placement while holding Alt key.
 - Now when you have walls selected, you can hold the Ctrl Key while clicking a wall type in the Scene Controls to instantly change the selected walls to that wall type.
 - Fixed Colour Picker so it no longer activates when you hit Enter in a config form.
 - Fixed the Capture Canvas so it will no longer deadlock if an exception occurs during the extraction. Also added a warning dialog if the entire canvas is over 100MB in memory size.
-- Added Wall Endpoint Auto-Snapping when dropping a wall with the Alt key held.
 - Spanish Localization - Courtesy of [lozalojo](https://github.com/lozalojo)
 
 ## Release v1.1.0 (2021-04-18)

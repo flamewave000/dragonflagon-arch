@@ -15,6 +15,7 @@ import CaptureGameScreen from './general/CaptureGameScreen.js';
 import { LightTemplateManager, LightingLayerOverride } from './lights/LightTemplate.js';
 import { WallChangeType } from './walls/WallChangeType.js';
 import { WallAltDrop } from './walls/WallAltDrop.js';
+import { AltLightNegativeRadius } from './lights/AltLightNegativeRadius.js';
 
 Hooks.once('init', function () {
 	if (!game.modules.get('lib-wrapper')?.active) return;
@@ -59,6 +60,7 @@ Hooks.once('ready', function () {
 	WallAltDrop.ready();
 	AltLightOrigin.ready();
 	QuickColourPicker.ready();
+	AltLightNegativeRadius.ready();
 	LightTemplateManager.ready();
 	LightingLayerOverride.ready();
 });
