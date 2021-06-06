@@ -2,7 +2,7 @@
 	"name": "df-architect",
 	"title": "DF Architect",
 	"description": "Architect for FoundryVTT provides a major overhaul of the Walls and Lighting features, as well as a few extra fun things like the Colour Picker and Alternate Grid Snap.",
-	"version": "2.0.0",
+	"version": "2.0.1",
 	"license": "MIT",
 	"repository": {
 		"url": "https://github.com/flamewave000/dragonflagon-arch"
@@ -18,8 +18,8 @@
 		"devclean": "npx gulp devClean",
 		"stage": "npx gulp zip",
 		"prod": "npx gulp zip --min",
+		"launch7": "sudo ./launch-foundry `which node` /var/www/foundryvtt7 /var/www/foundrydata7",
 		"launch": "sudo ./launch-foundry `which node` /var/www/foundryvtt /var/www/foundrydata",
-		"launch8": "sudo ./launch-foundry `which node` /var/www/foundryvtt8 /var/www/foundrydata8",
 		"tag": "git tag -d ${npm_package_name}_${npm_package_version} 2>/dev/null ; git tag ${npm_package_name}_${npm_package_version} && git push -f origin ${npm_package_name}_${npm_package_version}"
 	},
 	"devDependencies": {

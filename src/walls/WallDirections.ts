@@ -1,6 +1,11 @@
 import ARCHITECT from "../core/architect.js";
 import SETTINGS from "../core/settings.js";
 
+interface WallExt extends Wall {
+	leftLabel: PIXI.Text;
+	rightLabel: PIXI.Text;
+}
+
 class _WallDirections {
 	static readonly PREF_ALLOW_UNSELECTED_INVERT = "WallDirections.AllowUnselectedInvert";
 	init() {
@@ -29,7 +34,8 @@ class _WallDirections {
 
 	private _onControlOrRelease(this: PlaceableObject, wrapper: Function, ...args: any[]) {
 		const result = wrapper(...args);
-		this.refresh();
+		if (game.scenes.active.walls.has(this.id))
+			this.refresh();
 		return result;
 	}
 
@@ -43,7 +49,7 @@ class _WallDirections {
 		}
 	}
 
-	private async _onWallDraw(this: Wall): Promise<Wall> {
+	private async _onWallDraw(this: WallExt): Promise<Wall> {
 		this.clear();
 
 		// Draw wall components
@@ -58,8 +64,8 @@ class _WallDirections {
 			strokeThickness: 2,
 			lineHeight: 0
 		});
-		(<any>this).leftLabel = this.addChild(new PIXI.Text("L", style));
-		(<any>this).rightLabel = this.addChild(new PIXI.Text("R", style));
+		this.leftLabel = this.addChild(new PIXI.Text("L", style));
+		this.rightLabel = this.addChild(new PIXI.Text("R", style));
 
 		// Draw current wall
 		this.refresh();
@@ -68,12 +74,11 @@ class _WallDirections {
 		if (this.id) this.activateListeners();
 		return this;
 	}
-	private _onWallRefresh(this: Wall, wrapper: Function): Wall {
+	private _onWallRefresh(this: WallExt, wrapper: Function): Wall {
 		wrapper();
-		const graphics = (<any>this).line as PIXI.Graphics;
 		if (!this._controlled || this.data.dir) {
-			(<PIXI.Text>(<any>this).leftLabel).renderable = false;
-			(<PIXI.Text>(<any>this).rightLabel).renderable = false;
+			this.leftLabel.renderable = false;
+			this.rightLabel.renderable = false;
 			return this;
 		}
 		const [x1, y1] = this.data.c.slice(0, 2);
@@ -86,16 +91,14 @@ class _WallDirections {
 		const [lx, ly] = [cx - (nx * labelOffset), cy - (ny * labelOffset)]; // Calculate the position of the Left label
 		const [rx, ry] = [(nx * labelOffset) + cx, (ny * labelOffset) + cy]; // Calculate the position of the Right label
 		// Update left/right label positioning
-		const leftLabel = <PIXI.Text>(<any>this).leftLabel;
-		leftLabel.x = lx - (leftLabel.width / 2);
-		leftLabel.y = ly - (leftLabel.height / 2);
-		leftLabel.style.fill = this._getWallColor();
-		leftLabel.renderable = true;
-		const rightLabel = <PIXI.Text>(<any>this).rightLabel;
-		rightLabel.x = rx - (rightLabel.width / 2);
-		rightLabel.y = ry - (rightLabel.height / 2);
-		rightLabel.style.fill = this._getWallColor();
-		rightLabel.renderable = true;
+		this.leftLabel.x = lx - (this.leftLabel.width / 2);
+		this.leftLabel.y = ly - (this.leftLabel.height / 2);
+		this.leftLabel.style.fill = this._getWallColor();
+		this.leftLabel.renderable = true;
+		this.rightLabel.x = rx - (this.rightLabel.width / 2);
+		this.rightLabel.y = ry - (this.rightLabel.height / 2);
+		this.rightLabel.style.fill = this._getWallColor();
+		this.rightLabel.renderable = true;
 		return this;
 	}
 }

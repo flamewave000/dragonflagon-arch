@@ -1,5 +1,8 @@
 # DF Architect
 
+## Release 2.0.1 (2021-06-06)
+- Fixed issue with deleting walls that was introduced with the new wall direction labels.
+
 ## Release 2.0.0 (2021-06-06)
 - Migrated entire module to FoundryVTT 0.8.6.
 - Added Wall direction labels and orientation inversion.
