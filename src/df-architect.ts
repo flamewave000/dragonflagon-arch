@@ -52,6 +52,12 @@ Hooks.once('ready', function () {
 			ui.notifications.error('DF_ARCHITECT.ErrorLibWrapperMissing'.localize());
 		return;
 	}
+	if (!game.modules.get('colorsettings')?.active) {
+		console.error('Missing colorsettings module dependency');
+		if (game.user.isGM)
+			ui.notifications.error('DF_ARCHITECT.ErrorColourSettingsMissing'.localize());
+		return;
+	}
 
 	LayerShortcuts.ready();
 	WallShortcuts.ready();

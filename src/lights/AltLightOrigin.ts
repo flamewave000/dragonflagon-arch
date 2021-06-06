@@ -30,47 +30,24 @@ class _AltLightOrigin {
 		}, 'OVERRIDE');
 	}
 	ready() {
-		if (!game.modules.get('colorsettings')?.active) {
-			console.warn('Missing colorsettings module dependency');
-			if (game.user.isGM)
-				ui.notifications.info('DF_ARCHITECT.ErrorColourSettingsMissing'.localize());
-			SETTINGS.register(_AltLightOrigin.PREF_COLOUR1, {
-				name: 'DF_ARCHITECT.AltLightOrigin_Settings_Colour1_Name',
-				hint: 'DF_ARCHITECT.AltLightOrigin_Settings_Colour1_Hint',
-				scope: 'world',
-				config: true,
-				default: "#ffffffff",
-				type: String
-			});
-			SETTINGS.register(_AltLightOrigin.PREF_COLOUR2, {
-				name: 'DF_ARCHITECT.AltLightOrigin_Settings_Colour2_Name',
-				hint: 'DF_ARCHITECT.AltLightOrigin_Settings_Colour2_Hint',
-				scope: 'world',
-				config: true,
-				default: "#ff5500ff",
-				type: String
-			});
-		}
-		else {
-			// @ts-ignore
-			new window.Ardittristan.ColorSetting(ARCHITECT.MOD_NAME, _AltLightOrigin.PREF_COLOUR1, {
-				name: "DF_ARCHITECT.AltLightOrigin_Settings_Colour1_Name",
-				hint: "DF_ARCHITECT.AltLightOrigin_Settings_Colour1_Hint",
-				label: "DF_ARCHITECT.AltLightOrigin_Settings_Colour1_Name",
-				restricted: true,
-				defaultColor: "#ffffffff",
-				scope: "world",
-			});
-			// @ts-ignore
-			new window.Ardittristan.ColorSetting(ARCHITECT.MOD_NAME, _AltLightOrigin.PREF_COLOUR2, {
-				name: "DF_ARCHITECT.AltLightOrigin_Settings_Colour2_Name",
-				hint: "DF_ARCHITECT.AltLightOrigin_Settings_Colour2_Hint",
-				label: "DF_ARCHITECT.AltLightOrigin_Settings_Colour2_Name",
-				restricted: true,
-				defaultColor: "#ff5500ff",
-				scope: "world",
-			});
-		}
+		// @ts-ignore
+		new window.Ardittristan.ColorSetting(ARCHITECT.MOD_NAME, _AltLightOrigin.PREF_COLOUR1, {
+			name: "DF_ARCHITECT.AltLightOrigin_Settings_Colour1_Name",
+			hint: "DF_ARCHITECT.AltLightOrigin_Settings_Colour1_Hint",
+			label: "DF_ARCHITECT.AltLightOrigin_Settings_Colour1_Name",
+			restricted: true,
+			defaultColor: "#ffffffff",
+			scope: "world",
+		});
+		// @ts-ignore
+		new window.Ardittristan.ColorSetting(ARCHITECT.MOD_NAME, _AltLightOrigin.PREF_COLOUR2, {
+			name: "DF_ARCHITECT.AltLightOrigin_Settings_Colour2_Name",
+			hint: "DF_ARCHITECT.AltLightOrigin_Settings_Colour2_Hint",
+			label: "DF_ARCHITECT.AltLightOrigin_Settings_Colour2_Name",
+			restricted: true,
+			defaultColor: "#ff5500ff",
+			scope: "world",
+		});
 
 		Hooks.on('renderSceneControls', (controls: SceneControls) => {
 			if (controls.activeControl === _AltLightOrigin.LIGHTING_LAYER) {
