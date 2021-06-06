@@ -37,7 +37,7 @@ declare class Canvas {
 
 	grid: GridLayer;
 
-	walls: any; //TODO: WallsLayer
+	walls: WallsLayer; //TODO: WallsLayer
 
 	templates: any; //TODO: TemplateLayer
 

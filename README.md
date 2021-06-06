@@ -122,6 +122,18 @@ You can now hold the `Alt` key while dragging a wall endpoint to display a circl
 
 ![Wall Auto-Snap](.assets/walls-alt-snap.gif)
 
+### Wall Direction Labels and Orientation Swap
+
+Selected walls will now display a "L" and "R" on the Left and Right sides of the wall. This helps with selecting a Wall Direction so you can know at a glance what orientation the wall is in. Before, you would have to randomly select a direction and then check if it was correct. If it wasn't, you had to reopen the wall config and switch it.
+
+![Wall Direction Labels](.assets\walls-direction-labels.png)
+
+You can also `Double Right-Click` the node of a Selected wall to reverse the direction of that wall. This is useful if you have a long chain of walls that are all one direction, but there is a a couple walls in the chain that are opposite. If a wall already has a direction set, instead of inverting the orientation of the wall, double right clicking will simply switch the set direction.
+
+There is also a setting that, if enabled, will allow you to quickly invert the orientation of a wall without having to select it first. This is not default so as to help prevent accidental wall inversions by stray double right clicks.
+
+![Invert Wall Direction](.assets/walls-direction-invert.gif)
+
 ### Wall Type Hotkey
 
 There now hotkeys for quickly switching to the different wall types.

@@ -1,6 +1,7 @@
 # DF Architect
 
-## Release 2.0.0 (2021-06-)
+## Release 2.0.0 (2021-06-06)
+- Added Wall direction labels and orientation inversion.
 - Added Wall Endpoint Auto-Snapping when dropping a wall with the Alt key held.
 - Added Dark Light placement while holding Alt key.
 - Now when you have walls selected, you can hold the Ctrl Key while clicking a wall type in the Scene Controls to instantly change the selected walls to that wall type.
