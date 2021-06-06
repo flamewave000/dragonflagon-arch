@@ -59,7 +59,7 @@
 	"DF_ARCHITECT.WallAltDrop_Setting_DistanceHint": "The pixel distance a wall endpoint needs to be to auto-snap the currently dragging wall endpoint to that same position.",
 
 	"DF_ARCHITECT.WallDirections_Setting_AllowUnselectedInvertName": "Allow Orientation Invert on Unselected Walls",
-	"DF_ARCHITECT.WallDirections_Setting_AllowUnselectedInvertHint": "Allow the use of a double-click to invert a wall's orientation when the wall has not first been selected.",
+	"DF_ARCHITECT.WallDirections_Setting_AllowUnselectedInvertHint": "Allow the use of a double right-click to invert a wall's orientation when the wall has not first been selected.",
 
 	"DF_ARCHITECT.AltLightOrigin_Settings_Colour1_Name": "Lights: Crosshair Colour",
 	"DF_ARCHITECT.AltLightOrigin_Settings_Colour1_Hint": "The colour of the crosshairs that display when you hold Shift while moving a light source.",

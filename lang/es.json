@@ -53,6 +53,17 @@
 	"DF_ARCHITECT.WallJoinSplit_Split_Label": "Dividir los muros seleccionado en dos partes cada uno",
 	"DF_ARCHITECT.WallJoinSplit_Join_Label": "Unir las líneas de muros seleccionados en un único muro",
 
+	"DF_ARCHITECT.WallChangeType_Setting_MetaKeyName": "Tecla de cambio rápido de pared",
+	"DF_ARCHITECT.WallChangeType_Setting_MetaKeyHint": "¿Qué tecla le gustaría mantener presionada al hacer clic en un control de tipo de muro para cambiar la selección actual de muros a ese tipo de muro?",
+	"DF_ARCHITECT.WallChangeType_Setting_MetaKey_OptionAlt": "Tecla Alt",
+	"DF_ARCHITECT.WallChangeType_Setting_MetaKey_OptionCtrl": "Tecla Ctrl",
+
+	"DF_ARCHITECT.WallAltDrop_Setting_DistanceName": "Ajuste automático de caída de pared",
+	"DF_ARCHITECT.WallAltDrop_Setting_DistanceHint": "La distancia en píxeles que debe tener un punto final de pared para ajustar automáticamente el punto final de la pared que se arrastra actualmente a esa misma posición.",
+
+	"DF_ARCHITECT.WallDirections_Setting_AllowUnselectedInvertName": "Permitir Invertir Orientación en las paredes no seleccionados",
+	"DF_ARCHITECT.WallDirections_Setting_AllowUnselectedInvertHint": "Permita el uso de un doble clic para invertir la orientación de una pared cuando la pared no se haya seleccionado primero.",
+
 	"DF_ARCHITECT.AltLightOrigin_Settings_Colour1_Name": "Luces: color de la mirilla",
 	"DF_ARCHITECT.AltLightOrigin_Settings_Colour1_Hint": "Color de la mirilla que se muestra al pulsar MAYÚS mientras se mueve una fuente de luz",
 	"DF_ARCHITECT.AltLightOrigin_Settings_Colour2_Name": "Luces: color alternativo de la mirilla",
@@ -75,6 +86,8 @@
 	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_Compression": "Calidad del JPEG y el WebP",
 	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_KeepPadding": "(Solo para 'Todo el lienzo') Incluir relleno",
 	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_SplitImageNote": "(Solo para 'Todo el lienzo') Si la imagen no es renderizada correctamente (por ejemplo, si nota que faltan algunas partes), es que el tablero es demasiado grande para la GPU. Puede aumentar estos valores para dividir el tablero en varias imágenes tanto vertical como horizontalmente. Luego puede juntarlas de nuevo usando cualquier editor de imágenes",
+	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_WarningConfirmTitle": "Muy Grande Imagen",
+	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_WarningConfirmContent": "<p>Está intentando capturar una imagen muy grande. Es posible que desee dividir la imagen.<br>Dependiendo de su GPU, la renderización puede fallar y dar como resultado una imagen con solo parcialmente dibujada, el resto dejado en blanco.</p>",
 
 	"DF_ARCHITECT.LightTemplate_CreateTemplateButton_LightConfig": "Crear plantilla desde esta fuente de luz",
 	"DF_ARCHITECT.LightTemplate_CreateTemplateButton_MacroDirectory": "Crear plantilla de fuente de luz",
@@ -87,8 +100,10 @@
 	"DF_ARCHITECT.LightTemplate_TemplateConfig_SaveButton": "Guardar plantilla",
 	"DF_ARCHITECT.LightTemplate_TemplateConfig_UseButton": "Activar plantilla",
 
-	"LAYERS.BackgroundLayer": "Capa de fondo",
-	"LAYERS.TilesLayer": "Capa de baldosas",
+	"DF_ARCHITECT.AltLightNegativeRadius_InvertRadiusButton": "Invertir los radios tenue / brillante a claro y oscuro (valores positivos / negativos)",
+
+	"LAYERS.BackgroundLayer": "Capa de fondo/baldosas",
+	"LAYERS.ForegroundLayer": "Capa de primer plano/techos",
 	"LAYERS.DrawingsLayer": "Capa de dibujo",
 	"LAYERS.GridLayer": "Capa de rejilla",
 	"LAYERS.WallsLayer": "Capa de muros",

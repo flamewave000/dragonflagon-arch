@@ -1,6 +1,7 @@
 # DF Architect
 
 ## Release 2.0.0 (2021-06-06)
+- Migrated entire module to FoundryVTT 0.8.6.
 - Added Wall direction labels and orientation inversion.
 - Added Wall Endpoint Auto-Snapping when dropping a wall with the Alt key held.
 - Added Dark Light placement while holding Alt key.
