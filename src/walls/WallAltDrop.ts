@@ -99,7 +99,7 @@ class _WallAltDrop {
 		const wallsLayer = (<Canvas>canvas).walls;
 		// If we are controlling more than one wall, ignore it
 		if (!newWall && wallsLayer.controlled.length != 1) return null;
-		const wall = newWall || wallsLayer.controlled[0];
+		const wall: Wall = newWall || wallsLayer.controlled[0];
 		const walls = game.scenes.active.data.walls.filter(x => x.id != wall.data._id);
 		const radius: number = SETTINGS.get(_WallAltDrop.DISTANCE);
 		const closestPoints = walls.map(wall => {
@@ -116,7 +116,7 @@ class _WallAltDrop {
 			return await wall.delete(); // If we collapsed the wall, delete its
 		}
 		(<WallsLayer>wall.layer).last.point = target;
-		return await wall.update(<any>{ c: coords });
+		return await wall.document.update(<any>{ c: coords });
 	}
 }
 

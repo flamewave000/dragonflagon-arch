@@ -28,7 +28,7 @@ class _WallChangeType {
 			else if (wallData.ds === undefined)
 				wallData.ds = 0;
 			if ((<Canvas>canvas).walls.controlled.length === 1) {
-				await (<Canvas>canvas).walls.controlled[0].update(wallData);
+				await (<Canvas>canvas).walls.controlled[0].document.update(wallData);
 				return;
 			}
 			const updateData = (<Wall[]>(<Canvas>canvas).walls.controlled).map(it => mergeObject(it.data, wallData, { inplace: false }));

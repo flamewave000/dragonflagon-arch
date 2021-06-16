@@ -1,5 +1,9 @@
 # DF Architect
 
+## Release 2.0.2 (2021-06-16)
+- Cleaned up some deprecated calls that were flagged in the console.
+- Updated the compatibility to FoundryVTT 0.8.7
+
 ## Release 2.0.1 (2021-06-06)
 - Fixed issue with deleting walls that was introduced with the new wall direction labels.
 

@@ -120,8 +120,7 @@ ${'DF_ARCHITECT.LightTemplate_CreateTemplateButton_LightConfig'.localize()}
 	}
 
 	private static async _renderMacroConfig(app: MacroConfig, html: JQuery<HTMLElement>, data: BaseEntitySheet.Data) {
-		console.debug(data.entity);
-		const macro = new Macro(data.entity as Macro.Data);
+		const macro = new Macro(data.data as Macro.Data);
 		if (!macro.getFlag(ARCHITECT.MOD_NAME, this.FLAG_IS_TEMPLATE))
 			return;
 		html.find('div.form-group').remove();
@@ -133,7 +132,7 @@ ${'DF_ARCHITECT.LightTemplate_CreateTemplateButton_LightConfig'.localize()}
 			animationTypes[k] = v.label;
 		}
 
-		const lightData = this._extractLightDataFromMacroCommand((data.entity as Macro.Data).command);
+		const lightData = this._extractLightDataFromMacroCommand((data.data as Macro.Data).command);
 		const htmlData = {
 			object: duplicate(lightData),
 			lightTypes: this.lightTypes,
@@ -194,7 +193,7 @@ ${'DF_ARCHITECT.LightTemplate_CreateTemplateButton_LightConfig'.localize()}
 		// Create the Macro
 		const macro = await Macro.create({
 			name: 'Light Template ' + new Date().toISOString().replace(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}).+/, '$4$5$6'),
-			author: 'DF Architect',
+			author: game.userId,
 			img: `modules/${ARCHITECT.MOD_NAME}/templates/lightbulb.svg`,
 			scope: "global",
 			type: 'script',

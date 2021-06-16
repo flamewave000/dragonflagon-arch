@@ -42,10 +42,10 @@ class _WallDirections {
 	private async _reverseWallDirection(this: Wall) {
 		if (SETTINGS.get(_WallDirections.PREF_ALLOW_UNSELECTED_INVERT) && !this._controlled) return;
 		if (this.data.dir) {
-			await this.update(<DeepPartial<Wall.Data>>{ dir: this.data.dir === 1 ? 2 : 1 });
+			await this.document.update(<DeepPartial<Wall.Data>>{ dir: this.data.dir === 1 ? 2 : 1 });
 		} else {
 			const data = this.data.c.slice(2).concat(this.data.c.slice(0, 2));
-			await this.update(<DeepPartial<Wall.Data>>{ c: data });
+			await this.document.update(<DeepPartial<Wall.Data>>{ c: data });
 		}
 	}
 
