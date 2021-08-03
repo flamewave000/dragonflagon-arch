@@ -27,7 +27,34 @@ I hate big walls of text, so I've done my best to provide some animated previews
 - [libWrapper](https://foundryvtt.com/packages/lib-wrapper) This is used where ever DF Architect needs to patch FoundryVTT Core functionality. This helps it play nicer with other modules and avoid conflicts.
 - [lib - ColorSettings](https://foundryvtt.com/packages/colorsettings) This module makes colour selections in the FoundryVTT modules settings much easier for you.
 
+## Contents
 
+* [General Features](#general-features)
+	+ [Quick Colour Picker](#quick-colour-picker)
+		- [For Devs: You can use this feature!](#for-devs-you-can-use-this-feature)
+	+ [Alternate Grid Snap](#alternate-grid-snap)
+	+ [Layer Hotkeys](#layer-hotkeys)
+	+ [Layer Quick Swap](#layer-quick-swap)
+	+ [Canvas Capture](#canvas-capture)
+		- [Hidden Tokens, Tiles, Drawings](#hidden-tokens-tiles-drawings)
+		- [Capture Current View](#capture-current-view)
+		- [Capture Whole Canvas](#capture-whole-canvas)
+		- [Capture Whole Canvas with Padding](#capture-whole-canvas-with-padding)
+		- [Capture Vision](#capture-vision)
+		- [Layer Filtering (GM Only)](#layer-filtering-gm-only)
+* [Walls Features](#walls-features-1)
+	+ [Lock Wall Chaining](#lock-wall-chaining)
+	+ [Auto-Snap Wall Endpoint](#auto-snap-wall-endpoint)
+	+ [Wall Direction Labels and Orientation Swap](#wall-direction-labels-and-orientation-swap)
+	+ [Wall Type Hotkey](#wall-type-hotkey)
+	+ [Wall Type Switching](#wall-type-switching)
+	+ [Wall Splitting](#wall-splitting)
+	+ [Wall Joining](#wall-joining)
+* [Lighting Features](#lighting-features-1)
+	+ [Show Light Origin](#show-light-origin)
+	+ [Hold Alt for Darkness (Negative Light Radius)](#hold-alt-for-darkness-negative-light-radius)
+	+ [Light Templating](#light-templating)
+		- [Standard Light Templates](#standard-light-templates)
 
 ## General Features
 
@@ -75,7 +102,7 @@ You can now capture the current scene's canvas. Kind of like a screenshot, but i
 
 Tokens, Tiles, and Drawings can be made "hidden" in FoundryVTT. By default, Canvas Capture will completely remove these items from the rendering. There is, however, an option to Show Hidden for each individual layer. This will render the hidden Tokens, Tiles, or Drawings to the final image.
 
-#### Capture Current View Demo
+#### Capture Current View
 
 |Demo|Result|
 |:-:|:-:|
@@ -142,6 +169,12 @@ There is also a setting that, if enabled, will allow you to quickly invert the o
 There now hotkeys for quickly switching to the different wall types.
 
 ![Wall Type Hotkeys](.assets/walls-walltype-hotkeys.png)
+
+### Wall Type Switching
+
+While walls are selected, you can quickly switch their type by holding the `Ctrl` key down while clicking the wall type you want in the scene controls. The below demo shows the types being switched by holding Ctrl while clicking the buttons.
+
+![Wall Type Switching Demo](.assets/walls-walltype-switch.gif)
 
 ### Wall Splitting
 
