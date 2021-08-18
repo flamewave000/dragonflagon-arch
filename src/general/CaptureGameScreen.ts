@@ -248,6 +248,11 @@ export default class CaptureGameScreen {
 				});
 				Object.entries(this._layerFilters).forEach((layerFilter) => {
 					var [layer, filter] = layerFilter;
+					// If the layer no longer exists, remove it from list and return
+					if ((<Canvas>canvas).getLayer(layer) === null) {
+						delete this._layerFilters[layer];
+						return
+					}
 					this.toggleLayer(layer, filter.s);
 					if (!!filter.h) this.toggleHidden(layer, true);
 					if (!!filter.c) this.toggleControls(layer, true);
