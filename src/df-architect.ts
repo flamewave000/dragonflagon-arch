@@ -17,6 +17,7 @@ import { WallChangeType } from './walls/WallChangeType.js';
 import { WallAltDrop } from './walls/WallAltDrop.js';
 import { AltLightNegativeRadius } from './lights/AltLightNegativeRadius.js';
 import { WallDirections } from './walls/WallDirections.js';
+import { DataMigration } from './core/migration.js';
 
 Hooks.once('init', function () {
 	if (!game.modules.get('lib-wrapper')?.active) return;
@@ -34,6 +35,7 @@ Hooks.once('init', function () {
 	});
 
 	ARCHITECT.DrawArchitectGraphicToConsole();
+	DataMigration.init();
 	AltGridSnap.init();
 	WallCtrlInvert.init();
 	WallJoinSplit.init();
@@ -51,7 +53,7 @@ Hooks.once('setup', function () {
 	PIXIAppOverride.setup();
 });
 
-Hooks.once('ready', function () {
+Hooks.once('ready', async function () {
 	if (!game.modules.get('lib-wrapper')?.active) {
 		console.error('Missing libWrapper module dependency');
 		if (game.user.isGM)
@@ -71,6 +73,7 @@ Hooks.once('ready', function () {
 		return;
 	}
 
+	await DataMigration.ready();
 	LayerShortcuts.ready();
 	WallShortcuts.ready();
 	WallCtrlInvert.ready();

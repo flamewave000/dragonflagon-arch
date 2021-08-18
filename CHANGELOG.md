@@ -1,5 +1,16 @@
 # DF Architect
 
+## Release 2.1.0 (2021-08-18)
+- Fixed Canvas Capture layer filtering issues when a layer no longer exists.
+- Added custom filename field to Canvas Capture dialog.
+- Fixed issues with certain wall features that occurred when the currently viewed scene was not the "active" scene.
+- Updated Localization files to be in a better hierarchical format.
+- Fixed some broken localizations.
+- Added check for the Library: DF Hotkeys which is required.
+- Update Light Templates to use the new Darkness Range that was introduced in 0.8.x.
+- Added a data migration for existing light templates.
+- Updated software license from MIT to BSD-3-Clause.
+
 ## Release 2.0.2 (2021-06-16)
 - Cleaned up some deprecated calls that were flagged in the console.
 - Updated the compatibility to FoundryVTT 0.8.7
