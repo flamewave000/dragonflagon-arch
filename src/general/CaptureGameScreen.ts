@@ -17,7 +17,9 @@ export default class CaptureGameScreen {
 	static readonly PREF_VERT = 'CaptureGameScreen.Vertical';
 	static readonly PREF_PADS = 'CaptureGameScreen.Padding';
 	static readonly PREF_LYRS = 'CaptureGameScreen.Layers';
+	static readonly PREF_FILE = 'CaptureGameScreen.FileSettings';
 	private static _layerFilters: { [key: string]: LayerFilter };
+	private static _fileSettings: { name: string, date: boolean };
 	private static _getLayerFilter(key: string): LayerFilter {
 		if (!this._layerFilters[key])
 			this._layerFilters[key] = { s: true };
@@ -74,8 +76,15 @@ export default class CaptureGameScreen {
 			type: Object,
 			default: {},
 		});
+		SETTINGS.register(this.PREF_FILE, {
+			scope: 'client',
+			config: false,
+			type: Object,
+			default: { name: '', date: true },
+		});
 
 		this._layerFilters = SETTINGS.get(this.PREF_LYRS);
+		this._fileSettings = SETTINGS.get(this.PREF_FILE);
 
 		Hooks.on('renderSettings', (settings: Settings, html: JQuery<HTMLElement>, data: {}) => {
 			if (!SETTINGS.get(this.PREF_ALLOW_PC) && !game.user.isGM) return;
@@ -136,7 +145,9 @@ export default class CaptureGameScreen {
 			hori: SETTINGS.get(this.PREF_HORI),
 			vert: SETTINGS.get(this.PREF_VERT),
 			pads: SETTINGS.get(this.PREF_PADS),
-			layers: (<Canvas>canvas).layers.map(x => layerToConfig(x))
+			layers: (<Canvas>canvas).layers.map(x => layerToConfig(x)),
+			fileName: this._fileSettings.name,
+			fileDate: this._fileSettings.date
 		};
 
 		// Completely hide the placeables that are set as "Hidden"
@@ -179,6 +190,11 @@ export default class CaptureGameScreen {
 						const call = target === 'all' ? this.captureCanvas : this.captureView;
 						const format: string = html.find('#format').val() as string;
 						const split: [number, number] = [parseInt(<string>html.find('#split-h').val()), parseInt(<string>html.find('#split-v').val())];
+						this._fileSettings = {
+							name: (<HTMLInputElement>html.find('#fileName')[0]).value.trim(),
+							date: (<HTMLInputElement>html.find('#fileDate')[0]).checked
+						};
+						SETTINGS.set(this.PREF_FILE, this._fileSettings);
 						await Promise.all([
 							SETTINGS.set(this.PREF_COMP, compression),
 							SETTINGS.set(this.PREF_FRMT, format),
@@ -344,7 +360,10 @@ export default class CaptureGameScreen {
 			// Create a virtual link to virtually click for the download
 			const link = document.createElement('a');
 			link.href = imageData;
-			link.download = `screenshot-${new Date().toISOString().replace(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}).+/, '$1$2$3-$4$5$6')}.${extension}`;
+			const fileSettings = CaptureGameScreen._fileSettings;
+			const fileName = fileSettings.name === null || fileSettings.name.length === 0 ? 'screenshot' : fileSettings.name
+			const date = new Date().toISOString().replace(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}).+/, '$1$2$3-$4$5$6');
+			link.download = fileSettings.date ? `${fileName}-${date}.${extension}` : `${fileName}.${extension}`;
 			link.click();
 			// Remove the overlay after the canvas has had a chance to re-render
 			setTimeout(() => { element.remove(); res(); }, 100);
@@ -406,6 +425,8 @@ export default class CaptureGameScreen {
 			const canvasElement = $('canvas#board');
 			// Create a virtual link to virtually click for the download
 			const link = document.createElement('a');
+			const fileSettings = CaptureGameScreen._fileSettings;
+			const linkName = fileSettings.name === null || fileSettings.name.length === 0 ? 'screenshot' : fileSettings.name
 			const linkDate = new Date().toISOString().replace(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}).+/, '$1$2$3-$4$5$6');
 			const images: string[] = [];
 			for (let cy = 0; cy < split[1]; cy++) {
@@ -457,7 +478,7 @@ export default class CaptureGameScreen {
 				// Serve up the images as downloads
 				for (let c = 0; c < images.length; c++) {
 					link.href = images[c];
-					link.download = `screenshot${images.length > 1 ? '_' + (c + 1) : ''}-${linkDate}.${extension}`;
+					link.download = `${linkName}${images.length > 1 ? '_' + (c + 1) : ''}` + (fileSettings.date ? `-${linkDate}.` : '.') + extension;
 					link.click();
 				}
 				element.remove();

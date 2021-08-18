@@ -1,4 +1,11 @@
 <form class="dfarch-capture-form">
+	<h3>{{localize 'File Name'}}</h3>
+	<label class="grow" for="fileName">{{localize 'Append current date and time to file name?'}}</label>
+	<div></div>
+	<input class="grow" type="text" id="fileName" name="fileName" placeholder="screenshot" value="{{fileName}}"/>
+	<div></div>
+	<input class="shrink" type="checkbox" id="fileDate" name="fileDate" {{#if fileDate}}checked{{/if}}/>
+	<label class="grow" for="fileDate">{{localize 'Append current date and time to file name?'}}</label>
 	<h3>{{localize 'DF_ARCHITECT.CaptureGameScreen_ScreenCapture_Target'}}</h3>
 	<input class="shrink" type="radio" value="cur" id="cur" name="target" {{#unless all}}checked{{/unless}}>
 	<label class="grow" for="cur">{{localize 'DF_ARCHITECT.CaptureGameScreen_ScreenCapture_Target_Current'}}</label>
