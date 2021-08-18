@@ -3,18 +3,18 @@ export default class ARCHITECT {
 
 	static requestReload() {
 		const dialog: Dialog = new Dialog({
-			title: 'DF_ARCHITECT.ReloadRequired_Title'.localize(),
-			content: 'DF_ARCHITECT.ReloadRequired_Content'.localize(),
+			title: 'DF_ARCHITECT.ReloadRequired.Title'.localize(),
+			content: 'DF_ARCHITECT.ReloadRequired.Content'.localize(),
 			default: 'yes',
 			buttons: {
 				no: {
 					icon: '<i class="fas fa-times"><╱i>',
-					label: 'DF_ARCHITECT.ReloadRequired_Negative'.localize(),
+					label: 'DF_ARCHITECT.ReloadRequired.Negative'.localize(),
 					callback: async () => await dialog.close()
 				},
 				yes: {
 					icon: '<i class="fas fa-check"><╱i>',
-					label: 'DF_ARCHITECT.ReloadRequired_Positive'.localize(),
+					label: 'DF_ARCHITECT.ReloadRequired.Positive'.localize(),
 					callback: () => window.location.reload()
 				}
 			}

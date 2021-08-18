@@ -1,115 +1,150 @@
 {
-	"DF_ARCHITECT.ModName": "Dragon Flagon Architect",
-
-	"DF_ARCHITECT.ErrorColourSettingsMissing": "DF Architect: 'lib - ColorSettings' module required. Please install and activate 'lib - ColorSettings'",
-	"DF_ARCHITECT.ErrorLibWrapperMissing": "DF Architect: 'libWrapper' module required. Please install and activate 'libWrapper'.",
-
-	"DF_ARCHITECT.ReloadRequired_Title": "Reload Required",
-	"DF_ARCHITECT.ReloadRequired_Content": "<p>A reload is required for your changes to go into effect.</p>",
-	"DF_ARCHITECT.ReloadRequired_Positive": "Reload Now",
-	"DF_ARCHITECT.ReloadRequired_Negative": "I'll Reload Myself",
-
-	"DF_ARCHITECT.Hotkeys_Settings_Title": "Keyboard Shortcuts",
-
-	"DF_ARCHITECT.LayerShortcuts_Settings_Title": "DF Architect: Layers Keyboard Shortcuts",
-	"DF_ARCHITECT.LayerShortcuts_Settings_Description": "Shortcuts for switching between the canvas layers.",
-	"DF_ARCHITECT.LayerShortcuts_Settings_Layer_Tokens": "Tokens: ",
-	"DF_ARCHITECT.LayerShortcuts_Settings_Layer_Measure": "Measure: ",
-	"DF_ARCHITECT.LayerShortcuts_Settings_Layer_Tiles": "Tiles: ",
-	"DF_ARCHITECT.LayerShortcuts_Settings_Layer_Drawings": "Drawings: ",
-	"DF_ARCHITECT.LayerShortcuts_Settings_Layer_Walls": "Walls: ",
-	"DF_ARCHITECT.LayerShortcuts_Settings_Layer_Lighting": "Lighting: ",
-	"DF_ARCHITECT.LayerShortcuts_Settings_Layer_Sounds": "Sounds: ",
-	"DF_ARCHITECT.LayerShortcuts_Settings_Layer_Notes": "Notes: ",
-	"DF_ARCHITECT.LayerShortcuts_Settings_Reset": "Reset to Defaults",
-	"DF_ARCHITECT.LayerShortcuts_Settings_Save": "Save",
-	"DF_ARCHITECT.LayerShortcuts_Settings_QuickSwap_Title": "Layer Quick Swap",
-	"DF_ARCHITECT.LayerShortcuts_Settings_QuickSwap_Info": "This Hotkey is for quickly swapping between two preset layers. Each time it is pressed, it will switch to the layer it is not on. If you are on a layer that is not included in this pair, you will be switched to Layer 1.",
-	"DF_ARCHITECT.LayerShortcuts_Settings_QuickSwap_Layer1_Name": "Quick Swap Layer 1",
-	"DF_ARCHITECT.LayerShortcuts_Settings_QuickSwap_Layer1_Hint": "One of the two layers that will swap between when the Quick Swap hotkey is pressed.",
-	"DF_ARCHITECT.LayerShortcuts_Settings_QuickSwap_Layer2_Name": "Quick Swap Layer 2",
-	"DF_ARCHITECT.LayerShortcuts_Settings_QuickSwap_Layer2_Hint": "The second of the two layers that will swap between when the Quick Swap hotkey is pressed.",
-
-	"DF_ARCHITECT.WallShortcuts_Settings_Title": "DF Architect: Wall Type Switching",
-	"DF_ARCHITECT.WallShortcuts_Settings_Description": "Hotkeys assigned to switch between the different wall types",
-	"DF_ARCHITECT.WallShortcuts_Settings_Label_WallType": "Wall Type",
-
-	"DF_ARCHITECT.AltGridSnap_Setting_EnabledName": "Show Alternate Grid Snap Toggle",
-	"DF_ARCHITECT.AltGridSnap_Setting_EnabledHint": "Show the toggle button for enabling alternate grid snapping to the center of boxes instead of corners.",
-	"DF_ARCHITECT.AltGridSnap_Setting_PlaceOnControlBarName": "Place on Main Control Bar",
-	"DF_ARCHITECT.AltGridSnap_Setting_PlaceOnControlBarHint": "Place the Alternate Grid Snap Toggle button on the main Controls Bar instead of the Tools bars.",
-	"DF_ARCHITECT.AltGridSnap_Label": "Alternate Grid Snap",
-	"DF_ARCHITECT.AltGridSnap_Hotkey_Toggle": "Toggle Alternate Grid Snapping",
-	
-	"DF_ARCHITECT.WallCtrlInvert_Label": "Lock Wall Chaining",
-	"DF_ARCHITECT.WallCtrlInvert_Settings_Title": "Wall Chaining",
-	"DF_ARCHITECT.WallCtrlInvert_Setting_Hotkey": "Toggle chain lock: ",
-
-	"DF_ARCHITECT.WallBoxPlacer_Label": "Draw walls along a square",
-
-	"DF_ARCHITECT.WallJoinSplit_Split_Label": "Split the selected walls into two walls each",
-	"DF_ARCHITECT.WallJoinSplit_Join_Label": "Merge the selected line of walls into a single wall",
-
-	"DF_ARCHITECT.WallChangeType_Setting_MetaKeyName": "Quick Wall Change Key",
-	"DF_ARCHITECT.WallChangeType_Setting_MetaKeyHint": "Which key would you like to hold down when clicking a wall type control to change the current selection of walls to that wall type?",
-	"DF_ARCHITECT.WallChangeType_Setting_MetaKey_OptionAlt": "Alt Key",
-	"DF_ARCHITECT.WallChangeType_Setting_MetaKey_OptionCtrl": "Ctrl Key",
-
-	"DF_ARCHITECT.WallAltDrop_Setting_DistanceName": "Wall Drop Auto-Snap",
-	"DF_ARCHITECT.WallAltDrop_Setting_DistanceHint": "The pixel distance a wall endpoint needs to be to auto-snap the currently dragging wall endpoint to that same position.",
-
-	"DF_ARCHITECT.WallDirections_Setting_AllowUnselectedInvertName": "Allow Orientation Invert on Unselected Walls",
-	"DF_ARCHITECT.WallDirections_Setting_AllowUnselectedInvertHint": "Allow the use of a double right-click to invert a wall's orientation when the wall has not first been selected.",
-
-	"DF_ARCHITECT.AltLightOrigin_Settings_Colour1_Name": "Lights: Crosshair Colour",
-	"DF_ARCHITECT.AltLightOrigin_Settings_Colour1_Hint": "The colour of the crosshairs that display when you hold Shift while moving a light source.",
-	"DF_ARCHITECT.AltLightOrigin_Settings_Colour2_Name": "Lights: Alternative Crosshair Colour",
-	"DF_ARCHITECT.AltLightOrigin_Settings_Colour2_Hint": "The alternate colour of the crosshairs that display when you hold Shift+Alt while moving a light source.",
-
-	"DF_ARCHITECT.QuickColourPicker_EyeDrop_Title": "Pick a colour from the map",
-
-	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_Label": "Save Game Board Image",
-	"DF_ARCHITECT.CaptureGameScreen_Setting_AllowPC_Name": "Allow Players to Capture Canvas",
-	"DF_ARCHITECT.CaptureGameScreen_Setting_AllowPC_Hint": "Allow players to capture the current game board canvas.",
-	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_ContinueButton": "Capture Image",
-	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_CancelButton": "Cancel",
-	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_Target": "What portion would you like to capture?",
-	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_Target_Current": "Current View",
-	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_Target_All": "Entire Canvas",
-	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_Format": "Select a file format",
-	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_FormatPNG": "PNG",
-	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_FormatJPG": "JPEG",
-	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_FormatWEB": "WebP (Chrome Only)",
-	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_Compression": "The quality level for JPEG and WebP",
-	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_KeepPadding": "(Entire Canvas Only) Include Padding",
-	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_SplitImageNote": "(Entire Canvas Only) If the image does not render properly (ie. parts missing), the game board is too large for the GPU. You can increase these values to split the game board into multiple images vertically and horizontally. You can then stitch them together in any image editor of your choice.",
-	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_WarningConfirmTitle": "Very Large Image",
-	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_WarningConfirmContent": "<p>You are attempting to capture a very large image. You may want to split the image up.<br>Depending on your GPU, the rendering may fail and result in an image with only a portion of it drawn, the rest left blank.</p>",
-
-	"DF_ARCHITECT.LightTemplate_CreateTemplateButton_LightConfig": "Create Template from this Light",
-	"DF_ARCHITECT.LightTemplate_CreateTemplateButton_MacroDirectory": "Create Light Template",
-	"DF_ARCHITECT.LightTemplate_ContextMenu_Edit": "Edit Template",
-	"DF_ARCHITECT.LightTemplate_ContextMenu_Remove": "Remove Template",
-	"DF_ARCHITECT.LightTemplate_ContextMenu_Delete": "Delete Template",
-	"DF_ARCHITECT.LightTemplate_CurrentTemplate_Label": "Current Active Template",
-	"DF_ARCHITECT.LightTemplate_CurrentTemplate_EditButton": "Edit Template",
-	"DF_ARCHITECT.LightTemplate_CurrentTemplate_ExitButton": "Stop Placing Template",
-	"DF_ARCHITECT.LightTemplate_TemplateConfig_SaveButton": "Save Template",
-	"DF_ARCHITECT.LightTemplate_TemplateConfig_UseButton": "Activate Template",
-
-	"DF_ARCHITECT.AltLightNegativeRadius_InvertRadiusButton": "Invert Dim/Bright radii to Light and Dark (positive/negative values)",
-
-	"LAYERS.BackgroundLayer": "Background/Tiles Layer",
-	"LAYERS.ForegroundLayer": "Foreground/Roofs Layer",
-	"LAYERS.DrawingsLayer": "Drawings Layer",
-	"LAYERS.GridLayer": "Grid Layer",
-	"LAYERS.WallsLayer": "Walls Layer",
-	"LAYERS.TemplateLayer": "Template Layer",
-	"LAYERS.NotesLayer": "Notes Layer",
-	"LAYERS.TokenLayer": "Token Layer",
-	"LAYERS.LightingLayer": "Lighting Layer",
-	"LAYERS.SoundsLayer": "Sounds Layer",
-	"LAYERS.SightLayer": "Sight Layer",
-	"LAYERS.EffectsLayer": "Effects Layer",
-	"LAYERS.ControlsLayer": "Controls Layer"
+	"DF_ARCHITECT": {
+		"ModName": "Dragon Flagon Architect",
+		"ErrorColourSettingsMissing": "DF Architect: 'lib - ColorSettings' module required. Please install and activate 'lib - ColorSettings'",
+		"ErrorLibWrapperMissing": "DF Architect: 'libWrapper' module required. Please install and activate 'libWrapper'.",
+		"ReloadRequired": {
+			"Title": "Reload Required",
+			"Content": "<p>A reload is required for your changes to go into effect.</p>",
+			"Positive": "Reload Now",
+			"Negative": "I'll Reload Myself"
+		},
+		"LayerShortcuts.Settings": {
+			"Title": "DF Architect: Layers Keyboard Shortcuts",
+			"Description": "Shortcuts for switching between the canvas layers.",
+			"Reset": "Reset to Defaults",
+			"Save": "Save",
+			"Layer": {
+				"Tokens": "Tokens: ",
+				"Measure": "Measure: ",
+				"Tiles": "Tiles: ",
+				"Drawings": "Drawings: ",
+				"Walls": "Walls: ",
+				"Lighting": "Lighting: ",
+				"Sounds": "Sounds: ",
+				"Notes": "Notes: "
+			},
+			"QuickSwap": {
+				"Title": "Layer Quick Swap",
+				"Info": "This Hotkey is for quickly swapping between two preset layers. Each time it is pressed, it will switch to the layer it is not on. If you are on a layer that is not included in this pair, you will be switched to Layer 1.",
+				"Layer1_Name": "Quick Swap Layer 1",
+				"Layer1_Hint": "One of the two layers that will swap between when the Quick Swap hotkey is pressed.",
+				"Layer2_Name": "Quick Swap Layer 2",
+				"Layer2_Hint": "The second of the two layers that will swap between when the Quick Swap hotkey is pressed."
+			}
+		},
+		"WallShortcuts.Settings": {
+			"Title": "DF Architect: Wall Type Switching",
+			"Description": "Hotkeys assigned to switch between the different wall types",
+			"Label_WallType": "Wall Type"
+		},
+		"AltGridSnap": {
+			"Label": "Alternate Grid Snap",
+			"Hotkey_Toggle": "Toggle Alternate Grid Snapping",
+			"Setting": {
+				"EnabledName": "Show Alternate Grid Snap Toggle",
+				"EnabledHint": "Show the toggle button for enabling alternate grid snapping to the center of boxes instead of corners.",
+				"PlaceOnControlBarName": "Place on Main Control Bar",
+				"PlaceOnControlBarHint": "Place the Alternate Grid Snap Toggle button on the main Controls Bar instead of the Tools bars."
+			}
+		},
+		"WallCtrlInvert": {
+			"Label": "Lock Wall Chaining",
+			"Title": "Wall Chaining",
+			"Hotkey": "Toggle chain lock: "
+		},
+		"WallJoinSplit": {
+			"Split_Label": "Split the selected walls into two walls each",
+			"Join_Label": "Merge the selected line of walls into a single wall"
+		},
+		"WallChangeType.Setting": {
+			"MetaKeyName": "Quick Wall Change Key",
+			"MetaKeyHint": "Which key would you like to hold down when clicking a wall type control to change the current selection of walls to that wall type?",
+			"MetaKey_OptionAlt": "Alt Key",
+			"MetaKey_OptionCtrl": "Ctrl Key"
+		},
+		"WallAltDrop.Setting": {
+			"DistanceName": "Wall Drop Auto-Snap",
+			"DistanceHint": "The pixel distance a wall endpoint needs to be to auto-snap the currently dragging wall endpoint to that same position."
+		},
+		"WallDirections.Setting": {
+			"AllowUnselectedInvertName": "Allow Orientation Invert on Unselected Walls",
+			"AllowUnselectedInvertHint": "Allow the use of a double right-click to invert a wall's orientation when the wall has not first been selected."
+		},
+		"AltLightOrigin.Settings": {
+			"Colour1_Name": "Lights: Crosshair Colour",
+			"Colour1_Hint": "The colour of the crosshairs that display when you hold Shift while moving a light source.",
+			"Colour2_Name": "Lights: Alternative Crosshair Colour",
+			"Colour2_Hint": "The alternate colour of the crosshairs that display when you hold Shift+Alt while moving a light source."
+		},
+		"QuickColourPicker": {
+			"EyeDrop_Title": "Pick a colour from the map"
+		},
+		"CaptureGameScreen": {
+			"Setting": {
+				"AllowPC_Name": "Allow Players to Capture Canvas",
+				"AllowPC_Hint": "Allow players to capture the current game board canvas."
+			},
+			"ScreenCapture": {
+				"Capturing": "Capturing Canvas...",
+				"Label": "Save Game Board Image",
+				"ContinueButton": "Capture Image",
+				"CancelButton": "Cancel",
+				"Target": "What portion would you like to capture?",
+				"Target_Current": "Current View",
+				"Target_All": "Entire Canvas",
+				"Format": "Select a file format",
+				"FormatPNG": "PNG",
+				"FormatJPG": "JPEG",
+				"FormatWEB": "WebP (Chrome Only)",
+				"Compression": "The quality level for JPEG and WebP",
+				"KeepPadding": "(Entire Canvas Only) Include Padding",
+				"SplitImageNote": "(Entire Canvas Only) If the image does not render properly (ie. parts missing), the game board is too large for the GPU. You can increase these values to split the game board into multiple images vertically and horizontally. You can then stitch them together in any image editor of your choice.",
+				"WarningConfirmTitle": "Very Large Image",
+				"WarningConfirmContent": "<p>You are attempting to capture a very large image. You may want to split the image up.<br>Depending on your GPU, the rendering may fail and result in an image with only a portion of it drawn, the rest left blank.</p>"
+			}
+		},
+		"LightTemplate": {
+			"CreateTemplateButton": {
+				"LightConfig": "Create Template from this Light",
+				"MacroDirectory": "Create Light Template"
+			},
+			"ContextMenu": {
+				"Edit": "Edit Template",
+				"Remove": "Remove Template",
+				"Delete": "Delete Template"
+			},
+			"CurrentTemplate": {
+				"Label": "Current Active Template",
+				"EditButton": "Edit Template",
+				"ExitButton": "Stop Placing Template"
+			},
+			"TemplateConfig": {
+				"SaveButton": "Save Template",
+				"UseButton": "Activate Template"
+			},
+			"Delete": {
+				"Title": "Delete Light Template:",
+				"Confirm": "Are you sure you wish to delete this light template?"
+			}
+		},
+		"AltLightNegativeRadius": {
+			"InvertRadiusButton": "Invert Dim/Bright radii to Light and Dark (positive/negative values)"
+		}
+	},
+	"LAYERS": {
+		"BackgroundLayer": "Background/Tiles Layer",
+		"ForegroundLayer": "Foreground/Roofs Layer",
+		"DrawingsLayer": "Drawings Layer",
+		"GridLayer": "Grid Layer",
+		"WallsLayer": "Walls Layer",
+		"TemplateLayer": "Template Layer",
+		"NotesLayer": "Notes Layer",
+		"TokenLayer": "Token Layer",
+		"LightingLayer": "Lighting Layer",
+		"SoundsLayer": "Sounds Layer",
+		"SightLayer": "Sight Layer",
+		"EffectsLayer": "Effects Layer",
+		"ControlsLayer": "Controls Layer"
+	}
 }

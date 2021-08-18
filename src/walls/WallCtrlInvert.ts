@@ -24,7 +24,7 @@ class _WallCtrlInvert {
 
 		Hotkeys.registerShortcut({
 			name: `${ARCHITECT.MOD_NAME}.ctrlInvert`,
-			label: 'DF_ARCHITECT.WallCtrlInvert_Label',
+			label: 'DF_ARCHITECT.WallCtrlInvert.Label',
 			default: {
 				key: Hotkeys.keys.KeyC,
 				alt: true,
@@ -44,7 +44,7 @@ class _WallCtrlInvert {
 			wallsControls.tools.splice(wallsControls.tools.findIndex(x => x.name === 'snap'), 0, {
 				icon: 'fas fa-link',
 				name: 'ctrlInvert',
-				title: 'DF_ARCHITECT.WallCtrlInvert_Label',
+				title: 'DF_ARCHITECT.WallCtrlInvert.Label',
 				visible: isGM,
 				toggle: true,
 				active: this.enabled,

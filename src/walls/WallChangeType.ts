@@ -7,13 +7,13 @@ class _WallChangeType {
 
 	ready() {
 		SETTINGS.register(_WallChangeType.META_KEY, {
-			name: 'DF_ARCHITECT.WallChangeType_Setting_MetaKeyName',
-			hint: 'DF_ARCHITECT.WallChangeType_Setting_MetaKeyHint',
+			name: 'DF_ARCHITECT.WallChangeType.Setting.MetaKeyName',
+			hint: 'DF_ARCHITECT.WallChangeType.Setting.MetaKeyHint',
 			config: true,
 			scope: 'world',
 			choices: {
-				ctrl: 'DF_ARCHITECT.WallChangeType_Setting_MetaKey_OptionCtrl',
-				alt: 'DF_ARCHITECT.WallChangeType_Setting_MetaKey_OptionAlt'
+				ctrl: 'DF_ARCHITECT.WallChangeType.Setting.MetaKey_OptionCtrl',
+				alt: 'DF_ARCHITECT.WallChangeType.Setting.MetaKey_OptionAlt'
 			},
 			default: 'ctrl',
 			type: String

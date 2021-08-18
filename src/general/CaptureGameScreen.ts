@@ -27,8 +27,8 @@ export default class CaptureGameScreen {
 	}
 	static init() {
 		SETTINGS.register(this.PREF_ALLOW_PC, {
-			name: 'DF_ARCHITECT.CaptureGameScreen_Setting_AllowPC_Name',
-			hint: 'DF_ARCHITECT.CaptureGameScreen_Setting_AllowPC_Hint',
+			name: 'DF_ARCHITECT.CaptureGameScreen.Setting.AllowPC_Name',
+			hint: 'DF_ARCHITECT.CaptureGameScreen.Setting.AllowPC_Hint',
 			scope: 'world',
 			config: true,
 			type: Boolean,
@@ -88,7 +88,7 @@ export default class CaptureGameScreen {
 
 		Hooks.on('renderSettings', (settings: Settings, html: JQuery<HTMLElement>, data: {}) => {
 			if (!SETTINGS.get(this.PREF_ALLOW_PC) && !game.user.isGM) return;
-			const captureButton = $(`<div><button data-action="screen-capture"><i class="fas fa-camera"></i>${'DF_ARCHITECT.CaptureGameScreen_ScreenCapture_Label'.localize()}</button></div>`);
+			const captureButton = $(`<div><button data-action="screen-capture"><i class="fas fa-camera"></i>${'DF_ARCHITECT.CaptureGameScreen.ScreenCapture.Label'.localize()}</button></div>`);
 			captureButton.find('button').on('click', CaptureGameScreen.promptForCapture.bind(CaptureGameScreen));
 			html.find('#game-details').after(captureButton);
 		});
@@ -165,18 +165,18 @@ export default class CaptureGameScreen {
 		}
 		var cleanupHandled = false;
 		const dialog = new Dialog({
-			title: 'DF_ARCHITECT.CaptureGameScreen_ScreenCapture_Label'.localize(),
+			title: 'DF_ARCHITECT.CaptureGameScreen.ScreenCapture.Label'.localize(),
 			content: await renderTemplate(`modules/${ARCHITECT.MOD_NAME}/templates/capture-board.hbs`, data),
 			default: 'save',
 			buttons: {
 				cancel: {
 					icon: '<i class="fas fa-times"></i>',
-					label: 'DF_ARCHITECT.CaptureGameScreen_ScreenCapture_CancelButton'.localize(),
+					label: 'DF_ARCHITECT.CaptureGameScreen.ScreenCapture.CancelButton'.localize(),
 					callback: () => { cleanupHandled = true; this.cleanupLayers(hiddenItemsSnapshot); }
 				},
 				save: {
 					icon: '<i class="fas fa-camera"></i>',
-					label: 'DF_ARCHITECT.CaptureGameScreen_ScreenCapture_ContinueButton'.localize(),
+					label: 'DF_ARCHITECT.CaptureGameScreen.ScreenCapture.ContinueButton'.localize(),
 					callback: async (html: JQuery | HTMLElement) => {
 						cleanupHandled = true;
 						html = $(html);
@@ -354,7 +354,7 @@ export default class CaptureGameScreen {
 		return new Promise((res, _) => {
 			canvas = <Canvas>canvas;
 			// Create an overlay element to be temporarily displayed
-			const element = $(`<div id="dfarch-temp-overlay"><h1>${'Capturing Canvas...'.localize()}</h1></div>`);
+			const element = $(`<div id="dfarch-temp-overlay"><h1>${'DF_ARCHITECT.CaptureGameScreen.ScreenCapture.Capturing'.localize()}</h1></div>`);
 			element.appendTo(document.body);
 			const imageData = canvas.app.renderer.context.renderer.extract.base64(null, format, compression);
 			// Create a virtual link to virtually click for the download
@@ -411,8 +411,8 @@ export default class CaptureGameScreen {
 			const pixelCount = (keepPadding ? padW + widthChunk : widthChunk) * (keepPadding ? padH + heightChunk : heightChunk);
 			if (pixelCount > CaptureGameScreen.WARNING_SIZE) {
 				const confirmed = await Dialog.confirm({
-					title: 'DF_ARCHITECT.CaptureGameScreen_ScreenCapture_WarningConfirmTitle'.localize(),
-					content: 'DF_ARCHITECT.CaptureGameScreen_ScreenCapture_WarningConfirmContent'.localize(),
+					title: 'DF_ARCHITECT.CaptureGameScreen.ScreenCapture.WarningConfirmTitle'.localize(),
+					content: 'DF_ARCHITECT.CaptureGameScreen.ScreenCapture.WarningConfirmContent'.localize(),
 					defaultYes: true,
 				});
 				if (!confirmed) {

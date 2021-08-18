@@ -28,8 +28,8 @@ class _AltGridSnap {
 		SETTINGS.register(_AltGridSnap.PREF_ENABLED, {
 			scope: 'world',
 			config: true,
-			name: 'DF_ARCHITECT.AltGridSnap_Setting_EnabledName',
-			hint: 'DF_ARCHITECT.AltGridSnap_Setting_EnabledHint',
+			name: 'DF_ARCHITECT.AltGridSnap.Setting.EnabledName',
+			hint: 'DF_ARCHITECT.AltGridSnap.Setting.EnabledHint',
 			type: Boolean,
 			default: false,
 			onChange: () => { this._patchSquareGrid(); ui.controls.initialize() }
@@ -37,8 +37,8 @@ class _AltGridSnap {
 		SETTINGS.register(_AltGridSnap.PREF_PLACE_ON_CONTROL_BAR, {
 			scope: 'client',
 			config: true,
-			name: 'DF_ARCHITECT.AltGridSnap_Setting_PlaceOnControlBarName',
-			hint: 'DF_ARCHITECT.AltGridSnap_Setting_PlaceOnControlBarHint',
+			name: 'DF_ARCHITECT.AltGridSnap.Setting.PlaceOnControlBarName',
+			hint: 'DF_ARCHITECT.AltGridSnap.Setting.PlaceOnControlBarHint',
 			type: Boolean,
 			default: false,
 			onChange: () => { ui.controls.initialize(); ui.controls.render(true) }
@@ -46,7 +46,7 @@ class _AltGridSnap {
 
 		Hotkeys.registerShortcut({
 			name: ARCHITECT.MOD_NAME + '.AltSnapGrid.Toggle',
-			label: 'DF_ARCHITECT.AltGridSnap_Hotkey_Toggle',
+			label: 'DF_ARCHITECT.AltGridSnap.Hotkey_Toggle',
 			default: { key: Hotkeys.keys.KeyS, alt: true, ctrl: false, shift: false },
 			onKeyDown: () => {
 				if (this.enabled)
@@ -66,7 +66,7 @@ class _AltGridSnap {
 				control.tools.splice(0, 0, {
 					icon: 'df df-alt-snap',
 					name: 'altSnap',
-					title: 'DF_ARCHITECT.AltGridSnap_Label',
+					title: 'DF_ARCHITECT.AltGridSnap.Label',
 					visible: isGM,
 					toggle: true,
 					active: enabled,
@@ -77,7 +77,7 @@ class _AltGridSnap {
 		Hooks.on('renderSceneControls', (app: SceneControls, html: JQuery<HTMLElement>, data: any) => {
 			if (!SETTINGS.get(_AltGridSnap.PREF_PLACE_ON_CONTROL_BAR)) return;
 			const button = $(`
-<li class="control-tool toggle" id="df-arch-altSnap" style="line-height:0" title="${'DF_ARCHITECT.AltGridSnap_Label'.localize()}">
+<li class="control-tool toggle" id="df-arch-altSnap" style="line-height:0" title="${'DF_ARCHITECT.AltGridSnap.Label'.localize()}">
 	<i class="df df-alt-snap"></i>
 </li>`);
 			button.on('click', () => this.toggled = !button.hasClass('active'))

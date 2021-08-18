@@ -24,8 +24,8 @@ class _WallDirections {
 	ready() {
 		SETTINGS.register(_WallDirections.PREF_ALLOW_UNSELECTED_INVERT, {
 			scope: 'world',
-			name: 'DF_ARCHITECT.WallDirections_Setting_AllowUnselectedInvertName',
-			hint: 'DF_ARCHITECT.WallDirections_Setting_AllowUnselectedInvertHint',
+			name: 'DF_ARCHITECT.WallDirections.Setting.AllowUnselectedInvertName',
+			hint: 'DF_ARCHITECT.WallDirections.Setting.AllowUnselectedInvertHint',
 			config: true,
 			type: Boolean,
 			default: false

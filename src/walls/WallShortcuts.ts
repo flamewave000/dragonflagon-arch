@@ -7,8 +7,8 @@ class _WallShortcuts {
 	ready() {
 		Hotkeys.registerGroup({
 			name: `${ARCHITECT.MOD_NAME}.walls`,
-			label: 'DF_ARCHITECT.WallShortcuts_Settings_Title',
-			description: 'DF_ARCHITECT.WallShortcuts_Settings_Description'
+			label: 'DF_ARCHITECT.WallShortcuts.Settings.Title',
+			description: 'DF_ARCHITECT.WallShortcuts.Settings.Description'
 		});
 
 		var counter = 0;

@@ -88,7 +88,7 @@ export class LightTemplateManager {
 		});
 		Hooks.on('renderMacroDirectory', (app: MacroDirectory, html: JQuery<HTMLElement>, data: any) => {
 			const createTemplateButton = $(`<button style="flex:unset"><i class="far fa-lightbulb"></i>
-${'DF_ARCHITECT.LightTemplate_CreateTemplateButton_MacroDirectory'.localize()}</button>`);
+${'DF_ARCHITECT.LightTemplate.CreateTemplateButton.MacroDirectory'.localize()}</button>`);
 			createTemplateButton.appendTo(html.find('div.header-actions.action-buttons'));
 			createTemplateButton.on('click', async () => await this._createTemplate({
 				t: 'l',
@@ -110,7 +110,7 @@ ${'DF_ARCHITECT.LightTemplate_CreateTemplateButton_MacroDirectory'.localize()}</
 	private static _renderLightConfig(app: LightConfig, html: JQuery<HTMLElement>, data: any) {
 		const button = $(`<button type="button" style="margin-bottom:0.25em" name="save-template">
 <i class="far fa-lightbulb"></i>
-${'DF_ARCHITECT.LightTemplate_CreateTemplateButton_LightConfig'.localize()}
+${'DF_ARCHITECT.LightTemplate.CreateTemplateButton.LightConfig'.localize()}
 </button>`);
 		html.find('button[name="submit"]').before(button);
 		button.on('click', (event) => {
@@ -205,7 +205,7 @@ ${'DF_ARCHITECT.LightTemplate_CreateTemplateButton_LightConfig'.localize()}
 
 	/**
 	 * Unfortunately, by the design of this core function, I must duplicate the
-	 * code here in order to add a custom option.
+	 * Foundry Core code here in order to add a custom option.
 	 */
 	private static _contextMenu(html: JQuery<HTMLElement>) {
 		new ContextMenu(html, ".macro", [
@@ -214,32 +214,40 @@ ${'DF_ARCHITECT.LightTemplate_CreateTemplateButton_LightConfig'.localize()}
 				icon: '<i class="fas fa-edit"></i>',
 				condition: li => {
 					const macro = game.macros.get(li.data("macro-id"));
+					// Modified Section
 					return macro && !macro.getFlag(ARCHITECT.MOD_NAME, this.FLAG_IS_TEMPLATE) ? macro.owner : false;
+					// End Modification
 				},
 				callback: li => game.macros.get(li.data("macro-id")).sheet.render(true)
 			},
 			{
 				name: "MACRO.Remove", icon: '<i class="fas fa-times"></i>',
+				// Modified Section
 				condition: li => !game.macros.get(li.data("macro-id")).getFlag(ARCHITECT.MOD_NAME, this.FLAG_IS_TEMPLATE),
+				// End Modification
 				callback: li => game.user.assignHotbarMacro(null, li.data("slot"))
 			},
 			{
 				name: "MACRO.Delete", icon: '<i class="fas fa-trash"></i>',
 				condition: li => {
 					const macro = game.macros.get(li.data("macro-id"));
-					return macro && !macro.getFlag(ARCHITECT.MOD_NAME, this.FLAG_IS_TEMPLATE) ? macro.owner : false;
+					// @ts-ignore
+					// Modified Section
+					return macro && !macro.getFlag(ARCHITECT.MOD_NAME, this.FLAG_IS_TEMPLATE) ? macro.isOwner : false;
+					// End Modification
 				},
 				callback: li => {
 					const macro = game.macros.get(li.data("macro-id"));
 					return Dialog.confirm({
 						title: `${game.i18n.localize("MACRO.Delete")} ${macro.name}`,
-						content: game.i18n.localize("MACRO.DeleteConfirm"),
+						content: game.i18n.localize("MACRO.DeleteWarning"),
 						yes: macro.delete.bind(macro)
 					});
 				}
 			},
+			// Modified Section
 			{
-				name: "DF_ARCHITECT.LightTemplate_ContextMenu_Edit",
+				name: "DF_ARCHITECT.LightTemplate.ContextMenu.Edit",
 				icon: '<i class="fas fa-edit"></i>',
 				condition: li => {
 					const macro = game.macros.get(li.data("macro-id"));
@@ -248,27 +256,29 @@ ${'DF_ARCHITECT.LightTemplate_CreateTemplateButton_LightConfig'.localize()}
 				callback: li => game.macros.get(li.data("macro-id")).sheet.render(true)
 			},
 			{
-				name: "DF_ARCHITECT.LightTemplate_ContextMenu_Remove",
+				name: "DF_ARCHITECT.LightTemplate.ContextMenu.Remove",
 				icon: '<i class="fas fa-times"></i>',
 				condition: li => <boolean>game.macros.get(li.data("macro-id")).getFlag(ARCHITECT.MOD_NAME, this.FLAG_IS_TEMPLATE),
 				callback: li => game.user.assignHotbarMacro(null, li.data("slot"))
 			},
 			{
-				name: "DF_ARCHITECT.LightTemplate_ContextMenu_Delete",
+				name: "DF_ARCHITECT.LightTemplate.ContextMenu.Delete",
 				icon: '<i class="fas fa-trash"></i>',
 				condition: li => {
 					const macro = game.macros.get(li.data("macro-id"));
-					return macro && macro.getFlag(ARCHITECT.MOD_NAME, this.FLAG_IS_TEMPLATE) ? macro.owner : false;
+					// @ts-ignore
+					return macro && macro.getFlag(ARCHITECT.MOD_NAME, this.FLAG_IS_TEMPLATE) ? macro.isOwner : false;
 				},
 				callback: li => {
 					const macro = game.macros.get(li.data("macro-id"));
 					return Dialog.confirm({
-						title: `${game.i18n.localize("MACRO.Delete")} ${macro.name}`,
-						content: game.i18n.localize("MACRO.DeleteConfirm"),
+						title: `${game.i18n.localize("DF_ARCHITECT.LightTemplate.Delete.Title")} ${macro.name}`,
+						content: game.i18n.localize("DF_ARCHITECT.LightTemplate.Delete.Confirm"),
 						yes: macro.delete.bind(macro)
 					});
 				}
 			},
+			// End Modification
 		]);
 	}
 

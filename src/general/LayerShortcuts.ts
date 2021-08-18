@@ -21,8 +21,8 @@ class _LayerShortcuts {
 		}
 
 		SETTINGS.register<String>(_LayerShortcuts.PREF_LAYER_SWAP_LAYER1, {
-			name: 'DF_ARCHITECT.LayerShortcuts_Settings_QuickSwap_Layer1_Name',
-			hint: 'DF_ARCHITECT.LayerShortcuts_Settings_QuickSwap_Layer1_Hint',
+			name: 'DF_ARCHITECT.LayerShortcuts.Settings.QuickSwap.Layer1_Name',
+			hint: 'DF_ARCHITECT.LayerShortcuts.Settings.QuickSwap.Layer1_Hint',
 			choices: getLayers(),
 			scope: 'world',
 			type: String,
@@ -30,8 +30,8 @@ class _LayerShortcuts {
 			default: 'walls'
 		});
 		SETTINGS.register<String>(_LayerShortcuts.PREF_LAYER_SWAP_LAYER2, {
-			name: 'DF_ARCHITECT.LayerShortcuts_Settings_QuickSwap_Layer2_Name',
-			hint: 'DF_ARCHITECT.LayerShortcuts_Settings_QuickSwap_Layer2_Hint',
+			name: 'DF_ARCHITECT.LayerShortcuts.Settings.QuickSwap.Layer2_Name',
+			hint: 'DF_ARCHITECT.LayerShortcuts.Settings.QuickSwap.Layer2_Hint',
 			choices: getLayers(),
 			scope: 'world',
 			type: String,
@@ -40,12 +40,12 @@ class _LayerShortcuts {
 		});
 		Hotkeys.registerGroup({
 			name: `${ARCHITECT.MOD_NAME}.layers`,
-			label: 'DF_ARCHITECT.LayerShortcuts_Settings_Title',
-			description: 'DF_ARCHITECT.LayerShortcuts_Settings_Description'
+			label: 'DF_ARCHITECT.LayerShortcuts.Settings.Title',
+			description: 'DF_ARCHITECT.LayerShortcuts.Settings.Description'
 		});
 		Hotkeys.registerShortcut({
 			name: `${ARCHITECT.MOD_NAME}.layerHotSwap`,
-			label: 'DF_ARCHITECT.LayerShortcuts_Settings_QuickSwap_Title',
+			label: 'DF_ARCHITECT.LayerShortcuts.Settings.QuickSwap.Title',
 			group: `${ARCHITECT.MOD_NAME}.layers`,
 			default: {
 				key: Hotkeys.keys.KeyQ,

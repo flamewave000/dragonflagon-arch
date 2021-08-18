@@ -11,14 +11,14 @@ class _WallJoinSplit {
 			wallsControls.tools.splice(wallsControls.tools.findIndex(x => x.name === 'clone') + 1, 0, {
 				icon: 'df df-alt-split',
 				name: 'split',
-				title: 'DF_ARCHITECT.WallJoinSplit_Split_Label',
+				title: 'DF_ARCHITECT.WallJoinSplit.Split_Label',
 				button: true,
 				visible: isGM,
 				onClick: this._splitWalls.bind(this)
 			}, {
 				icon: 'df df-alt-join',
 				name: 'join',
-				title: 'DF_ARCHITECT.WallJoinSplit_Join_Label',
+				title: 'DF_ARCHITECT.WallJoinSplit.Join_Label',
 				button: true,
 				visible: isGM,
 				onClick: this._joinWalls.bind(this)

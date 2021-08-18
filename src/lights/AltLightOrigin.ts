@@ -32,18 +32,18 @@ class _AltLightOrigin {
 	ready() {
 		// @ts-ignore
 		new window.Ardittristan.ColorSetting(ARCHITECT.MOD_NAME, _AltLightOrigin.PREF_COLOUR1, {
-			name: "DF_ARCHITECT.AltLightOrigin_Settings_Colour1_Name",
-			hint: "DF_ARCHITECT.AltLightOrigin_Settings_Colour1_Hint",
-			label: "DF_ARCHITECT.AltLightOrigin_Settings_Colour1_Name",
+			name: "DF_ARCHITECT.AltLightOrigin.Settings.Colour1_Name",
+			hint: "DF_ARCHITECT.AltLightOrigin.Settings.Colour1_Hint",
+			label: "DF_ARCHITECT.AltLightOrigin.Settings.Colour1_Name",
 			restricted: true,
 			defaultColor: "#ffffffff",
 			scope: "world",
 		});
 		// @ts-ignore
 		new window.Ardittristan.ColorSetting(ARCHITECT.MOD_NAME, _AltLightOrigin.PREF_COLOUR2, {
-			name: "DF_ARCHITECT.AltLightOrigin_Settings_Colour2_Name",
-			hint: "DF_ARCHITECT.AltLightOrigin_Settings_Colour2_Hint",
-			label: "DF_ARCHITECT.AltLightOrigin_Settings_Colour2_Name",
+			name: "DF_ARCHITECT.AltLightOrigin.Settings.Colour2_Name",
+			hint: "DF_ARCHITECT.AltLightOrigin.Settings.Colour2_Hint",
+			label: "DF_ARCHITECT.AltLightOrigin.Settings.Colour2_Name",
 			restricted: true,
 			defaultColor: "#ff5500ff",
 			scope: "world",

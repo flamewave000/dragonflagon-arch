@@ -18,8 +18,8 @@ class _WallAltDrop {
 
 	ready() {
 		SETTINGS.register(_WallAltDrop.DISTANCE, {
-			name: 'DF_ARCHITECT.WallAltDrop_Setting_DistanceName',
-			hint: 'DF_ARCHITECT.WallAltDrop_Setting_DistanceHint',
+			name: 'DF_ARCHITECT.WallAltDrop.Setting.DistanceName',
+			hint: 'DF_ARCHITECT.WallAltDrop.Setting.DistanceHint',
 			config: true,
 			scope: 'world',
 			type: Number,

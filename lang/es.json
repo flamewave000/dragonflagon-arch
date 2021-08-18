@@ -1,118 +1,149 @@
 {
-	"I18N.LANGUAGE": "Español",
-	"I18N.MAINTAINERS": "@Viriato139ac#0342",
-	
-	"DF_ARCHITECT.ModName": "Dragon Flagon Architect",
-
-	"DF_ARCHITECT.ErrorColourSettingsMissing": "DF Architect: Se recomienda usar el módulo \"lib - ColorSettings\"",
-	"DF_ARCHITECT.ErrorLibWrapperMissing": "DF Architect: Se requiere el módulo 'libWrapper'. Por favor, instale y active 'libWrapper'",
-
-	"DF_ARCHITECT.ReloadRequired_Title": "Se requiere recargar",
-	"DF_ARCHITECT.ReloadRequired_Content": "<p>Es necesario recargar para que los cambios tengan efecto</p>",
-	"DF_ARCHITECT.ReloadRequired_Positive": "Recargar ahora",
-	"DF_ARCHITECT.ReloadRequired_Negative": "Ya recargaré yo",
-
-	"DF_ARCHITECT.Hotkeys_Settings_Title": "Métodos abreviados de teclado",
-
-	"DF_ARCHITECT.LayerShortcuts_Settings_Title": "DF Architect: Métodos abreviados de teclado para capas",
-	"DF_ARCHITECT.LayerShortcuts_Settings_Description": "Shortcuts for switching between the canvas layers.",
-	"DF_ARCHITECT.LayerShortcuts_Settings_Layer_Tokens": "Controles básicos: ",
-	"DF_ARCHITECT.LayerShortcuts_Settings_Layer_Measure": "Medición: ",
-	"DF_ARCHITECT.LayerShortcuts_Settings_Layer_Tiles": "Baldosas: ",
-	"DF_ARCHITECT.LayerShortcuts_Settings_Layer_Drawings": "Dibujo: ",
-	"DF_ARCHITECT.LayerShortcuts_Settings_Layer_Walls": "Muros: ",
-	"DF_ARCHITECT.LayerShortcuts_Settings_Layer_Lighting": "Iluminación: ",
-	"DF_ARCHITECT.LayerShortcuts_Settings_Layer_Sounds": "Sonido: ",
-	"DF_ARCHITECT.LayerShortcuts_Settings_Layer_Notes": "Notas: ",
-	"DF_ARCHITECT.LayerShortcuts_Settings_Reset": "Volver a ajustes por defecto",
-	"DF_ARCHITECT.LayerShortcuts_Settings_Save": "Guardar",
-	"DF_ARCHITECT.LayerShortcuts_Settings_QuickSwap_Title": "Cambio rápido de capas",
-	"DF_ARCHITECT.LayerShortcuts_Settings_QuickSwap_Info": "Esta tecla se usa para cambiar rápidamente entre dos capas predeterminadas. Cada vez que se presiona, se cambiará a la capa en la que no se esté. Si se encuentra en una capa que no es ninguna de las dos que se han configurado, entonces se cambiará a la capa 1",
-	"DF_ARCHITECT.LayerShortcuts_Settings_QuickSwap_Layer1_Name": "Capa 1 de cambio rápido",
-	"DF_ARCHITECT.LayerShortcuts_Settings_QuickSwap_Layer1_Hint": "Una de las dos capas entre las que cambiará cuando se presione la tecla de cambio rápido",
-	"DF_ARCHITECT.LayerShortcuts_Settings_QuickSwap_Layer2_Name": "Capa 2 de cambio rápido",
-	"DF_ARCHITECT.LayerShortcuts_Settings_QuickSwap_Layer2_Hint": "La segunda de las capas entre las que cambiará cuando se presione la tecla de cambio rápido",
-
-	"DF_ARCHITECT.WallShortcuts_Settings_Title": "DF Architect: Cambio de tipo de muro",
-	"DF_ARCHITECT.WallShortcuts_Settings_Description": "Teclas para cambiar entre los distintos tipos de muros",
-	"DF_ARCHITECT.WallShortcuts_Settings_Label_WallType": "Tipos de muros",
-
-	"DF_ARCHITECT.AltGridSnap_Setting_EnabledName": "Mostrar conmutador de ajuste alternativo a la rejilla",
-	"DF_ARCHITECT.AltGridSnap_Setting_EnabledHint": "Mostrar el botón para activar el ajuste alternativo a la rejilla (al centro de las casillas en lugar de a las esquinas)",
-	"DF_ARCHITECT.AltGridSnap_Setting_PlaceOnControlBarName": "Situar en la barra de controles principales",
-	"DF_ARCHITECT.AltGridSnap_Setting_PlaceOnControlBarHint": "Situa el conmutador de ajuste alternativo a la rejilla en la barra de controles principales en lgar de la barra de herramientas",
-	"DF_ARCHITECT.AltGridSnap_Label": "Ajuste alternativo a la rejilla",
-	"DF_ARCHITECT.AltGridSnap_Hotkey_Toggle": "Conmutar el ajuste alternativo a la rejilla",
-	
-	"DF_ARCHITECT.WallCtrlInvert_Label": "Bloqueo de la continuidad de muros",
-	"DF_ARCHITECT.WallCtrlInvert_Settings_Title": "Continuidad de muros",
-	"DF_ARCHITECT.WallCtrlInvert_Setting_Hotkey": "Conmutar bloqueo de continuidad: ",
-
-	"DF_ARCHITECT.WallBoxPlacer_Label": "Dibujar muros a partir de un rectángulo",
-
-	"DF_ARCHITECT.WallJoinSplit_Split_Label": "Dividir los muros seleccionado en dos partes cada uno",
-	"DF_ARCHITECT.WallJoinSplit_Join_Label": "Unir las líneas de muros seleccionados en un único muro",
-
-	"DF_ARCHITECT.WallChangeType_Setting_MetaKeyName": "Tecla de cambio rápido de pared",
-	"DF_ARCHITECT.WallChangeType_Setting_MetaKeyHint": "¿Qué tecla le gustaría mantener presionada al hacer clic en un control de tipo de muro para cambiar la selección actual de muros a ese tipo de muro?",
-	"DF_ARCHITECT.WallChangeType_Setting_MetaKey_OptionAlt": "Tecla Alt",
-	"DF_ARCHITECT.WallChangeType_Setting_MetaKey_OptionCtrl": "Tecla Ctrl",
-
-	"DF_ARCHITECT.WallAltDrop_Setting_DistanceName": "Ajuste automático de caída de pared",
-	"DF_ARCHITECT.WallAltDrop_Setting_DistanceHint": "La distancia en píxeles que debe tener un punto final de pared para ajustar automáticamente el punto final de la pared que se arrastra actualmente a esa misma posición.",
-
-	"DF_ARCHITECT.WallDirections_Setting_AllowUnselectedInvertName": "Permitir Invertir Orientación en las paredes no seleccionados",
-	"DF_ARCHITECT.WallDirections_Setting_AllowUnselectedInvertHint": "Permita el uso de un doble clic para invertir la orientación de una pared cuando la pared no se haya seleccionado primero.",
-
-	"DF_ARCHITECT.AltLightOrigin_Settings_Colour1_Name": "Luces: color de la mirilla",
-	"DF_ARCHITECT.AltLightOrigin_Settings_Colour1_Hint": "Color de la mirilla que se muestra al pulsar MAYÚS mientras se mueve una fuente de luz",
-	"DF_ARCHITECT.AltLightOrigin_Settings_Colour2_Name": "Luces: color alternativo de la mirilla",
-	"DF_ARCHITECT.AltLightOrigin_Settings_Colour2_Hint": "Color alternativo de la mirilla que se muestra al pulsar MAYÚS+ALT mientras se mueve una fuente de luz",
-
-	"DF_ARCHITECT.QuickColourPicker_EyeDrop_Title": "Escoja un color del mapa",
-
-	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_Label": "Guardar imagen del tablero",
-	"DF_ARCHITECT.CaptureGameScreen_Setting_AllowPC_Name": "Permitir captura del lienzo",
-	"DF_ARCHITECT.CaptureGameScreen_Setting_AllowPC_Hint": "Permite a los jugadores que hagan una captura del lienzo activo del tablero de juego",
-	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_ContinueButton": "Capturar imagen",
-	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_CancelButton": "Cancelar",
-	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_Target": "¿Qué parte desea capturar?",
-	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_Target_Current": "Vista actual",
-	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_Target_All": "Todo el lienzo",
-	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_Format": "Seleccione formato de la imagen",
-	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_FormatPNG": "PNG",
-	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_FormatJPG": "JPEG",
-	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_FormatWEB": "WebP (solo en Chrome)",
-	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_Compression": "Calidad del JPEG y el WebP",
-	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_KeepPadding": "(Solo para 'Todo el lienzo') Incluir relleno",
-	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_SplitImageNote": "(Solo para 'Todo el lienzo') Si la imagen no es renderizada correctamente (por ejemplo, si nota que faltan algunas partes), es que el tablero es demasiado grande para la GPU. Puede aumentar estos valores para dividir el tablero en varias imágenes tanto vertical como horizontalmente. Luego puede juntarlas de nuevo usando cualquier editor de imágenes",
-	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_WarningConfirmTitle": "Muy Grande Imagen",
-	"DF_ARCHITECT.CaptureGameScreen_ScreenCapture_WarningConfirmContent": "<p>Está intentando capturar una imagen muy grande. Es posible que desee dividir la imagen.<br>Dependiendo de su GPU, la renderización puede fallar y dar como resultado una imagen con solo parcialmente dibujada, el resto dejado en blanco.</p>",
-
-	"DF_ARCHITECT.LightTemplate_CreateTemplateButton_LightConfig": "Crear plantilla desde esta fuente de luz",
-	"DF_ARCHITECT.LightTemplate_CreateTemplateButton_MacroDirectory": "Crear plantilla de fuente de luz",
-	"DF_ARCHITECT.LightTemplate_ContextMenu_Edit": "Editar plantilla",
-	"DF_ARCHITECT.LightTemplate_ContextMenu_Remove": "Quitar plantilla",
-	"DF_ARCHITECT.LightTemplate_ContextMenu_Delete": "Borrar plantilla",
-	"DF_ARCHITECT.LightTemplate_CurrentTemplate_Label": "Plantilla activa",
-	"DF_ARCHITECT.LightTemplate_CurrentTemplate_EditButton": "Editar plantilla",
-	"DF_ARCHITECT.LightTemplate_CurrentTemplate_ExitButton": "Parar posicionamiento de plantilla",
-	"DF_ARCHITECT.LightTemplate_TemplateConfig_SaveButton": "Guardar plantilla",
-	"DF_ARCHITECT.LightTemplate_TemplateConfig_UseButton": "Activar plantilla",
-
-	"DF_ARCHITECT.AltLightNegativeRadius_InvertRadiusButton": "Invertir los radios tenue / brillante a claro y oscuro (valores positivos / negativos)",
-
-	"LAYERS.BackgroundLayer": "Capa de fondo/baldosas",
-	"LAYERS.ForegroundLayer": "Capa de primer plano/techos",
-	"LAYERS.DrawingsLayer": "Capa de dibujo",
-	"LAYERS.GridLayer": "Capa de rejilla",
-	"LAYERS.WallsLayer": "Capa de muros",
-	"LAYERS.TemplateLayer": "Capa de plantillas",
-	"LAYERS.NotesLayer": "Capa de notas",
-	"LAYERS.TokenLayer": "Capa de iconos",
-	"LAYERS.LightingLayer": "Capa de iluminación",
-	"LAYERS.SoundsLayer": "Capa de sonidos",
-	"LAYERS.SightLayer": "Capa de visión",
-	"LAYERS.EffectsLayer": "Capa de efectos",
-	"LAYERS.ControlsLayer": "Capa de controles"
+	"I18N": {
+		"LANGUAGE": "Español",
+		"MAINTAINERS": "@Viriato139ac#0342"
+	},
+	"DF_ARCHITECT": {
+		"ModName": "Dragon Flagon Architect",
+		"ErrorColourSettingsMissing": "DF Architect: Se recomienda usar el módulo \"lib - ColorSettings\"",
+		"ErrorLibWrapperMissing": "DF Architect: Se requiere el módulo 'libWrapper'. Por favor, instale y active 'libWrapper'",
+		"ReloadRequired": {
+			"Title": "Se requiere recargar",
+			"Content": "<p>Es necesario recargar para que los cambios tengan efecto</p>",
+			"Positive": "Recargar ahora",
+			"Negative": "Ya recargaré yo"
+		},
+		"LayerShortcuts.Settings": {
+			"Title": "DF Architect: Métodos abreviados de teclado para capas",
+			"Description": "Shortcuts for switching between the canvas layers.",
+			"Reset": "Volver a ajustes por defecto",
+			"Save": "Guardar",
+			"Layer": {
+				"Tokens": "Controles básicos: ",
+				"Measure": "Medición: ",
+				"Tiles": "Baldosas: ",
+				"Drawings": "Dibujo: ",
+				"Walls": "Muros: ",
+				"Lighting": "Iluminación: ",
+				"Sounds": "Sonido: ",
+				"Notes": "Notas: "
+			},
+			"QuickSwap": {
+				"Title": "Cambio rápido de capas",
+				"Info": "Esta tecla se usa para cambiar rápidamente entre dos capas predeterminadas. Cada vez que se presiona, se cambiará a la capa en la que no se esté. Si se encuentra en una capa que no es ninguna de las dos que se han configurado, entonces se cambiará a la capa 1",
+				"Layer1_Name": "Capa 1 de cambio rápido",
+				"Layer1_Hint": "Una de las dos capas entre las que cambiará cuando se presione la tecla de cambio rápido",
+				"Layer2_Name": "Capa 2 de cambio rápido",
+				"Layer2_Hint": "La segunda de las capas entre las que cambiará cuando se presione la tecla de cambio rápido"
+			}
+		},
+		"WallShortcuts.Settings": {
+			"Title": "DF Architect: Cambio de tipo de muro",
+			"Description": "Teclas para cambiar entre los distintos tipos de muros",
+			"Label_WallType": "Tipos de muros"
+		},
+		"AltGridSnap": {
+			"Label": "Ajuste alternativo a la rejilla",
+			"Hotkey_Toggle": "Conmutar el ajuste alternativo a la rejilla",
+			"Setting": {
+				"EnabledName": "Mostrar conmutador de ajuste alternativo a la rejilla",
+				"EnabledHint": "Mostrar el botón para activar el ajuste alternativo a la rejilla (al centro de las casillas en lugar de a las esquinas)",
+				"PlaceOnControlBarName": "Situar en la barra de controles principales",
+				"PlaceOnControlBarHint": "Situa el conmutador de ajuste alternativo a la rejilla en la barra de controles principales en lgar de la barra de herramientas"
+			}
+		},
+		"WallCtrlInvert": {
+			"Label": "Bloqueo de la continuidad de muros",
+			"Title": "Continuidad de muros",
+			"Hotkey": "Conmutar bloqueo de continuidad: "
+		},
+		"WallJoinSplit": {
+			"Split_Label": "Dividir los muros seleccionado en dos partes cada uno",
+			"Join_Label": "Unir las líneas de muros seleccionados en un único muro"
+		},
+		"WallChangeType.Setting": {
+			"MetaKeyName": "Tecla de cambio rápido de pared",
+			"MetaKeyHint": "¿Qué tecla le gustaría mantener presionada al hacer clic en un control de tipo de muro para cambiar la selección actual de muros a ese tipo de muro?",
+			"MetaKey_OptionAlt": "Tecla Alt",
+			"MetaKey_OptionCtrl": "Tecla Ctrl"
+		},
+		"WallAltDrop.Setting": {
+			"DistanceName": "Ajuste automático de caída de pared",
+			"DistanceHint": "La distancia en píxeles que debe tener un punto final de pared para ajustar automáticamente el punto final de la pared que se arrastra actualmente a esa misma posición."
+		},
+		"WallDirections.Setting": {
+			"AllowUnselectedInvertName": "Permitir Invertir Orientación en las paredes no seleccionados",
+			"AllowUnselectedInvertHint": "Permita el uso de un doble clic para invertir la orientación de una pared cuando la pared no se haya seleccionado primero."
+		},
+		"AltLightOrigin.Settings": {
+			"Colour1_Name": "Luces: color de la mirilla",
+			"Colour1_Hint": "Color de la mirilla que se muestra al pulsar MAYÚS mientras se mueve una fuente de luz",
+			"Colour2_Name": "Luces: color alternativo de la mirilla",
+			"Colour2_Hint": "Color alternativo de la mirilla que se muestra al pulsar MAYÚS+ALT mientras se mueve una fuente de luz"
+		},
+		"QuickColourPicker": {
+			"EyeDrop_Title": "Escoja un color del mapa"
+		},
+		"CaptureGameScreen": {
+			"Setting": {
+				"AllowPC_Name": "Permitir captura del lienzo",
+				"AllowPC_Hint": "Permite a los jugadores que hagan una captura del lienzo activo del tablero de juego"
+			},
+			"ScreenCapture": {
+				"Label": "Guardar imagen del tablero",
+				"ContinueButton": "Capturar imagen",
+				"CancelButton": "Cancelar",
+				"Target": "¿Qué parte desea capturar?",
+				"Target_Current": "Vista actual",
+				"Target_All": "Todo el lienzo",
+				"Format": "Seleccione formato de la imagen",
+				"FormatPNG": "PNG",
+				"FormatJPG": "JPEG",
+				"FormatWEB": "WebP (solo en Chrome)",
+				"Compression": "Calidad del JPEG y el WebP",
+				"KeepPadding": "(Solo para 'Todo el lienzo') Incluir relleno",
+				"SplitImageNote": "(Solo para 'Todo el lienzo') Si la imagen no es renderizada correctamente (por ejemplo, si nota que faltan algunas partes), es que el tablero es demasiado grande para la GPU. Puede aumentar estos valores para dividir el tablero en varias imágenes tanto vertical como horizontalmente. Luego puede juntarlas de nuevo usando cualquier editor de imágenes",
+				"WarningConfirmTitle": "Muy Grande Imagen",
+				"WarningConfirmContent": "<p>Está intentando capturar una imagen muy grande. Es posible que desee dividir la imagen.<br>Dependiendo de su GPU, la renderización puede fallar y dar como resultado una imagen con solo parcialmente dibujada, el resto dejado en blanco.</p>"
+			}
+		},
+		"LightTemplate": {
+			"CreateTemplateButton": {
+				"LightConfig": "Crear plantilla desde esta fuente de luz",
+				"MacroDirectory": "Crear plantilla de fuente de luz"
+			},
+			"ContextMenu": {
+				"Edit": "Editar plantilla",
+				"Remove": "Quitar plantilla",
+				"Delete": "Borrar plantilla"
+			},
+			"CurrentTemplate": {
+				"Label": "Plantilla activa",
+				"EditButton": "Editar plantilla",
+				"ExitButton": "Parar posicionamiento de plantilla"
+			},
+			"TemplateConfig": {
+				"SaveButton": "Guardar plantilla",
+				"UseButton": "Activar plantilla"
+			}
+		},
+		"AltLightNegativeRadius": {
+			"InvertRadiusButton": "Invertir los radios tenue / brillante a claro y oscuro (valores positivos / negativos)"
+		}
+	},
+	"LAYERS": {
+		"BackgroundLayer": "Capa de fondo/baldosas",
+		"ForegroundLayer": "Capa de primer plano/techos",
+		"DrawingsLayer": "Capa de dibujo",
+		"GridLayer": "Capa de rejilla",
+		"WallsLayer": "Capa de muros",
+		"TemplateLayer": "Capa de plantillas",
+		"NotesLayer": "Capa de notas",
+		"TokenLayer": "Capa de iconos",
+		"LightingLayer": "Capa de iluminación",
+		"SoundsLayer": "Capa de sonidos",
+		"SightLayer": "Capa de visión",
+		"EffectsLayer": "Capa de efectos",
+		"ControlsLayer": "Capa de controles"
+	}
 }

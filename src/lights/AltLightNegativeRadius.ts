@@ -28,7 +28,7 @@ class _AltLightNegativeRadius {
 	private _renderLightConfig(app: LightConfig, html: JQuery<HTMLElement>, data: any) {
 		const button = $(`<button type="button" style="margin-bottom:0.25em" name="invert-radius">
 <i class="fas fa-adjust"></i>
-${'DF_ARCHITECT.AltLightNegativeRadius_InvertRadiusButton'.localize()}
+${'DF_ARCHITECT.AltLightNegativeRadius.InvertRadiusButton'.localize()}
 </button>`);
 		html.find('input[name="bright"]').parent().after(button);
 		button.on('click', (event) => {

@@ -6,28 +6,28 @@
 	<div></div>
 	<input class="shrink" type="checkbox" id="fileDate" name="fileDate" {{#if fileDate}}checked{{/if}}/>
 	<label class="grow" for="fileDate">{{localize 'Append current date and time to file name?'}}</label>
-	<h3>{{localize 'DF_ARCHITECT.CaptureGameScreen_ScreenCapture_Target'}}</h3>
+	<h3>{{localize 'DF_ARCHITECT.CaptureGameScreen.ScreenCapture.Target'}}</h3>
 	<input class="shrink" type="radio" value="cur" id="cur" name="target" {{#unless all}}checked{{/unless}}>
-	<label class="grow" for="cur">{{localize 'DF_ARCHITECT.CaptureGameScreen_ScreenCapture_Target_Current'}}</label>
+	<label class="grow" for="cur">{{localize 'DF_ARCHITECT.CaptureGameScreen.ScreenCapture.Target_Current'}}</label>
 	<div></div>
 	<input class="shrink" type="radio" value="all" id="all" name="target" {{#if all}}checked{{/if}}>
-	<label class="grow" for="all">{{localize 'DF_ARCHITECT.CaptureGameScreen_ScreenCapture_Target_All'}}</label>
+	<label class="grow" for="all">{{localize 'DF_ARCHITECT.CaptureGameScreen.ScreenCapture.Target_All'}}</label>
 	<div></div>
 	<input class="shrink" type="checkbox" id="padding" name="padding" {{#if pads}}checked{{/if}}/>
-	<label class="grow" for="padding">{{localize 'DF_ARCHITECT.CaptureGameScreen_ScreenCapture_KeepPadding'}}</label>
-	<div><p>{{localize 'DF_ARCHITECT.CaptureGameScreen_ScreenCapture_SplitImageNote'}}</p></div>
+	<label class="grow" for="padding">{{localize 'DF_ARCHITECT.CaptureGameScreen.ScreenCapture.KeepPadding'}}</label>
+	<div><p>{{localize 'DF_ARCHITECT.CaptureGameScreen.ScreenCapture.SplitImageNote'}}</p></div>
 	<input class="shrink" style="width:50px;margin-right:0.25em" id="split-h" type="number" min="1" max="8" step="1" value="{{hori}}"/>
 	<label class="shrink" for="split-h">horizontal</label>
 	<input class="shrink" style="width:50px;margin-right:0.25em;margin-left:1em" id="split-v" type="number" min="1" max="8" step="1" value="{{vert}}"/>
 	<label class="shrink" for="split-v">vertical</label>
 	<div></div>
-	<h3>{{localize 'DF_ARCHITECT.CaptureGameScreen_ScreenCapture_Format'}}</h3>
+	<h3>{{localize 'DF_ARCHITECT.CaptureGameScreen.ScreenCapture.Format'}}</h3>
 	<select name="format" id="format">
-		<option value="png" {{#if png}}selected{{/if}}>{{localize 'DF_ARCHITECT.CaptureGameScreen_ScreenCapture_FormatPNG'}}</option>
-		<option value="jpeg" {{#if jpeg}}selected{{/if}}>{{localize 'DF_ARCHITECT.CaptureGameScreen_ScreenCapture_FormatJPG'}}</option>
-		<option value="webp" {{#if webp}}selected{{/if}}>{{localize 'DF_ARCHITECT.CaptureGameScreen_ScreenCapture_FormatWEB'}}</option>
+		<option value="png" {{#if png}}selected{{/if}}>{{localize 'DF_ARCHITECT.CaptureGameScreen.ScreenCapture.FormatPNG'}}</option>
+		<option value="jpeg" {{#if jpeg}}selected{{/if}}>{{localize 'DF_ARCHITECT.CaptureGameScreen.ScreenCapture.FormatJPG'}}</option>
+		<option value="webp" {{#if webp}}selected{{/if}}>{{localize 'DF_ARCHITECT.CaptureGameScreen.ScreenCapture.FormatWEB'}}</option>
 	</select>
-	<h3>{{localize 'DF_ARCHITECT.CaptureGameScreen_ScreenCapture_Compression'}}</h3>
+	<h3>{{localize 'DF_ARCHITECT.CaptureGameScreen.ScreenCapture.Compression'}}</h3>
 	<output class="shrink">{{compression}}</output>
 	<input class="grow" id="compression" name="compression" type="range" min="0" max="1" step="0.01"
 		value="{{compression}}">
