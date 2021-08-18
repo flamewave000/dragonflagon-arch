@@ -139,6 +139,8 @@ class _QuickColourPicker {
 				const promises: Promise<void>[] = [];
 				this._states = [];
 				for (let window of Object.values(ui.windows)) {
+					// If the application does not allow minimization, ignore it
+					if (!window.options.minimizable) continue;
 					this._states.push({ id: window.appId, minimized: (<any>window)._minimized })
 					promises.push(window.minimize());
 				}
