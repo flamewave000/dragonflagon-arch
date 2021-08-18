@@ -33,13 +33,14 @@
 	</div>
 
 	<div class="form-group">
-		<label>{{ localize 'LIGHT.DarknessThreshold' }}</label>
+		<label>{{ localize 'LIGHT.DarknessRange' }}</label>
 		<div class="form-fields">
-			<input type="range" name="darknessThreshold" value="{{object.darknessThreshold}}" min="0.0" max="1.0"
-				step="0.05" data-dtype="Number" />
-			<span class="range-value">{{object.darknessThreshold}}</span>
+			<label for="darkness.min">{{ localize 'Between' }}</label>
+			<input type="number" name="darkness.min" value="{{object.darkness.min}}" min="0" max="1" step="any" placeholder="0">
+			<label for="darkness.max">{{ localize 'and' }}</label>
+			<input type="number" name="darkness.max" value="{{object.darkness.max}}" min="0" max="1" step="any" placeholder="1">
 		</div>
-		<p class="hint">{{ localize "LIGHT.DarknessThresholdHint" }}</p>
+		<p class="hint">{{ localize 'LIGHT.DarknessRangeHint' }}</p>
 	</div>
 
 	<div class="form-group">
@@ -47,7 +48,9 @@
 		<div class="form-fields">
 			<input class="color" type="text" name="tintColor" value="{{object.tintColor}}" data-dtype="String" />
 			<input type="color" value="{{object.tintColor}}" data-edit="tintColor" />
-			<button class="eyedropper" style="flex:0 0" title="{{localize 'DF_ARCHITECT.QuickColourPicker.EyeDrop_Title'}}"><i class="fas fa-eye-dropper"></i></button>
+			<button class="eyedropper" style="flex:0 0"
+				title="{{localize 'DF_ARCHITECT.QuickColourPicker.EyeDrop_Title'}}"><i
+					class="fas fa-eye-dropper"></i></button>
 		</div>
 	</div>
 
@@ -87,7 +90,10 @@
 	</div>
 
 	<div class="form-group">
-		<button type="submit"><i class="far fa-save"></i> {{localize 'DF_ARCHITECT.LightTemplate.TemplateConfig.SaveButton'}}</button>
-		<button type="button" class="execute"><i class="far fa-lightbulb"></i> {{localize 'DF_ARCHITECT.LightTemplate.TemplateConfig.UseButton'}}</button>
+		<button type="submit"><i class="far fa-save"></i> {{localize
+			'DF_ARCHITECT.LightTemplate.TemplateConfig.SaveButton'}}</button>
+		<button type="button" class="execute"><i class="far fa-lightbulb"></i> {{localize
+			'DF_ARCHITECT.LightTemplate.TemplateConfig.UseButton'}}</button>
 	</div>
-{{!-- </form> --}}
+	{{!--
+</form> --}}

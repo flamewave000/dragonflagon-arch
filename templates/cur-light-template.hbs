@@ -13,8 +13,8 @@
 	<p>{{data.angle}}</p>
 	<h2>{{localize "LIGHT.LightRotation" }}:</h2>
 	<p>{{data.rotation}}</p>
-	<h2>{{localize 'LIGHT.DarknessThreshold' }}:</h2>
-	<p>{{data.darknessThreshold}}</p>
+	<h2>{{localize 'LIGHT.DarknessRange' }}:</h2>
+	<p>{{ localize 'Between' }} {{data.darkness.min}} {{ localize 'and' }} {{data.darkness.max}}</p>
 	<h2>{{localize "LIGHT.LightColor" }}:</h2>
 	<p style="padding:0"><code style="padding:0.25em;background-color:{{tintColorValue}};color:#{{#if tintIsDark}}fff{{else}}000{{/if}}">{{tintColorLabel}}</code></p>
 	<h2>{{localize "LIGHT.LightAlpha" }}:</h2>

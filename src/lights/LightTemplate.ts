@@ -59,12 +59,12 @@ class _LightTemplates {
 window.LightTemplates = new _LightTemplates();
 
 export class LightTemplateManager {
-	private static readonly FLAG_IS_TEMPLATE = 'isLightTemplate';
+	static readonly FLAG_IS_TEMPLATE = 'isLightTemplate';
 
 	static currentActiveTemplate: string | null = null;
 	static getCurrentTemplateData(): Partial<AmbientLight.Data> | null {
 		if (this.currentActiveTemplate === null) return null;
-		return this._extractLightDataFromMacroCommand(game.macros.get(this.currentActiveTemplate).data.command);
+		return this.extractLightDataFromMacroCommand(game.macros.get(this.currentActiveTemplate).data.command);
 	}
 
 	static get lightTypes(): { [key: string]: string } {
@@ -99,6 +99,7 @@ ${'DF_ARCHITECT.LightTemplate.CreateTemplateButton.MacroDirectory'.localize()}</
 				tintColor: "",
 				tintAlpha: Math.pow(0.7, 2).toNearest(0.01),
 				darknessThreshold: 0,
+				darkness: { min: 0, max: 1 },
 				lightAnimation: {
 					intensity: 5,
 					speed: 5,
@@ -132,7 +133,7 @@ ${'DF_ARCHITECT.LightTemplate.CreateTemplateButton.LightConfig'.localize()}
 			animationTypes[k] = v.label;
 		}
 
-		const lightData = this._extractLightDataFromMacroCommand((data.data as Macro.Data).command);
+		const lightData = this.extractLightDataFromMacroCommand((data.data as Macro.Data).command);
 		const htmlData = {
 			object: duplicate(lightData),
 			lightTypes: this.lightTypes,
@@ -165,7 +166,7 @@ ${'DF_ARCHITECT.LightTemplate.CreateTemplateButton.LightConfig'.localize()}
 			delete formData.name;
 			delete formData.img;
 			await macro.update({
-				command: this._generateCommandData(formData),
+				command: this.generateCommandData(formData),
 				name: name,
 				img: img
 			});
@@ -197,7 +198,7 @@ ${'DF_ARCHITECT.LightTemplate.CreateTemplateButton.LightConfig'.localize()}
 			img: `modules/${ARCHITECT.MOD_NAME}/templates/lightbulb.svg`,
 			scope: "global",
 			type: 'script',
-			command: this._generateCommandData(lightData)
+			command: this.generateCommandData(lightData)
 		});
 		await macro.setFlag(ARCHITECT.MOD_NAME, this.FLAG_IS_TEMPLATE, true);
 		macro.sheet.render(true);
@@ -282,10 +283,10 @@ ${'DF_ARCHITECT.LightTemplate.CreateTemplateButton.LightConfig'.localize()}
 		]);
 	}
 
-	private static _generateCommandData(lightData: Partial<AmbientLight.Data>) {
+	static generateCommandData(lightData: Partial<AmbientLight.Data>) {
 		return `const ld=${JSON.stringify(lightData, null, '')};\nLightTemplates.activate(this.id,ld);`
 	}
-	private static _extractLightDataFromMacroCommand(commandString: string): Partial<AmbientLight.Data> {
+	static extractLightDataFromMacroCommand(commandString: string): Partial<AmbientLight.Data> {
 		return JSON.parse(/const ld=(.+);/.exec(commandString)[1]) as Partial<AmbientLight.Data>
 	}
 }
