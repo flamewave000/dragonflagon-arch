@@ -31,7 +31,7 @@ class _AltGridSnap {
 			name: 'DF_ARCHITECT.AltGridSnap_Setting_EnabledName',
 			hint: 'DF_ARCHITECT.AltGridSnap_Setting_EnabledHint',
 			type: Boolean,
-			default: true,
+			default: false,
 			onChange: () => { this._patchSquareGrid(); ui.controls.initialize() }
 		});
 		SETTINGS.register(_AltGridSnap.PREF_PLACE_ON_CONTROL_BAR, {
