@@ -34,7 +34,7 @@ class _WallDirections {
 
 	private _onControlOrRelease(this: PlaceableObject, wrapper: Function, ...args: any[]) {
 		const result = wrapper(...args);
-		if (game.scenes.active.walls.has(this.id))
+		if (game.scenes.viewed.walls.has(this.id))
 			this.refresh();
 		return result;
 	}

@@ -44,9 +44,9 @@ class _WallJoinSplit {
 			delete wall2._id;
 			newWalls.push(wall1, wall2)
 		}
-		await game.scenes.active.deleteEmbeddedDocuments('Wall', walls.map(x => x.id));
+		await game.scenes.viewed.deleteEmbeddedDocuments('Wall', walls.map(x => x.id));
 		// await layer.deleteMany(walls.map(x => x.id));
-		const wallObjects = (await game.scenes.active.createEmbeddedDocuments('Wall', newWalls));
+		const wallObjects = (await game.scenes.viewed.createEmbeddedDocuments('Wall', newWalls));
 		for (let o of wallObjects) {
 			const wall = layer.get(o.id);
 			if (!wall.visible || !wall.can(game.user, "control")) continue;
@@ -72,8 +72,8 @@ class _WallJoinSplit {
 		const wallData = duplicate(endpoints[0][1][0].data) as Wall.Data;
 		delete wallData._id;
 		wallData.c = endpoints.reduce((r, x) => r.concat(JSON.parse(x[0])), [] as number[]) as [number, number, number, number];
-		await game.scenes.active.deleteEmbeddedDocuments('Wall', walls.map(x => x.id));
-		const result = await game.scenes.active.createEmbeddedDocuments('Wall', [wallData]);
+		await game.scenes.viewed.deleteEmbeddedDocuments('Wall', walls.map(x => x.id));
+		const result = await game.scenes.viewed.createEmbeddedDocuments('Wall', [wallData]);
 		for (let wall of result) wall.object.control();
 	}
 }

@@ -72,7 +72,7 @@ class _WallAltDrop {
 						else setTimeout(waiter, 100);
 						return;
 					}
-					res(game.scenes.active.data.walls.find(x => x.id === (<Canvas>canvas).walls.last.id).object);
+					res(game.scenes.viewed.data.walls.find(x => x.id === (<Canvas>canvas).walls.last.id).object);
 				}
 				setTimeout(waiter, 100);
 			});
@@ -100,7 +100,7 @@ class _WallAltDrop {
 		// If we are controlling more than one wall, ignore it
 		if (!newWall && wallsLayer.controlled.length != 1) return null;
 		const wall: Wall = newWall || wallsLayer.controlled[0];
-		const walls = game.scenes.active.data.walls.filter(x => x.id != wall.data._id);
+		const walls = game.scenes.viewed.data.walls.filter(x => x.id != wall.data._id);
 		const radius: number = SETTINGS.get(_WallAltDrop.DISTANCE);
 		const closestPoints = walls.map(wall => {
 			const [x, y] = WallsLayer.getClosestEndpoint(dest, <Wall>(<any>wall).object)
