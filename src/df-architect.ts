@@ -20,6 +20,8 @@ import { WallDirections } from './walls/WallDirections.js';
 
 Hooks.once('init', function () {
 	if (!game.modules.get('lib-wrapper')?.active) return;
+	if (!game.modules.get('colorsettings')?.active) return;
+	if (!game.modules.get('lib-df-hotkeys')?.active) return;
 
 	SETTINGS.registerMenu('hotkeys', {
 		icon: 'fas fa-keyboard',
@@ -44,6 +46,8 @@ Hooks.once('init', function () {
 
 Hooks.once('setup', function () {
 	if (!game.modules.get('lib-wrapper')?.active) return;
+	if (!game.modules.get('colorsettings')?.active) return;
+	if (!game.modules.get('lib-df-hotkeys')?.active) return;
 	PIXIAppOverride.setup();
 });
 
@@ -58,6 +62,12 @@ Hooks.once('ready', function () {
 		console.error('Missing colorsettings module dependency');
 		if (game.user.isGM)
 			ui.notifications.error('DF_ARCHITECT.ErrorColourSettingsMissing'.localize());
+		return;
+	}
+	if (!game.modules.get('lib-df-hotkeys')?.active) {
+		console.error('Missing Library: DF Hotkeys module dependency');
+		if (game.user.isGM)
+			ui.notifications.error('DF_ARCHITECT.ErrorLibDFHotkeysMissing'.localize());
 		return;
 	}
 

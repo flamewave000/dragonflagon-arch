@@ -3,6 +3,7 @@
 		"ModName": "Dragon Flagon Architect",
 		"ErrorColourSettingsMissing": "DF Architect: 'lib - ColorSettings' module required. Please install and activate 'lib - ColorSettings'",
 		"ErrorLibWrapperMissing": "DF Architect: 'libWrapper' module required. Please install and activate 'libWrapper'.",
+		"ErrorLibDFHotkeysMissing": "DF Architect: 'Library: DF Hotkeys' module required. Please install and activate 'Library: DF Hotkeys'.",
 		"ReloadRequired": {
 			"Title": "Reload Required",
 			"Content": "<p>A reload is required for your changes to go into effect.</p>",
