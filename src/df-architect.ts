@@ -10,7 +10,7 @@ import { WallCtrlInvert } from './walls/WallCtrlInvert.js';
 import { WallShortcuts } from './walls/WallShortcuts.js';
 import { WallJoinSplit } from './walls/WallJoinSplit.js';
 import { AltLightOrigin } from './lights/AltLightOrigin.js';
-import { QuickColourPicker } from './lights/QuickColourPicker.js';
+import { QuickColourPicker } from './general/QuickColourPicker.js';
 import CaptureGameScreen from './general/CaptureGameScreen.js';
 import { LightTemplateManager, LightingLayerOverride } from './lights/LightTemplate.js';
 import { WallChangeType } from './walls/WallChangeType.js';

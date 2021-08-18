@@ -1,5 +1,5 @@
 import ARCHITECT from "../core/architect.js";
-import { QuickColourPicker } from "./QuickColourPicker.js";
+import { QuickColourPicker } from "../general/QuickColourPicker.js";
 
 declare global {
 	// class MacroConfig extends BaseEntitySheet { }
