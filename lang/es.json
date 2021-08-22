@@ -7,6 +7,7 @@
 		"ModName": "Dragon Flagon Architect",
 		"ErrorColourSettingsMissing": "DF Architect: Se recomienda usar el módulo \"lib - ColorSettings\"",
 		"ErrorLibWrapperMissing": "DF Architect: Se requiere el módulo 'libWrapper'. Por favor, instale y active 'libWrapper'",
+		"ErrorLibDFHotkeysMissing": "DF Architect: se requiere el módulo 'Library: DF Hotkeys'. Por favor, instálelo y actívelo",
 		"ReloadRequired": {
 			"Title": "Se requiere recargar",
 			"Content": "<p>Es necesario recargar para que los cambios tengan efecto</p>",
@@ -90,6 +91,7 @@
 				"AllowPC_Hint": "Permite a los jugadores que hagan una captura del lienzo activo del tablero de juego"
 			},
 			"ScreenCapture": {
+				"Capturing": "Capturando el lienzo...",
 				"Label": "Guardar imagen del tablero",
 				"ContinueButton": "Capturar imagen",
 				"CancelButton": "Cancelar",
@@ -125,6 +127,10 @@
 			"TemplateConfig": {
 				"SaveButton": "Guardar plantilla",
 				"UseButton": "Activar plantilla"
+			},
+			"Delete": {
+				"Title": "Borrar plantilla ligera:",
+				"Confirm": "¿Está seguro que quiere borrar esta plantilla ligera?"
 			}
 		},
 		"AltLightNegativeRadius": {

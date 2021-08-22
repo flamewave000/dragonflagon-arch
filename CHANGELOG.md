@@ -1,5 +1,8 @@
 # DF Architect
 
+## Release 2.1.1 (2021-08-27)
+- Spanish Localization Update: Courtesy of [lozalojo](https://github.com/lozalojo)
+
 ## Release 2.1.0 (2021-08-18)
 - Fixed Canvas Capture layer filtering issues when a layer no longer exists.
 - Added custom filename field to Canvas Capture dialog.
