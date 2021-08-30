@@ -1,5 +1,9 @@
 # DF Architect
 
+## Release 2.1.2 (2021-08-30)
+- Fixed broken Wall Chain Lock feature.
+- Heavily Improved Wall Chain Lock to no longer require Click+Drag to chain walls. It will now properly immediately auto-chain like Foundry normally does while holding Ctrl.
+
 ## Release 2.1.1 (2021-08-27)
 - Spanish Localization Update: Courtesy of [lozalojo](https://github.com/lozalojo)
 

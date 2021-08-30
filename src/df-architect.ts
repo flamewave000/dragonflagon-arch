@@ -6,7 +6,7 @@ SETTINGS.init(ARCHITECT.MOD_NAME);
 import PIXIAppOverride from './general/PIXIAppOverride.js';
 import { LayerShortcuts } from "./general/LayerShortcuts.js";
 import { AltGridSnap } from './general/AltGridSnap.js';
-import { WallCtrlInvert } from './walls/WallCtrlInvert.js';
+import WallCtrlInvert from './walls/WallCtrlInvert.js';
 import { WallShortcuts } from './walls/WallShortcuts.js';
 import { WallJoinSplit } from './walls/WallJoinSplit.js';
 import { AltLightOrigin } from './lights/AltLightOrigin.js';

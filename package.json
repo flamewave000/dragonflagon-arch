@@ -2,7 +2,7 @@
 	"name": "df-architect",
 	"title": "DF Architect",
 	"description": "Architect for FoundryVTT provides a major overhaul of the Walls and Lighting features, as well as a few extra fun things like the Colour Picker and Alternate Grid Snap.",
-	"version": "2.1.1",
+	"version": "2.1.2",
 	"license": "BSD-3-Clause",
 	"repository": {
 		"url": "https://github.com/flamewave000/dragonflagon-arch"
