@@ -4,3 +4,4 @@ dist/
 dev
 package-lock.json
 **/.DS_Store/
+foundry-reference.js
