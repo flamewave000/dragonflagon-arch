@@ -4,6 +4,9 @@
 		"ErrorColourSettingsMissing": "DF Architect: 'lib - ColorSettings' module required. Please install and activate 'lib - ColorSettings'",
 		"ErrorLibWrapperMissing": "DF Architect: 'libWrapper' module required. Please install and activate 'libWrapper'.",
 		"ErrorLibDFHotkeysMissing": "DF Architect: 'Library: DF Hotkeys' module required. Please install and activate 'Library: DF Hotkeys'.",
+		"General": {
+			"Cancel": "Cancel"
+		},
 		"ReloadRequired": {
 			"Title": "Reload Required",
 			"Content": "<p>A reload is required for your changes to go into effect.</p>",
@@ -88,9 +91,20 @@
 			},
 			"ScreenCapture": {
 				"Capturing": "Capturing Canvas...",
+				"File": {
+					"Title": "File Name",
+					"AppendDate": "Append current date and time to file name?"
+				},
+				"Background": {
+					"Hide": "Hide Background Image",
+					"Colour": "BG Colour",
+					"Alpha": "BG Transparency"
+				},
+				"ShowControls": "Show Controls",
+				"ShowHidden": "Show Hidden",
+				"ResetFilters": "Reset Filter",
 				"Label": "Save Game Board Image",
 				"ContinueButton": "Capture Image",
-				"CancelButton": "Cancel",
 				"Target": "What portion would you like to capture?",
 				"Target_Current": "Current View",
 				"Target_All": "Entire Canvas",
@@ -131,6 +145,16 @@
 		},
 		"AltLightNegativeRadius": {
 			"InvertRadiusButton": "Invert Dim/Bright radii to Light and Dark (positive/negative values)"
+		},
+		"TileFlattener": {
+			"Label": "Flatten Tiles into Single Image",
+			"FlattenButton": "Flatten Tiles",
+			"RenderLighting": "Render Lighting (background will not be transparent)",
+			"RenderBackground": "Render Background Image",
+			"RenderHiddenTiles": "Render Hidden Tiles",
+			"RenderSelectedOnly": "Selected Tiles",
+			"RenderEntireCanvas": "Entire Canvas",
+			"Margin": "Additional padding to be rendered outside of selected tiles"
 		}
 	},
 	"LAYERS": {

@@ -24,7 +24,7 @@ class _PIXIAppOverride extends PIXI.Application {
 		const allow = game.user.isGM || SETTINGS.get(CaptureGameScreen.PREF_ALLOW_PC);
 		// Only enable the `preserveDrawingBuffer` if we are the GM
 		if (allow)
-			super(mergeObject(options, { preserveDrawingBuffer: true }));
+			super(mergeObject(options, { preserveDrawingBuffer: true, transparent: true }));
 		else
 			super(options);
 	}

@@ -18,6 +18,7 @@ import { WallAltDrop } from './walls/WallAltDrop.js';
 import { AltLightNegativeRadius } from './lights/AltLightNegativeRadius.js';
 import { WallDirections } from './walls/WallDirections.js';
 import { DataMigration } from './core/migration.js';
+import TileFlattener from './tiles/TileFlattener.js';
 
 Hooks.once('init', function () {
 	if (!game.modules.get('lib-wrapper')?.active) return;
@@ -44,6 +45,7 @@ Hooks.once('init', function () {
 	AltLightOrigin.init();
 	CaptureGameScreen.init();
 	LightTemplateManager.init();
+	TileFlattener.init();
 });
 
 Hooks.once('setup', function () {

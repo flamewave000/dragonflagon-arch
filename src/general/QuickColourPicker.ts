@@ -42,8 +42,8 @@ class _QuickColourPicker {
 						event.preventDefault();
 						const colour = await QuickColourPicker.requestColourPick(app);
 						if (colour === false) return;
-						$(event.currentTarget).parent().find('input[type="color"]').val(colour);
-						$(event.currentTarget).parent().find('input.color').val(colour);
+						$(event.currentTarget).parent().find('input[type="color"]').val(colour).trigger('change');
+						$(event.currentTarget).parent().find('input.color').val(colour).trigger('change');
 					})
 					$(x).after(button);
 				})
