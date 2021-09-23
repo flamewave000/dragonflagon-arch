@@ -1,5 +1,12 @@
 # DF Architect
 
+## Release 3.0.0 (2021-09-)
+- Fixed Quick Colour Picker not invoking the "change" event on the colour selector elements.
+- Including OpenCV library that is only loaded if needed.
+- Major Optimization in Capture Canvas feature, no longer need to split canvas into many images. This will be done automatically and the resulting images stitched together into a single image download.
+- Introducing a new Canvas Capture API that any module can use.
+- New Tile Flattener feature. This uses the new Canvas Capture API to generate images from the tiles in a quick and efficient way.
+
 ## Release 2.1.2 (2021-08-30)
 - Fixed broken Wall Chain Lock feature.
 - Heavily Improved Wall Chain Lock to no longer require Click+Drag to chain walls. It will now properly immediately auto-chain like Foundry normally does while holding Ctrl.

@@ -109,7 +109,7 @@ export default class CaptureGameScreen {
 	}
 
 	// Reset the canvas layers to their proper activation states
-	private static endCapture(hiddenItemsSnapshot: PlaceableObject[]) {
+	static endCapture(hiddenItemsSnapshot: PlaceableObject[]) {
 		// Cleanup Background
 		canvas.background.bg.visible = true;
 		canvas.app.renderer.backgroundColor = parseInt(game.scenes.viewed.data.backgroundColor.slice(1), 16);
@@ -602,7 +602,14 @@ export default class CaptureGameScreen {
 	}
 }
 
-(<any>window).CanvaseCapture = {
+(<any>window).CanvasCapture = {
+	LayersWithInvisiblePlaceables: CaptureGameScreen.LayersWithInvisiblePlaceables,
+	LayersWithHiddenPlaceables: CaptureGameScreen.LayersWithHiddenPlaceables,
+	beginCapture: CaptureGameScreen.beginCapture,
+	endCapture: CaptureGameScreen.endCapture,
 	captureCanvas: CaptureGameScreen.captureCanvas,
-	captureView: CaptureGameScreen.captureView
+	captureView: CaptureGameScreen.captureView,
+	toggleLayer: CaptureGameScreen.toggleLayer,
+	toggleHidden: CaptureGameScreen.toggleHidden,
+	toggleControls: CaptureGameScreen.toggleControls
 };

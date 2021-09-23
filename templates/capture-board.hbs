@@ -1,4 +1,5 @@
 <form class="dfarch-capture-form">
+	{{!-- File Name Settings --}}
 	<h3>{{localize 'DF_ARCHITECT.CaptureGameScreen.ScreenCapture.File.Title'}}</h3>
 	<label class="grow" for="fileName">{{localize 'DF_ARCHITECT.CaptureGameScreen.ScreenCapture.File.AppendDate'}}</label>
 	<div></div>
@@ -6,6 +7,7 @@
 	<div></div>
 	<input class="shrink" type="checkbox" id="fileDate" name="fileDate" {{#if fileDate}}checked{{/if}}/>
 	<label class="grow" for="fileDate">{{localize 'DF_ARCHITECT.CaptureGameScreen.ScreenCapture.File.AppendDate'}}</label>
+	{{!-- Capture Area --}}
 	<h3>{{localize 'DF_ARCHITECT.CaptureGameScreen.ScreenCapture.Target'}}</h3>
 	<input class="shrink" type="radio" value="cur" id="cur" name="target" {{#unless all}}checked{{/unless}}>
 	<label class="grow" for="cur">{{localize 'DF_ARCHITECT.CaptureGameScreen.ScreenCapture.Target_Current'}}</label>
@@ -15,12 +17,8 @@
 	<div></div>
 	<input class="shrink" type="checkbox" id="padding" name="padding" {{#if pads}}checked{{/if}}/>
 	<label class="grow" for="padding">{{localize 'DF_ARCHITECT.CaptureGameScreen.ScreenCapture.KeepPadding'}}</label>
-	<div><p>{{localize 'DF_ARCHITECT.CaptureGameScreen.ScreenCapture.SplitImageNote'}}</p></div>
-	<input class="shrink" style="width:50px;margin-right:0.25em" id="split-h" type="number" min="1" max="8" step="1" value="{{hori}}"/>
-	<label class="shrink" for="split-h">horizontal</label>
-	<input class="shrink" style="width:50px;margin-right:0.25em;margin-left:1em" id="split-v" type="number" min="1" max="8" step="1" value="{{vert}}"/>
-	<label class="shrink" for="split-v">vertical</label>
 	<div></div>
+	{{!-- File Format and Compression --}}
 	<h3>{{localize 'DF_ARCHITECT.CaptureGameScreen.ScreenCapture.Format'}}</h3>
 	<select name="format" id="format">
 		<option value="png" {{#if png}}selected{{/if}}>{{localize 'DF_ARCHITECT.CaptureGameScreen.ScreenCapture.FormatPNG'}}</option>
@@ -31,8 +29,10 @@
 	<output class="shrink" style="min-width:2em">{{compression}}</output>
 	<input class="grow" id="compression" name="compression" type="range" min="0" max="1" step="0.01"
 		value="{{compression}}">
+	{{!-- GM ONLY START --}}
 	{{#if isGM}}
-	<div style="margin-top:2em"></div>
+	{{!-- Background Adjustments --}}
+	<div style="margin-top:1.5em"></div>
 	<input class="shrink" id="bg-hide" name="bg.hide" type="checkbox" {{#if bg.hide}}checked{{/if}}>
 	<label class="grow" for="bg-hide">{{localize 'DF_ARCHITECT.CaptureGameScreen.ScreenCapture.Background.Hide'}}</label>
 	<div></div>
@@ -43,6 +43,7 @@
 	<label class="shrink" for="bg-alph" style="margin-right:1em">{{localize 'DF_ARCHITECT.CaptureGameScreen.ScreenCapture.Background.Alpha'}}</label>
 	<input class="grow" id="bg-alph" name="bg.alph" value="{{bg.alph}}" type="range" min="0" max="100" step="1">
 	<output class="shrink" style="margin-left:1em;min-width:3em" id="bg-alph-out">{{bg.alph}}%</output>
+	{{!-- Layer Filtering --}}
 	<section>
 		<h3
 			onclick="$('.dfarch-capture-form i.fa-plus-square').toggle();$('.dfarch-capture-form i.fa-minus-square').toggle();$('.dfarch-capture-form section>div').slideToggle(200);$('.dfarch-capture-form span').slideToggle(200)">
@@ -68,4 +69,5 @@
 		<span style="display:block;height:150px">&nbsp;</span>
 	</section>
 	{{/if}}
+	{{!-- GM ONLY END --}}
 </form>
