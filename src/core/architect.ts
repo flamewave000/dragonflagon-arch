@@ -1,6 +1,19 @@
 export default class ARCHITECT {
 	static MOD_NAME = 'df-architect'
 
+	static reportProgress(context: string, progress: number, total: number, keepAlive: boolean = false) {
+		const loader = document.getElementById("loading");
+		const pct = Math.round((progress / total) * 100);
+		loader.querySelector("#context").textContent = context + ` (${progress}/${total})`;
+		loader.querySelector("#loading-bar").style.width = `${pct}%`;
+		loader.querySelector("#progress").textContent = `${pct}%`;
+		loader.style.display = "block";
+		if ((pct === 100) && !loader.hidden && !keepAlive) $(loader).fadeOut(2000);
+	}
+	static hideProgress(immediately = false) {
+		immediately ? $('#loading').hide() : $('#loading').fadeOut(2000);
+	}
+
 	static requestReload() {
 		const dialog: Dialog = new Dialog({
 			title: 'DF_ARCHITECT.ReloadRequired.Title'.localize(),

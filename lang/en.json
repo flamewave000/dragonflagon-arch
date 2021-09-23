@@ -90,7 +90,9 @@
 				"AllowPC_Hint": "Allow players to capture the current game board canvas."
 			},
 			"ScreenCapture": {
-				"Capturing": "Capturing Canvas...",
+				"Rendering": "Rendering Images",
+				"Stitching": "Stitching Images Together",
+				"ErrorStitchingFailure": "Failed to complete image stitching process due to hitting memory limit. You can try again but you may need to make the scene smaller.",
 				"File": {
 					"Title": "File Name",
 					"AppendDate": "Append current date and time to file name?"
@@ -115,7 +117,7 @@
 				"Compression": "The quality level for JPEG and WebP",
 				"KeepPadding": "(Entire Canvas Only) Include Padding",
 				"WarningConfirmTitle": "Very Large Image",
-				"WarningConfirmContent": "<p>You are attempting to capture a very large image. The browser window <b>MUST NOT be adjusted</b> once the process has started.<br><b>It is recommended that you maximize browser window before beginning as it will make the process more efficient.</b></p>"
+				"WarningConfirmContent": "<p>You are attempting to capture a very large image. The browser window <b>MUST NOT be adjusted</b> once the process has started.<br><br><i>It is <b>not recommended</b> to render anything over <b>8000px by 8000px</b> as this may lead to stitching failures due to memory limits.</i></p>"
 			}
 		},
 		"LightTemplate": {

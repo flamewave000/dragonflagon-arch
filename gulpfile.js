@@ -19,6 +19,7 @@ const GLOB = '**/*';
 const DIST = 'dist/';
 const BUNDLE = 'bundle/';
 const SOURCE = 'src/';
+const LIBS = 'libs/';
 const LANG = 'lang/';
 const PACKS = 'packs/';
 const TEMPLATES = 'templates/';
@@ -78,6 +79,7 @@ function buildSource(output = null) {
 					.split('/').length - 1) || './'
 		}))
 		if (!minifySources) stream = stream.pipe(tabify(4, false))
+		stream = stream.pipe(gulp.src(LIBS + GLOB));
 		return stream.pipe(gulp.dest((output || DIST) + SOURCE));
 	});
 }
