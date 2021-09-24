@@ -93,10 +93,6 @@
 				"Rendering": "Rendering Images",
 				"Stitching": "Stitching Images Together",
 				"ErrorStitchingFailure": "Failed to complete image stitching process due to hitting memory limit. You can try again but you may need to make the scene smaller.",
-				"File": {
-					"Title": "File Name",
-					"AppendDate": "Append current date and time to file name?"
-				},
 				"Background": {
 					"Hide": "Hide Background Image",
 					"Colour": "BG Colour",
@@ -118,7 +114,16 @@
 				"KeepPadding": "(Entire Canvas Only) Include Padding",
 				"WarningConfirmTitle": "Very Large Image",
 				"WarningConfirmContent": "<p>You are attempting to capture a very large image. The browser window <b>MUST NOT be adjusted</b> once the process has started.<br><br><i>It is <b>not recommended</b> to render anything over <b>8000px by 8000px</b> as this may lead to stitching failures due to memory limits.</i></p>"
-			}
+			},
+			"SaveImageDialog": {
+				"Title": "Save Image",
+				"SaveServer": "Save on Server",
+				"SaveLocal": "Save on Computer",
+				"FileNameLabel": "File Name: ",
+				"FileNamePlaceholder": "screenshot",
+				"DefaultFileName": "capture"
+			},
+			"ErrorCaptureInProgress": "A capture session is already in progress. Please complete or cancel it before trying again."
 		},
 		"LightTemplate": {
 			"CreateTemplateButton": {
@@ -159,11 +164,9 @@
 			"Margin": "Additional padding to be rendered outside of <b>Selected Tiles</b>",
 			"ImageFolderTitle": "Flattened Tile Images Folder",
 			"SaveImageDialog": {
-				"Title": "Save Image",
-				"SaveServer": "Save on Server",
-				"SaveLocal": "Save on Computer",
+				"Title": "Save Flattened Tile",
 				"FileNameLabel": "File Name: ",
-				"FileNamePlaceholder": "tile-flattener-"
+				"FileNamePlaceholder": "tile-flattener"
 			},
 			"SceneReplaceDialog": {
 				"Title": "Scene Replacement",
@@ -172,7 +175,7 @@
 				"ReplaceBackgroundHint": "The current scene's background will be changed to the newly created image.",
 				"CloneScene": "Clone the current scene and use image as background",
 				"CloneSceneHint": "Clone the current scene's configuration but NOT its content and set its background to the newly created image.",
-				"ImportToScene": "Import as new tile in current Scene",
+				"ImportToScene": "Import as a new tile in current Scene",
 				"ImportToSceneHint": "Import the new image as a tile into the center of the current scene.",
 				"DoNothing": "Do Nothing"
 			}

@@ -33,6 +33,12 @@ interface ImageData {
 	height: number;
 }
 
+interface CaptureSession {
+	id: number;
+	hiddenItemsSnapshot: PlaceableObject[];
+	foregroundPreviouslyActive: boolean;
+}
+
 export default class CaptureGameScreen {
 	private static readonly SPLIT_DIM = 1024 * 4; // Maximum 64MiB Raw Image
 	private static readonly WARNING_SIZE = CaptureGameScreen.SPLIT_DIM * CaptureGameScreen.SPLIT_DIM;
@@ -42,15 +48,14 @@ export default class CaptureGameScreen {
 	static readonly PREF_TRGT = 'CaptureGameScreen.Target';
 	static readonly PREF_PADS = 'CaptureGameScreen.Padding';
 	static readonly PREF_LYRS = 'CaptureGameScreen.Layers';
-	static readonly PREF_FILE = 'CaptureGameScreen.FileSettings';
 	static readonly PREF_BG_HIDE = 'CaptureGameScreen.BG.Hide';
 	static readonly PREF_BG_COLO = 'CaptureGameScreen.BG.Colour';
 	static readonly PREF_BG_ALPH = 'CaptureGameScreen.BG.Alpha';
 	static readonly LayersWithInvisiblePlaceables = ['WallsLayer', 'LightingLayer', 'SoundsLayer', 'TemplateLayer', 'NotesLayer'];
 	static readonly LayersWithHiddenPlaceables = ['BackgroundLayer', 'TokenLayer', 'DrawingsLayer', 'ForegroundLayer'];
 	private static _layerFilters: { [key: string]: LayerFilter };
-	private static _fileSettings: { name: string, date: boolean };
 	private static _captureInProgress = false;
+	private static _currentSession: CaptureSession = null;
 	private static _getLayerFilter(key: string): LayerFilter {
 		if (!this._layerFilters[key])
 			this._layerFilters[key] = { s: true };
@@ -70,13 +75,11 @@ export default class CaptureGameScreen {
 		SETTINGS.register(this.PREF_TRGT, { scope: 'client', config: false, type: String, default: 'all' });
 		SETTINGS.register(this.PREF_PADS, { scope: 'client', config: false, type: Boolean, default: false });
 		SETTINGS.register(this.PREF_LYRS, { scope: 'client', config: false, type: Object, default: {} });
-		SETTINGS.register(this.PREF_FILE, { scope: 'client', config: false, type: Object, default: { name: '', date: true } });
 		SETTINGS.register(this.PREF_BG_HIDE, { scope: 'client', config: false, type: Boolean, default: false });
 		SETTINGS.register(this.PREF_BG_COLO, { scope: 'client', config: false, type: String, default: '#999999' });
 		SETTINGS.register(this.PREF_BG_ALPH, { scope: 'client', config: false, type: Number, default: 100 });
 
 		this._layerFilters = SETTINGS.get(this.PREF_LYRS);
-		this._fileSettings = SETTINGS.get(this.PREF_FILE);
 
 		Hooks.on('renderSettings', (settings: Settings, html: JQuery<HTMLElement>, data: {}) => {
 			if (!SETTINGS.get(this.PREF_ALLOW_PC) && !game.user.isGM) return;
@@ -110,8 +113,6 @@ export default class CaptureGameScreen {
 			all: SETTINGS.get(this.PREF_TRGT) === 'all',
 			pads: SETTINGS.get(this.PREF_PADS),
 			layers: (<Canvas>canvas).layers.map(x => layerToConfig(x)),
-			fileName: this._fileSettings.name,
-			fileDate: this._fileSettings.date,
 			bg: {
 				hide: SETTINGS.get<boolean>(this.PREF_BG_HIDE),
 				alph: SETTINGS.get<number>(this.PREF_BG_ALPH),
@@ -125,7 +126,11 @@ export default class CaptureGameScreen {
 		(<any>canvas.app.renderer).backgroundAlpha = data.bg.alph / 100.0;
 
 		// Completely hide the placeables that are set as "Hidden"
-		const hiddenItemsSnapshot: PlaceableObject[] = await this.beginCapture();
+		const session = this.beginCapture(false);
+		if (!session) {
+			ui.notifications.warn('DF_ARCHITECT.CaptureGameScreen.ErrorCaptureInProgress'.localize());
+			return;
+		}
 		var cleanupHandled = false;
 		const dialog = new Dialog({
 			title: 'DF_ARCHITECT.CaptureGameScreen.ScreenCapture.Label'.localize(),
@@ -135,7 +140,7 @@ export default class CaptureGameScreen {
 				cancel: {
 					icon: '<i class="fas fa-times"></i>',
 					label: 'DF_ARCHITECT.General.Cancel'.localize(),
-					callback: () => { cleanupHandled = true; this.endCapture(hiddenItemsSnapshot); }
+					callback: () => { cleanupHandled = true; this.endCapture(session); }
 				},
 				save: {
 					icon: '<i class="fas fa-camera"></i>',
@@ -152,11 +157,6 @@ export default class CaptureGameScreen {
 						const compression: number = parseFloat(html.find('#compression').val() as string);
 						const call = target === 'all' ? this.captureCanvas : this.captureView;
 						const format: string = html.find('#format').val() as string;
-						this._fileSettings = {
-							name: (<HTMLInputElement>html.find('#fileName')[0]).value.trim(),
-							date: (<HTMLInputElement>html.find('#fileDate')[0]).checked
-						};
-						SETTINGS.set(this.PREF_FILE, this._fileSettings);
 						await Promise.all([
 							SETTINGS.set(this.PREF_COMP, compression),
 							SETTINGS.set(this.PREF_FRMT, format),
@@ -180,22 +180,16 @@ export default class CaptureGameScreen {
 							console.warn(error);
 							return;
 						} finally {
-							this.endCapture(hiddenItemsSnapshot);
+							this.endCapture(session);
 						}
-						const extension = imageData.data.match(/^data:image\/(.+);/)[1];
-						const linkName = this._fileSettings?.name?.length === 0 ? 'screenshot' : this._fileSettings.name
-						const link = document.createElement('a');
-						link.href = imageData.data;
-						if (this._fileSettings.date) {
-							const linkDate = new Date().toISOString().replace(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}).+/, '$1$2$3-$4$5$6');
-							link.download = `${linkName}-${linkDate}.${extension}`;
-						}
-						else link.download = `${linkName}.${extension}`;
-						link.click();
+						await this.saveImageData({
+							image: imageData,
+							format: imageData.data.match(/^data:image\/(.+);/)[1]
+						});
 					}
 				}
 			},
-			close: () => { if (!cleanupHandled) this.endCapture(hiddenItemsSnapshot); },
+			close: () => { if (!cleanupHandled) this.endCapture(session); },
 			render: (html: JQuery<HTMLElement>) => {
 				const compression = html.find('#compression');
 				const output = html.find('output');
@@ -300,11 +294,14 @@ export default class CaptureGameScreen {
 
 	/**
 	 * Begins the process of capturing the canvas.
+	 * @param throwOnError If true, an error is thrown if a Capture is already running; otherwise function will return null.
 	 * @returns The HiddenPlaceablesSnapshot
 	 * @throws If `beginCapture()` has been invoked and `endCapture()` has not been subsequently invoked yet.
 	 */
-	static beginCapture(): PlaceableObject[] {
-		if (this._captureInProgress) throw Error('Capture In Progress');
+	static beginCapture(throwOnError = true): CaptureSession {
+		if (CaptureGameScreen._captureInProgress)
+			if (throwOnError) throw Error('Capture In Progress'); else return null;
+		CaptureGameScreen._captureInProgress = true;
 		// Collect Hidden Items
 		const hiddenItemsSnapshot: PlaceableObject[] = [];
 		for (let layerName of this.LayersWithHiddenPlaceables) {
@@ -318,19 +315,26 @@ export default class CaptureGameScreen {
 				object.refresh();
 			}
 		}
-		return hiddenItemsSnapshot;
+		const foregroundPreviouslyActive = canvas.foreground._active;
+		if (foregroundPreviouslyActive)
+			canvas.foreground.activate();
+		CaptureGameScreen._currentSession = { hiddenItemsSnapshot, foregroundPreviouslyActive, id: new Date().getTime() };
+		return CaptureGameScreen._currentSession;
 	}
 
 	// Reset the canvas layers to their proper activation states
-	static endCapture(hiddenItemsSnapshot: PlaceableObject[]) {
+	static endCapture(captureSession: CaptureSession): boolean {
+		if (!CaptureGameScreen._captureInProgress) return false;
+		if (captureSession === null || captureSession.id !== CaptureGameScreen._currentSession?.id) return false;
+		CaptureGameScreen._captureInProgress = false;
 		// Cleanup Background
 		canvas.background.bg.visible = true;
 		canvas.app.renderer.backgroundColor = parseInt(game.scenes.viewed.data.backgroundColor.slice(1), 16);
 		(<any>canvas.app.renderer).backgroundAlpha = 1.0;
 
 		// Correct Hidden Items
-		for (let object of hiddenItemsSnapshot) {
-			(<any>object.data).hidden = true;
+		for (let object of captureSession.hiddenItemsSnapshot as any[]) {
+			object.data.hidden = true;
 			object.renderable = true;
 			delete object.data.flags.df_arch_hidden;
 		}
@@ -350,7 +354,9 @@ export default class CaptureGameScreen {
 		// Correct Active Layer
 		const controlName = ui.controls.activeControl;
 		const control = ui.controls.controls.find(c => c.name === controlName);
+		if (!captureSession.foregroundPreviouslyActive) canvas.foreground.deactivate();
 		if (control && control.layer) canvas[control.layer].activate();
+		return true;
 	}
 
 	static toggleLayer(layerName: string, show: boolean) {
@@ -479,6 +485,16 @@ export default class CaptureGameScreen {
 		return new Promise(async (resolveCapture, rejectCapture) => {
 			// Make sure OpenCV has fully loaded. If it is loaded, this will resolve immediately
 			await CaptureGameScreen.loadOpenCV();
+
+			// Activate the Foreground layer so it draws properly
+			if (!canvas.foreground._active) {
+				canvas.foreground.activate();
+				const resolve = resolveCapture;
+				const reject = rejectCapture;
+				resolveCapture = v => { canvas.foreground.deactivate(); resolve(v) };
+				rejectCapture = e => { canvas.foreground.deactivate(); reject(e) };
+			}
+
 			// Save the previous orientation of the canvas stage
 			const origX = canvas.stage.pivot.x;
 			const origY = canvas.stage.pivot.y;
@@ -696,6 +712,95 @@ export default class CaptureGameScreen {
 			}
 		});
 	}
+
+	static async saveImageData({ image, format, defaultFileName, dialogTitle, folder, folderSource }
+		: { image: ImageData, format: string, defaultFileName?: string, dialogTitle?: string, folder?: string, folderSource?: string })
+		: Promise<string> {
+		return new Promise(async (res) => {
+			var resolved = false;
+			const resolve = (value: any) => {
+				if (resolved) return;
+				resolved = true;
+				res(value);
+			}
+			var ignoreClose = false;
+
+			const linkDate = new Date().toISOString().replace(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}).+/, '$3$4$5$6');
+			const dialog: Dialog = new Dialog({
+				title: dialogTitle || 'DF_ARCHITECT.CaptureGameScreen.SaveImageDialog.Title'.localize(),
+				content: await renderTemplate(`modules/${ARCHITECT.MOD_NAME}/templates/tile-flatten-save.hbs`, {
+					placeholder: (defaultFileName || 'DF_ARCHITECT.CaptureGameScreen.SaveImageDialog.DefaultFileName'.localize()) + '-' + linkDate,
+					format, image: image.data
+				}),
+				close: () => { if (!ignoreClose) resolve(null) },
+				buttons: {
+					cancel: {
+						icon: '<i class="fas fa-times"></i>',
+						label: 'DF_ARCHITECT.General.Cancel'.localize(),
+						callback: () => { dialog.close(); resolve(null); }
+					},
+					local: {
+						icon: '<i class="fas fa-download"></i>',
+						label: 'DF_ARCHITECT.CaptureGameScreen.SaveImageDialog.SaveLocal'.localize(),
+						callback: (html) => {
+							html = html instanceof HTMLElement ? $(html) : html;
+							const fileName = html.find('#filename')[0] as HTMLInputElement;
+							const link = document.createElement('a') as HTMLAnchorElement;
+							link.href = image.data;
+							link.download = fileName.value || fileName.placeholder;
+							link.click();
+						}
+					},
+					server: {
+						icon: '<i class="fas fa-upload"></i>',
+						label: 'DF_ARCHITECT.CaptureGameScreen.SaveImageDialog.SaveServer'.localize(),
+						callback: async (html) => {
+							ignoreClose = true;
+							html = html instanceof HTMLElement ? $(html) : html;
+							const fileNameElement = html.find('#filename')[0] as HTMLInputElement;
+							const fileName = fileNameElement.value || fileNameElement.placeholder;
+							const parts = image.data.match(/^data:(.+);base64,(.+)/);
+							const data = ARCHITECT.Base64ToBlob(parts[2], parts[1]);
+							const file = new File([data], fileName, {});
+
+							if (!folder) {
+								const result = await new Promise<{ path: string, source: string }>((res) => {
+									var resolved = false;
+									const picker = new FilePicker(<any>{
+										title: dialogTitle,
+										type: 'folder',
+										folderSource: folderSource || 'data',
+										callback: async (path: string) => {
+											resolved = true;
+											folderSource = picker.activeSource;
+											folder = path
+											res({ path, source: picker.activeSource });
+										},
+									});
+									const tmpClose = picker.close;
+									picker.close = (o: Application.CloseOptions) => {
+										res({ path: null, source: null });
+										return tmpClose.bind(picker).call(o);
+									};
+									picker.browse();
+								});
+								if (!result.path) {
+									resolve(null);
+									return;
+								}
+								folder = result.path;
+								folderSource = result.source;
+							}
+							await FilePicker.upload(folderSource, folder, file);
+							resolve(folder + '/' + fileName);
+						}
+					},
+				},
+				default: 'server'
+			}, { width: 500 });
+			dialog.render(true);
+		});
+	}
 }
 
 (<any>window).CanvasCapture = {
@@ -707,5 +812,6 @@ export default class CaptureGameScreen {
 	captureView: CaptureGameScreen.captureView,
 	toggleLayer: CaptureGameScreen.toggleLayer,
 	toggleHidden: CaptureGameScreen.toggleHidden,
-	toggleControls: CaptureGameScreen.toggleControls
+	toggleControls: CaptureGameScreen.toggleControls,
+	saveImageData: CaptureGameScreen.saveImageData
 };

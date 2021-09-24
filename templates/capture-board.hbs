@@ -1,12 +1,4 @@
 <form class="dfarch-capture-form">
-	{{!-- File Name Settings --}}
-	<h3>{{localize 'DF_ARCHITECT.CaptureGameScreen.ScreenCapture.File.Title'}}</h3>
-	<label class="grow" for="fileName">{{localize 'DF_ARCHITECT.CaptureGameScreen.ScreenCapture.File.AppendDate'}}</label>
-	<div></div>
-	<input class="grow" type="text" id="fileName" name="fileName" placeholder="screenshot" value="{{fileName}}"/>
-	<div></div>
-	<input class="shrink" type="checkbox" id="fileDate" name="fileDate" {{#if fileDate}}checked{{/if}}/>
-	<label class="grow" for="fileDate">{{localize 'DF_ARCHITECT.CaptureGameScreen.ScreenCapture.File.AppendDate'}}</label>
 	{{!-- Capture Area --}}
 	<h3>{{localize 'DF_ARCHITECT.CaptureGameScreen.ScreenCapture.Target'}}</h3>
 	<input class="shrink" type="radio" value="cur" id="cur" name="target" {{#unless all}}checked{{/unless}}>

@@ -4,6 +4,7 @@
 - Fixed Quick Colour Picker not invoking the "change" event on the colour selector elements.
 - Including OpenCV library that is only loaded if needed.
 - Major Optimization in Capture Canvas feature, no longer need to split canvas into many images. This will be done automatically and the resulting images stitched together into a single image download.
+- You are now given a prompt for where to save the image file, either on the server or on your local computer.
 - Introducing a new Canvas Capture API that any module can use.
 - New Tile Flattener feature. This uses the new Canvas Capture API to generate images from the tiles in a quick and efficient way.
 

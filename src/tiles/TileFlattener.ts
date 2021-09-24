@@ -154,15 +154,17 @@ export default class TileFlattener {
 		canvas.background.bg.visible = showBG;
 		(<any>canvas.app.renderer).backgroundAlpha = 0;
 
-		// Activate the Foreground layer so it draws properly
-		const previouslyActive = canvas.activeLayer;
-		canvas.foreground.activate();
-
 		// Begin the Canvas Capture Process
-		const hiddenItemsSnapshot = CaptureGameScreen.beginCapture();
-		CaptureGameScreen.toggleHidden("BackgroundLayer", hidden && !select);
-		CaptureGameScreen.toggleHidden("ForegroundLayer", hidden && !select);
+		const session = CaptureGameScreen.beginCapture(false);
 		try {
+			if (!session) {
+				ui.notifications.warn('DF_ARCHITECT.CaptureGameScreen.ErrorCaptureInProgress'.localize());
+				this.promptForTileFlattening();
+				return;
+			}
+			CaptureGameScreen.toggleHidden("BackgroundLayer", hidden && !select);
+			CaptureGameScreen.toggleHidden("ForegroundLayer", hidden && !select);
+
 			var image: ImageData;
 			if (select) {
 				const rect = {
@@ -188,10 +190,22 @@ export default class TileFlattener {
 			} else {
 				image = await CaptureGameScreen.captureCanvas('image/' + format, compression);
 			}
-			this.saveImageData(image, format);
+			// Terminate the canvas capture
+			CaptureGameScreen.endCapture(session);
+			// Save the image data to file
+			const filePath = await CaptureGameScreen.saveImageData({
+				image, format,
+				defaultFileName: 'DF_ARCHITECT.TileFlattener.SaveImageDialog.FileNamePlaceholder'.localize(),
+				dialogTitle: 'DF_ARCHITECT.TileFlattener.SaveImageDialog.Title'.localize(),
+				folder: SETTINGS.get<string>(this.PREF_FOLDER),
+				folderSource: SETTINGS.get<string>(this.PREF_FOLDER_SOURCE)
+			});
+			// Prompt to ask what to do with it
+			if (!!filePath)
+				this.promptSceneReplacement(filePath, image.width, image.height);
 		} finally {
 			// Terminate the canvas capture
-			CaptureGameScreen.endCapture(hiddenItemsSnapshot);
+			CaptureGameScreen.endCapture(session);
 			// Restore Background Image
 			canvas.background.bg.visible = true;
 			(<any>canvas.app.renderer).backgroundAlpha = 1;
@@ -199,8 +213,6 @@ export default class TileFlattener {
 			for (let [tile, hidden] of tilesPreHidden) {
 				tile.data.hidden = hidden;
 			}
-			// Restore Active Layer
-			previouslyActive.activate();
 			// Restore selection
 			controlledTiles.forEach(x => x.control({ releaseOthers: false }));
 		}
@@ -222,54 +234,6 @@ export default class TileFlattener {
 		};
 		canvas.on('change', update);
 		tiles.on('change', update);
-	}
-
-	private static async saveImageData(image: ImageData, format: string) {
-		const linkDate = new Date().toISOString().replace(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}).+/, '$1$2$3-$4$5$6');
-		const dialog: Dialog = new Dialog({
-			title: 'DF_ARCHITECT.TileFlattener.CapturePromptTitle'.localize(),
-			content: await renderTemplate(`modules/${ARCHITECT.MOD_NAME}/templates/tile-flatten-save.hbs`, {
-				placeholder: 'DF_ARCHITECT.TileFlattener.SaveImageDialog.FileNamePlaceholder'.localize() + linkDate,
-				format, image: image.data
-			}),
-			buttons: {
-				cancel: {
-					icon: '<i class="fas fa-times"></i>',
-					label: 'DF_ARCHITECT.General.Cancel'.localize(),
-					callback: () => dialog.close()
-				},
-				local: {
-					icon: '<i class="fas fa-download"></i>',
-					label: 'DF_ARCHITECT.TileFlattener.SaveImageDialog.SaveLocal'.localize(),
-					callback: (html) => {
-						html = html instanceof HTMLElement ? $(html) : html;
-						const fileName = html.find('#filename')[0] as HTMLInputElement;
-						const link = document.createElement('a') as HTMLAnchorElement;
-						link.href = image.data;
-						link.download = fileName.value || fileName.placeholder;
-						link.click();
-					}
-				},
-				server: {
-					icon: '<i class="fas fa-upload"></i>',
-					label: 'DF_ARCHITECT.TileFlattener.SaveImageDialog.SaveServer'.localize(),
-					callback: async (html) => {
-						html = html instanceof HTMLElement ? $(html) : html;
-						const fileNameElement = html.find('#filename')[0] as HTMLInputElement;
-						const fileName = fileNameElement.value || fileNameElement.placeholder;
-						const folder = SETTINGS.get<string>(this.PREF_FOLDER);
-						const folderSource = SETTINGS.get<string>(this.PREF_FOLDER_SOURCE);
-						const parts = image.data.match(/^data:(.+);base64,(.+)/);
-						const data = ARCHITECT.Base64ToBlob(parts[2], parts[1]);
-						const file = new File([data], fileName, {});
-						await FilePicker.upload(folderSource, folder, file);
-						this.promptSceneReplacement(folder + '/' + fileName, image.width, image.height);
-					}
-				},
-			},
-			default: 'server'
-		}, { width: 500 });
-		dialog.render(true);
 	}
 
 	private static async promptSceneReplacement(filePath: string, width: number, height: number) {
