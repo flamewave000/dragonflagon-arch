@@ -55,62 +55,17 @@ export default class CaptureGameScreen {
 			scope: 'world',
 			config: true,
 			type: Boolean,
-			default: false,
+			default: false
 		});
-		SETTINGS.register(this.PREF_COMP, {
-			scope: 'client',
-			config: false,
-			type: Number,
-			default: 0.95,
-		});
-		SETTINGS.register(this.PREF_FRMT, {
-			scope: 'client',
-			config: false,
-			type: String,
-			default: 'png',
-		});
-		SETTINGS.register(this.PREF_TRGT, {
-			scope: 'client',
-			config: false,
-			type: String,
-			default: 'all',
-		});
-		SETTINGS.register(this.PREF_PADS, {
-			scope: 'client',
-			config: false,
-			type: Boolean,
-			default: false,
-		});
-		SETTINGS.register(this.PREF_LYRS, {
-			scope: 'client',
-			config: false,
-			type: Object,
-			default: {},
-		});
-		SETTINGS.register(this.PREF_FILE, {
-			scope: 'client',
-			config: false,
-			type: Object,
-			default: { name: '', date: true },
-		});
-		SETTINGS.register(this.PREF_BG_HIDE, {
-			scope: 'client',
-			config: false,
-			type: Boolean,
-			default: false,
-		});
-		SETTINGS.register(this.PREF_BG_COLO, {
-			scope: 'client',
-			config: false,
-			type: String,
-			default: '#999999',
-		});
-		SETTINGS.register(this.PREF_BG_ALPH, {
-			scope: 'client',
-			config: false,
-			type: Number,
-			default: 100,
-		});
+		SETTINGS.register(this.PREF_COMP, { scope: 'client', config: false, type: Number, default: 0.95 });
+		SETTINGS.register(this.PREF_FRMT, { scope: 'client', config: false, type: String, default: 'png' });
+		SETTINGS.register(this.PREF_TRGT, { scope: 'client', config: false, type: String, default: 'all' });
+		SETTINGS.register(this.PREF_PADS, { scope: 'client', config: false, type: Boolean, default: false });
+		SETTINGS.register(this.PREF_LYRS, { scope: 'client', config: false, type: Object, default: {} });
+		SETTINGS.register(this.PREF_FILE, { scope: 'client', config: false, type: Object, default: { name: '', date: true } });
+		SETTINGS.register(this.PREF_BG_HIDE, { scope: 'client', config: false, type: Boolean, default: false });
+		SETTINGS.register(this.PREF_BG_COLO, { scope: 'client', config: false, type: String, default: '#999999' });
+		SETTINGS.register(this.PREF_BG_ALPH, { scope: 'client', config: false, type: Number, default: 100 });
 
 		this._layerFilters = SETTINGS.get(this.PREF_LYRS);
 		this._fileSettings = SETTINGS.get(this.PREF_FILE);
@@ -340,20 +295,20 @@ export default class CaptureGameScreen {
 	 * @returns The HiddenPlaceablesSnapshot
 	 * @throws If `beginCapture()` has been invoked and `endCapture()` has not been subsequently invoked yet.
 	 */
-	static async beginCapture(): Promise<PlaceableObject[]> {
+	static beginCapture(): PlaceableObject[] {
 		if (this._captureInProgress) throw Error('Capture In Progress');
 		// Collect Hidden Items
 		const hiddenItemsSnapshot: PlaceableObject[] = [];
 		for (let layerName of this.LayersWithHiddenPlaceables) {
 			const layer = (<Canvas>canvas).getLayer(layerName) as PlaceablesLayer;
-			(layer.objects.children as PlaceableObject[]).forEach(x => {
-				if ((<any>x.data).hidden === undefined || !(<any>x.data).hidden) return;
-				x.renderable = false;
-				(<any>x.data).hidden = false;
-				x.data.flags.df_arch_hidden = true;
-				hiddenItemsSnapshot.push(x);
-				x.refresh();
-			});
+			for (let object of layer.objects.children as PlaceableObject[]) {
+				if ((<any>object.data).hidden === undefined || !(<any>object.data).hidden) continue;
+				object.renderable = false;
+				(<any>object.data).hidden = false;
+				object.data.flags.df_arch_hidden = true;
+				hiddenItemsSnapshot.push(object);
+				object.refresh();
+			}
 		}
 		return hiddenItemsSnapshot;
 	}
@@ -366,11 +321,11 @@ export default class CaptureGameScreen {
 		(<any>canvas.app.renderer).backgroundAlpha = 1.0;
 
 		// Correct Hidden Items
-		hiddenItemsSnapshot.forEach(x => {
-			(<any>x.data).hidden = true;
-			x.renderable = true;
-			delete x.data.flags.df_arch_hidden;
-		});
+		for (let object of hiddenItemsSnapshot) {
+			(<any>object.data).hidden = true;
+			object.renderable = true;
+			delete object.data.flags.df_arch_hidden;
+		}
 		// Correct Layers
 		for (let layer of (<Canvas>canvas).layers) {
 			layer.renderable = true;

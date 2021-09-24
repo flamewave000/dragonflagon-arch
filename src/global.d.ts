@@ -65,6 +65,7 @@ declare class Canvas {
 	stage: PIXI.Container;
 	hud: HeadsUpDisplay;
 	background: any; // TODO: BackgroundLayer
+	foreground: any; // TODO: BackgroundLayer
 	tiles: any; //TODO: TilesLayer
 	drawings: any; //TODO: DrawingsLayer
 	grid: GridLayer;

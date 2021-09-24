@@ -1,11 +1,11 @@
 <form class="dfarch-flatten-form">
-	<input class="shrink" type="checkbox" id="lights" name="lights" {{#if pads}}checked{{/if}} />
+	<input class="shrink" type="checkbox" id="lights" name="lights" {{#if lights}}checked{{/if}} />
 	<label class="grow" for="lights">{{localize 'DF_ARCHITECT.TileFlattener.RenderLighting'}}</label>
 	<div></div>
-	<input class="shrink" type="checkbox" id="hideBG" name="hideBG" {{#if pads}}checked{{/if}} />
-	<label class="grow" for="hideBG">{{localize 'DF_ARCHITECT.TileFlattener.RenderBackground'}}</label>
+	<input class="shrink" type="checkbox" id="showBG" name="showBG" {{#if showBG}}checked{{/if}} />
+	<label class="grow" for="showBG">{{localize 'DF_ARCHITECT.TileFlattener.RenderBackground'}}</label>
 	<div></div>
-	<input class="shrink" type="checkbox" id="hidden" name="hidden" {{#if pads}}checked{{/if}} />
+	<input class="shrink" type="checkbox" id="hidden" name="hidden" {{#if hidden}}checked{{/if}} />
 	<label class="grow" for="hidden">{{localize 'DF_ARCHITECT.TileFlattener.RenderHiddenTiles'}}</label>
 	<div></div>
 	<input class="shrink" type="radio" value="all" id="canvas" name="select" {{#unless select}}checked{{/unless}}>

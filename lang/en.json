@@ -152,7 +152,7 @@
 			"FlattenButton": "Flatten Tiles",
 			"RenderLighting": "Render Lighting (background will not be transparent)",
 			"RenderBackground": "Render Background Image",
-			"RenderHiddenTiles": "Render Hidden Tiles",
+			"RenderHiddenTiles": "Render Hidden Tiles (Entire Canvas Only)",
 			"RenderSelectedOnly": "Selected Tiles",
 			"RenderEntireCanvas": "Entire Canvas",
 			"Margin": "Additional padding to be rendered outside of selected tiles"
