@@ -5,7 +5,7 @@
 	<input class="shrink" type="checkbox" id="showBG" name="showBG" {{#if showBG}}checked{{/if}} />
 	<label class="grow" for="showBG">{{localize 'DF_ARCHITECT.TileFlattener.RenderBackground'}}</label>
 	<div></div>
-	<input class="shrink" type="checkbox" id="hidden" name="hidden" {{#if hidden}}checked{{/if}} />
+	<input class="shrink" type="checkbox" id="hidden" name="hidden" {{#if hidden}}checked{{/if}} {{#if select}}disabled{{/if}} />
 	<label class="grow" for="hidden">{{localize 'DF_ARCHITECT.TileFlattener.RenderHiddenTiles'}}</label>
 	<div></div>
 	<input class="shrink" type="radio" value="all" id="canvas" name="select" {{#unless select}}checked{{/unless}}>
@@ -13,32 +13,32 @@
 	<div></div>
 	<input class="shrink" type="radio" value="cur" id="tiles" name="select" {{#if select}}checked{{/if}}>
 	<label class="grow" for="tiles">{{localize 'DF_ARCHITECT.TileFlattener.RenderSelectedOnly'}}</label>
-	<div><p>{{localize 'DF_ARCHITECT.TileFlattener.Margin'}}</p></div>
+	<div><p>{{{localize 'DF_ARCHITECT.TileFlattener.Margin'}}}</p></div>
 	<span class="grow">&nbsp;</span>
 	<table class="shrink">
 		<tr>
 			<td></td>
 			<td>
-				<input class="overlayed" type="number" step="1" value="{{margin.t}}" id="top">
+				<input class="overlayed" type="number" step="1" value="{{margin.t}}" id="top" {{#unless select}}disabled{{/unless}}>
 				<span class="input-overlay">px</span>
 			</td>
 			<td></td>
 		</tr>
 		<tr>
 			<td>
-				<input class="overlayed" type="number" step="1" value="{{margin.l}}" id="left">
+				<input class="overlayed" type="number" step="1" value="{{margin.l}}" id="left" {{#unless select}}disabled{{/unless}}>
 				<span class="input-overlay">px</span>
 			</td>
 			<td><i class="fas fa-arrows-alt"></i></td>
 			<td>
-				<input class="overlayed" type="number" step="1" value="{{margin.r}}" id="right">
+				<input class="overlayed" type="number" step="1" value="{{margin.r}}" id="right" {{#unless select}}disabled{{/unless}}>
 				<span class="input-overlay">px</span>
 			</td>
 		</tr>
 		<tr>
 			<td></td>
 			<td>
-				<input class="overlayed" type="number" step="1" value="{{margin.b}}" id="bottom">
+				<input class="overlayed" type="number" step="1" value="{{margin.b}}" id="bottom" {{#unless select}}disabled{{/unless}}>
 				<span class="input-overlay">px</span>
 			</td>
 			<td></td>

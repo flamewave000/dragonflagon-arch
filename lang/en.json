@@ -155,7 +155,7 @@
 			"RenderHiddenTiles": "Render Hidden Tiles (Entire Canvas Only)",
 			"RenderSelectedOnly": "Selected Tiles",
 			"RenderEntireCanvas": "Entire Canvas",
-			"Margin": "Additional padding to be rendered outside of selected tiles"
+			"Margin": "Additional padding to be rendered outside of <b>Selected Tiles</b>"
 		}
 	},
 	"LAYERS": {
