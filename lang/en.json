@@ -148,6 +148,7 @@
 			"InvertRadiusButton": "Invert Dim/Bright radii to Light and Dark (positive/negative values)"
 		},
 		"TileFlattener": {
+			"CapturePromptTitle": "Flatten Tiles",
 			"Label": "Flatten Tiles into Single Image",
 			"FlattenButton": "Flatten Tiles",
 			"RenderLighting": "Render Lighting (background will not be transparent)",
@@ -155,7 +156,26 @@
 			"RenderHiddenTiles": "Render Hidden Tiles (Entire Canvas Only)",
 			"RenderSelectedOnly": "Selected Tiles",
 			"RenderEntireCanvas": "Entire Canvas",
-			"Margin": "Additional padding to be rendered outside of <b>Selected Tiles</b>"
+			"Margin": "Additional padding to be rendered outside of <b>Selected Tiles</b>",
+			"ImageFolderTitle": "Flattened Tile Images Folder",
+			"SaveImageDialog": {
+				"Title": "Save Image",
+				"SaveServer": "Save on Server",
+				"SaveLocal": "Save on Computer",
+				"FileNameLabel": "File Name: ",
+				"FileNamePlaceholder": "tile-flattener-"
+			},
+			"SceneReplaceDialog": {
+				"Title": "Scene Replacement",
+				"WhatToDo": "Would you like Tile Flattener to do any of these processes for you?",
+				"ReplaceBackground": "Replace the current scene's background",
+				"ReplaceBackgroundHint": "The current scene's background will be changed to the newly created image.",
+				"CloneScene": "Clone the current scene and use image as background",
+				"CloneSceneHint": "Clone the current scene's configuration but NOT its content and set its background to the newly created image.",
+				"ImportToScene": "Import as new tile in current Scene",
+				"ImportToSceneHint": "Import the new image as a tile into the center of the current scene.",
+				"DoNothing": "Do Nothing"
+			}
 		}
 	},
 	"LAYERS": {

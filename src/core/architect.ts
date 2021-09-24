@@ -35,6 +35,21 @@ export default class ARCHITECT {
 		dialog.render(true);
 	}
 
+	static Base64ToBlob(b64Data: string, contentType: string, sliceSize = 512) {
+		const byteCharacters = atob(b64Data);
+		const byteArrays: Uint8Array[] = [];
+		for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+			const slice = byteCharacters.slice(offset, offset + sliceSize);
+			const byteNumbers = new Array<number>(slice.length);
+			for (let i = 0; i < slice.length; i++) {
+				byteNumbers[i] = slice.charCodeAt(i);
+			}
+			const byteArray = new Uint8Array(byteNumbers);
+			byteArrays.push(byteArray);
+		}
+		return new Blob(byteArrays, { type: contentType });
+	}
+
 	private static readonly GR_BG_HI = '44';
 	private static readonly GR_BG_LO = '08';
 	private static readonly GR_BG_BDR = '36a';

@@ -17,6 +17,8 @@ declare namespace Scene {
 		description: string;
 		drawings: Drawing['data'][];
 		fogExploration: boolean;
+		fogReset: number;
+		foreground: string;
 		globalLight: boolean;
 		globalLightThreshold: number;
 		grid: number;
@@ -28,7 +30,7 @@ declare namespace Scene {
 		height: number;
 		img: string;
 		initial: { x: number; y: number; scale: number } | null;
-		journal: string;
+		journal: string | null;
 		lights: AmbientLight['data'][];
 		name: string;
 		navName: string;
@@ -37,7 +39,8 @@ declare namespace Scene {
 		notes: Note['data'][];
 		padding: number;
 		permission: Entity.Permission;
-		playlist: string;
+		playlist: string | null;
+		playlistSound: string | null;
 		shiftX: number;
 		shiftY: number;
 		size: number;

@@ -13,6 +13,8 @@ declare namespace cv {
 		delete(): void;
 		isDeleted(): boolean;
 		size(): { width: number, height: number };
+		get rows(): number;
+		get cols(): number;
 	}
 	class MatVector {
 		push_back(mat: Mat): void;
@@ -23,6 +25,12 @@ declare namespace cv {
 	function imshow(dst: HTMLCanvasElement, image: Mat): void;
 	function hconcat(vector: MatVector, dst: Mat): void;
 	function vconcat(vector: MatVector, dst: Mat): void;
+}
+
+interface ImageData {
+	data: string;
+	width: number;
+	height: number;
 }
 
 export default class CaptureGameScreen {
@@ -155,7 +163,7 @@ export default class CaptureGameScreen {
 							SETTINGS.set(this.PREF_TRGT, target),
 							SETTINGS.set(this.PREF_PADS, keepPadding)]);
 						await dialog.close();
-						var imageData: string;
+						var imageData: ImageData;
 						try {
 							switch (format) {
 								case "png":
@@ -174,10 +182,10 @@ export default class CaptureGameScreen {
 						} finally {
 							this.endCapture(hiddenItemsSnapshot);
 						}
-						const extension = imageData.match(/^data:image\/(.+);/)[1];
+						const extension = imageData.data.match(/^data:image\/(.+);/)[1];
 						const linkName = this._fileSettings?.name?.length === 0 ? 'screenshot' : this._fileSettings.name
 						const link = document.createElement('a');
-						link.href = imageData;
+						link.href = imageData.data;
 						if (this._fileSettings.date) {
 							const linkDate = new Date().toISOString().replace(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}).+/, '$1$2$3-$4$5$6');
 							link.download = `${linkName}-${linkDate}.${extension}`;
@@ -417,7 +425,7 @@ export default class CaptureGameScreen {
 		}
 	}
 
-	static async captureView(format: string, compression: number): Promise<string> {
+	static async captureView(format: string, compression: number): Promise<ImageData> {
 		canvas = <Canvas>canvas;
 		return await CaptureGameScreen.captureCanvas(format, compression, false, {
 			x: canvas.stage.pivot.x,
@@ -428,7 +436,7 @@ export default class CaptureGameScreen {
 		});
 	}
 
-	static async captureCanvas(format: string, compression: number, keepPadding: boolean = false, view?: { x: number, y: number, w: number, h: number, s: number }): Promise<string> {
+	static async captureCanvas(format: string, compression: number, keepPadding: boolean = false, view?: { x: number, y: number, w: number, h: number, s: number }): Promise<ImageData> {
 		const afterDOMUpdate = (block: () => void) => setTimeout(block, 10);
 		const waitForDOMUpdate = async () => new Promise<void>(res => afterDOMUpdate(res));
 		const DELETE_RESOURCES = (resources: any | any[]) => {
@@ -537,7 +545,7 @@ export default class CaptureGameScreen {
 			// Game Board Canvas Element
 			const boardCanvasElement = $('canvas#board');
 			// Array of images in the form of Base64 encoded strings
-			const images: string[] = [];
+			const images: ImageData[] = [];
 			try {
 				const widthSplitMultiplier = view.s != 1 ? Math.floor(split[0] / 2) : split[0] / 2;
 				const heightSplitMultiplier = view.s != 1 ? Math.floor(split[1] / 2) : split[1] / 2;
@@ -574,7 +582,10 @@ export default class CaptureGameScreen {
 						// Wait for DOM to Update
 						await waitForDOMUpdate();
 						// Render a single image for the given Sector
-						images.push(canvas.app.renderer.context.renderer.extract.base64(null, format, compression));
+						images.push({
+							data: canvas.app.renderer.context.renderer.extract.base64(null, format, compression),
+							width, height
+						});
 					}
 				}
 			}
@@ -612,7 +623,7 @@ export default class CaptureGameScreen {
 					await waitForDOMUpdate();
 					// If there is only 1 Sector per ROW
 					if (split[0] === 1) {
-						finalMats.push(await GetImageMat(images[cy]));
+						finalMats.push(await GetImageMat(images[cy].data));
 						finalVec.push_back(finalMats[cy]);
 						console.log(finalMats[cy].size());
 						// Continue to next image
@@ -627,7 +638,7 @@ export default class CaptureGameScreen {
 						// Convert image datas to Mats
 						for (let cx = 0; cx < split[0]; cx++) {
 							// Extract the Mat for the current Image
-							renderTarget = await GetImageMat(images[(cy * split[0]) + cx]);
+							renderTarget = await GetImageMat(images[(cy * split[0]) + cx].data);
 							// Append Mat onto rowMat array for cleanup
 							rowMats.push(renderTarget);
 							// Append Mat to MetVector for stitching
@@ -661,7 +672,7 @@ export default class CaptureGameScreen {
 			var finalImage: cv.Mat;
 			try {
 				if (finalMats.length == 1) {
-					resolveCapture(GetImageData(finalMats[0]));
+					resolveCapture({ data: GetImageData(finalMats[0]), width: finalMats[0].cols, height: finalMats[0].rows });
 					DELETE_RESOURCES([finalVec, finalMats]);
 					return;
 				}
@@ -673,7 +684,7 @@ export default class CaptureGameScreen {
 				// Delete the final vector and mats
 				DELETE_RESOURCES([finalVec, finalMats]);
 				// Retrieve the rendered image data and return it.
-				resolveCapture(GetImageData(finalImage));
+				resolveCapture({ data: GetImageData(finalImage), width: finalImage.cols, height: finalImage.rows });
 			} catch (error) {
 				console.error('Failed to complete image stitching!', error);
 				ui.notifications.error("DF_ARCHITECT.CaptureGameScreen.ScreenCapture.ErrorStitchingFailure".localize(), { permanent: true });
