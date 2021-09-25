@@ -174,7 +174,7 @@
 				"ReplaceBackground": "Replace the current scene's background",
 				"ReplaceBackgroundHint": "The current scene's background will be changed to the newly created image.",
 				"CloneScene": "Clone the current scene and use image as background",
-				"CloneSceneHint": "Clone the current scene's configuration but NOT its content and set its background to the newly created image.",
+				"CloneSceneHint": "Clones the current scene and its content and sets the new scene's background to the newly created image.",
 				"ImportToScene": "Import as a new tile in current Scene",
 				"ImportToSceneHint": "Import the new image as a tile into the center of the current scene.",
 				"DoNothing": "Do Nothing"

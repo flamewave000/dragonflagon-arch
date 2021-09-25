@@ -96,6 +96,12 @@ Two layers can be mapped to a hotkey that will quickly switch back and forth bet
 
 You can now capture the current scene's canvas. Kind of like a screenshot, but it will render either the currently visible portion of the canvas visible in the browser window, or it will render the entire canvas. You can also hide individual layers from the rendered image. This is perfect for removing all lighting, weather, tokens, tiles, drawings, etc. without having to change anything to the gameboard itself. The canvas capture dialog will give you a Live Preview of this filtering in action. You can also have Walls, Light Sources, Sound Sources get rendered as if you were on those layers.
 
+#### Image Saving
+
+As of v3.0, Images are now saved using a Save Image prompt that provides a preview of the result and the option to save either on your local computer or the server.
+
+![Image Save Dialog](.assets/general-capture-save.png)
+
 #### Hidden Tokens, Tiles, Drawings
 
 Tokens, Tiles, and Drawings can be made "hidden" in FoundryVTT. By default, Canvas Capture will completely remove these items from the rendering. There is, however, an option to Show Hidden for each individual layer. This will render the hidden Tokens, Tiles, or Drawings to the final image.
@@ -135,6 +141,156 @@ Also, when you have Hidden Tokens/Tiles/Drawings, those will be default not be r
 |Demo|Result|
 |:-:|:-:|
 |![Layer filtering demo](.assets/general-capture-filter.gif)|<img src=".assets/general-capture-filter.png" alt="Layer filtering result" style="zoom: 33%;" />|
+
+#### Public Canvas Capture API
+
+Macro and Module developer can now access the `CanvasCapture` processor. You simply follow some specific steps and you can capture any portion/zoom of the canvas. A working example can be found below:
+
+```JavaScript
+async function CaptureCanvas() {
+	const session = CanvasCapture.beginCapture(false);
+	if (!session) {
+		// A session is already running...
+		return;
+	}
+	// Hide the Token Layer from render
+	CanvasCapture.toggleLayer("TokenLayer", false);
+	// Render the Hidden Tiles
+	CanvasCapture.toggleHidden("BackgroundLayer", true);
+	// Show the light icons and boundries
+	CanvasCapture.toggleControls("LightingLayer", true);
+	// Render the final image
+	const imageData = CanvasCapture.render({
+		format: "image/jpeg", // Supports jpeg, png, and (chromium only)webp
+		quality: 0.9,
+		view: {
+			x: 100, y: 100,
+			w: 400, h: 400,
+			s: 1.0
+		}
+	});
+	CanvasCapture.endCapture(session);
+	const filePath = await CanvasCapture.saveImageData({image: imageData});
+	if (filePath !== null) {
+		// User selected to save on the server
+	} else {
+		// Use the server image path...
+	}
+}
+```
+
+##### API Definition
+
+```TypeScript
+// Contains a complete image capture result
+interface ImageData {
+	// Base64 Data URI
+	data: string;
+	// Width of image
+	width: number;
+	// Height of image
+	height: number;
+}
+
+class CanvasCapture {
+	// Known layers with Invisible Placeables (ie. Lights, Sounds, and Walls)
+	static readonly LayersWithInvisiblePlaceables;
+	// Known layers with Hideable entities (ie. Tiles, Tokens, and Drawings)
+	static readonly LayersWithHiddenPlaceables;
+	/**
+	 * Begins the process of capturing the canvas.
+	 * @param throwOnError If true, an error is thrown if a Capture is already running; otherwise function will return null.
+	 * @returns The HiddenPlaceablesSnapshot
+	 * @throws If `beginCapture()` has been invoked and `endCapture()` has not been subsequently invoked yet.
+	 */
+	static beginCapture(throwOnError: boolean = true): CaptureSession;
+    /**
+	 * Ends a capture session. Resetting all changes to layers and objects.
+	 * @param session The {@link CaptureSession} object returned by {@link beginCapture}
+	 * @returns 
+	 */
+	static endCapture(session: CaptureSession): boolean;
+	/**
+	 * Renders the Canvas to a single image.
+	 * @param format MIME type of final image. Supports `image/png`, `image/jpeg`, (Chromium only) `image/webp`.
+	 * @param quality The percent quality from 0 to 1 for Jpeg and WebP images.
+	 * @param keepPadding (optional) Includes the canvas padding if no {@link view} is given.
+	 * @param view The region of the canvas and scale to render.
+	 * @returns {@link ImageData} object containing the rendered image
+	 */
+	static async render({ format: string, quality: number, keepPadding?: boolean, view?: { x: number, y: number, w: number, h: number, s: number } }): Promise<ImageData>;
+	/**
+	 * Toggle the visibility of the given layer.
+	 * @param layerName String name of the layer to shown/hidden.
+	 * @param show true to show; false to hide.
+	 */
+	static toggleLayer(layerName: string, show: boolean);
+	/**
+	 * Toggle the visibility of hidden entities on the given layer.
+	 * @param layerName String name of the layer to show/hide entities on.
+	 * @param show true to show; false to hide.
+	 */
+	static toggleHidden(layerName: string, show: boolean);
+	/**
+	 * Toggle the visibility of entity controls on the given layer.
+	 * @param layerName String name of the layer to show/hide entity controls on.
+	 * @param show true to show; false to hide.
+	 */
+	static toggleControls(layerName: string, show: boolean);
+	/**
+	 * Prompt the user to save the image data to either their computer or the server.
+	 * @param image {@link ImageData} object to be saved.
+	 * @param dialogTitle (optional) Title to display in the Dialog Titlebar.
+	 * @param defaultFileName (optional) Default file name to be used as a placeholder. Default: 'capture'
+	 * @param folder (optional) Folder path to save the image to (must already exist).
+	 * @param folderSource (optional) Storage source for saving the file (ie. 'data', 'public', or 's3')
+	 * @param allowDownload (optional) If true, allow the user to download the image to their computer; otherwise the option will be hidden.
+	 * @returns String containing the server file path to the image is uploaded; otherwise null if the user saved locally, or undefined if the user cancelled the process.
+	 */
+	static async saveImageData({ image: ImageData, dialogTitle: string, defaultFileName: string, folder: string, folderSource: string, allowDownload: boolean }): Promise<string>;
+}
+```
+
+## Tiles Features
+
+### Tile Flattener
+
+This feature utilises the Canvas Capture API to provide a quick and easy process for flattening a map of tiles into a single image for optimising a scene and reduce load times and increase performance. After capturing the tiles, you can then either download the image, or upload it to the server. If you upload it to the server, you will also be presented with additional options of what to do with the image.
+
+<img src=".assets/tiles-flatten-button.png" alt="Tiled Map" style="zoom: 25%;" />
+
+#### Tile Flatten Config
+
+<img src=".assets/tiles-flatten-config.png" alt="Tile Flattener Config" style="zoom:75%;" />
+
+| Option               | Description                                                  |
+| -------------------- | ------------------------------------------------------------ |
+| Render&nbsp;Lighting | If enabled, the lighting layer will be rendered above the tiles. Great for baking lighting into a night map if you want to remove the lights for a more performant map. |
+| Render&nbsp;Background&nbsp;Image | If disabled, the scene's background image will be hidden. If you want to create a set of tiles that sit on a transparent background, disabling this will allow you to do that. |
+| Render&nbsp;Hidden&nbsp;Tiles  | If enabled, hidden tiles will get rendered to the final image. This is only relevant if you have the "Entire Canvas" option selected. |
+| Entire&nbsp;Canvas        | Renders the entire canvas and all of the background and roof tiles (not including scene padding) to the final image |
+| Selected&nbsp;Tiles       | Will only render the tiles that are currently selected, including selected hidden tiles. The final image will be cropped to the area the selected tiles are in. |
+| Padding              | (Selected Tiles Option Only) Adds additional pixels of padding around the selected tiles. Useful for including more of the background image, or adding some extra spacing along the border. |
+| File Format | Supported file types:<br />- PNG<br />- JPEG<br />-WebP (Chromium browsers only) |
+| Quality | The compression quality for JPEG and WebP images. |
+
+#### Save Image Dialog
+
+After clicking the <kbd>Flatten Tiles</kbd> button, you will be prompted with a dialog containing a preview of the final image and the options to save to your local computer, or to the FoundryVTT Server. The location on the server is configurable in the Module Settings.
+
+<img src=".assets/tiles-flatten-save.png" alt="Save Image" style="zoom: 75%;" />
+
+#### Save to Server Additional Options
+
+If You select the <kbd>Save on Server</kbd> option, you will be given an additional prompt after saving that allows you to do some automated processes.
+
+![What To Do With Image?](.assets/tiles-flatten-scene-replace.png)
+
+| Options                                                      | Description                                                  |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| <kbd>Replace the current scene's background</kbd>            | The current scene's background will be changed to the newly created image. |
+| <kbd>Clone the current scene and use the image as background</kbd> | Clones the current scene and its content and sets the new scene's background to the newly created image. |
+| <kbd>Import as a new tile in current Scene</kbd>             | Import the new image as a tile into the center of the current scene. |
 
 
 

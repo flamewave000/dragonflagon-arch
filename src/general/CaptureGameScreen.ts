@@ -165,27 +165,14 @@ export default class CaptureGameScreen {
 						await dialog.close();
 						var imageData: ImageData;
 						try {
-							switch (format) {
-								case "png":
-									imageData = await call('image/png', compression, keepPadding);
-									break;
-								case "jpeg":
-									imageData = await call('image/jpeg', compression, keepPadding);
-									break;
-								case "webp":
-									imageData = await call('image/webp', compression, keepPadding);
-									break;
-							}
+							imageData = await call(<any>{ format: 'image/' + format, compression, keepPadding });
 						} catch (error) {
 							console.warn(error);
 							return;
 						} finally {
 							this.endCapture(session);
 						}
-						await this.saveImageData({
-							image: imageData,
-							format: imageData.data.match(/^data:image\/(.+);/)[1]
-						});
+						await this.saveImageData({ image: imageData });
 					}
 				}
 			},
@@ -322,10 +309,14 @@ export default class CaptureGameScreen {
 		return CaptureGameScreen._currentSession;
 	}
 
-	// Reset the canvas layers to their proper activation states
-	static endCapture(captureSession: CaptureSession): boolean {
+	/**
+	 * Ends a capture session. Resetting all changes to layers and objects.
+	 * @param session The {@link CaptureSession} object returned by {@link beginCapture}
+	 * @returns 
+	 */
+	static endCapture(session: CaptureSession): boolean {
 		if (!CaptureGameScreen._captureInProgress) return false;
-		if (captureSession === null || captureSession.id !== CaptureGameScreen._currentSession?.id) return false;
+		if (session === null || session.id !== CaptureGameScreen._currentSession?.id) return false;
 		CaptureGameScreen._captureInProgress = false;
 		// Cleanup Background
 		canvas.background.bg.visible = true;
@@ -333,7 +324,7 @@ export default class CaptureGameScreen {
 		(<any>canvas.app.renderer).backgroundAlpha = 1.0;
 
 		// Correct Hidden Items
-		for (let object of captureSession.hiddenItemsSnapshot as any[]) {
+		for (let object of session.hiddenItemsSnapshot as any[]) {
 			object.data.hidden = true;
 			object.renderable = true;
 			delete object.data.flags.df_arch_hidden;
@@ -354,14 +345,24 @@ export default class CaptureGameScreen {
 		// Correct Active Layer
 		const controlName = ui.controls.activeControl;
 		const control = ui.controls.controls.find(c => c.name === controlName);
-		if (!captureSession.foregroundPreviouslyActive) canvas.foreground.deactivate();
+		if (!session.foregroundPreviouslyActive) canvas.foreground.deactivate();
 		if (control && control.layer) canvas[control.layer].activate();
 		return true;
 	}
 
+	/**
+	 * Toggle the visibility of the given layer.
+	 * @param layerName String name of the layer to shown/hidden.
+	 * @param show true to show; false to hide.
+	 */
 	static toggleLayer(layerName: string, show: boolean) {
 		(<Canvas>canvas).getLayer(layerName).renderable = show;
 	}
+	/**
+	 * Toggle the visibility of hidden entities on the given layer.
+	 * @param layerName String name of the layer to show/hide entities on.
+	 * @param show true to show; false to hide.
+	 */
 	static toggleHidden(layerName: string, show: boolean) {
 		const layer = <PlaceablesLayer>canvas.getLayer(layerName);
 		(layer.objects.children as PlaceableObject[]).forEach(x => {
@@ -369,6 +370,11 @@ export default class CaptureGameScreen {
 			x.renderable = show;
 		});
 	}
+	/**
+	 * Toggle the visibility of entity controls on the given layer.
+	 * @param layerName String name of the layer to show/hide entity controls on.
+	 * @param show true to show; false to hide.
+	 */
 	static toggleControls(layerName: string, show: boolean) {
 		const layer = <PlaceablesLayer>canvas.getLayer(layerName);
 		this._getLayerFilter(layerName).c = show;
@@ -431,18 +437,29 @@ export default class CaptureGameScreen {
 		}
 	}
 
-	static async captureView(format: string, compression: number): Promise<ImageData> {
+	static async captureView({ format, quality }: { format: string, quality: number }): Promise<ImageData> {
 		canvas = <Canvas>canvas;
-		return await CaptureGameScreen.captureCanvas(format, compression, false, {
-			x: canvas.stage.pivot.x,
-			y: canvas.stage.pivot.y,
-			w: canvas.app.renderer.width,
-			h: canvas.app.renderer.height,
-			s: canvas.stage.scale.x
+		return await CaptureGameScreen.captureCanvas({
+			format, quality, view: {
+				x: canvas.stage.pivot.x,
+				y: canvas.stage.pivot.y,
+				w: canvas.app.renderer.width,
+				h: canvas.app.renderer.height,
+				s: canvas.stage.scale.x
+			}
 		});
 	}
 
-	static async captureCanvas(format: string, compression: number, keepPadding: boolean = false, view?: { x: number, y: number, w: number, h: number, s: number }): Promise<ImageData> {
+	/**
+	 * Renders the Canvas to a single image.
+	 * @param format MIME type of final image. Supports `image/png`, `image/jpeg`, (Chromium only) `image/webp`.
+	 * @param quality The percent quality from 0 to 1 for Jpeg and WebP images.
+	 * @param keepPadding (optional) Includes the canvas padding if no {@link view} is given.
+	 * @param view The region of the canvas and scale to render.
+	 * @returns {@link ImageData} object containing the rendered image
+	 */
+	static async captureCanvas({ format, quality, keepPadding, view }
+		: { format: string, quality: number, keepPadding?: boolean, view?: { x: number, y: number, w: number, h: number, s: number } }): Promise<ImageData> {
 		const afterDOMUpdate = (block: () => void) => setTimeout(block, 10);
 		const waitForDOMUpdate = async () => new Promise<void>(res => afterDOMUpdate(res));
 		const DELETE_RESOURCES = (resources: any | any[]) => {
@@ -479,7 +496,7 @@ export default class CaptureGameScreen {
 		});
 		const GetImageData = (image: cv.Mat) => {
 			cv.imshow(targetCanvas, image);
-			return targetCanvas.toDataURL(format, compression);
+			return targetCanvas.toDataURL(format, quality);
 		}
 
 		return new Promise(async (resolveCapture, rejectCapture) => {
@@ -599,7 +616,7 @@ export default class CaptureGameScreen {
 						await waitForDOMUpdate();
 						// Render a single image for the given Sector
 						images.push({
-							data: canvas.app.renderer.context.renderer.extract.base64(null, format, compression),
+							data: canvas.app.renderer.context.renderer.extract.base64(null, format, quality),
 							width, height
 						});
 					}
@@ -713,8 +730,18 @@ export default class CaptureGameScreen {
 		});
 	}
 
-	static async saveImageData({ image, format, defaultFileName, dialogTitle, folder, folderSource }
-		: { image: ImageData, format: string, defaultFileName?: string, dialogTitle?: string, folder?: string, folderSource?: string })
+	/**
+	 * Prompt the user to save the image data to either their computer or the server.
+	 * @param image {@link ImageData} object to be saved.
+	 * @param dialogTitle (optional) Title to display in the Dialog Titlebar.
+	 * @param defaultFileName (optional) Default file name to be used as a placeholder. Default: 'capture'
+	 * @param folder (optional) Folder path to save the image to (must already exist).
+	 * @param folderSource (optional) Storage source for saving the file (ie. 'data', 'public', or 's3')
+	 * @param allowDownload (optional) If true, allow the user to download the image to their computer; otherwise the option will be hidden.
+	 * @returns String containing the server file path to the image is uploaded; otherwise null if the user saved locally, or undefined if the user cancelled the process.
+	 */
+	static async saveImageData({ image, dialogTitle, defaultFileName, folder, folderSource, allowDownload }
+		: { image: ImageData, dialogTitle?: string, defaultFileName?: string, folder?: string, folderSource?: string, allowDownload?: boolean })
 		: Promise<string> {
 		return new Promise(async (res) => {
 			var resolved = false;
@@ -726,77 +753,81 @@ export default class CaptureGameScreen {
 			var ignoreClose = false;
 
 			const linkDate = new Date().toISOString().replace(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}).+/, '$3$4$5$6');
+
+			const buttons: Record<string, Dialog.Button<unknown>> = {
+				cancel: {
+					icon: '<i class="fas fa-times"></i>',
+					label: 'DF_ARCHITECT.General.Cancel'.localize(),
+					callback: () => { dialog.close(); }
+				},
+				local: {
+					icon: '<i class="fas fa-download"></i>',
+					label: 'DF_ARCHITECT.CaptureGameScreen.SaveImageDialog.SaveLocal'.localize(),
+					callback: (html) => {
+						html = html instanceof HTMLElement ? $(html) : html;
+						const fileName = html.find('#filename')[0] as HTMLInputElement;
+						const link = document.createElement('a') as HTMLAnchorElement;
+						link.href = image.data;
+						link.download = fileName.value || fileName.placeholder;
+						link.click();
+						resolve(null);
+					}
+				},
+				server: {
+					icon: '<i class="fas fa-upload"></i>',
+					label: 'DF_ARCHITECT.CaptureGameScreen.SaveImageDialog.SaveServer'.localize(),
+					callback: async (html) => {
+						ignoreClose = true;
+						html = html instanceof HTMLElement ? $(html) : html;
+						const fileNameElement = html.find('#filename')[0] as HTMLInputElement;
+						const fileName = fileNameElement.value || fileNameElement.placeholder;
+						const parts = image.data.match(/^data:(.+);base64,(.+)/);
+						const data = ARCHITECT.Base64ToBlob(parts[2], parts[1]);
+						const file = new File([data], fileName, {});
+
+						if (!folder) {
+							const result = await new Promise<{ path: string, source: string }>((res) => {
+								var resolved = false;
+								const picker = new FilePicker(<any>{
+									title: dialogTitle,
+									type: 'folder',
+									folderSource: folderSource || 'data',
+									callback: async (path: string) => {
+										resolved = true;
+										folderSource = picker.activeSource;
+										folder = path
+										res({ path, source: picker.activeSource });
+									},
+								});
+								const tmpClose = picker.close;
+								picker.close = (o: Application.CloseOptions) => {
+									res({ path: null, source: null });
+									return tmpClose.bind(picker).call(o);
+								};
+								picker.browse();
+							});
+							if (!result.path) {
+								resolve(null);
+								return;
+							}
+							folder = result.path;
+							folderSource = result.source;
+						}
+						await FilePicker.upload(folderSource, folder, file);
+						resolve(folder + '/' + fileName);
+					}
+				},
+			};
+			if (!allowDownload === false)
+				delete buttons.local;
 			const dialog: Dialog = new Dialog({
 				title: dialogTitle || 'DF_ARCHITECT.CaptureGameScreen.SaveImageDialog.Title'.localize(),
 				content: await renderTemplate(`modules/${ARCHITECT.MOD_NAME}/templates/tile-flatten-save.hbs`, {
 					placeholder: (defaultFileName || 'DF_ARCHITECT.CaptureGameScreen.SaveImageDialog.DefaultFileName'.localize()) + '-' + linkDate,
-					format, image: image.data
+					format: image.data.match(/data:image\/(.+);/)[1], image: image.data
 				}),
-				close: () => { if (!ignoreClose) resolve(null) },
-				buttons: {
-					cancel: {
-						icon: '<i class="fas fa-times"></i>',
-						label: 'DF_ARCHITECT.General.Cancel'.localize(),
-						callback: () => { dialog.close(); resolve(null); }
-					},
-					local: {
-						icon: '<i class="fas fa-download"></i>',
-						label: 'DF_ARCHITECT.CaptureGameScreen.SaveImageDialog.SaveLocal'.localize(),
-						callback: (html) => {
-							html = html instanceof HTMLElement ? $(html) : html;
-							const fileName = html.find('#filename')[0] as HTMLInputElement;
-							const link = document.createElement('a') as HTMLAnchorElement;
-							link.href = image.data;
-							link.download = fileName.value || fileName.placeholder;
-							link.click();
-						}
-					},
-					server: {
-						icon: '<i class="fas fa-upload"></i>',
-						label: 'DF_ARCHITECT.CaptureGameScreen.SaveImageDialog.SaveServer'.localize(),
-						callback: async (html) => {
-							ignoreClose = true;
-							html = html instanceof HTMLElement ? $(html) : html;
-							const fileNameElement = html.find('#filename')[0] as HTMLInputElement;
-							const fileName = fileNameElement.value || fileNameElement.placeholder;
-							const parts = image.data.match(/^data:(.+);base64,(.+)/);
-							const data = ARCHITECT.Base64ToBlob(parts[2], parts[1]);
-							const file = new File([data], fileName, {});
-
-							if (!folder) {
-								const result = await new Promise<{ path: string, source: string }>((res) => {
-									var resolved = false;
-									const picker = new FilePicker(<any>{
-										title: dialogTitle,
-										type: 'folder',
-										folderSource: folderSource || 'data',
-										callback: async (path: string) => {
-											resolved = true;
-											folderSource = picker.activeSource;
-											folder = path
-											res({ path, source: picker.activeSource });
-										},
-									});
-									const tmpClose = picker.close;
-									picker.close = (o: Application.CloseOptions) => {
-										res({ path: null, source: null });
-										return tmpClose.bind(picker).call(o);
-									};
-									picker.browse();
-								});
-								if (!result.path) {
-									resolve(null);
-									return;
-								}
-								folder = result.path;
-								folderSource = result.source;
-							}
-							await FilePicker.upload(folderSource, folder, file);
-							resolve(folder + '/' + fileName);
-						}
-					},
-				},
-				default: 'server'
+				close: () => { if (!ignoreClose) resolve(undefined) },
+				buttons, default: 'server'
 			}, { width: 500 });
 			dialog.render(true);
 		});
@@ -808,8 +839,7 @@ export default class CaptureGameScreen {
 	LayersWithHiddenPlaceables: CaptureGameScreen.LayersWithHiddenPlaceables,
 	beginCapture: CaptureGameScreen.beginCapture,
 	endCapture: CaptureGameScreen.endCapture,
-	captureCanvas: CaptureGameScreen.captureCanvas,
-	captureView: CaptureGameScreen.captureView,
+	render: CaptureGameScreen.captureCanvas,
 	toggleLayer: CaptureGameScreen.toggleLayer,
 	toggleHidden: CaptureGameScreen.toggleHidden,
 	toggleControls: CaptureGameScreen.toggleControls,

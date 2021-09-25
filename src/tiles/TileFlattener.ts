@@ -99,7 +99,7 @@ export default class TileFlattener {
 		// Collect data from form
 		html = html instanceof HTMLElement ? html : html[0];
 		const format = html.querySelector<HTMLSelectElement>('#format').value;
-		const compression = html.querySelector<HTMLInputElement>('#compression').valueAsNumber;
+		const quality = html.querySelector<HTMLInputElement>('#compression').valueAsNumber;
 		const margin = {
 			l: html.querySelector<HTMLInputElement>('#left').valueAsNumber,
 			r: html.querySelector<HTMLInputElement>('#right').valueAsNumber,
@@ -119,7 +119,7 @@ export default class TileFlattener {
 			SETTINGS.set(this.PREF_MARGIN, margin),
 			SETTINGS.set(this.PREF_RENDER_LIGHT, lights),
 			SETTINGS.set(CaptureGameScreen.PREF_FRMT, format),
-			SETTINGS.set(CaptureGameScreen.PREF_COMP, compression),
+			SETTINGS.set(CaptureGameScreen.PREF_COMP, quality),
 		]);
 
 		const tilesPreHidden: [Tile, boolean][] = [];
@@ -179,22 +179,24 @@ export default class TileFlattener {
 					if (tile.x + tile.width > rect.r) rect.r = tile.x + tile.width;
 					if (tile.y + tile.height > rect.b) rect.b = tile.y + tile.height;
 				}
-				image = await CaptureGameScreen.captureCanvas('image/' + format, compression, false,
-					{
+				image = await CaptureGameScreen.captureCanvas({
+					format: 'image/' + format, quality,
+					view: {
 						x: -margin.l + rect.l,
 						y: -margin.t + rect.t,
 						w: margin.l + margin.r + rect.r - rect.l,
 						h: margin.t + margin.b + rect.b - rect.t,
 						s: 1
-					});
+					}
+				});
 			} else {
-				image = await CaptureGameScreen.captureCanvas('image/' + format, compression);
+				image = await CaptureGameScreen.captureCanvas({ format: 'image/' + format, quality });
 			}
 			// Terminate the canvas capture
 			CaptureGameScreen.endCapture(session);
 			// Save the image data to file
 			const filePath = await CaptureGameScreen.saveImageData({
-				image, format,
+				image,
 				defaultFileName: 'DF_ARCHITECT.TileFlattener.SaveImageDialog.FileNamePlaceholder'.localize(),
 				dialogTitle: 'DF_ARCHITECT.TileFlattener.SaveImageDialog.Title'.localize(),
 				folder: SETTINGS.get<string>(this.PREF_FOLDER),
