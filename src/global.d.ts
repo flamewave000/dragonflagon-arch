@@ -47,7 +47,7 @@ declare namespace Scene {
 		sort: number;
 		sounds: AmbientSound['data'][];
 		templates: MeasuredTemplate['data'][];
-		tiles: Tile['data'][];
+		tiles: Tile[];
 		tokenVision: boolean;
 		tokens: Token['data'][];
 		walls: Wall['data'][];
@@ -69,7 +69,7 @@ declare class Canvas {
 	hud: HeadsUpDisplay;
 	background: any; // TODO: BackgroundLayer
 	foreground: any; // TODO: BackgroundLayer
-	tiles: any; //TODO: TilesLayer
+	tiles: TilesLayer; //TODO: TilesLayer
 	drawings: any; //TODO: DrawingsLayer
 	grid: GridLayer;
 	walls: WallsLayer; //TODO: WallsLayer

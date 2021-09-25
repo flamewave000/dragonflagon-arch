@@ -197,6 +197,7 @@ exports.zip = gulp.series(
 			, pdel(DIST + SOURCE)
 			, () => gulp.src(DIST + '.temp/' + GLOB).pipe(gulp.dest(DIST + SOURCE))
 			, pdel(DIST + '.temp/')
+			, () => gulp.src(LIBS + GLOB).pipe(gulp.dest(DIST + SOURCE))
 		)
 		, buildManifest()
 		, outputLanguages()

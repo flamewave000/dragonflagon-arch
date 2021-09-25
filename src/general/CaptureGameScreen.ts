@@ -92,6 +92,10 @@ export default class CaptureGameScreen {
 	}
 
 	static async promptForCapture() {
+		if (!game.scenes.viewed) {
+			ui.notifications.warn('DF_ARCHITECT.CaptureGameScreen.ScreenCapture.WarningNoScene'.localize());
+			return;
+		}
 		const layerToConfig = (layer: CanvasLayer): any => {
 			var label = ('LAYERS.' + layer.name).localize();
 			if (label.startsWith('LAYERS.'))

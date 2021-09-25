@@ -38,7 +38,7 @@
 	],
 	"bugs":		"https://github.com/flamewave000/dragonflagon-arch/issues/new/choose",
 	"url":		"https://github.com/flamewave000/dragonflagon-arch",
-	"license":	"https://github.com/flamewave000/dragonflagon-arch/blob/master/LICENSE",
+	"license":	"https://raw.githubusercontent.com/flamewave000/dragonflagon-arch/master/LICENSE",
 	"manifest":	"https://dragonflagon.cafe/mods/man/{{name}}",
 	"download":	"https://dragonflagon.cafe/mods/pak/{{name}}",
 	"readme":	"https://github.com/flamewave000/dragonflagon-arch/blob/master/README.md",
@@ -58,6 +58,9 @@
 		{ "type": "screenshot", "url": "https://raw.githubusercontent.com/flamewave000/dragonflagon-arch/master/.assets/lights-template-create.gif" },
 		{ "type": "screenshot", "url": "https://raw.githubusercontent.com/flamewave000/dragonflagon-arch/master/.assets/lights-template-drag.gif" },
 		{ "type": "screenshot", "url": "https://raw.githubusercontent.com/flamewave000/dragonflagon-arch/master/.assets/lights-template-duplicate.gif" },
-		{ "type": "screenshot", "url": "https://raw.githubusercontent.com/flamewave000/dragonflagon-arch/master/.assets/walls-join-split.gif" }
+		{ "type": "screenshot", "url": "https://raw.githubusercontent.com/flamewave000/dragonflagon-arch/master/.assets/walls-join-split.gif" },
+		{ "type": "screenshot", "url": "https://raw.githubusercontent.com/flamewave000/dragonflagon-arch/master/.assets/tiles-flatten-config.gif" },
+		{ "type": "screenshot", "url": "https://raw.githubusercontent.com/flamewave000/dragonflagon-arch/master/.assets/tiles-flatten-save.gif" },
+		{ "type": "screenshot", "url": "https://raw.githubusercontent.com/flamewave000/dragonflagon-arch/master/.assets/tiles-flatten-scene-replace.gif" }
 	]
 }

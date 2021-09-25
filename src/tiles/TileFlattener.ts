@@ -11,6 +11,12 @@ interface Margin {
 }
 interface ImageData { data: string, width: number, height: number }
 
+enum TileLayerRendered {
+	Floor,
+	Roof,
+	Both
+}
+
 export default class TileFlattener {
 
 	private static readonly PREF_RENDER_LIGHT = "TileFlattener.RenderLighting";
@@ -18,19 +24,18 @@ export default class TileFlattener {
 	private static readonly PREF_RENDER_SLCTD = "TileFlattener.RenderSelectedOnly";
 	private static readonly PREF_RENDER_HIDEN = "TileFlattener.RenderHiddenTiles";
 	private static readonly PREF_MARGIN = "TileFlattener.Margin";
+	private static readonly PREF_LAYERS = "TileFlattener.Layers";
 	static readonly PREF_FOLDER = "TileFlattener.Folder";
 	static readonly PREF_FOLDER_SOURCE = "TileFlattener.FolderSource";
 
-	private static get renderLights(): Boolean { return SETTINGS.get(this.PREF_RENDER_LIGHT); }
-	private static set renderLights(value: Boolean) { SETTINGS.set(this.PREF_RENDER_LIGHT, value); }
-	private static get renderBackground(): Boolean { return SETTINGS.get(this.PREF_RENDER_BACKG); }
-	private static set renderBackground(value: Boolean) { SETTINGS.set(this.PREF_RENDER_BACKG, value); }
-	private static get renderSelected(): Boolean { return SETTINGS.get(this.PREF_RENDER_SLCTD); }
-	private static set renderSelected(value: Boolean) { SETTINGS.set(this.PREF_RENDER_SLCTD, value); }
-	private static get renderHidden(): Boolean { return SETTINGS.get(this.PREF_RENDER_HIDEN); }
-	private static set renderHidden(value: Boolean) { SETTINGS.set(this.PREF_RENDER_HIDEN, value); }
+	private static get renderLights(): boolean { return SETTINGS.get(this.PREF_RENDER_LIGHT); }
+	private static get renderBackground(): boolean { return SETTINGS.get(this.PREF_RENDER_BACKG); }
+	private static get renderSelected(): boolean { return SETTINGS.get(this.PREF_RENDER_SLCTD); }
+	private static get renderHidden(): boolean { return SETTINGS.get(this.PREF_RENDER_HIDEN); }
 	private static get margin(): Margin { return SETTINGS.get(this.PREF_MARGIN); }
-	private static set margin(value: Margin) { SETTINGS.set(this.PREF_MARGIN, value); }
+	private static get layers(): number { return SETTINGS.get(this.PREF_LAYERS); }
+	private static get folder(): string { return SETTINGS.get(this.PREF_FOLDER); }
+	private static get folderSource(): string { return SETTINGS.get(this.PREF_FOLDER_SOURCE); }
 
 	static init() {
 		//#region Register Render Configuration Settings
@@ -38,6 +43,7 @@ export default class TileFlattener {
 		SETTINGS.register<Boolean>(this.PREF_RENDER_BACKG, { scope: 'client', config: false, type: Boolean, default: true });
 		SETTINGS.register<Boolean>(this.PREF_RENDER_SLCTD, { scope: 'client', config: false, type: Boolean, default: false });
 		SETTINGS.register<Boolean>(this.PREF_RENDER_HIDEN, { scope: 'client', config: false, type: Boolean, default: true });
+		SETTINGS.register<Number>(this.PREF_LAYERS, { scope: 'client', config: false, type: Number, default: 0 });
 		SETTINGS.register<Margin>(this.PREF_MARGIN, { scope: 'client', config: false, type: SETTINGS.typeOf<Margin>(), default: { l: 0, r: 0, t: 0, b: 0 } });
 		//#endregion
 
@@ -72,7 +78,8 @@ export default class TileFlattener {
 			lights: this.renderLights,
 			showBG: this.renderBackground,
 			select: this.renderSelected,
-			hidden: this.renderHidden
+			hidden: this.renderHidden,
+			layers: this.layers
 		};
 		const dialog: Dialog = new Dialog({
 			title: 'DF_ARCHITECT.TileFlattener.CapturePromptTitle'.localize(),
@@ -110,6 +117,9 @@ export default class TileFlattener {
 		const showBG = html.querySelector<HTMLInputElement>('#showBG').checked;
 		const hidden = html.querySelector<HTMLInputElement>('#hidden').checked;
 		const select = html.querySelector<HTMLInputElement>('#tiles').checked;
+		const layers = html.querySelector<HTMLInputElement>('#floor').checked
+			? TileLayerRendered.Floor : html.querySelector<HTMLInputElement>('#roof').checked
+				? TileLayerRendered.Roof : TileLayerRendered.Both;
 		// Save data as defaults for later
 		await Promise.all([
 			SETTINGS.set(this.PREF_RENDER_LIGHT, lights),
@@ -118,6 +128,7 @@ export default class TileFlattener {
 			SETTINGS.set(this.PREF_RENDER_SLCTD, select),
 			SETTINGS.set(this.PREF_MARGIN, margin),
 			SETTINGS.set(this.PREF_RENDER_LIGHT, lights),
+			SETTINGS.set(this.PREF_LAYERS, layers),
 			SETTINGS.set(CaptureGameScreen.PREF_FRMT, format),
 			SETTINGS.set(CaptureGameScreen.PREF_COMP, quality),
 		]);
@@ -150,22 +161,31 @@ export default class TileFlattener {
 			CaptureGameScreen.toggleLayer(layer.name, false)
 		}
 		CaptureGameScreen.toggleLayer("LightingLayer", lights);
+		if (layers === TileLayerRendered.Floor)
+			CaptureGameScreen.toggleLayer("ForegroundLayer", false);
+		else if (layers === TileLayerRendered.Roof) {
+			// Hide all tiles on the background layer
+			for (let tile of canvas.background.tiles) {
+				tilesPreHidden.push([tile, tile.data.hidden]);
+				tile.data.hidden = true;
+			}
+		}
 		// Update the Background Image
 		canvas.background.bg.visible = showBG;
 		(<any>canvas.app.renderer).backgroundAlpha = 0;
 
 		// Begin the Canvas Capture Process
 		const session = CaptureGameScreen.beginCapture(false);
+		var image: ImageData;
 		try {
 			if (!session) {
 				ui.notifications.warn('DF_ARCHITECT.CaptureGameScreen.ErrorCaptureInProgress'.localize());
 				this.promptForTileFlattening();
 				return;
 			}
-			CaptureGameScreen.toggleHidden("BackgroundLayer", hidden && !select);
+			CaptureGameScreen.toggleHidden("BackgroundLayer", hidden && !select && layers !== TileLayerRendered.Roof);
 			CaptureGameScreen.toggleHidden("ForegroundLayer", hidden && !select);
 
-			var image: ImageData;
 			if (select) {
 				const rect = {
 					l: Number.MAX_VALUE,
@@ -192,19 +212,6 @@ export default class TileFlattener {
 			} else {
 				image = await CaptureGameScreen.captureCanvas({ format: 'image/' + format, quality });
 			}
-			// Terminate the canvas capture
-			CaptureGameScreen.endCapture(session);
-			// Save the image data to file
-			const filePath = await CaptureGameScreen.saveImageData({
-				image,
-				defaultFileName: 'DF_ARCHITECT.TileFlattener.SaveImageDialog.FileNamePlaceholder'.localize(),
-				dialogTitle: 'DF_ARCHITECT.TileFlattener.SaveImageDialog.Title'.localize(),
-				folder: SETTINGS.get<string>(this.PREF_FOLDER),
-				folderSource: SETTINGS.get<string>(this.PREF_FOLDER_SOURCE)
-			});
-			// Prompt to ask what to do with it
-			if (!!filePath)
-				this.promptSceneReplacement(filePath, image.width, image.height);
 		} finally {
 			// Terminate the canvas capture
 			CaptureGameScreen.endCapture(session);
@@ -214,10 +221,22 @@ export default class TileFlattener {
 			// Restore the non-selected tiles
 			for (let [tile, hidden] of tilesPreHidden) {
 				tile.data.hidden = hidden;
+				tile.refresh();
 			}
 			// Restore selection
 			controlledTiles.forEach(x => x.control({ releaseOthers: false }));
 		}
+		// Save the image data to file
+		CaptureGameScreen.saveImageData({
+			image,
+			defaultFileName: 'DF_ARCHITECT.TileFlattener.SaveImageDialog.FileNamePlaceholder'.localize(),
+			dialogTitle: 'DF_ARCHITECT.TileFlattener.SaveImageDialog.Title'.localize(),
+			folder: this.folder,
+			folderSource: this.folderSource
+		}).then(filePath => {
+			// Prompt to ask what to do with it
+			if (!!filePath) this.promptSceneReplacement(filePath, image.width, image.height, layers, lights);
+		});
 	}
 
 	private static setupBindings(html: JQuery) {
@@ -238,7 +257,7 @@ export default class TileFlattener {
 		tiles.on('change', update);
 	}
 
-	private static async promptSceneReplacement(filePath: string, width: number, height: number) {
+	private static async promptSceneReplacement(filePath: string, width: number, height: number, layersRendered: TileLayerRendered, bakedLighting: boolean) {
 		const dialog: Dialog = new Dialog({
 			title: 'DF_ARCHITECT.TileFlattener.SceneReplaceDialog.Title'.localize(),
 			content: await renderTemplate(`modules/${ARCHITECT.MOD_NAME}/templates/tile-flatten-scene.hbs`, {}),
@@ -258,38 +277,25 @@ export default class TileFlattener {
 				});
 				html.find('#clone').on('click', async (e) => {
 					e.preventDefault();
-					const data: DeepPartial<Scene.Data> = {};
-					const ignored = new Set([
-						"active",
-						"drawings",
-						"flags",
-						"img",
-						"lights",
-						"name",
-						"navName",
-						"navOrder",
-						"navigation",
-						"notes",
-						"permission",
-						"sounds",
-						"templates",
-						"thumb",
-						"tiles",
-						"tokens",
-						"walls",
-						"_id",
-					]);
-					for (let prop of Object.keys(game.scenes.viewed.data)) {
-						if (ignored.has(prop)) continue;
-						(data as Record<string, any>)[prop] = (game.scenes.viewed.data as Record<string, any>)[prop];
-					}
-					data.img = filePath;
-					const result = await Scene.createDialog();
-					if (!result) return;
-					else dialog.close();
-					await result.update(data);
-					const thumbData = await (<any>result).createThumbnail();
-					await result.update(<any>{ thumb: thumbData.thumb }, { diff: false });
+					// Create the new scene
+					const newScene = await game.scenes.viewed.clone({
+						name: game.scenes.viewed.name + ' (Copy)',
+						img: filePath
+					}, { save: true });
+					// Get the tiles that were rendered
+					var tiles: Tile.Data[] = newScene.data.tiles.map(x => x.data);
+					if (layersRendered === TileLayerRendered.Floor)
+						tiles = tiles.filter(x => !x.overhead);
+					else if (layersRendered === TileLayerRendered.Roof)
+						tiles = tiles.filter(x => x.overhead);
+					// Delete the rendered tiles
+					await newScene.deleteEmbeddedDocuments('Tile', tiles.map(x => x._id));
+					const thumbData = await (<any>newScene).createThumbnail();
+					await newScene.update(<any>{ thumb: thumbData.thumb }, { diff: false });
+					// If lighting was baked in, delete the scene's lights
+					if (bakedLighting)
+						await newScene.deleteEmbeddedDocuments('AmbientLight', newScene.data.lights.map(x => x._id));
+					dialog.close();
 				});
 				html.find('#tile').on('click', async (e) => {
 					e.preventDefault();
