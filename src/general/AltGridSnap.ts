@@ -19,10 +19,14 @@ class _AltGridSnap {
 			type: Boolean,
 			default: false,
 			onChange: (value: Boolean) => {
-				if (!SETTINGS.get(_AltGridSnap.PREF_PLACE_ON_CONTROL_BAR)) return;
-				const button = $('ol#controls>li#df-arch-altSnap');
-				if (value) button.addClass('active');
-				else button.removeClass('active');
+				if (SETTINGS.get(_AltGridSnap.PREF_PLACE_ON_CONTROL_BAR)) {
+					const button = $('ol#controls>li#df-arch-altSnap');
+					if (value) button.addClass('active');
+					else button.removeClass('active');
+				} else {
+					ui.controls.control.tools.find(t => t.name === 'altSnap').active = <boolean>value;
+					ui.controls.render();
+				}
 			}
 		});
 		SETTINGS.register(_AltGridSnap.PREF_ENABLED, {
@@ -70,7 +74,7 @@ class _AltGridSnap {
 					visible: isGM,
 					toggle: true,
 					active: enabled,
-					onClick: (toggled: boolean) => { this.toggled = toggled }
+					onClick: (toggled: boolean) => this.toggled = toggled
 				});
 			}
 		});
