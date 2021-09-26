@@ -255,6 +255,9 @@ export default class TileFlattener {
 		};
 		canvas.on('change', update);
 		tiles.on('change', update);
+		const compression = html.find('#compression');
+		compression.on('input', () => compression.trigger('change'));
+		compression.on('change', () => html.find('#compression-output').val(compression.val()));
 	}
 
 	private static async promptSceneReplacement(filePath: string, width: number, height: number, layersRendered: TileLayerRendered, bakedLighting: boolean) {

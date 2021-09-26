@@ -25,6 +25,8 @@ declare namespace cv {
 	function imshow(dst: HTMLCanvasElement, image: Mat): void;
 	function hconcat(vector: MatVector, dst: Mat): void;
 	function vconcat(vector: MatVector, dst: Mat): void;
+	function getBuildInformation(): string;
+	var onRuntimeInitialized: Function;
 }
 
 interface ImageData {
@@ -56,6 +58,9 @@ export default class CaptureGameScreen {
 	private static _layerFilters: { [key: string]: LayerFilter };
 	private static _captureInProgress = false;
 	private static _currentSession: CaptureSession = null;
+	private static _openCVPromise: Promise<void> = null;
+
+
 	private static _getLayerFilter(key: string): LayerFilter {
 		if (!this._layerFilters[key])
 			this._layerFilters[key] = { s: true };
@@ -269,18 +274,23 @@ export default class CaptureGameScreen {
 	}
 
 	private static async loadOpenCV(): Promise<void> {
-		var openCVScript = document.getElementById("opencv") as HTMLScriptElement;
 		// Resolve immediately if element exists
-		if (!!openCVScript) return Promise.resolve()
-		// If the OpenCV library has not yet been loaded, lets load it now and wait for it before continuing
-		return new Promise<void>(res => {
-			openCVScript = document.createElement('script') as HTMLScriptElement;
-			openCVScript.id = 'opencv';
-			openCVScript.async = true
-			openCVScript.onload = () => res(undefined);
-			openCVScript.src = `/modules/${ARCHITECT.MOD_NAME}/src/opencv.js`;
-			document.body.append(openCVScript);
-		});
+		if (this._openCVPromise == null) {
+			// If the OpenCV library has not yet been loaded, lets load it now inside a promise
+			this._openCVPromise = new Promise<void>(res => {
+				var openCVScript = document.createElement('script') as HTMLScriptElement;
+				openCVScript.id = 'opencv';
+				openCVScript.async = true;
+				openCVScript.onload = () => {
+					if (cv.getBuildInformation) res();
+					// WASM
+					else cv['onRuntimeInitialized'] = () => res();
+				};
+				openCVScript.src = `/modules/${ARCHITECT.MOD_NAME}/src/opencv.js`;
+				document.body.append(openCVScript);
+			});
+		}
+		return this._openCVPromise;
 	}
 
 	/**
@@ -470,12 +480,13 @@ export default class CaptureGameScreen {
 			// If a single resource was given
 			if (!(resources instanceof Array)) {
 				// Delete it if it is alive
-				if (!resources.isDeleted())
+				if (resources !== null && resources !== undefined && !resources.isDeleted())
 					resources.delete();
 				return;
 			}
 			// Iterate over all resources given
 			for (let res of resources) {
+				if (res === null || res === undefined) continue;
 				// If item is an Array, recurse!
 				if (res instanceof Array) DELETE_RESOURCES(res);
 				// If the item is already dead, ignore!
@@ -489,7 +500,7 @@ export default class CaptureGameScreen {
 		const targetCanvas = document.createElement('canvas') as HTMLCanvasElement;
 		const targetContext = targetCanvas.getContext('2d');
 		targetContext.imageSmoothingEnabled = false;
-		const GetImageMat = (imageData: string) => new Promise<cv.Mat>((resolve, reject) => {
+		const GetImageMat = (imageData: string) => new Promise<cv.Mat>((resolve, _) => {
 			targetImage.onload = () => {
 				targetCanvas.width = targetImage.width;
 				targetCanvas.height = targetImage.height;
@@ -504,6 +515,10 @@ export default class CaptureGameScreen {
 		}
 
 		return new Promise(async (resolveCapture, rejectCapture) => {
+			// Create an overlay element to be temporarily displayed
+			const overlayElement = $(`<div id="dfarch-temp-overlay"><h1>${'DF_ARCHITECT.CaptureGameScreen.ScreenCapture.Rendering'.localize()}...</h1><div class="dfarch-dual-ring"></div></div>`);
+			overlayElement.appendTo(document.body);
+
 			// Make sure OpenCV has fully loaded. If it is loaded, this will resolve immediately
 			await CaptureGameScreen.loadOpenCV();
 
@@ -522,9 +537,6 @@ export default class CaptureGameScreen {
 			const origS = canvas.stage.scale.x;
 			const origW = canvas.app.renderer.width;
 			const origH = canvas.app.renderer.height;
-			// Create an overlay element to be temporarily displayed
-			const overlayElement = $(`<div id="dfarch-temp-overlay"><h1>${'DF_ARCHITECT.CaptureGameScreen.ScreenCapture.Rendering'.localize()}...</h1><div class="dfarch-dual-ring"></div></div>`);
-			overlayElement.appendTo(document.body);
 			// Calculate dimension adjustments for offseting coordinates relative to the body
 			const body = $(document.body);
 
@@ -620,7 +632,7 @@ export default class CaptureGameScreen {
 						await waitForDOMUpdate();
 						// Render a single image for the given Sector
 						images.push({
-							data: canvas.app.renderer.context.renderer.extract.base64(null, format, quality),
+							data: canvas.app.renderer.context.renderer.extract.base64(null, 'image/png', 1),
 							width, height
 						});
 					}
@@ -652,8 +664,9 @@ export default class CaptureGameScreen {
 			}
 			// Begin Stitching the individual Rows
 			const finalMats: cv.Mat[] = [];
-			const finalVec = new cv.MatVector();
+			var finalVec: cv.MatVector;
 			try {
+				finalVec = new cv.MatVector();
 				// Loop over each ROW
 				for (let cy = 0; cy < split[1]; cy++) {
 					ARCHITECT.reportProgress('DF_ARCHITECT.CaptureGameScreen.ScreenCapture.Stitching'.localize(), cy, split[1]);
