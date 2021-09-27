@@ -854,11 +854,11 @@ export default class CaptureGameScreen {
 (<any>window).CanvasCapture = {
 	LayersWithInvisiblePlaceables: CaptureGameScreen.LayersWithInvisiblePlaceables,
 	LayersWithHiddenPlaceables: CaptureGameScreen.LayersWithHiddenPlaceables,
-	beginCapture: CaptureGameScreen.beginCapture,
-	endCapture: CaptureGameScreen.endCapture,
-	render: CaptureGameScreen.captureCanvas,
-	toggleLayer: CaptureGameScreen.toggleLayer,
-	toggleHidden: CaptureGameScreen.toggleHidden,
-	toggleControls: CaptureGameScreen.toggleControls,
-	saveImageData: CaptureGameScreen.saveImageData
+	beginCapture: CaptureGameScreen.beginCapture.bind(CaptureGameScreen),
+	endCapture: CaptureGameScreen.endCapture.bind(CaptureGameScreen),
+	render: CaptureGameScreen.captureCanvas.bind(CaptureGameScreen),
+	toggleLayer: CaptureGameScreen.toggleLayer.bind(CaptureGameScreen),
+	toggleHidden: CaptureGameScreen.toggleHidden.bind(CaptureGameScreen),
+	toggleControls: CaptureGameScreen.toggleControls.bind(CaptureGameScreen),
+	saveImageData: CaptureGameScreen.saveImageData.bind(CaptureGameScreen)
 };
