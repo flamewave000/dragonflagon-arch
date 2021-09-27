@@ -19,6 +19,10 @@ import { AltLightNegativeRadius } from './lights/AltLightNegativeRadius.js';
 import { WallDirections } from './walls/WallDirections.js';
 import { DataMigration } from './core/migration.js';
 import TileFlattener from './tiles/TileFlattener.js';
+import LightCounter from './lights/LightCounter.js';
+import WallsCounter from './walls/WallCounter.js';
+import TileCounter from './tiles/TileCounter.js';
+import SoundCounter from './tiles/SoundCounter.js';
 
 Hooks.once('init', function () {
 	if (!game.modules.get('lib-wrapper')?.active) return;
@@ -36,16 +40,20 @@ Hooks.once('init', function () {
 	});
 
 	ARCHITECT.DrawArchitectGraphicToConsole();
-	DataMigration.init();
-	AltGridSnap.init();
-	WallCtrlInvert.init();
-	WallJoinSplit.init();
-	WallAltDrop.init();
-	WallDirections.init();
-	AltLightOrigin.init();
-	CaptureGameScreen.init();
-	LightTemplateManager.init();
-	TileFlattener.init();
+	try { DataMigration.init() } catch (error) { console.error(error) }
+	try { AltGridSnap.init() } catch (error) { console.error(error) }
+	try { WallCtrlInvert.init() } catch (error) { console.error(error) }
+	try { WallJoinSplit.init() } catch (error) { console.error(error) }
+	try { WallAltDrop.init() } catch (error) { console.error(error) }
+	try { WallDirections.init() } catch (error) { console.error(error) }
+	try { AltLightOrigin.init() } catch (error) { console.error(error) }
+	try { CaptureGameScreen.init() } catch (error) { console.error(error) }
+	try { LightTemplateManager.init() } catch (error) { console.error(error) }
+	try { TileFlattener.init() } catch (error) { console.error(error) }
+	try { LightCounter.init() } catch (error) { console.error(error) }
+	try { WallsCounter.init() } catch (error) { console.error(error) }
+	try { TileCounter.init() } catch (error) { console.error(error) }
+	try { SoundCounter.init() } catch (error) { console.error(error) }
 });
 
 Hooks.once('setup', function () {
@@ -76,15 +84,15 @@ Hooks.once('ready', async function () {
 	}
 
 	await DataMigration.ready();
-	LayerShortcuts.ready();
-	WallShortcuts.ready();
-	WallCtrlInvert.ready();
-	WallChangeType.ready();
-	WallAltDrop.ready();
-	WallDirections.ready();
-	AltLightOrigin.ready();
-	QuickColourPicker.ready();
-	AltLightNegativeRadius.ready();
-	LightTemplateManager.ready();
-	LightingLayerOverride.ready();
+	try { LayerShortcuts.ready() } catch (error) { console.error(error) }
+	try { WallShortcuts.ready() } catch (error) { console.error(error) }
+	try { WallCtrlInvert.ready() } catch (error) { console.error(error) }
+	try { WallChangeType.ready() } catch (error) { console.error(error) }
+	try { WallAltDrop.ready() } catch (error) { console.error(error) }
+	try { WallDirections.ready() } catch (error) { console.error(error) }
+	try { AltLightOrigin.ready() } catch (error) { console.error(error) }
+	try { QuickColourPicker.ready() } catch (error) { console.error(error) }
+	try { AltLightNegativeRadius.ready() } catch (error) { console.error(error) }
+	try { LightTemplateManager.ready() } catch (error) { console.error(error) }
+	try { LightingLayerOverride.ready() } catch (error) { console.error(error) }
 });

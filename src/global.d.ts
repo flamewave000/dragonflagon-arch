@@ -639,5 +639,6 @@ declare namespace Wall {
 		 * 2 - terrain
 		 */
 		sense: Const.WallSenseType;
+		sound: Const.WallSenseType;
 	}
 }

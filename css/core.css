@@ -15,3 +15,26 @@ i.df.df-alt-split {
 	height: inherit;
 	content: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZlcnNpb249IjEuMSIgdmlld0JveD0iMCAwIDEyLjcgMTIuNyIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIyLjExNjciIGN5PSIxMC41ODMiIHI9IjEuMDU4MyIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9Ii41MjkxNyIvPjxjaXJjbGUgY3g9IjEwLjU4MyIgY3k9IjIuMTE2NyIgcj0iMS4wNTgzIiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iLjUyOTE3Ii8+PHJlY3QgdHJhbnNmb3JtPSJyb3RhdGUoLTQ1KSIgeD0iLTUuMTU5NCIgeT0iOC40NTExIiB3aWR0aD0iMTAuMzE5IiBoZWlnaHQ9IjEuMDU4MyIgZmlsbD0iI2ZmZiIgZmlsbC1ydWxlPSJldmVub2RkIiBzdHJva2Utd2lkdGg9Ii4yNTI2OSIvPjxjaXJjbGUgY3g9IjYuMzUiIGN5PSI2LjM1IiByPSIxLjA1ODMiIGZpbGw9IiNmZmYiIGZpbGwtcnVsZT0iZXZlbm9kZCIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9Ii41MjkxNyIvPjwvc3ZnPgo');
 }
+
+.df-arch-counter {
+	position: fixed;
+	bottom: auto;
+	padding: 0.5em 1em;
+	background: url(/ui/denim075.png) repeat;
+	color: white;
+	border: solid thin black;
+	text-align: center;
+	border-right: none;
+	border-radius: 5px 0px 0px 5px;
+	right: 305px;
+	overflow: hidden;
+	top: 10px;
+}
+
+.df-arch-counter output {
+	font-size: x-large;
+}
+
+.df-arch-counter label {
+	font-size: small;
+}
