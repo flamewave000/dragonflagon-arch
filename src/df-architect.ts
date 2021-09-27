@@ -22,7 +22,7 @@ import TileFlattener from './tiles/TileFlattener.js';
 import LightCounter from './lights/LightCounter.js';
 import WallsCounter from './walls/WallCounter.js';
 import TileCounter from './tiles/TileCounter.js';
-import SoundCounter from './tiles/SoundCounter.js';
+import SoundCounter from './sounds/SoundCounter.js';
 
 Hooks.once('init', function () {
 	if (!game.modules.get('lib-wrapper')?.active) return;
