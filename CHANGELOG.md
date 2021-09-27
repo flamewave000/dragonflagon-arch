@@ -8,6 +8,7 @@
 - NEW: Introducing a new Canvas Capture API that any module can use.
 - NEW: New Tile Flattener feature. This uses the new Canvas Capture API to generate images from the tiles in a quick and efficient way.
 - NEW: Tile, Light, Wall, & Sound Counts. Each of these layers will display a small window in the top right of Foundry with the current number of objects in that layer. Hovering the window will display additional information.
+- NEW: Toggle the visibility of Walls, Lights, and Sounds controls while on other layers. Simply toggle the Eye button on each layer you want to see.
 
 ## Release 2.1.2 (2021-08-30)
 - Fixed broken Wall Chain Lock feature.

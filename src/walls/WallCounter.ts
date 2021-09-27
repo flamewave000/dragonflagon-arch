@@ -3,7 +3,7 @@ import CounterUI from "../core/CounterUI.js";
 
 export default class WallsCounter {
 	private static _counter = new CounterUI(0, 'Walls');
-	static init() {
+	static ready() {
 		libWrapper.register(ARCHITECT.MOD_NAME, 'WallsLayer.prototype.activate', (wrapped: Function) => {
 			wrapped();
 			this.updateCount();

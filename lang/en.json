@@ -183,6 +183,11 @@
 				"ImportToSceneHint": "Import the new image as a tile into the center of the current scene.",
 				"DoNothing": "Do Nothing"
 			}
+		},
+		"ShowLayerControls": {
+			"Walls": "Display Walls on other layers",
+			"Lights": "Display Light boundaries on other layers",
+			"Sounds": "Display Sound boundaries on other layers"
 		}
 	},
 	"LAYERS": {

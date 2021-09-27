@@ -3,7 +3,7 @@ import CounterUI from "../core/CounterUI.js";
 
 export default class SoundCounter {
 	private static _counter = new CounterUI(0, 'Sounds');
-	static init() {
+	static ready() {
 		libWrapper.register(ARCHITECT.MOD_NAME, 'SoundsLayer.prototype.activate', (wrapped: Function) => {
 			wrapped();
 			this.updateCount();

@@ -77,7 +77,7 @@ declare class Canvas {
 	notes: any; //TODO: NotesLayer
 	tokens: TokenLayer;
 	lighting: LightingLayer;
-	sounds: any; //TODO: SoundsLayer
+	sounds: SoundsLayer; //TODO: SoundsLayer
 	sight: SightLayer;
 	effects: any; //TODO: EffectsLayer
 	controls: any; //TODO: ControlsLayer

@@ -3,7 +3,7 @@ import CounterUI from "../core/CounterUI.js";
 
 export default class TileCounter {
 	private static _counter = new CounterUI(0, 'Tiles');
-	static init() {
+	static ready() {
 		libWrapper.register(ARCHITECT.MOD_NAME, 'BackgroundLayer.prototype.activate', (wrapped: Function) => {
 			wrapped();
 			this.updateCount();

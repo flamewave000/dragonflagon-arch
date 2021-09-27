@@ -3,7 +3,7 @@ import CounterUI from "../core/CounterUI.js";
 
 export default class LightCounter {
 	private static _counter = new CounterUI(0, 'Lights');
-	static init() {
+	static ready() {
 		libWrapper.register(ARCHITECT.MOD_NAME, 'LightingLayer.prototype.activate', (wrapped: Function) => {
 			wrapped();
 			this.updateCount();
