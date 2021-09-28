@@ -38,3 +38,30 @@ i.df.df-alt-split {
 .df-arch-counter label {
 	font-size: small;
 }
+
+.df-arch-tile-config {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+.df-arch-tile-config img {
+	flex: 0 0;
+	width: 100px;
+	height: 100px;
+	object-fit: contain;
+}
+
+.df-arch-tile-config output {
+	flex: 1 0;
+	margin-left: 1em;
+}
+
+.df-arch-scale {
+	flex: auto 0 !important;
+	width: 36.5px;
+}
+
+.df-arch-scale i {
+	margin: 0;
+}

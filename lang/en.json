@@ -188,6 +188,10 @@
 			"Walls": "Display Walls on other layers",
 			"Lights": "Display Light boundaries on other layers",
 			"Sounds": "Display Sound boundaries on other layers"
+		},
+		"TileConfigExt": {
+			"LabelDimens": "Image Dimensions",
+			"LabelAspect": "Image Aspect Ratio"
 		}
 	},
 	"LAYERS": {

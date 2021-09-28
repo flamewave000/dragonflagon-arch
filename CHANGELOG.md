@@ -9,6 +9,8 @@
 - NEW: New Tile Flattener feature. This uses the new Canvas Capture API to generate images from the tiles in a quick and efficient way.
 - NEW: Tile, Light, Wall, & Sound Counts. Each of these layers will display a small window in the top right of Foundry with the current number of objects in that layer. Hovering the window will display additional information.
 - NEW: Toggle the visibility of Walls, Lights, and Sounds controls while on other layers. Simply toggle the Eye button on each layer you want to see.
+- NEW: Tile Config now shows a thumbnail of the current image. As well as the width, height, and aspect ratio of the original image.
+- NEW: Tile Config now has a scale button beside the width and height. These will use the aspect ratio of the original image to set the width or height depending on which button you press.
 
 ## Release 2.1.2 (2021-08-30)
 - Fixed broken Wall Chain Lock feature.
