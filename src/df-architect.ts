@@ -25,6 +25,7 @@ import TileCounter from './tiles/TileCounter.js';
 import SoundCounter from './sounds/SoundCounter.js';
 import ShowLayerControls from './general/ShowLayerControls.js';
 import TileConfigExt from './tiles/TileConfigExt.js';
+import CounterUI from './core/CounterUI.js';
 
 Hooks.once('init', function () {
 	if (!game.modules.get('lib-wrapper')?.active) return;
@@ -55,6 +56,7 @@ Hooks.once('init', function () {
 	try { LightTemplateManager.init() } catch (error) { console.error(error) }
 	try { TileFlattener.init() } catch (error) { console.error(error) }
 	try { TileConfigExt.init() } catch (error) { console.error(error) }
+	try { CounterUI.init() } catch (error) { console.error(error) }
 });
 
 Hooks.once('setup', function () {
