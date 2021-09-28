@@ -57,6 +57,18 @@ export default class ShowLayerControls {
 			if (this.preview) this.preview.removeChildren();
 			return this;
 		}, 'MIXED');
+
+		Hooks.on('updateWall', () => {
+			const refreshLayer = (layer: any) => {
+				layer._active = true;
+				layer.objects.children.forEach((x: any) => { x.updateSource(); x.refresh() });
+				layer._active = false;
+			}
+			if (SETTINGS.get(ShowLayerControls.PREF_LIGHT))
+				refreshLayer(canvas.lighting);
+			if (SETTINGS.get(ShowLayerControls.PREF_SOUND))
+				refreshLayer(canvas.sounds);
+		});
 	}
 
 	static ready() {
