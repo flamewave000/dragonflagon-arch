@@ -1,5 +1,6 @@
 import ARCHITECT from "../core/architect.js";
 import CounterUI from "../core/CounterUI.js";
+import SETTINGS from "../core/settings.js";
 
 export default class TileCounter {
 	private static _counter = new CounterUI(0, 'Tiles');
@@ -7,7 +8,8 @@ export default class TileCounter {
 		libWrapper.register(ARCHITECT.MOD_NAME, 'BackgroundLayer.prototype.activate', (wrapped: Function) => {
 			wrapped();
 			this.updateCount();
-			this._counter.render(true);
+			if (SETTINGS.get('General.ShowCounters'))
+				this._counter.render(true);
 		}, 'WRAPPER');
 		libWrapper.register(ARCHITECT.MOD_NAME, 'BackgroundLayer.prototype.deactivate', (wrapped: Function) => {
 			wrapped();
@@ -20,6 +22,7 @@ export default class TileCounter {
 	}
 
 	static updateCount() {
+		if (!SETTINGS.get('General.ShowCounters')) return;
 		this._counter.count = canvas.background.objects.children.length + canvas.foreground.objects.children.length;
 		this._counter.hint = `Floors: ${canvas.background.objects.children.length}
 Roofs: ${canvas.foreground.objects.children.length}`;

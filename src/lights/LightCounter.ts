@@ -1,5 +1,6 @@
 import ARCHITECT from "../core/architect.js";
 import CounterUI from "../core/CounterUI.js";
+import SETTINGS from "../core/settings.js";
 
 export default class LightCounter {
 	private static _counter = new CounterUI(0, 'Lights');
@@ -7,7 +8,8 @@ export default class LightCounter {
 		libWrapper.register(ARCHITECT.MOD_NAME, 'LightingLayer.prototype.activate', (wrapped: Function) => {
 			wrapped();
 			this.updateCount();
-			this._counter.render(true);
+			if (SETTINGS.get('General.ShowCounters'))
+				this._counter.render(true);
 		}, 'WRAPPER');
 		libWrapper.register(ARCHITECT.MOD_NAME, 'LightingLayer.prototype.deactivate', (wrapped: Function) => {
 			wrapped();
@@ -19,6 +21,7 @@ export default class LightCounter {
 	}
 
 	static updateCount() {
+		if (!SETTINGS.get('General.ShowCounters')) return;
 		const objects = canvas.lighting.objects.children as AmbientLight[];
 		this._counter.count = objects.length;
 		var local = 0;

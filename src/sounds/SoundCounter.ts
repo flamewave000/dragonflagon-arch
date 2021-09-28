@@ -1,5 +1,6 @@
 import ARCHITECT from "../core/architect.js";
 import CounterUI from "../core/CounterUI.js";
+import SETTINGS from "../core/settings.js";
 
 export default class SoundCounter {
 	private static _counter = new CounterUI(0, 'Sounds');
@@ -7,7 +8,8 @@ export default class SoundCounter {
 		libWrapper.register(ARCHITECT.MOD_NAME, 'SoundsLayer.prototype.activate', (wrapped: Function) => {
 			wrapped();
 			this.updateCount();
-			this._counter.render(true);
+			if (SETTINGS.get('General.ShowCounters'))
+				this._counter.render(true);
 		}, 'WRAPPER');
 		libWrapper.register(ARCHITECT.MOD_NAME, 'SoundsLayer.prototype.deactivate', (wrapped: Function) => {
 			wrapped();
@@ -20,6 +22,7 @@ export default class SoundCounter {
 	}
 
 	static updateCount() {
+		if (!SETTINGS.get('General.ShowCounters')) return;
 		const objects = canvas.sounds.objects.children as AmbientSound[];
 		this._counter.count = objects.length;
 		this._counter.hint = `Local Sounds: ${objects.filter(x => x.data.type === 'l').length}

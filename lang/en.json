@@ -5,7 +5,9 @@
 		"ErrorLibWrapperMissing": "DF Architect: 'libWrapper' module required. Please install and activate 'libWrapper'.",
 		"ErrorLibDFHotkeysMissing": "DF Architect: 'Library: DF Hotkeys' module required. Please install and activate 'Library: DF Hotkeys'.",
 		"General": {
-			"Cancel": "Cancel"
+			"Cancel": "Cancel",
+			"ShowCounterName": "Show Object Counters",
+			"ShowCounterHint": "Display object counters on the tiles, walls, lighting, and sounds layers"
 		},
 		"ReloadRequired": {
 			"Title": "Reload Required",

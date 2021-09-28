@@ -4,6 +4,7 @@
 
 ![Forge Installs](https://img.shields.io/badge/dynamic/json?color=red&label=Forge%20Installs&query=package.installs&suffix=%25&url=https%3A%2F%2Fforge-vtt.com%2Fapi%2Fbazaar%2Fpackage%2Fdf-architect)
 ![Latest Version](https://img.shields.io/badge/dynamic/json?label=Latest%20Release&prefix=v&query=package.versions%5B0%5D&url=https%3A%2F%2Fforge-vtt.com%2Fapi%2Fbazaar%2Fpackage%2Fdf-architect)
+[![Foundry Hub Endorsements](https://img.shields.io/endpoint?logoColor=white&url=https%3A%2F%2Fwww.foundryvtt-hub.com%2Fwp-json%2Fhubapi%2Fv1%2Fpackage%2Fdf-architect%2Fshield%2Fendorsements)](https://www.foundryvtt-hub.com/package/df-architect/)
 
 Welcome to the great big Architect's Tool Suite. This module provides many many many new Quality of Life features to the Foundry Walls and Lighting layers. As well as a few extras that are just fun to have and make life a little easier.
 
@@ -63,6 +64,12 @@ These are some of the general features that are available outside of the Game Bo
 The walls, lighting, and wounds layers now have a toggle button that allows you to see them from other layers. This is very handy for map building when you are placing lights and such and want to try and line things up, or see exactly what walls/lights/sounds you're interacting with.
 
 ![view walls, lights, and sounds on other layers](.assets/general-view-layers.gif)
+
+### Layer Object Counters
+
+The Tiles, Walls, Lights, and Sounds layers will now each display an Object Counter to the left of the sidebar that displays how many objects are on that layer. You can also hover the counter for more info.
+
+![Layer Object Counters](.assets/general-counters.png)
 
 ### Quick Colour Picker
 

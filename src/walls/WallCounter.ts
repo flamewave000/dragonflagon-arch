@@ -1,5 +1,6 @@
 import ARCHITECT from "../core/architect.js";
 import CounterUI from "../core/CounterUI.js";
+import SETTINGS from "../core/settings.js";
 
 export default class WallsCounter {
 	private static _counter = new CounterUI(0, 'Walls');
@@ -7,7 +8,8 @@ export default class WallsCounter {
 		libWrapper.register(ARCHITECT.MOD_NAME, 'WallsLayer.prototype.activate', (wrapped: Function) => {
 			wrapped();
 			this.updateCount();
-			this._counter.render(true);
+			if (SETTINGS.get('General.ShowCounters'))
+				this._counter.render(true);
 		}, 'WRAPPER');
 		libWrapper.register(ARCHITECT.MOD_NAME, 'WallsLayer.prototype.deactivate', (wrapped: Function) => {
 			wrapped();
@@ -20,6 +22,7 @@ export default class WallsCounter {
 	}
 
 	static updateCount() {
+		if (!SETTINGS.get('General.ShowCounters')) return;
 		const objects = canvas.walls.objects.children as Wall[];
 		this._counter.count = objects.length;
 		var doors = 0;

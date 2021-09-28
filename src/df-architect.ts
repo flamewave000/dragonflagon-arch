@@ -57,6 +57,15 @@ Hooks.once('init', function () {
 	try { TileFlattener.init() } catch (error) { console.error(error) }
 	try { TileConfigExt.init() } catch (error) { console.error(error) }
 	try { CounterUI.init() } catch (error) { console.error(error) }
+
+	SETTINGS.register('General.ShowCounters', {
+		name: 'DF_ARCHITECT.General.ShowCounterName'.localize(),
+		hint: 'DF_ARCHITECT.General.ShowCounterHint'.localize(),
+		config: true,
+		scope: 'world',
+		type: Boolean,
+		default: true
+	})
 });
 
 Hooks.once('setup', function () {
