@@ -58,6 +58,12 @@ I hate big walls of text, so I've done my best to provide some animated previews
 
 These are some of the general features that are available outside of the Game Board layers
 
+### See Walls/Lights/Sounds on other Layers
+
+The walls, lighting, and wounds layers now have a toggle button that allows you to see them from other layers. This is very handy for map building when you are placing lights and such and want to try and line things up, or see exactly what walls/lights/sounds you're interacting with.
+
+![view walls, lights, and sounds on other layers](.assets/general-view-layers.gif)
+
 ### Quick Colour Picker
 
 You can now use an eyedropper from any FoundryVTT Config dialog that has a colour selector to quickly select a colour from the current map. Great for trying to match a light colour to a material in the map like lava, water, etc. This will immediately minimize ALL open windows during the selection process. It will then restore all windows that were not previously minimized.
@@ -292,7 +298,13 @@ If You select the <kbd>Save on Server</kbd> option, you will be given an additio
 | <kbd>Clone the current scene and use the image as background</kbd> | Clones the current scene and its content and sets the new scene's background to the newly created image. |
 | <kbd>Import as a new tile in current Scene</kbd>             | Import the new image as a tile into the center of the current scene. |
 
+### Tile Config Improvements
 
+The Tile Config will now show a thumbnail of the tile image selected. This will automatically update if you change the Tile Image field. To the right there will also be a description of the image's dimensions and aspect ratio.
+
+There are now two new buttons to the right of the Width and Height fields. The Width field will scale the width based on the original image's aspect ratio to be relative to the set height. The same occurs for the height scale button but in relation to the set width.
+
+![Tile Config Improvements](.assets/tile-config-improve.png)
 
 ## Walls Features
 
