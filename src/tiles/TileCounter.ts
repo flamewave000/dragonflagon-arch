@@ -13,7 +13,7 @@ export default class TileCounter {
 		}, 'WRAPPER');
 		libWrapper.register(ARCHITECT.MOD_NAME, 'BackgroundLayer.prototype.deactivate', (wrapped: Function) => {
 			wrapped();
-			if (this._counter.rendered && canvas.activeLayer.name !== 'ForegroundLayer')
+			if (this._counter.rendered && canvas.activeLayer?.name !== 'ForegroundLayer')
 				this._counter.close();
 		}, 'WRAPPER');
 		Hooks.on('createTile', this.updateCount.bind(this));
