@@ -45,7 +45,8 @@ i.df.df-alt-split {
 	align-items: center;
 }
 
-.df-arch-tile-config img {
+.df-arch-tile-config img,
+.df-arch-tile-config video {
 	flex: 0 0;
 	width: 100px;
 	height: 100px;

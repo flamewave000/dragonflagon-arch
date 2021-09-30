@@ -194,7 +194,9 @@
 		},
 		"TileConfigExt": {
 			"LabelDimens": "Image Dimensions",
-			"LabelAspect": "Image Aspect Ratio"
+			"LabelAspect": "Image Aspect Ratio",
+			"SettingControlsName": "Tile Config: Show Controls for Animations",
+			"SettingControlsHint": "Display playback controls for animations in the tile config thumbnail"
 		}
 	},
 	"LAYERS": {
