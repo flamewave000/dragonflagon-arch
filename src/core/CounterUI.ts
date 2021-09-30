@@ -76,11 +76,28 @@ export default class CounterUI extends Application {
 		});
 	}
 
-	async _render(force=false, options={}): Promise<void> {
+	async _render(force = false, options = {}): Promise<void> {
 		Hooks.on('collapseSidebarPre', this._handleSidebarCollapse.bind(this));
 		await super._render(force, options);
-		if((<any>ui.sidebar)._collapsed) {
+		if ((<any>ui.sidebar)._collapsed) {
 			this.element.css('right', '35px');
+		}
+
+		/**
+		 * This catches if the FPS Meter module is enabled and displaying its counter
+		 */
+		const fpsCounter = $('div.fpsCounter');
+		if (fpsCounter) {
+			const fpsT = fpsCounter[0].offsetTop;
+			const fpsB = fpsT + fpsCounter[0].offsetHeight;
+			const cuiT = this.element[0].offsetTop - 5; // Add a 5px margin to the top
+			const cuiH = this.element[0].offsetHeight + 5; // account for margin
+			// If we are touching, push us down to be 5px below the counter
+			if ((fpsT <= cuiT && fpsB >= cuiT)
+				|| (fpsT >= cuiT && fpsT <= cuiH)
+				|| (fpsB >= cuiT && fpsB <= cuiH)) {
+				this.element[0].style.top = `${fpsB + 5}px`;
+			}
 		}
 	}
 

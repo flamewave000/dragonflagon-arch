@@ -3,6 +3,7 @@
 ## Release 3.0.1 (2021-09-30)
 - FIX: Tile Flattener conflict with the Levels module.
 - FIX: Tile Config thumbnail now supports animated tile sources.
+- FIX: Object Counter no longer overlaps FPS Meter.
 - NEW: Tile Flattener has new option to hide animated tiles.
 
 ## Release 3.0.0 (2021-09-29)
