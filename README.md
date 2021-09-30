@@ -113,6 +113,8 @@ You can now capture the current scene's canvas. Kind of like a screenshot, but i
 
 As of v3.0, Images are now saved using a Save Image prompt that provides a preview of the result and the option to save either on your local computer or the server.
 
+**Known Conflicts:** The **Tile Flattener** feature does not work properly with the **Levels** module. It does a lot of management of objects in a way that I am unable to interact with. If there are tokens or objects showing up in your final image, you will have to disable **Levels** to get an accurate image capture.
+
 ![Image Save Dialog](.assets/general-capture-save.png)
 
 #### Hidden Tokens, Tiles, Drawings
