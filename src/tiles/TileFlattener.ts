@@ -17,6 +17,15 @@ enum TileLayerRendered {
 	Both
 }
 
+/**
+ * This Declaration is for the Levels Module. This module performs placeable
+ * cloning into its own PIXI Containers. This is used to disable those
+ * containers for proper rendering.
+ * 
+ * https://foundryvtt.com/packages/levels
+ */
+declare const _levels: any;
+
 export default class TileFlattener {
 
 	private static readonly PREF_RENDER_LIGHT = "TileFlattener.RenderLighting";
@@ -203,6 +212,13 @@ export default class TileFlattener {
 			CaptureGameScreen.toggleHidden("BackgroundLayer", hidden && !select && layers !== TileLayerRendered.Roof);
 			CaptureGameScreen.toggleHidden("ForegroundLayer", hidden && !select);
 
+			if(!!_levels) {
+				_levels.floorContainer.visible = false;
+				_levels.overContainer.visible = false;
+				_levels.fogContainer.visible = false;
+				_levels.tokenRevealFogContainer.visible = false;
+			}
+
 			if (select) {
 				const rect = {
 					l: Number.MAX_VALUE,
@@ -230,6 +246,12 @@ export default class TileFlattener {
 				image = await CaptureGameScreen.captureCanvas({ format: 'image/' + format, quality });
 			}
 		} finally {
+			if(!!_levels) {
+				_levels.floorContainer.visible = true;
+				_levels.overContainer.visible = true;
+				_levels.fogContainer.visible = true;
+				_levels.tokenRevealFogContainer.visible = true;
+			}
 			// Terminate the canvas capture
 			CaptureGameScreen.endCapture(session);
 			// Restore Background Image

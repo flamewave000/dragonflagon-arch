@@ -1,5 +1,10 @@
 # DF Architect
 
+## Release 3.0.1 (2021-09-30)
+- FIX: Tile Flattener conflict with the Levels module.
+- FIX: Tile Config thumbnail now supports animated tile sources.
+- NEW: Tile Flattener has new option to hide animated tiles.
+
 ## Release 3.0.0 (2021-09-29)
 - FIX: Quick Colour Picker not invoking the "change" event on the colour selector elements.
 - NEW: Including OpenCV library that is only loaded when required.

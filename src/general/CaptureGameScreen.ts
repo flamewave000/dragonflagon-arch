@@ -757,10 +757,10 @@ export default class CaptureGameScreen {
 	 * @param allowDownload (optional) If true, allow the user to download the image to their computer; otherwise the option will be hidden.
 	 * @returns String containing the server file path to the image is uploaded; otherwise null if the user saved locally, or undefined if the user cancelled the process.
 	 */
-	static async saveImageData({ image, dialogTitle, defaultFileName, folder, folderSource, allowDownload }
+	static saveImageData({ image, dialogTitle, defaultFileName, folder, folderSource, allowDownload }
 		: { image: ImageData, dialogTitle?: string, defaultFileName?: string, folder?: string, folderSource?: string, allowDownload?: boolean })
 		: Promise<string> {
-		return new Promise(async (res) => {
+		return new Promise<string>(async (res) => {
 			var resolved = false;
 			const resolve = (value: any) => {
 				if (resolved) return;
@@ -837,14 +837,28 @@ export default class CaptureGameScreen {
 			};
 			if (!allowDownload === false)
 				delete buttons.local;
+
+			const title = dialogTitle || 'DF_ARCHITECT.CaptureGameScreen.SaveImageDialog.Title'.localize();
+			const format = image.data.slice(0, 20).match(/data:image\/(.+);/)[1];
+			const content = await renderTemplate(`modules/${ARCHITECT.MOD_NAME}/templates/tile-flatten-save.hbs`, {
+				format,
+				placeholder: (defaultFileName || 'DF_ARCHITECT.CaptureGameScreen.SaveImageDialog.DefaultFileName'.localize()) + '-' + linkDate
+			});
 			const dialog: Dialog = new Dialog({
-				title: dialogTitle || 'DF_ARCHITECT.CaptureGameScreen.SaveImageDialog.Title'.localize(),
-				content: await renderTemplate(`modules/${ARCHITECT.MOD_NAME}/templates/tile-flatten-save.hbs`, {
-					placeholder: (defaultFileName || 'DF_ARCHITECT.CaptureGameScreen.SaveImageDialog.DefaultFileName'.localize()) + '-' + linkDate,
-					format: image.data.match(/data:image\/(.+);/)[1], image: image.data
-				}),
+				title,
+				content,
 				close: () => { if (!ignoreClose) resolve(undefined) },
-				buttons, default: 'server'
+				buttons, default: 'server',
+				render: (html: JQuery) => {
+					const img = html.find('#img-preview')[0] as HTMLImageElement;
+					img.onload = () => {
+						dialog.setPosition({ height: "auto" });
+						const tarT = (window.innerHeight - dialog.element[0].offsetHeight) / 2;
+						const maxT = Math.max(window.innerHeight - dialog.element[0].offsetHeight, 0);
+						dialog.setPosition({ top: Math.clamped(tarT, 0, maxT) });
+					}
+					img.src = image.data;
+				}
 			}, { width: 500 });
 			dialog.render(true);
 		});

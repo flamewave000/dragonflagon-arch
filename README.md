@@ -6,12 +6,12 @@
 ![Latest Version](https://img.shields.io/badge/dynamic/json?label=Latest%20Release&prefix=v&query=package.versions%5B0%5D&url=https%3A%2F%2Fforge-vtt.com%2Fapi%2Fbazaar%2Fpackage%2Fdf-architect)
 [![Foundry Hub Endorsements](https://img.shields.io/endpoint?logoColor=white&url=https%3A%2F%2Fwww.foundryvtt-hub.com%2Fwp-json%2Fhubapi%2Fv1%2Fpackage%2Fdf-architect%2Fshield%2Fendorsements)](https://www.foundryvtt-hub.com/package/df-architect/)
 
-Welcome to the great big Architect's Tool Suite. This module provides many many many new Quality of Life features to the Foundry Walls and Lighting layers. As well as a few extras that are just fun to have and make life a little easier.
+Welcome to the great big Architect's Tool Suite. This module provides many many many new Quality of Life features the FoundryVTT. These are all features specifically designed to make Map Making and Scene Prep more enjoyable. I have also tried to keep it clean with a concise goal of Pre-Game prep and you should be able to safely disable this module on Game Day. Any feature that I think can be used during a game will be in one of my other many modules.
 
-I hate big walls of text, so I've done my best to provide some animated previews of what each feature does. I hope you enjoy what this module brings to your FoundryVTT experience!
+I hate big walls of text, so I've done my best to provide some images and animated previews of what each feature does. I hope you enjoy what this module brings to your FoundryVTT experience!
 
 ## Contributions
-- This module was Commissioned by Anathema.
+- The original featureset was Commissioned by Anathema.
 - Spanish Localization - Courtesy of [lozalojo](https://github.com/lozalojo)
 
 ---
