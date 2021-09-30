@@ -162,6 +162,7 @@
 			"RenderLighting": "Bake-In Lighting (background will not be transparent)",
 			"RenderBackground": "Render Background Image",
 			"RenderHiddenTiles": "Render Hidden Tiles (Entire Canvas Only)",
+			"HideAnimatedTiles": "Hide Animated Tiles (Render Hidden Tiles must be OFF)",
 			"RenderSelectedOnly": "Selected Tiles",
 			"RenderEntireCanvas": "Entire Canvas",
 			"Margin": "Additional padding to be rendered outside of <b>Selected Tiles</b>",

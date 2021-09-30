@@ -23,6 +23,7 @@ export default class TileFlattener {
 	private static readonly PREF_RENDER_BACKG = "TileFlattener.RenderBackground";
 	private static readonly PREF_RENDER_SLCTD = "TileFlattener.RenderSelectedOnly";
 	private static readonly PREF_RENDER_HIDEN = "TileFlattener.RenderHiddenTiles";
+	private static readonly PREF_RENDER_ANIMS = "TileFlattener.RenderAnimatedTiles";
 	private static readonly PREF_MARGIN = "TileFlattener.Margin";
 	private static readonly PREF_LAYERS = "TileFlattener.Layers";
 	static readonly PREF_FOLDER = "TileFlattener.Folder";
@@ -32,6 +33,7 @@ export default class TileFlattener {
 	private static get renderBackground(): boolean { return SETTINGS.get(this.PREF_RENDER_BACKG); }
 	private static get renderSelected(): boolean { return SETTINGS.get(this.PREF_RENDER_SLCTD); }
 	private static get renderHidden(): boolean { return SETTINGS.get(this.PREF_RENDER_HIDEN); }
+	private static get renderAnimated(): boolean { return SETTINGS.get(this.PREF_RENDER_ANIMS); }
 	private static get margin(): Margin { return SETTINGS.get(this.PREF_MARGIN); }
 	private static get layers(): number { return SETTINGS.get(this.PREF_LAYERS); }
 	private static get folder(): string { return SETTINGS.get(this.PREF_FOLDER); }
@@ -42,7 +44,8 @@ export default class TileFlattener {
 		SETTINGS.register<Boolean>(this.PREF_RENDER_LIGHT, { scope: 'client', config: false, type: Boolean, default: false });
 		SETTINGS.register<Boolean>(this.PREF_RENDER_BACKG, { scope: 'client', config: false, type: Boolean, default: true });
 		SETTINGS.register<Boolean>(this.PREF_RENDER_SLCTD, { scope: 'client', config: false, type: Boolean, default: false });
-		SETTINGS.register<Boolean>(this.PREF_RENDER_HIDEN, { scope: 'client', config: false, type: Boolean, default: true });
+		SETTINGS.register<Boolean>(this.PREF_RENDER_HIDEN, { scope: 'client', config: false, type: Boolean, default: false });
+		SETTINGS.register<Boolean>(this.PREF_RENDER_ANIMS, { scope: 'client', config: false, type: Boolean, default: false });
 		SETTINGS.register<Number>(this.PREF_LAYERS, { scope: 'client', config: false, type: Number, default: 0 });
 		SETTINGS.register<Margin>(this.PREF_MARGIN, { scope: 'client', config: false, type: SETTINGS.typeOf<Margin>(), default: { l: 0, r: 0, t: 0, b: 0 } });
 		//#endregion
@@ -79,7 +82,8 @@ export default class TileFlattener {
 			showBG: this.renderBackground,
 			select: this.renderSelected,
 			hidden: this.renderHidden,
-			layers: this.layers
+			layers: this.layers,
+			hideAnimated: this.renderAnimated
 		};
 		const dialog: Dialog = new Dialog({
 			title: 'DF_ARCHITECT.TileFlattener.CapturePromptTitle'.localize(),
@@ -116,6 +120,7 @@ export default class TileFlattener {
 		const lights = html.querySelector<HTMLInputElement>('#lights').checked;
 		const showBG = html.querySelector<HTMLInputElement>('#showBG').checked;
 		const hidden = html.querySelector<HTMLInputElement>('#hidden').checked;
+		const animated = !html.querySelector<HTMLInputElement>('#animated').checked;
 		const select = html.querySelector<HTMLInputElement>('#tiles').checked;
 		const layers = html.querySelector<HTMLInputElement>('#floor').checked
 			? TileLayerRendered.Floor : html.querySelector<HTMLInputElement>('#roof').checked
@@ -125,6 +130,7 @@ export default class TileFlattener {
 			SETTINGS.set(this.PREF_RENDER_LIGHT, lights),
 			SETTINGS.set(this.PREF_RENDER_BACKG, showBG),
 			SETTINGS.set(this.PREF_RENDER_HIDEN, hidden),
+			SETTINGS.set(this.PREF_RENDER_ANIMS, animated),
 			SETTINGS.set(this.PREF_RENDER_SLCTD, select),
 			SETTINGS.set(this.PREF_MARGIN, margin),
 			SETTINGS.set(this.PREF_RENDER_LIGHT, lights),
@@ -133,7 +139,7 @@ export default class TileFlattener {
 			SETTINGS.set(CaptureGameScreen.PREF_COMP, quality),
 		]);
 
-		const tilesPreHidden: [Tile, boolean][] = [];
+		const tilesPreHidden = new Map<string, [Tile, boolean]>();
 		var controlledTiles: Tile[];
 		// Collect all of the selected tiles
 		controlledTiles = (canvas.background.controlled as Tile[]).concat(canvas.foreground.controlled);
@@ -148,8 +154,18 @@ export default class TileFlattener {
 			const allTiles = (canvas.background.tiles as Tile[]).concat(canvas.foreground.tiles);
 			const controlledIDs = controlledTiles.map(x => x.id);
 			for (let tile of allTiles) {
-				tilesPreHidden.push([tile, tile.data.hidden]);
+				tilesPreHidden.set(tile.data._id, [tile, tile.data.hidden]);
 				tile.data.hidden = !controlledIDs.includes(tile.id);
+			}
+		}
+		// If we are not rendering animated tiles
+		if (!animated) {
+			// Collect and hide all the other tiles
+			const allTiles = (canvas.background.tiles as Tile[]).concat(canvas.foreground.tiles);
+			for (let tile of allTiles) {
+				if (!tilesPreHidden.has(tile.data._id))
+					tilesPreHidden.set(tile.data._id, [tile, tile.data.hidden]);
+				tile.data.hidden = VideoHelper.hasVideoExtension(tile.data.img);
 			}
 		}
 		canvas.background.selectObjects();
@@ -166,7 +182,8 @@ export default class TileFlattener {
 		else if (layers === TileLayerRendered.Roof) {
 			// Hide all tiles on the background layer
 			for (let tile of canvas.background.tiles) {
-				tilesPreHidden.push([tile, tile.data.hidden]);
+				if (!tilesPreHidden.has(tile.data._id))
+					tilesPreHidden.set(tile.data._id, [tile, tile.data.hidden]);
 				tile.data.hidden = true;
 			}
 		}
@@ -219,7 +236,7 @@ export default class TileFlattener {
 			canvas.background.bg.visible = true;
 			(<any>canvas.app.renderer).backgroundAlpha = 1;
 			// Restore the non-selected tiles
-			for (let [tile, hidden] of tilesPreHidden) {
+			for (let [_, [tile, hidden]] of tilesPreHidden) {
 				tile.data.hidden = hidden;
 				tile.refresh();
 			}

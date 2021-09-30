@@ -11,6 +11,10 @@
 	<input class="shrink" type="checkbox" id="hidden" {{#if hidden}}checked{{/if}} {{#if select}}disabled{{/if}} />
 	<label class="grow" for="hidden">{{localize 'DF_ARCHITECT.TileFlattener.RenderHiddenTiles'}}</label>
 	<div></div>
+	{{!-- Hide Animated Tiles --}}
+	<input class="shrink" type="checkbox" id="animated" {{#unless hideAnimated}}checked{{/unless}} />
+	<label class="grow" for="animated">{{localize 'DF_ARCHITECT.TileFlattener.HideAnimatedTiles'}}</label>
+	<div></div>
 	{{!-- Render Canvas or Selection --}}
 	<input class="shrink" type="radio" name="selectOrCanvas" id="canvas" {{#unless select}}checked{{/unless}}>
 	<label class="grow" for="canvas">{{localize 'DF_ARCHITECT.TileFlattener.RenderEntireCanvas'}}</label>
