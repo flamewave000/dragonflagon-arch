@@ -29,18 +29,29 @@ I hate big walls of text, so I've done my best to provide some animated previews
 ## Contents
 
 * [General Features](#general-features)
-	+ [Quick Colour Picker](#quick-colour-picker)
-		- [For Devs: You can use this feature!](#for-devs-you-can-use-this-feature)
-	+ [Alternate Grid Snap](#alternate-grid-snap)
-	+ [Layer Hotkeys](#layer-hotkeys)
-	+ [Layer Quick Swap](#layer-quick-swap)
-	+ [Canvas Capture](#canvas-capture)
-		- [Hidden Tokens, Tiles, Drawings](#hidden-tokens-tiles-drawings)
-		- [Capture Current View](#capture-current-view)
-		- [Capture Whole Canvas](#capture-whole-canvas)
-		- [Capture Whole Canvas with Padding](#capture-whole-canvas-with-padding)
-		- [Capture Vision](#capture-vision)
-		- [Layer Filtering (GM Only)](#layer-filtering-gm-only)
+  * [See Walls/Lights/Sounds on other Layers](#See-WallsLightsSounds-on-other-Layers)
+  * [Layer Object Counters](#Layer-Object-Counters)
+  * [Quick Colour Picker](#quick-colour-picker)
+    - [For Devs: You can use this feature!](#for-devs-you-can-use-this-feature)
+  * [Alternate Grid Snap](#alternate-grid-snap)
+  * [Layer Hotkeys](#layer-hotkeys)
+  * [Layer Quick Swap](#layer-quick-swap)
+  * [Canvas Capture](#canvas-capture)
+    * [Image Saving](#Image-Saving)
+    * [Hidden Tokens, Tiles, Drawings](#hidden-tokens-tiles-drawings)
+    * [Capture Current View](#capture-current-view)
+    * [Capture Whole Canvas](#capture-whole-canvas)
+    * [Capture Whole Canvas with Padding](#capture-whole-canvas-with-padding)
+    * [Capture Vision](#capture-vision)
+    * [Layer Filtering (GM Only)](#layer-filtering-gm-only)
+    * [Public Canvas Capture API](#Public-Canvas-Capture-API)
+    	* [API Definitions](#API-Definitions)
+* [Tiles Features](#Tiles-Features)
+	* [Tile Flattener](#Tile-Flattener)
+		* [Tile Flatten Config](#Tile-Flatten-Config)
+		* [Save Image Dialog](#Save-Image-Dialog)
+		* [Save to Server Additional Options](#Save-to-Server-Additional-Options)
+	* [Tile Config Improvements](#Tile-Config-Improvements)
 * [Walls Features](#walls-features-1)
 	+ [Lock Wall Chaining](#lock-wall-chaining)
 	+ [Auto-Snap Wall Endpoint](#auto-snap-wall-endpoint)
@@ -194,7 +205,7 @@ async function CaptureCanvas() {
 }
 ```
 
-##### API Definition
+##### API Definitions
 
 ```TypeScript
 // Contains a complete image capture result
