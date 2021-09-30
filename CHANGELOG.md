@@ -1,6 +1,6 @@
 # DF Architect
 
-## Release 3.0.0 (2021-09-)
+## Release 3.0.0 (2021-09-29)
 - FIX: Quick Colour Picker not invoking the "change" event on the colour selector elements.
 - NEW: Including OpenCV library that is only loaded when required.
 - UPDATE: Major Optimization in Capture Canvas feature, no longer need to split canvas into many images. This will be done automatically and the resulting images stitched together into a single image download.
