@@ -8,6 +8,11 @@
 		"ErrorColourSettingsMissing": "DF Architect: Se recomienda usar el módulo \"lib - ColorSettings\"",
 		"ErrorLibWrapperMissing": "DF Architect: Se requiere el módulo 'libWrapper'. Por favor, instale y active 'libWrapper'",
 		"ErrorLibDFHotkeysMissing": "DF Architect: se requiere el módulo 'Library: DF Hotkeys'. Por favor, instálelo y actívelo",
+		"General": {
+			"Cancel": "Cancelar",
+			"ShowCounterName": "Mostrar contadores de objeto",
+			"ShowCounterHint": "Mostrar contadores de objetos en las baldosas, muros, iluminación u capas de sonidos"
+		},
 		"ReloadRequired": {
 			"Title": "Se requiere recargar",
 			"Content": "<p>Es necesario recargar para que los cambios tengan efecto</p>",
@@ -91,10 +96,19 @@
 				"AllowPC_Hint": "Permite a los jugadores que hagan una captura del lienzo activo del tablero de juego"
 			},
 			"ScreenCapture": {
-				"Capturing": "Capturando el lienzo...",
+				"Rendering": "Procesando imágines",
+				"Stitching": "Uniendo las imagenes",
+				"ErrorStitchingFailure": "Ha fallado el proceso de unión de imágenes por capacidad de memoria. Puede intentarlo de nuevo pero tendrá que hacer más pequeña la escena",
+				"Background": {
+					"Hide": "Ocultar imagen de fondo",
+					"Colour": "Color de fondo",
+					"Alpha": "Transparencia del color de fondo"
+				},
+				"ShowControls": "Mostrar controles",
+				"ShowHidden": "Mostrar ocultos",
+				"ResetFilters": "Reiniciar filtros",
 				"Label": "Guardar imagen del tablero",
 				"ContinueButton": "Capturar imagen",
-				"CancelButton": "Cancelar",
 				"Target": "¿Qué parte desea capturar?",
 				"Target_Current": "Vista actual",
 				"Target_All": "Todo el lienzo",
@@ -104,10 +118,19 @@
 				"FormatWEB": "WebP (solo en Chrome)",
 				"Compression": "Calidad del JPEG y el WebP",
 				"KeepPadding": "(Solo para 'Todo el lienzo') Incluir relleno",
-				"SplitImageNote": "(Solo para 'Todo el lienzo') Si la imagen no es renderizada correctamente (por ejemplo, si nota que faltan algunas partes), es que el tablero es demasiado grande para la GPU. Puede aumentar estos valores para dividir el tablero en varias imágenes tanto vertical como horizontalmente. Luego puede juntarlas de nuevo usando cualquier editor de imágenes",
-				"WarningConfirmTitle": "Muy Grande Imagen",
+				"WarningNoScene": "No está visualizando ninguna escena. Por favor, active o visualice una escena para capturar el lienzo",
+				"WarningConfirmTitle": "Imagen muy grande",
 				"WarningConfirmContent": "<p>Está intentando capturar una imagen muy grande. Es posible que desee dividir la imagen.<br>Dependiendo de su GPU, la renderización puede fallar y dar como resultado una imagen con solo parcialmente dibujada, el resto dejado en blanco.</p>"
-			}
+			},
+			"SaveImageDialog": {
+				"Title": "Guardar imagen",
+				"SaveServer": "Guardar en el servidor",
+				"SaveLocal": "Guardar en el PC",
+				"FileNameLabel": "Nombre del fichero: ",
+				"FileNamePlaceholder": "capturapantalla",
+				"DefaultFileName": "captura"
+			},
+			"ErrorCaptureInProgress": "Una sesión de captura se encuentra activa. Por favor, complétela o cancélela antes de volver a intentarlo"
 		},
 		"LightTemplate": {
 			"CreateTemplateButton": {
@@ -135,6 +158,49 @@
 		},
 		"AltLightNegativeRadius": {
 			"InvertRadiusButton": "Invertir los radios tenue / brillante a claro y oscuro (valores positivos / negativos)"
+		},
+		"TileFlattener": {
+			"CapturePromptTitle": "Aplanar baldosas",
+			"Label": "Aplanar las baldosas en una única imagen",
+			"FlattenButton": "Aplanar baldosas",
+			"RenderLighting": "Procesar iluminación (el fondo no será transparente)",
+			"RenderBackground": "Procesar imagen de fondo",
+			"RenderHiddenTiles": "Procesar baldosas ocultas (solo para todo el lienzo)",
+			"HideAnimatedTiles": "Ocultar baldosas animadas (Procesar baldosas ocultas debe estar desactivado)",
+			"RenderSelectedOnly": "Baldosas seleccionadas",
+			"RenderEntireCanvas": "Todo el lienzo",
+			"Margin": "Compensación adicional que debe procesarse fuera de las <b>baldosas seleccionadas</b>",
+			"ImageFolderTitle": "Directorio de imágenes de baldosas aplanadas",
+			"RenderRoofTiles": "Procesar solo baldosas de tejados",
+			"RenderFloorTiles": "Procesar solo baldosas de suelo",
+			"RenderBothTiles": "Procesar baldosas de suelo y tejado",
+			"SaveImageDialog": {
+				"Title": "Guardar baldosa aplanada",
+				"FileNameLabel": "Nombe de fichero: ",
+				"FileNamePlaceholder": "aplanador-baldosas"
+			},
+			"SceneReplaceDialog": {
+				"Title": "Reemplazamiento de escena",
+				"WhatToDo": "Would you like Tile Flattener to do any of these processes for you?",
+				"ReplaceBackground": "Replace the current scene's background",
+				"ReplaceBackgroundHint": "The current scene's background will be changed to the newly created image.",
+				"CloneScene": "Clone the current scene and use image as background",
+				"CloneSceneHint": "Clones the current scene and its content and sets the new scene's background to the newly created image.",
+				"ImportToScene": "Import as a new tile in current Scene",
+				"ImportToSceneHint": "Import the new image as a tile into the center of the current scene.",
+				"DoNothing": "Do Nothing"
+			}
+		},
+		"ShowLayerControls": {
+			"Walls": "Mostrar muros en otras capas",
+			"Lights": "Mostrar barreras de luz en otras capas",
+			"Sounds": "Mostrar barreras de sonidos en otras capas"
+		},
+		"TileConfigExt": {
+			"LabelDimens": "Dimensiones de imagen",
+			"LabelAspect": "Proporción de aspecto de imagen",
+			"SettingControlsName": "Configuración de baldosa: Mostrar controles de animación",
+			"SettingControlsHint": "Mostrar controles de reproducción para las animaciones en la configuración de vista previa de la baldosa"
 		}
 	},
 	"LAYERS": {
