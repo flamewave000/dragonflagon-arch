@@ -212,7 +212,7 @@ export default class TileFlattener {
 			CaptureGameScreen.toggleHidden("BackgroundLayer", hidden && !select && layers !== TileLayerRendered.Roof);
 			CaptureGameScreen.toggleHidden("ForegroundLayer", hidden && !select);
 
-			if(!!_levels) {
+			if(typeof _levels !== 'undefined') {
 				_levels.floorContainer.visible = false;
 				_levels.overContainer.visible = false;
 				_levels.fogContainer.visible = false;
@@ -246,7 +246,7 @@ export default class TileFlattener {
 				image = await CaptureGameScreen.captureCanvas({ format: 'image/' + format, quality });
 			}
 		} finally {
-			if(!!_levels) {
+			if(typeof _levels !== 'undefined') {
 				_levels.floorContainer.visible = true;
 				_levels.overContainer.visible = true;
 				_levels.fogContainer.visible = true;

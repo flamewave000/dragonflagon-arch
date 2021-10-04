@@ -1,5 +1,9 @@
 # DF Architect
 
+## Release 3.0.2 (2021-10-04)
+- FIX: _levels undefined when Levels module not installed.
+- UPDATE: Spanish Translations courtesy of [lozalojo](https://github.com/lozalojo).
+
 ## Release 3.0.1 (2021-09-30)
 - FIX: Tile Flattener conflict with the Levels module.
 - FIX: Tile Config thumbnail now supports animated tile sources.
