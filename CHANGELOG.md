@@ -1,5 +1,8 @@
 # DF Architect
 
+## Release 3.0.3 (2021-10-05)
+- FIX: Counters overlapping due to an error when dismissing them.
+
 ## Release 3.0.2 (2021-10-04)
 - FIX: _levels undefined when Levels module not installed.
 - UPDATE: Spanish Translations courtesy of [lozalojo](https://github.com/lozalojo).

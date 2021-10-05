@@ -87,7 +87,7 @@ export default class CounterUI extends Application {
 		 * This catches if the FPS Meter module is enabled and displaying its counter
 		 */
 		const fpsCounter = $('div.fpsCounter');
-		if (fpsCounter) {
+		if (fpsCounter.length > 0) {
 			const fpsT = fpsCounter[0].offsetTop;
 			const fpsB = fpsT + fpsCounter[0].offsetHeight;
 			const cuiT = this.element[0].offsetTop - 5; // Add a 5px margin to the top
