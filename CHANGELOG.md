@@ -1,5 +1,9 @@
 # DF Architect
 
+## Release 3.0.4 (2021-10-07)
+- FIX: Tiles Flattener wasn't excluding hidden tiles properly.
+- FIX: Canvas Capture will now hide the borders that appear around hovered and selected Tokens, Tiles, and Drawings.
+
 ## Release 3.0.3 (2021-10-05)
 - FIX: Counters overlapping due to an error when dismissing them.
 

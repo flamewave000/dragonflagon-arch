@@ -308,6 +308,10 @@ export default class CaptureGameScreen {
 		for (let layerName of this.LayersWithHiddenPlaceables) {
 			const layer = (<Canvas>canvas).getLayer(layerName) as PlaceablesLayer;
 			for (let object of layer.objects.children as PlaceableObject[]) {
+				// Disable the Border/Frame of the selectable objects during the render
+				if ((<Tile>object).frame !== undefined) (<Tile>object).frame.renderable = false
+				else if ((<Token>object).border !== undefined) (<Token>object).border.renderable = false
+				// If the object is not hidden, ignore it
 				if ((<any>object.data).hidden === undefined || !(<any>object.data).hidden) continue;
 				object.renderable = false;
 				(<any>object.data).hidden = false;
@@ -343,8 +347,16 @@ export default class CaptureGameScreen {
 			object.renderable = true;
 			delete object.data.flags.df_arch_hidden;
 		}
+
 		// Correct Layers
-		for (let layer of (<Canvas>canvas).layers) {
+		for (let layer of (<Canvas>canvas).layers as PlaceablesLayer[]) {
+			if (this.LayersWithHiddenPlaceables.includes(layer.name))
+				layer.objects.children.forEach(object => {
+					// Disable the Border/Frame of the selectable objects during the render
+					if ((<Tile>object).frame !== undefined) (<Tile>object).frame.renderable = true
+					else if ((<Token>object).border !== undefined) (<Token>object).border.renderable = true
+				});
+
 			layer.renderable = true;
 			layer.deactivate();
 			if (layer.name === 'NotesLayer') {
