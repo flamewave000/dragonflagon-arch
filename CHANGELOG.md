@@ -2,7 +2,8 @@
 
 ## Release 3.0.5 (2021-10-19)
 - FIX: Crash when trying to hide a canvas layer that is not properly registered with FoundryVTT's.
-- 
+- FIX: Crash when attempting to flatten tiles on a scene with no background image.
+- FIX: Issue with background colour being transparent by default in FoundryVTT.
 
 ## Release 3.0.4 (2021-10-07)
 - FIX: Tiles Flattener wasn't excluding hidden tiles properly.

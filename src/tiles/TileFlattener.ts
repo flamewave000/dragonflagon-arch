@@ -201,7 +201,8 @@ export default class TileFlattener {
 			}
 		}
 		// Update the Background Image
-		canvas.background.bg.visible = showBG;
+		if (!!canvas.background.bg)
+			canvas.background.bg.visible = showBG;
 		(<any>canvas.app.renderer).backgroundAlpha = 0;
 
 		// Begin the Canvas Capture Process
@@ -262,7 +263,8 @@ export default class TileFlattener {
 			// Terminate the canvas capture
 			CaptureGameScreen.endCapture(session);
 			// Restore Background Image
-			canvas.background.bg.visible = true;
+			if (!!canvas.background.bg)
+				canvas.background.bg.visible = true;
 			(<any>canvas.app.renderer).backgroundAlpha = 1;
 			// Restore the non-selected tiles
 			for (let [_, [tile, hidden]] of tilesPreHidden) {

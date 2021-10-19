@@ -337,7 +337,8 @@ export default class CaptureGameScreen {
 		if (session === null || session.id !== CaptureGameScreen._currentSession?.id) return false;
 		CaptureGameScreen._captureInProgress = false;
 		// Cleanup Background
-		canvas.background.bg.visible = true;
+		if (!!canvas.background.bg)
+			canvas.background.bg.visible = true;
 		canvas.app.renderer.backgroundColor = parseInt(game.scenes.viewed.data.backgroundColor.slice(1), 16);
 		(<any>canvas.app.renderer).backgroundAlpha = 1.0;
 
@@ -386,7 +387,7 @@ export default class CaptureGameScreen {
 		if (!layer) {
 			console.warn(`CaptureGameScreen::toggleLayer() - There is no registered layer for the name '${layerName}'. Attempting to find layer in layer list manually.`);
 			layer = canvas.layers.find(x => x.name === layerName);
-			if(!layer) {
+			if (!layer) {
 				console.error(`CaptureGameScreen::toggleLayer() - Could not find any layer with the name '${layerName}'`);
 				return;
 			}

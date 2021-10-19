@@ -15,6 +15,7 @@ class _PIXIAppOverride extends PIXI.Application {
 		resolution?: number;
 		forceCanvas?: boolean;
 		backgroundColor?: number;
+		backgroundAlpha?: number;
 		clearBeforeRender?: boolean;
 		powerPreference?: string;
 		sharedTicker?: boolean;
@@ -23,8 +24,10 @@ class _PIXIAppOverride extends PIXI.Application {
 	}) {
 		const allow = game.user.isGM || SETTINGS.get(CaptureGameScreen.PREF_ALLOW_PC);
 		// Only enable the `preserveDrawingBuffer` if we are the GM
-		if (allow)
+		if (allow) {
 			super(mergeObject(options, { preserveDrawingBuffer: true, transparent: true }));
+			(<any>this.renderer).backgroundAlpha = 1.0;
+		}
 		else
 			super(options);
 	}
