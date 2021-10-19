@@ -175,7 +175,7 @@ export default class TileFlattener {
 				if (!tilesPreHidden.has(tile.data._id))
 					tilesPreHidden.set(tile.data._id, [tile, tile.data.hidden]);
 				// Only override the hidden if it is not already true
-				if(!tile.data.hidden)
+				if (!tile.data.hidden)
 					tile.data.hidden = VideoHelper.hasVideoExtension(tile.data.img);
 			}
 		}
@@ -183,7 +183,11 @@ export default class TileFlattener {
 		// Disable ALL Other Layers
 		for (let layer of canvas.layers) {
 			if (["BackgroundLayer", "ForegroundLayer", "LightingLayer"].includes(layer.name)) continue;
-			CaptureGameScreen.toggleLayer(layer.name, false)
+			try {
+				CaptureGameScreen.toggleLayer(layer.name, false)
+			} catch (error: any) {
+				console.error(error);
+			}
 		}
 		CaptureGameScreen.toggleLayer("LightingLayer", lights);
 		if (layers === TileLayerRendered.Floor)
@@ -215,7 +219,7 @@ export default class TileFlattener {
 			CaptureGameScreen.toggleHidden("ForegroundLayer", hidden && !select);
 			await waitForDOMUpdate();
 
-			if(typeof _levels !== 'undefined') {
+			if (typeof _levels !== 'undefined') {
 				_levels.floorContainer.visible = false;
 				_levels.overContainer.visible = false;
 				_levels.fogContainer.visible = false;
@@ -249,7 +253,7 @@ export default class TileFlattener {
 				image = await CaptureGameScreen.captureCanvas({ format: 'image/' + format, quality });
 			}
 		} finally {
-			if(typeof _levels !== 'undefined') {
+			if (typeof _levels !== 'undefined') {
 				_levels.floorContainer.visible = true;
 				_levels.overContainer.visible = true;
 				_levels.fogContainer.visible = true;

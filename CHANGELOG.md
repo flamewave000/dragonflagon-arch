@@ -1,5 +1,9 @@
 # DF Architect
 
+## Release 3.0.5 (2021-10-19)
+- FIX: Crash when trying to hide a canvas layer that is not properly registered with FoundryVTT's.
+- 
+
 ## Release 3.0.4 (2021-10-07)
 - FIX: Tiles Flattener wasn't excluding hidden tiles properly.
 - FIX: Canvas Capture will now hide the borders that appear around hovered and selected Tokens, Tiles, and Drawings.

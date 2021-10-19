@@ -382,7 +382,16 @@ export default class CaptureGameScreen {
 	 * @param show true to show; false to hide.
 	 */
 	static toggleLayer(layerName: string, show: boolean) {
-		(<Canvas>canvas).getLayer(layerName).renderable = show;
+		var layer: CanvasLayer | undefined = <PlaceablesLayer>canvas.getLayer(layerName);
+		if (!layer) {
+			console.warn(`CaptureGameScreen::toggleLayer() - There is no registered layer for the name '${layerName}'. Attempting to find layer in layer list manually.`);
+			layer = canvas.layers.find(x => x.name === layerName);
+			if(!layer) {
+				console.error(`CaptureGameScreen::toggleLayer() - Could not find any layer with the name '${layerName}'`);
+				return;
+			}
+		}
+		layer.renderable = show;
 	}
 	/**
 	 * Toggle the visibility of hidden entities on the given layer.
