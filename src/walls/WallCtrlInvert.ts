@@ -51,6 +51,9 @@ export default class WallCtrlInvert {
 				onClick: (toggled: boolean) => { this.enabled = toggled }
 			});
 		});
+
+		// When ever the scene changes, we need to repatch the walls layer
+		Hooks.on("canvasReady", () => WallCtrlInvert._patchWallsLayer());
 	}
 
 	static ready() {
@@ -68,7 +71,7 @@ export default class WallCtrlInvert {
 	}
 
 	/** Swaps between the Original Callback list and the Wrapped Callback list */
-	private static _patchWallsLayer() {
+	private static _patchWallsLayer(enabledOverride?: boolean) {
 		const mim = (canvas as Canvas).mouseInteractionManager;
 		if (!this._originalCallbacks) {
 			this._originalCallbacks = mim.callbacks as MouseCallbacks;
@@ -79,7 +82,12 @@ export default class WallCtrlInvert {
 					(<any>this._overrideCallbacks)[key] = this._wrap((<any>this._originalCallbacks)[key]);
 			}
 		}
-		mim.callbacks = this.enabled ? this._overrideCallbacks : this._originalCallbacks;
+		if (enabledOverride ?? this.enabled)
+			mim.callbacks = this._overrideCallbacks;
+		else {
+			mim.callbacks = this._originalCallbacks;
+			this._originalCallbacks = null;
+		}
 	}
 
 	/** Wraps the event with the {@link _PointerEvent} class for inverting the Ctrl Key, if it is an event that should be wrapped */
