@@ -130,7 +130,8 @@ export default class CaptureGameScreen {
 		};
 
 		// Initialize the Background
-		canvas.background.bg.visible = !data.bg.hide;
+		if (!!canvas.background.bg)
+			canvas.background.bg.visible = !data.bg.hide;
 		canvas.app.renderer.backgroundColor = parseInt(data.bg.colo.slice(1), 16);
 		(<any>canvas.app.renderer).backgroundAlpha = data.bg.alph / 100.0;
 
@@ -232,7 +233,8 @@ export default class CaptureGameScreen {
 				});
 				html.find('#bg-hide').on('change', (e: Event) => {
 					const hide = (<HTMLInputElement>e.currentTarget).checked;
-					canvas.background.bg.visible = !hide;
+					if (!!canvas.background.bg)
+						canvas.background.bg.visible = !hide;
 					SETTINGS.set(this.PREF_BG_HIDE, hide);
 				});
 				html.find('#bg-colo').on('change', (e: Event) => {

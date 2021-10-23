@@ -1,7 +1,10 @@
 # DF Architect
 
+## Release 3.0.6 (2021-10-23)
+- FIX: Capture Canvas issue with scene with no background image.
+
 ## Release 3.0.5 (2021-10-19)
-- FIX: Crash when trying to hide a canvas layer that is not properly registered with FoundryVTT's.
+- FIX: Crash when trying to hide a canvas layer that is not properly registered with FoundryVTT.
 - FIX: Crash when attempting to flatten tiles on a scene with no background image.
 - FIX: Issue with background colour being transparent by default in FoundryVTT.
 - FIX: Ctrl Lock was not being preserved across scene transitions.
