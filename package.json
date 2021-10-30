@@ -23,7 +23,7 @@
 		"release": "npm run tag && npm run prod"
 	},
 	"devDependencies": {
-		"@league-of-foundry-developers/foundry-vtt-types": "^0.7.9-0",
+		"@league-of-foundry-developers/foundry-vtt-types": "^0.8.9-7",
 		"del": "^6.0.0",
 		"gulp": "^4.0.2",
 		"gulp-better-rollup": "^4.0.1",

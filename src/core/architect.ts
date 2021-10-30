@@ -4,9 +4,9 @@ export default class ARCHITECT {
 	static reportProgress(context: string, progress: number, total: number, keepAlive: boolean = false) {
 		const loader = document.getElementById("loading");
 		const pct = Math.round((progress / total) * 100);
-		loader.querySelector("#context").textContent = context + ` (${progress}/${total})`;
-		loader.querySelector("#loading-bar").style.width = `${pct}%`;
-		loader.querySelector("#progress").textContent = `${pct}%`;
+		loader.querySelector<HTMLElement>("#context").textContent = context + ` (${progress}/${total})`;
+		loader.querySelector<HTMLElement>("#loading-bar").style.width = `${pct}%`;
+		loader.querySelector<HTMLElement>("#progress").textContent = `${pct}%`;
 		loader.style.display = "block";
 		if ((pct === 100) && !loader.hidden && !keepAlive) $(loader).fadeOut(2000);
 	}

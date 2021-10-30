@@ -1,3 +1,4 @@
+import { TileData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs";
 import SETTINGS from "../core/settings.js";
 
 function reduce(numerator: number, denominator: number) {
@@ -30,7 +31,7 @@ export default class TileConfigExt {
 		Hooks.on('renderTileConfig', this.updateTileConfig.bind(this));
 	}
 
-	private static updateTileConfig(config: TileConfig, html: JQuery<HTMLElement>, data: Tile.Data) {
+	private static updateTileConfig(config: TileConfig, html: JQuery<HTMLElement>, data: TileData) {
 		// Update the image preview
 		const imgInput = html.find('input[name="img"]');
 		imgInput.parent().parent().before($(this._previewImageHTML));

@@ -1,7 +1,9 @@
+import { WallData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs";
 import ARCHITECT from "../core/architect.js";
 import SETTINGS from "../core/settings.js";
 
 interface WallExt extends Wall {
+	[key: string]: any;
 	leftLabel: PIXI.Text;
 	rightLabel: PIXI.Text;
 }
@@ -42,10 +44,10 @@ class _WallDirections {
 	private async _reverseWallDirection(this: Wall) {
 		if (SETTINGS.get(_WallDirections.PREF_ALLOW_UNSELECTED_INVERT) && !this._controlled) return;
 		if (this.data.dir) {
-			await this.document.update(<DeepPartial<Wall.Data>>{ dir: this.data.dir === 1 ? 2 : 1 });
+			await this.document.update(<DeepPartial<WallData>>{ dir: this.data.dir === 1 ? 2 : 1 });
 		} else {
 			const data = this.data.c.slice(2).concat(this.data.c.slice(0, 2));
-			await this.document.update(<DeepPartial<Wall.Data>>{ c: data });
+			await this.document.update(<DeepPartial<WallData>>{ c: data });
 		}
 	}
 

@@ -1,3 +1,4 @@
+import { WallData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs";
 import SETTINGS from "../core/settings.js";
 
 class _WallJoinSplit {
@@ -29,24 +30,24 @@ class _WallJoinSplit {
 	private async _splitWalls() {
 		const layer = <WallsLayer>(<Canvas>canvas).getLayer('WallsLayer');
 		const walls = layer.controlled;
-		const newWalls: Wall.Data[] = [];
+		const newWalls: WallData[] = [];
 		for (let wall of walls) {
 			const [x1, y1, x2, y2] = wall.data.c;
 			var midX = (x1 + x2) / 2;
 			var midY = (y1 + y2) / 2;
 			//@ts-expect-error
 			[midX, midY] = layer._getWallEndpointCoordinates(new PIXI.Point(midX, midY), {snap:false});
-			const wall1 = duplicate(wall.data) as Wall.Data;
+			const wall1 = duplicate(wall.data) as WallData;
 			wall1.c = [x1, y1, midX, midY];
 			delete wall1._id;
-			const wall2 = duplicate(wall.data) as Wall.Data;
+			const wall2 = duplicate(wall.data) as WallData;
 			wall2.c = [midX, midY, x2, y2];
 			delete wall2._id;
 			newWalls.push(wall1, wall2)
 		}
 		await game.scenes.viewed.deleteEmbeddedDocuments('Wall', walls.map(x => x.id));
 		// await layer.deleteMany(walls.map(x => x.id));
-		const wallObjects = (await game.scenes.viewed.createEmbeddedDocuments('Wall', newWalls));
+		const wallObjects = (await game.scenes.viewed.createEmbeddedDocuments('Wall', <any>newWalls));
 		for (let o of wallObjects) {
 			const wall = layer.get(o.id);
 			if (!wall.visible || !wall.can(game.user, "control")) continue;
@@ -69,11 +70,11 @@ class _WallJoinSplit {
 			return;
 		}
 		const endpoints = [...points.entries()].filter(x => x[1].length == 1);
-		const wallData = duplicate(endpoints[0][1][0].data) as Wall.Data;
+		const wallData = duplicate(endpoints[0][1][0].data) as WallData;
 		delete wallData._id;
 		wallData.c = endpoints.reduce((r, x) => r.concat(JSON.parse(x[0])), [] as number[]) as [number, number, number, number];
 		await game.scenes.viewed.deleteEmbeddedDocuments('Wall', walls.map(x => x.id));
-		const result = await game.scenes.viewed.createEmbeddedDocuments('Wall', [wallData]);
+		const result = <WallDocument[]>await game.scenes.viewed.createEmbeddedDocuments('Wall', <any[]>[wallData]);
 		for (let wall of result) wall.object.control();
 	}
 }

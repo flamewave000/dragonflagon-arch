@@ -72,7 +72,7 @@ class _WallAltDrop {
 						else setTimeout(waiter, 100);
 						return;
 					}
-					res(game.scenes.viewed.data.walls.find(x => x.id === (<Canvas>canvas).walls.last.id).object);
+					res(game.scenes.viewed.data.walls.find(x => x.id === (<Canvas>canvas).walls['last'].id).object as Wall);
 				}
 				setTimeout(waiter, 100);
 			});
@@ -113,10 +113,12 @@ class _WallAltDrop {
 		const p0 = fixed ? wall.coords.slice(2, 4) : wall.coords.slice(0, 2);
 		const coords = fixed ? target.concat(p0) : p0.concat(target);
 		if ((coords[0] === coords[2]) && (coords[1] === coords[3])) {
-			return await wall.delete(); // If we collapsed the wall, delete its
+			await wall.document.delete(); // If we collapsed the wall, delete its
+			return wall;
 		}
-		(<WallsLayer>wall.layer).last.point = target;
-		return await wall.document.update(<any>{ c: coords });
+		(<WallsLayer>wall.layer)['last'].point = target;
+		await wall.document.update(<any>{ c: coords });
+		return wall;
 	}
 }
 

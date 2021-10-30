@@ -1,3 +1,4 @@
+import { TileData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs";
 import ARCHITECT from "../core/architect.js";
 import SETTINGS from "../core/settings.js";
 import CaptureGameScreen from "../general/CaptureGameScreen.js";
@@ -287,7 +288,8 @@ export default class TileFlattener {
 		});
 	}
 
-	private static setupBindings(html: JQuery) {
+	private static setupBindings(root: HTMLElement | JQuery<HTMLElement>) {
+		const html = $(root);
 		const margins = html.find('table');
 		const hidden = html.find('#hidden');
 		const canvas = html.find('#canvas');
@@ -320,7 +322,8 @@ export default class TileFlattener {
 				}
 			},
 			default: 'cancel',
-			render: (html: JQuery) => {
+			render: (root: HTMLElement | JQuery<HTMLElement>) => {
+				const html = $(root);
 				html.find('#replace').on('click', async (e) => {
 					e.preventDefault();
 					dialog.close();
@@ -334,7 +337,7 @@ export default class TileFlattener {
 						img: filePath
 					}, { save: true });
 					// Get the tiles that were rendered
-					var tiles: Tile.Data[] = newScene.data.tiles.map(x => x.data);
+					var tiles: TileData[] = newScene.data.tiles.map(x => x.data);
 					if (layersRendered === TileLayerRendered.Floor)
 						tiles = tiles.filter(x => !x.overhead);
 					else if (layersRendered === TileLayerRendered.Roof)

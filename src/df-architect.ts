@@ -1,3 +1,11 @@
+
+declare global {
+	interface LenientGlobalVariableTypes {
+		game: never; // the type doesn't matter
+		canvas: never;
+	}
+}
+
 import DECLARATIONS from './core/declarations.js'; DECLARATIONS();
 import SETTINGS from './core/settings.js';
 import ARCHITECT from "./core/architect.js";

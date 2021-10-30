@@ -36,7 +36,7 @@ export default class ShowLayerControls {
 			});
 		});
 
-		libWrapper.register(ARCHITECT.MOD_NAME, 'PlaceablesLayer.prototype.deactivate', function (this: PlaceablesLayer, wrapped: Function) {
+		libWrapper.register(ARCHITECT.MOD_NAME, 'PlaceablesLayer.prototype.deactivate', function (this: PlaceablesLayer<any>, wrapped: Function) {
 			if (!ShowLayerControls._ready) return wrapped();
 			var toggled: boolean = false;
 			switch (this.name) {

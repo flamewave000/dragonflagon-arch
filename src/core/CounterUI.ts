@@ -101,7 +101,7 @@ export default class CounterUI extends Application {
 		}
 	}
 
-	close(options: Application.CloseOptions = {}): Promise<unknown> {
+	close(options: Application.CloseOptions = {}): Promise<void> {
 		Hooks.off('collapseSidebarPre', this._handleSidebarCollapse.bind(this));
 		/**********************************/
 		/****** COPIED FROM FOUNDRY *******/

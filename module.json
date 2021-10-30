@@ -4,7 +4,7 @@
 	"description": "{{description}}",
 	"version": "{{version}}",
 	"author": "flamewave000#0001",
-	"minimumCoreVersion": "0.8.6",
+	"minimumCoreVersion": "0.8.9",
 	"compatibleCoreVersion": "0.8.9",
 	"dependencies": [ { "name": "lib-wrapper" }, { "name": "lib-df-hotkeys" }, { "name": "colorsettings" } ],
 	"esmodules": "{{sources}}",

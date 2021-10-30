@@ -1,3 +1,4 @@
+import { WallData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs";
 import ARCHITECT from "../core/architect.js";
 import SETTINGS from "../core/settings.js";
 
@@ -22,7 +23,7 @@ class _WallChangeType {
 			wrapper(event);
 			if (SETTINGS.get(_WallChangeType.META_KEY) === 'ctrl' && !event.ctrlKey) return;
 			else if (SETTINGS.get(_WallChangeType.META_KEY) === 'alt' && !event.altKey) return;
-			const wallData = (<Canvas>canvas).walls._getWallDataFromActiveTool(game.activeTool) as Partial<Wall.Data>;
+			const wallData = (<Canvas>canvas).walls['_getWallDataFromActiveTool'](game.activeTool) as Partial<WallData>;
 			if (wallData.door === undefined)
 				wallData.door = 0;
 			else if (wallData.ds === undefined)
@@ -31,8 +32,8 @@ class _WallChangeType {
 				await (<Canvas>canvas).walls.controlled[0].document.update(wallData);
 				return;
 			}
-			const updateData = (<Wall[]>(<Canvas>canvas).walls.controlled).map(it => mergeObject(it.data, wallData, { inplace: false }));
-			await (<Canvas>canvas).scene.updateEmbeddedEntity("Wall", updateData);
+			const updateData = <WallData[]>(<Wall[]>(<Canvas>canvas).walls.controlled).map(it => mergeObject(it.data as any, wallData, { inplace: false } as any));
+			await WallDocument.createDocuments(updateData);
 		}, 'WRAPPER');
 	}
 }

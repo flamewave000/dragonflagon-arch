@@ -187,7 +187,8 @@ export default class CaptureGameScreen {
 				}
 			},
 			close: () => { if (!cleanupHandled) this.endCapture(session); },
-			render: (html: JQuery<HTMLElement>) => {
+			render: (htmlElement: HTMLElement | JQuery<HTMLElement>) => {
+				const html = $(htmlElement);
 				const compression = html.find('#compression');
 				const output = html.find('output');
 				compression.on('change', () => output.html(<string>compression.val()));
@@ -308,11 +309,11 @@ export default class CaptureGameScreen {
 		// Collect Hidden Items
 		const hiddenItemsSnapshot: PlaceableObject[] = [];
 		for (let layerName of this.LayersWithHiddenPlaceables) {
-			const layer = (<Canvas>canvas).getLayer(layerName) as PlaceablesLayer;
+			const layer = (<Canvas>canvas).getLayer(layerName) as PlaceablesLayer<any>;
 			for (let object of layer.objects.children as PlaceableObject[]) {
 				// Disable the Border/Frame of the selectable objects during the render
 				if ((<Tile>object).frame !== undefined) (<Tile>object).frame.renderable = false
-				else if ((<Token>object).border !== undefined) (<Token>object).border.renderable = false
+				else if ((<any | Token>object).border !== undefined) (<any | Token>object).border.renderable = false
 				// If the object is not hidden, ignore it
 				if ((<any>object.data).hidden === undefined || !(<any>object.data).hidden) continue;
 				object.renderable = false;
@@ -352,21 +353,21 @@ export default class CaptureGameScreen {
 		}
 
 		// Correct Layers
-		for (let layer of (<Canvas>canvas).layers as PlaceablesLayer[]) {
+		for (let layer of (<Canvas>canvas).layers as PlaceablesLayer<any>[]) {
 			if (this.LayersWithHiddenPlaceables.includes(layer.name))
 				layer.objects.children.forEach(object => {
 					// Disable the Border/Frame of the selectable objects during the render
 					if ((<Tile>object).frame !== undefined) (<Tile>object).frame.renderable = true
-					else if ((<Token>object).border !== undefined) (<Token>object).border.renderable = true
+					else if ((<any | Token>object).border !== undefined) (<any | Token>object).border.renderable = true
 				});
 
 			layer.renderable = true;
 			layer.deactivate();
 			if (layer.name === 'NotesLayer') {
 				const isToggled = <boolean>game.settings.get("core", (<any>layer.constructor).TOGGLE_SETTING);
-				if ((<PlaceablesLayer>layer).objects) {
-					(<PlaceablesLayer>layer).objects.visible = isToggled;
-					(<PlaceablesLayer>layer).placeables.forEach(p => p.controlIcon.visible = isToggled);
+				if ((<PlaceablesLayer<any>>layer).objects) {
+					(<PlaceablesLayer<any>>layer).objects.visible = isToggled;
+					(<PlaceablesLayer<any>>layer).placeables.forEach(p => p.controlIcon.visible = isToggled);
 				}
 				layer.interactiveChildren = isToggled;
 			}
@@ -375,7 +376,7 @@ export default class CaptureGameScreen {
 		const controlName = ui.controls.activeControl;
 		const control = ui.controls.controls.find(c => c.name === controlName);
 		if (!session.foregroundPreviouslyActive) canvas.foreground.deactivate();
-		if (control && control.layer) canvas[control.layer].activate();
+		if (control && control.layer) (<any>canvas)[control.layer].activate();
 		return true;
 	}
 
@@ -385,7 +386,7 @@ export default class CaptureGameScreen {
 	 * @param show true to show; false to hide.
 	 */
 	static toggleLayer(layerName: string, show: boolean) {
-		var layer: CanvasLayer | undefined = <PlaceablesLayer>canvas.getLayer(layerName);
+		var layer: CanvasLayer | undefined = <PlaceablesLayer<any>>canvas.getLayer(layerName);
 		if (!layer) {
 			console.warn(`CaptureGameScreen::toggleLayer() - There is no registered layer for the name '${layerName}'. Attempting to find layer in layer list manually.`);
 			layer = canvas.layers.find(x => x.name === layerName);
@@ -402,7 +403,7 @@ export default class CaptureGameScreen {
 	 * @param show true to show; false to hide.
 	 */
 	static toggleHidden(layerName: string, show: boolean) {
-		const layer = <PlaceablesLayer>canvas.getLayer(layerName);
+		const layer = <PlaceablesLayer<any>>canvas.getLayer(layerName);
 		(layer.objects.children as PlaceableObject[]).forEach(x => {
 			if (!x.data.flags.df_arch_hidden) return;
 			x.renderable = show;
@@ -414,7 +415,7 @@ export default class CaptureGameScreen {
 	 * @param show true to show; false to hide.
 	 */
 	static toggleControls(layerName: string, show: boolean) {
-		const layer = <PlaceablesLayer>canvas.getLayer(layerName);
+		const layer = <PlaceablesLayer<any>>canvas.getLayer(layerName);
 		this._getLayerFilter(layerName).c = show;
 		// The Template Layer has specialized activation to always show template frame.
 		if (layer.name === 'TemplateLayer') {
@@ -854,7 +855,7 @@ export default class CaptureGameScreen {
 							folder = result.path;
 							folderSource = result.source;
 						}
-						await FilePicker.upload(folderSource, folder, file);
+						await FilePicker.upload(<FilePicker.DataSource>folderSource, folder, file);
 						resolve(folder + '/' + fileName);
 					}
 				},
@@ -873,8 +874,8 @@ export default class CaptureGameScreen {
 				content,
 				close: () => { if (!ignoreClose) resolve(undefined) },
 				buttons, default: 'server',
-				render: (html: JQuery) => {
-					const img = html.find('#img-preview')[0] as HTMLImageElement;
+				render: (html: HTMLElement | JQuery<HTMLElement>) => {
+					const img = $(html).find('#img-preview')[0] as HTMLImageElement;
 					img.onload = () => {
 						dialog.setPosition({ height: "auto" });
 						const tarT = (window.innerHeight - dialog.element[0].offsetHeight) / 2;

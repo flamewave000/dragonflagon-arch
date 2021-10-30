@@ -24,8 +24,8 @@ export default class ArchiveFolderMenu extends FormApplication {
 		return { path: this.folder }
 	}
 
-	async _renderInner(data: any, options?: any): Promise<JQuery<HTMLElement>> {
-		const html = await super._renderInner(data, options);
+	async _renderInner(data: any): Promise<JQuery<HTMLElement>> {
+		const html = await super._renderInner(data);
 		const input = html.find('input#dfce-ca-folder-path')[0] as HTMLInputElement;
 		html.find('label>button').on('click', async event => {
 			event.preventDefault();

@@ -1,3 +1,6 @@
+import { AnimationData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/animationData";
+import { DarknessActivation } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/darknessActivation";
+import { AmbientLightData, MacroData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs";
 import ARCHITECT from "../core/architect.js";
 import { QuickColourPicker } from "../general/QuickColourPicker.js";
 
@@ -62,7 +65,7 @@ export class LightTemplateManager {
 	static readonly FLAG_IS_TEMPLATE = 'isLightTemplate';
 
 	static currentActiveTemplate: string | null = null;
-	static getCurrentTemplateData(): Partial<AmbientLight.Data> | null {
+	static getCurrentTemplateData(): Partial<AmbientLightData> | null {
 		if (this.currentActiveTemplate === null) return null;
 		return this.extractLightDataFromMacroCommand(game.macros.get(this.currentActiveTemplate).data.command);
 	}
@@ -99,11 +102,11 @@ ${'DF_ARCHITECT.LightTemplate.CreateTemplateButton.MacroDirectory'.localize()}</
 				tintColor: "",
 				tintAlpha: Math.pow(0.7, 2).toNearest(0.01),
 				darknessThreshold: 0,
-				darkness: { min: 0, max: 1 },
+				darkness: { min: 0, max: 1 } as DarknessActivation,
 				lightAnimation: {
 					intensity: 5,
 					speed: 5,
-				},
+				} as AnimationData,
 			}));
 		});
 	}
@@ -116,12 +119,12 @@ ${'DF_ARCHITECT.LightTemplate.CreateTemplateButton.LightConfig'.localize()}
 		html.find('button[name="submit"]').before(button);
 		button.on('click', (event) => {
 			event.preventDefault();
-			this._createTemplate(duplicate((<AmbientLight>app.object).data) as Partial<AmbientLight.Data>);
+			this._createTemplate(duplicate((<AmbientLightDocument>app.object).data) as Partial<AmbientLightData>);
 		});
 	}
 
-	private static async _renderMacroConfig(app: MacroConfig, html: JQuery<HTMLElement>, data: BaseEntitySheet.Data) {
-		const macro = new Macro(data.data as Macro.Data);
+	private static async _renderMacroConfig(app: MacroConfig, html: JQuery<HTMLElement>, data: Macro) {
+		const macro = new Macro(data.data as MacroData);
 		if (!macro.getFlag(ARCHITECT.MOD_NAME, this.FLAG_IS_TEMPLATE))
 			return;
 		html.find('div.form-group').remove();
@@ -133,7 +136,7 @@ ${'DF_ARCHITECT.LightTemplate.CreateTemplateButton.LightConfig'.localize()}
 			animationTypes[k] = v.label;
 		}
 
-		const lightData = this.extractLightDataFromMacroCommand((data.data as Macro.Data).command);
+		const lightData = this.extractLightDataFromMacroCommand((data.data as MacroData).command);
 		const htmlData = {
 			object: duplicate(lightData),
 			lightTypes: this.lightTypes,
@@ -185,7 +188,7 @@ ${'DF_ARCHITECT.LightTemplate.CreateTemplateButton.LightConfig'.localize()}
 	 * Simple function used to generate a specialized Macro to be used for Light Templating.
 	 * @param app LightConfig Application
 	 */
-	private static async _createTemplate(lightData: Partial<AmbientLight.Data>) {
+	private static async _createTemplate(lightData: Partial<AmbientLightData>) {
 		// Delete the obsolete fields
 		delete lightData._id;
 		delete lightData.x;
@@ -242,7 +245,7 @@ ${'DF_ARCHITECT.LightTemplate.CreateTemplateButton.LightConfig'.localize()}
 					return Dialog.confirm({
 						title: `${game.i18n.localize("MACRO.Delete")} ${macro.name}`,
 						content: game.i18n.localize("MACRO.DeleteWarning"),
-						yes: macro.delete.bind(macro)
+						yes: () => macro.delete()
 					});
 				}
 			},
@@ -275,7 +278,7 @@ ${'DF_ARCHITECT.LightTemplate.CreateTemplateButton.LightConfig'.localize()}
 					return Dialog.confirm({
 						title: `${game.i18n.localize("DF_ARCHITECT.LightTemplate.Delete.Title")} ${macro.name}`,
 						content: game.i18n.localize("DF_ARCHITECT.LightTemplate.Delete.Confirm"),
-						yes: macro.delete.bind(macro)
+						yes: () => macro.delete()
 					});
 				}
 			},
@@ -283,11 +286,11 @@ ${'DF_ARCHITECT.LightTemplate.CreateTemplateButton.LightConfig'.localize()}
 		]);
 	}
 
-	static generateCommandData(lightData: Partial<AmbientLight.Data>) {
+	static generateCommandData(lightData: Partial<AmbientLightData>) {
 		return `const ld=${JSON.stringify(lightData, null, '')};\nLightTemplates.activate(this.id,ld);`
 	}
-	static extractLightDataFromMacroCommand(commandString: string): Partial<AmbientLight.Data> {
-		return JSON.parse(/const ld=(.+);/.exec(commandString)[1]) as Partial<AmbientLight.Data>
+	static extractLightDataFromMacroCommand(commandString: string): Partial<AmbientLightData> {
+		return JSON.parse(/const ld=(.+);/.exec(commandString)[1]) as Partial<AmbientLightData>
 	}
 }
 
@@ -308,12 +311,12 @@ export class LightingLayerOverride {
 	}
 
 	static _onClickLeft(this: LightingLayer, wrapper: Function, event: PIXI.InteractionEvent) {
-		const templateData = LightTemplateManager.getCurrentTemplateData();
+		const templateData: Partial<AmbientLightData> | null = LightTemplateManager.getCurrentTemplateData();
 		// If we do not have an active template/Ctrl not pressed, pass through to original function
 		if (templateData === null || !event.data.originalEvent.ctrlKey)
 			return wrapper(event);
 		const origin: { x: number, y: number } = (<any>event.data).origin;
-		AmbientLight.create(mergeObject(templateData, { x: origin.x, y: origin.y }));
+		canvas.scene.createEmbeddedDocuments(AmbientLight.embeddedName, [mergeObject(templateData, { x: origin.x, y: origin.y }) as any], {});
 	}
 
 	static _onClickRight(this: LightingLayer, wrapper: Function, event: PIXI.InteractionEvent) {
