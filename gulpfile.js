@@ -7,11 +7,11 @@ const rename = require('gulp-rename');
 const notify = require('gulp-notify');
 const stringify = require('json-stringify-pretty-compact');
 const replace = require('gulp-replace');
-const cleanCss = require('gulp-clean-css');
 const jsonminify = require('gulp-jsonminify');
 const sass = require('gulp-sass')(require('sass'));
 const webpack = require('webpack-stream');
 const TerserPlugin = require('terser-webpack-plugin');
+const concat = require('gulp-concat');
 
 const GLOB = '**/*';
 const DIST = 'dist/';
@@ -55,15 +55,13 @@ function desc(name, lambda) {
 
 /**
  * Compile the source code into the distribution directory
- * @param {Boolean} keepSources Include the TypeScript SourceMaps
+ * @param {String} output The output directory for the build
  */
 function buildSource(output = null) {
 	return desc('build Source', () => {
-		const keepSources = process.argv.includes('--sm');
-		const minifySources = process.argv.includes('--min');
 		return webpack({
 			entry: './' + PACKAGE.main,
-			devtool: keepSources ? 'source-map' : undefined,
+			devtool: process.argv.includes('--sm') ? 'source-map' : undefined,
 			mode: 'none',
 			module: {
 				rules: [
@@ -78,7 +76,7 @@ function buildSource(output = null) {
 				extensions: ['.ts', '.tsx', '.js'],
 			},
 			optimization: {
-				minimize: minifySources,
+				minimize: process.argv.includes('--min'),
 				minimizer: [
 					new TerserPlugin({
 						terserOptions: {
@@ -90,16 +88,10 @@ function buildSource(output = null) {
 			},
 			output: {
 				filename: 'df-architect.js',
-				// path: path.resolve(__dirname, 'dist'),
 			}
-		})
-			.pipe(gulp.src(LIBS + GLOB))
-			.pipe(gulp.dest((output || DIST) + SOURCE));
+		}).pipe(gulp.dest((output || DIST) + SOURCE));
 	});
 }
-
-
-
 
 exports.step_buildSourceDev = gulp.series(pdel(DEV_DIST() + SOURCE), buildSource(DEV_DIST()));
 exports.step_buildSource = gulp.series(pdel(DIST + SOURCE), buildSource());
@@ -112,14 +104,15 @@ function copyDevDistToLocalDist() {
  * Builds the module manifest based on the package, sources, and css.
  */
 function buildManifest(output = null) {
-	const files = []; // Collector for all the file paths
-	return desc('build Manifest', (cb) => gulp.src(PACKAGE.main) // collect the source files
-		.pipe(rename({ extname: '.js' })) // rename their extensions to `.js`
-		.pipe(gulp.src(CSS + GLOB)) // grab all the CSS files
+	var files = []; // Collector for all the file paths
+	output = output || DIST;
+	return desc('build Manifest', (cb) => gulp.src(output + SOURCE + GLOB) // collect the source files
+		.pipe(gulp.src(output + CSS + GLOB)) // grab all the CSS files
 		.on('data', file => files.push(file.path.replace(file.base, file.base.replace(file.cwd + '/', '')))) // Collect all the file paths
 		.on('end', () => { // output the filepaths to the module.json
 			if (files.length == 0)
 				throw Error('No files found in ' + SOURCE + GLOB + " or " + CSS + GLOB);
+			files = files.map(x => x.startsWith(output) ? x.substr(output.length) : x);
 			const js = files.filter(e => e.endsWith('js')); // split the CSS and JS files
 			const css = files.filter(e => e.endsWith('css'));
 			fs.readFile('module.json', (err, data) => {
@@ -130,7 +123,7 @@ function buildManifest(output = null) {
 					.replaceAll('{{description}}', PACKAGE.description)
 					.replace('"{{sources}}"', stringify(js, { indent: '\t' }))
 					.replace('"{{css}}"', stringify(css, { indent: '\t' }));
-				fs.writeFile((output || DIST) + 'module.json', module, cb); // save the module to the distribution directory
+				fs.writeFile(output + 'module.json', module, cb); // save the module to the distribution directory
 			});
 		}));
 }
@@ -138,11 +131,10 @@ exports.step_buildManifest = buildManifest();
 
 function outputLanguages(output = null) { return desc('output Languages', () => gulp.src(LANG + GLOB).pipe(jsonminify()).pipe(gulp.dest((output || DIST) + LANG))); }
 function outputTemplates(output = null) { return desc('output Templates', () => gulp.src(TEMPLATES + GLOB).pipe(replace(/\t/g, '')).pipe(replace(/\>\n\</g, '><')).pipe(gulp.dest((output || DIST) + TEMPLATES))); }
-function outputStylesCSS(output = null) { return desc('output Styles CSS', () => gulp.src(CSS + GLOB).pipe(sass({ outputStyle: process.argv.includes('--min') ? 'compressed' : undefined })).pipe(gulp.dest((output || DIST) + CSS))); }
+function outputStylesCSS(output = null) { return desc('output Styles CSS', () => gulp.src(CSS + GLOB).pipe(sass({ outputStyle: process.argv.includes('--min') ? 'compressed' : undefined })).pipe(concat(PACKAGE.main.replace(/(.+\/)*(.+)\.[tj]sx?/, '$2.css'))).pipe(gulp.dest((output || DIST) + CSS))); }
 function outputMetaFiles(output = null) { return desc('output Meta Files', () => gulp.src(['LICENSE', 'README.md', 'CHANGELOG.md']).pipe(gulp.dest((output || DIST)))); }
 function outputPackFiles(output = null) { return desc('output Meta Files', () => gulp.src(PACKS + GLOB).pipe(gulp.dest((output || DIST) + PACKS))); }
-
-exports.step_CSS = gulp.parallel(outputStylesCSS());
+function outputLibraries(output = null) { return desc("output Libs Files", () => gulp.src(LIBS + GLOB).pipe(gulp.dest((output || DIST) + LIBS))); }
 
 /**
  * Copy files to module named directory and then compress that folder into a zip
@@ -177,13 +169,14 @@ exports.default = gulp.series(
 	pdel([DIST])
 	, gulp.parallel(
 		buildSource()
-		, buildManifest()
 		, outputLanguages()
 		, outputTemplates()
 		, outputStylesCSS()
 		, outputMetaFiles()
 		, outputPackFiles()
+		, outputLibraries()
 	)
+	, buildManifest()
 	, plog('Build Complete')
 	, pnotify('Default distribution build completed.', 'Build Complete')
 );
@@ -194,13 +187,14 @@ exports.dev = gulp.series(
 	pdel([DIST + GLOB, DEV_DIST() + GLOB], { force: true }),
 	gulp.parallel(
 		buildSource(DEV_DIST())
-		, buildManifest(DEV_DIST())
 		, outputLanguages(DEV_DIST())
 		, outputTemplates(DEV_DIST())
 		, outputStylesCSS(DEV_DIST())
 		, outputMetaFiles(DEV_DIST())
 		, outputPackFiles(DEV_DIST())
+		, outputLibraries(DEV_DIST())
 	)
+	, buildManifest(DEV_DIST())
 	, copyDevDistToLocalDist
 	, pnotify('Development distribution build completed.', 'Dev Build Complete')
 );
@@ -218,13 +212,14 @@ exports.zip = gulp.series(
 			// , pdel(DIST + '.temp/')
 			, () => gulp.src(LIBS + GLOB).pipe(gulp.dest(DIST + SOURCE))
 		)
-		, buildManifest()
 		, outputLanguages()
 		, outputTemplates()
 		, outputStylesCSS()
 		, outputMetaFiles()
 		, outputPackFiles()
+		, outputLibraries()
 	)
+	, buildManifest()
 	, compressDistribution()
 	// , pdel([DIST])
 	, pnotify('Production Release built and bundled.', 'Release Complete')
@@ -241,6 +236,7 @@ exports.watch = function () {
 	gulp.watch(CSS + GLOB, gulp.series(pdel(DIST + CSS), outputStylesCSS()));
 	gulp.watch(['LICENSE', 'README.md', 'CHANGELOG.md'], outputMetaFiles());
 	gulp.watch(PACKS + GLOB, outputPackFiles());
+	gulp.watch(LIBS + GLOB, outputLibraries());
 }
 /**
  * Sets up a file watch on the project to detect any file changes and automatically rebuild those components, and then copy them to the Development Environment.
@@ -256,4 +252,5 @@ exports.devWatch = function () {
 	gulp.watch(CSS + GLOB, gulp.series(pdel(devDist + CSS + GLOB, { force: true }), outputStylesCSS(devDist), plog('css done.')));
 	gulp.watch(['LICENSE', 'README.md', 'CHANGELOG.md'], gulp.series(outputMetaFiles(devDist), plog('metas done.')));
 	gulp.watch(PACKS + GLOB, gulp.series(outputPackFiles(devDist), plog('compendiums done.')));
+	gulp.watch(LIBS + GLOB, gulp.series(outputLibraries(devDist), plog('compendiums done.')));
 }

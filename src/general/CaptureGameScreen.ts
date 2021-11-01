@@ -289,7 +289,7 @@ export default class CaptureGameScreen {
 					// WASM
 					else cv['onRuntimeInitialized'] = () => res();
 				};
-				openCVScript.src = `/modules/${ARCHITECT.MOD_NAME}/src/opencv.js`;
+				openCVScript.src = `/modules/${ARCHITECT.MOD_NAME}/libs/opencv.js`;
 				document.body.append(openCVScript);
 			});
 		}
