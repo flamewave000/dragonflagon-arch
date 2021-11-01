@@ -1,5 +1,6 @@
 import ARCHITECT from "../core/architect.js";
 import SETTINGS from "../core/settings.js";
+import WallCtrlInvert from "./WallCtrlInvert.js";
 
 interface WallEventData {
 	destination: PIXI.Point; preview: Wall; object: Wall; fixed: boolean;
@@ -55,29 +56,33 @@ class _WallAltDrop {
 		this._updateCircle(true, data.destination);
 	}
 	private async _handleDragDrop(wrapper: Function, event: PIXI.InteractionEvent) {
+		const data = (<any>event.data) as WallEventData;
+		var wall = data.preview;
+		const destination = data.destination;
+		const fixed = data.fixed;
+		const object = data.object;
 		await wrapper(event);
 		// If we are controlling more than one wall, ignore it
 		if ((<Canvas>canvas).walls.controlled.length > 1) return;
-		const data = (<any>event.data) as WallEventData;
 		this._updateCircle(false);
 		// If Alt is not pressed, or no wall is bound, return
-		if (!event.data.originalEvent.altKey || (!data.preview && !data.object)) return;
-		if (data.preview) {
-			data.preview = await new Promise<Wall>((res, _) => {
+		if (!event.data.originalEvent.altKey || (!wall && !object)) return;
+		if (wall) {
+			wall = await new Promise<Wall>((res, _) => {
 				var counter = 0;
 				const waiter = () => {
-					counter += 100;
-					if (data.preview.data._id === "preview") {
+					counter += 10;
+					if (wall.data._id === "preview") {
 						if (counter > 2000) res(undefined);
 						else setTimeout(waiter, 100);
 						return;
 					}
 					res(game.scenes.viewed.data.walls.find(x => x.id === (<Canvas>canvas).walls['last'].id).object as Wall);
 				}
-				setTimeout(waiter, 100);
+				setTimeout(waiter, 10);
 			});
 		}
-		this._updateWallSnap(data.destination, data.fixed, data.preview);
+		this._updateWallSnap(destination, fixed, event, wall);
 	}
 	private async _handleDragCancel(wrapper: Function, event: PIXI.InteractionEvent) {
 		wrapper(event);
@@ -95,11 +100,7 @@ class _WallAltDrop {
 		this._visible = visible;
 	}
 
-	private async _updateWallSnap(dest: { x: number, y: number }, fixed: boolean, newWall?: Wall): Promise<Wall> {
-		const wallsLayer = (<Canvas>canvas).walls;
-		// If we are controlling more than one wall, ignore it
-		if (!newWall && wallsLayer.controlled.length != 1) return null;
-		const wall: Wall = newWall || wallsLayer.controlled[0];
+	private async _updateWallSnap(dest: { x: number, y: number }, fixed: boolean, event: PIXI.InteractionEvent, wall: Wall): Promise<Wall> {
 		const walls = game.scenes.viewed.data.walls.filter(x => x.id != wall.data._id);
 		const radius: number = SETTINGS.get(_WallAltDrop.DISTANCE);
 		const closestPoints = walls.map(wall => {
@@ -112,8 +113,14 @@ class _WallAltDrop {
 
 		const p0 = fixed ? wall.coords.slice(2, 4) : wall.coords.slice(0, 2);
 		const coords = fixed ? target.concat(p0) : p0.concat(target);
+		// If we are chaining walls, move the new wall's origin to the target point
+		if (game.keyboard.isCtrl(event) || WallCtrlInvert.enabled) {
+			(<any>event.data).preview.data.c[0] = target[0];
+			(<any>event.data).preview.data.c[1] = target[1];
+		}
+		// If we collapsed the wall, delete it
 		if ((coords[0] === coords[2]) && (coords[1] === coords[3])) {
-			await wall.document.delete(); // If we collapsed the wall, delete its
+			await wall.document.delete();
 			return wall;
 		}
 		(<WallsLayer>wall.layer)['last'].point = target;

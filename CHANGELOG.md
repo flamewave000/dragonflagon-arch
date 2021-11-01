@@ -1,5 +1,8 @@
 # DF Architect
 
+## Release 3.0.7 (2021-10-31)
+- FIX: Issue when holding Alt for wall snapping whilc Ctrl is pressed/locked.
+
 ## Release 3.0.6 (2021-10-23)
 - FIX: Capture Canvas issue with scene with no background image.
 
