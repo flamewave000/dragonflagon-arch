@@ -7,11 +7,14 @@
 			"request": "launch",
 			"port": 9222,
 			"url": "http://localhost:30000/game",
-			"webRoot": "${workspaceFolder}/dist",
+			"webRoot": "${workspaceFolder}/src",
 			"runtimeArgs": [
 				"--remote-debugging-port=9222",
 				"--app=http://localhost:30000"
-			]
+			],
+			"sourceMapPathOverrides": {
+				"webpack://df-architect/./*": "${workspaceFolder}/*"
+			}
 		},
 		{
 			"name": "Attach to Foundry",
@@ -19,7 +22,10 @@
 			"request": "attach",
 			"port": 9222,
 			"url": "http://localhost:30000/game",
-			"webRoot": "${workspaceFolder}/dist",
+			"webRoot": "${workspaceFolder}/src",
+			"sourceMapPathOverrides": {
+				"webpack://df-architect/./*": "${workspaceFolder}/*"
+			}
 		}
 	]
 }
