@@ -2,18 +2,15 @@ const gulp = require('gulp');
 const fs = require('fs');
 const path = require('path');
 const del = require('del');
-const ts = require('gulp-typescript');
-const sourcemaps = require('gulp-sourcemaps');
 const zip = require('gulp-zip');
 const rename = require('gulp-rename');
-const minify = require('gulp-minify');
-const tabify = require('gulp-tabify');
 const notify = require('gulp-notify');
 const stringify = require('json-stringify-pretty-compact');
-const rollup = require('gulp-better-rollup');
 const replace = require('gulp-replace');
 const cleanCss = require('gulp-clean-css');
 const jsonminify = require('gulp-jsonminify');
+const webpack = require('webpack-stream');
+const TerserPlugin = require('terser-webpack-plugin');
 
 const GLOB = '**/*';
 const DIST = 'dist/';
@@ -63,26 +60,45 @@ function buildSource(output = null) {
 	return desc('build Source', () => {
 		const keepSources = process.argv.includes('--sm');
 		const minifySources = process.argv.includes('--min');
-		var stream = gulp.src(SOURCE + GLOB);
-		if (keepSources) stream = stream.pipe(sourcemaps.init())
-		stream = stream.pipe(ts.createProject("tsconfig.json")());
-		if (minifySources)
-			stream = stream.pipe(minify({
-				ext: { min: '.js' },
-				mangle: false,
-				noSource: true
-			}));
-		if (keepSources) stream = stream.pipe(sourcemaps.write({
-			sourceRoot: file =>
-				'../'.repeat(file.path
-					.split('src/')[1]
-					.split('/').length - 1) || './'
-		}))
-		if (!minifySources) stream = stream.pipe(tabify(4, false))
-		stream = stream.pipe(gulp.src(LIBS + GLOB));
-		return stream.pipe(gulp.dest((output || DIST) + SOURCE));
+		return webpack({
+				entry: './' + PACKAGE.main,
+				devtool: keepSources ? 'source-map' : undefined,
+				mode: 'none',
+				module: {
+					rules: [
+						{
+							test: /\.tsx?$/,
+							use: 'ts-loader',
+							exclude: /node_modules/,
+						},
+					],
+				},
+				resolve: {
+					extensions: ['.ts', '.tsx', '.js'],
+				},
+				optimization: {
+					minimize: minifySources,
+					minimizer: [
+						new TerserPlugin({
+							terserOptions: {
+								keep_classnames: true,
+								keep_fnames: true
+							}
+						})
+					]
+				},
+				output: {
+					filename: 'df-architect.js',
+					// path: path.resolve(__dirname, 'dist'),
+				}
+			})
+			.pipe(gulp.src(LIBS + GLOB))
+			.pipe(gulp.dest((output || DIST) + SOURCE));
 	});
 }
+
+
+
 
 exports.step_buildSourceDev = gulp.series(pdel(DEV_DIST() + SOURCE), buildSource(DEV_DIST()));
 exports.step_buildSource = gulp.series(pdel(DIST + SOURCE), buildSource());
@@ -192,11 +208,11 @@ exports.zip = gulp.series(
 	pdel([DIST + GLOB])
 	, gulp.parallel(
 		gulp.series(
-			buildSource(null, true)
-			, () => gulp.src(DIST + PACKAGE.main.replace('.ts', '.js')).pipe(rollup('es')).pipe(gulp.dest(DIST + '.temp/'))
-			, pdel(DIST + SOURCE)
+			buildSource(DIST + '.temp/', true)
+			// , () => gulp.src(DIST + PACKAGE.main.replace('.ts', '.js')).pipe(rollup('es')).pipe(gulp.dest(DIST + '.temp/'))
+			// , pdel(DIST + SOURCE)
 			, () => gulp.src(DIST + '.temp/' + GLOB).pipe(gulp.dest(DIST + SOURCE))
-			, pdel(DIST + '.temp/')
+			// , pdel(DIST + '.temp/')
 			, () => gulp.src(LIBS + GLOB).pipe(gulp.dest(DIST + SOURCE))
 		)
 		, buildManifest()
@@ -207,7 +223,7 @@ exports.zip = gulp.series(
 		, outputPackFiles()
 	)
 	, compressDistribution()
-	, pdel([DIST])
+	// , pdel([DIST])
 	, pnotify('Production Release built and bundled.', 'Release Complete')
 );
 /**

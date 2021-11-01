@@ -1,5 +1,5 @@
 import { TileData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs";
-import SETTINGS from "../core/settings.js";
+import SETTINGS from "../core/settings";
 
 function reduce(numerator: number, denominator: number) {
 	var a = numerator;

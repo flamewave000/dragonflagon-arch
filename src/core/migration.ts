@@ -1,6 +1,6 @@
-import { LightTemplateManager } from "../lights/LightTemplate.js";
-import ARCHITECT from "./architect.js";
-import SETTINGS from "./settings.js";
+import { LightTemplateManager } from "../lights/LightTemplate";
+import ARCHITECT from "./architect";
+import SETTINGS from "./settings";
 
 interface Version {
 	arch: string,

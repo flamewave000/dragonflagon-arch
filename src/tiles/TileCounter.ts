@@ -1,6 +1,6 @@
-import ARCHITECT from "../core/architect.js";
-import CounterUI from "../core/CounterUI.js";
-import SETTINGS from "../core/settings.js";
+import ARCHITECT from "../core/architect";
+import CounterUI from "../core/CounterUI";
+import SETTINGS from "../core/settings";
 
 export default class TileCounter {
 	private static _counter = new CounterUI(0, 'Tiles');

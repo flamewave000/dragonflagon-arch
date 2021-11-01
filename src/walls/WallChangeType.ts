@@ -1,6 +1,6 @@
 import { WallData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs";
-import ARCHITECT from "../core/architect.js";
-import SETTINGS from "../core/settings.js";
+import ARCHITECT from "../core/architect";
+import SETTINGS from "../core/settings";
 
 
 class _WallChangeType {

@@ -1,6 +1,6 @@
-import ARCHITECT from "../core/architect.js";
-import SETTINGS from "../core/settings.js";
-import WallCtrlInvert from "./WallCtrlInvert.js";
+import ARCHITECT from "../core/architect";
+import SETTINGS from "../core/settings";
+import WallCtrlInvert from "./WallCtrlInvert";
 
 interface WallEventData {
 	destination: PIXI.Point; preview: Wall; object: Wall; fixed: boolean;

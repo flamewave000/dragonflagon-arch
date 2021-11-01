@@ -1,8 +1,8 @@
 import { AnimationData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/animationData";
 import { DarknessActivation } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/darknessActivation";
 import { AmbientLightData, MacroData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs";
-import ARCHITECT from "../core/architect.js";
-import { QuickColourPicker } from "../general/QuickColourPicker.js";
+import ARCHITECT from "../core/architect";
+import { QuickColourPicker } from "../general/QuickColourPicker";
 
 declare global {
 	// class MacroConfig extends BaseEntitySheet { }

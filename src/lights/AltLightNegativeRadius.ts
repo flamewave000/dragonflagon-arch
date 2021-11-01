@@ -1,4 +1,4 @@
-import ARCHITECT from "../core/architect.js";
+import ARCHITECT from "../core/architect";
 
 class _AltLightNegativeRadius {
 	ready() {

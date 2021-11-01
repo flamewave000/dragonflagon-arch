@@ -1,5 +1,5 @@
 import { WallData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs";
-import SETTINGS from "../core/settings.js";
+import SETTINGS from "../core/settings";
 
 class _WallJoinSplit {
 	static readonly PREF_ENABLED = 'WallJoinSplit-Enabled';

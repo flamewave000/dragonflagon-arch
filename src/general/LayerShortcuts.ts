@@ -1,5 +1,5 @@
-import ARCHITECT from "../core/architect.js";
-import SETTINGS from "../core/settings.js";
+import ARCHITECT from "../core/architect";
+import SETTINGS from "../core/settings";
 
 class _LayerShortcuts {
 	private static readonly PREF_LAYER_ = "LayerShortcutsSettingsLayer-";

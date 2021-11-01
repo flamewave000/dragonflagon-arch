@@ -1,6 +1,6 @@
-import ARCHITECT from "../core/architect.js";
-import SETTINGS from "../core/settings.js";
-import CaptureGameScreen from "./CaptureGameScreen.js";
+import ARCHITECT from "../core/architect";
+import SETTINGS from "../core/settings";
+import CaptureGameScreen from "./CaptureGameScreen";
 
 export default class ShowLayerControls {
 	private static readonly PREF_WALLS = 'ShowLayerControls.WallsLayer';

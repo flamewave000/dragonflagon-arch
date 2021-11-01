@@ -1,6 +1,6 @@
 
-import SETTINGS from '../core/settings.js';
-import CaptureGameScreen from './CaptureGameScreen.js'
+import SETTINGS from '../core/settings';
+import CaptureGameScreen from './CaptureGameScreen'
 
 class _PIXIAppOverride extends PIXI.Application {
 	constructor(options?: {

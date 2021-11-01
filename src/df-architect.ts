@@ -6,34 +6,34 @@ declare global {
 	}
 }
 
-import DECLARATIONS from './core/declarations.js'; DECLARATIONS();
-import SETTINGS from './core/settings.js';
-import ARCHITECT from "./core/architect.js";
+import DECLARATIONS from './core/declarations'; DECLARATIONS();
+import SETTINGS from './core/settings';
+import ARCHITECT from "./core/architect";
 SETTINGS.init(ARCHITECT.MOD_NAME);
 
-import PIXIAppOverride from './general/PIXIAppOverride.js';
-import { LayerShortcuts } from "./general/LayerShortcuts.js";
-import { AltGridSnap } from './general/AltGridSnap.js';
-import WallCtrlInvert from './walls/WallCtrlInvert.js';
-import { WallShortcuts } from './walls/WallShortcuts.js';
-import { WallJoinSplit } from './walls/WallJoinSplit.js';
-import { AltLightOrigin } from './lights/AltLightOrigin.js';
-import { QuickColourPicker } from './general/QuickColourPicker.js';
-import CaptureGameScreen from './general/CaptureGameScreen.js';
-import { LightTemplateManager, LightingLayerOverride } from './lights/LightTemplate.js';
-import { WallChangeType } from './walls/WallChangeType.js';
-import { WallAltDrop } from './walls/WallAltDrop.js';
-import { AltLightNegativeRadius } from './lights/AltLightNegativeRadius.js';
-import { WallDirections } from './walls/WallDirections.js';
-import { DataMigration } from './core/migration.js';
-import TileFlattener from './tiles/TileFlattener.js';
-import LightCounter from './lights/LightCounter.js';
-import WallsCounter from './walls/WallCounter.js';
-import TileCounter from './tiles/TileCounter.js';
-import SoundCounter from './sounds/SoundCounter.js';
-import ShowLayerControls from './general/ShowLayerControls.js';
-import TileConfigExt from './tiles/TileConfigExt.js';
-import CounterUI from './core/CounterUI.js';
+import PIXIAppOverride from './general/PIXIAppOverride';
+import { LayerShortcuts } from "./general/LayerShortcuts";
+import { AltGridSnap } from './general/AltGridSnap';
+import WallCtrlInvert from './walls/WallCtrlInvert';
+import { WallShortcuts } from './walls/WallShortcuts';
+import { WallJoinSplit } from './walls/WallJoinSplit';
+import { AltLightOrigin } from './lights/AltLightOrigin';
+import { QuickColourPicker } from './general/QuickColourPicker';
+import CaptureGameScreen from './general/CaptureGameScreen';
+import { LightTemplateManager, LightingLayerOverride } from './lights/LightTemplate';
+import { WallChangeType } from './walls/WallChangeType';
+import { WallAltDrop } from './walls/WallAltDrop';
+import { AltLightNegativeRadius } from './lights/AltLightNegativeRadius';
+import { WallDirections } from './walls/WallDirections';
+import { DataMigration } from './core/migration';
+import TileFlattener from './tiles/TileFlattener';
+import LightCounter from './lights/LightCounter';
+import WallsCounter from './walls/WallCounter';
+import TileCounter from './tiles/TileCounter';
+import SoundCounter from './sounds/SoundCounter';
+import ShowLayerControls from './general/ShowLayerControls';
+import TileConfigExt from './tiles/TileConfigExt';
+import CounterUI from './core/CounterUI';
 
 Hooks.once('init', function () {
 	if (!game.modules.get('lib-wrapper')?.active) return;

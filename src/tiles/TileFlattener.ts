@@ -1,8 +1,8 @@
 import { TileData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs";
-import ARCHITECT from "../core/architect.js";
-import SETTINGS from "../core/settings.js";
-import CaptureGameScreen from "../general/CaptureGameScreen.js";
-import ArchiveFolderMenu from "./TileFlattenerFolder.js";
+import ARCHITECT from "../core/architect";
+import SETTINGS from "../core/settings";
+import CaptureGameScreen from "../general/CaptureGameScreen";
+import ArchiveFolderMenu from "./TileFlattenerFolder";
 
 interface Margin {
 	l: number;
