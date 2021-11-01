@@ -1,0 +1,44 @@
+.dfarch-flatten-form {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+
+	h3 {
+		flex-basis: 100%;
+		margin-top: 0.5em;
+	}
+	input[type="radio"] {
+		width: 20px;
+		height: 20px;
+		margin-right: 0.25em;
+		margin-bottom: 0.125em;
+	}
+	.shrink {
+		flex: 0 0 auto;
+	}
+	.grow {
+		flex: 1 0;
+	}
+	div {
+		flex-basis: 100%;
+	}
+	table {
+		width: unset;
+		text-align: center;
+	}
+	table {
+		tr {
+			background: none;
+		}
+		td input {
+			width: 4em;
+		}
+	}
+	input.overlayed {
+		padding-right: 1.25em;
+		text-align: right;
+	}
+	span.input-overlay {
+		margin-left: -1.25em;
+	}
+}

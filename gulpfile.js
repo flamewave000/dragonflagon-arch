@@ -9,6 +9,7 @@ const stringify = require('json-stringify-pretty-compact');
 const replace = require('gulp-replace');
 const cleanCss = require('gulp-clean-css');
 const jsonminify = require('gulp-jsonminify');
+const sass = require('gulp-sass')(require('sass'));
 const webpack = require('webpack-stream');
 const TerserPlugin = require('terser-webpack-plugin');
 
@@ -61,37 +62,37 @@ function buildSource(output = null) {
 		const keepSources = process.argv.includes('--sm');
 		const minifySources = process.argv.includes('--min');
 		return webpack({
-				entry: './' + PACKAGE.main,
-				devtool: keepSources ? 'source-map' : undefined,
-				mode: 'none',
-				module: {
-					rules: [
-						{
-							test: /\.tsx?$/,
-							use: 'ts-loader',
-							exclude: /node_modules/,
-						},
-					],
-				},
-				resolve: {
-					extensions: ['.ts', '.tsx', '.js'],
-				},
-				optimization: {
-					minimize: minifySources,
-					minimizer: [
-						new TerserPlugin({
-							terserOptions: {
-								keep_classnames: true,
-								keep_fnames: true
-							}
-						})
-					]
-				},
-				output: {
-					filename: 'df-architect.js',
-					// path: path.resolve(__dirname, 'dist'),
-				}
-			})
+			entry: './' + PACKAGE.main,
+			devtool: keepSources ? 'source-map' : undefined,
+			mode: 'none',
+			module: {
+				rules: [
+					{
+						test: /\.tsx?$/,
+						use: 'ts-loader',
+						exclude: /node_modules/,
+					},
+				],
+			},
+			resolve: {
+				extensions: ['.ts', '.tsx', '.js'],
+			},
+			optimization: {
+				minimize: minifySources,
+				minimizer: [
+					new TerserPlugin({
+						terserOptions: {
+							keep_classnames: true,
+							keep_fnames: true
+						}
+					})
+				]
+			},
+			output: {
+				filename: 'df-architect.js',
+				// path: path.resolve(__dirname, 'dist'),
+			}
+		})
 			.pipe(gulp.src(LIBS + GLOB))
 			.pipe(gulp.dest((output || DIST) + SOURCE));
 	});
@@ -137,9 +138,11 @@ exports.step_buildManifest = buildManifest();
 
 function outputLanguages(output = null) { return desc('output Languages', () => gulp.src(LANG + GLOB).pipe(jsonminify()).pipe(gulp.dest((output || DIST) + LANG))); }
 function outputTemplates(output = null) { return desc('output Templates', () => gulp.src(TEMPLATES + GLOB).pipe(replace(/\t/g, '')).pipe(replace(/\>\n\</g, '><')).pipe(gulp.dest((output || DIST) + TEMPLATES))); }
-function outputStylesCSS(output = null) { return desc('output Styles CSS', () => gulp.src(CSS + GLOB).pipe(cleanCss()).pipe(gulp.dest((output || DIST) + CSS))); }
+function outputStylesCSS(output = null) { return desc('output Styles CSS', () => gulp.src(CSS + GLOB).pipe(sass({ outputStyle: process.argv.includes('--min') ? 'compressed' : undefined })).pipe(gulp.dest((output || DIST) + CSS))); }
 function outputMetaFiles(output = null) { return desc('output Meta Files', () => gulp.src(['LICENSE', 'README.md', 'CHANGELOG.md']).pipe(gulp.dest((output || DIST)))); }
 function outputPackFiles(output = null) { return desc('output Meta Files', () => gulp.src(PACKS + GLOB).pipe(gulp.dest((output || DIST) + PACKS))); }
+
+exports.step_CSS = gulp.parallel(outputStylesCSS());
 
 /**
  * Copy files to module named directory and then compress that folder into a zip

@@ -1,0 +1,43 @@
+#dfarch-cur-light-template {
+	position: absolute;
+	background: rgba(0, 0, 0, 0.5);
+	display: grid;
+	grid-template-columns: auto 1fr 1fr auto;
+	width: fit-content;
+	padding: 1em;
+	border: thin solid #000;
+	border-radius: 16px;
+
+	h1 {
+		color: #fff;
+		font-size: medium;
+		grid-column-start: 2;
+		grid-column-end: 4;
+		text-align: center;
+	}
+	h2 {
+		color: #fff;
+		font-size: small;
+		text-decoration: none;
+		text-align: right;
+		grid-column: 2;
+		border: none;
+		margin: 0;
+		padding: 0.25em;
+	}
+	p {
+		color: #fff;
+		font-size: small;
+		grid-column: 3;
+		margin: 0;
+		padding: 0.25em;
+	}
+	a:first-of-type {
+		grid-column: 1;
+		color: #fff;
+	}
+	a:last-of-type {
+		grid-column: 4;
+		color: #fff;
+	}
+}
