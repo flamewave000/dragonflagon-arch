@@ -53,7 +53,7 @@ export default class CaptureGameScreen {
 	static readonly PREF_BG_HIDE = 'CaptureGameScreen.BG.Hide';
 	static readonly PREF_BG_COLO = 'CaptureGameScreen.BG.Colour';
 	static readonly PREF_BG_ALPH = 'CaptureGameScreen.BG.Alpha';
-	static readonly LayersWithInvisiblePlaceables = ['WallsLayer', 'LightingLayer', 'SoundsLayer', 'TemplateLayer', 'NotesLayer'];
+	static readonly LayersWithInvisiblePlaceables = ['WallsLayer', 'LightingLayer', 'SoundsLayer', 'TemplateLayer', 'NotesLayer', 'LightingLayerPF2e'];
 	static readonly LayersWithHiddenPlaceables = ['BackgroundLayer', 'TokenLayer', 'DrawingsLayer', 'ForegroundLayer'];
 	private static _layerFilters: { [key: string]: LayerFilter };
 	private static _captureInProgress = false;

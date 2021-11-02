@@ -3,7 +3,7 @@ import ARCHITECT from "../core/architect";
 class _AltLightNegativeRadius {
 	ready() {
 		libWrapper.register(ARCHITECT.MOD_NAME, 'LightingLayer.prototype._onDragLeftMove',
-			this._onDragLeftMove.bind((<LightingLayer>(<Canvas>canvas).getLayer('LightingLayer'))),
+			this._onDragLeftMove.bind(canvas.lighting),
 			'MIXED');
 		Hooks.on('renderLightConfig', this._renderLightConfig.bind(this));
 	}

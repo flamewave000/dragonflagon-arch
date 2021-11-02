@@ -300,13 +300,13 @@ ${'DF_ARCHITECT.LightTemplate.CreateTemplateButton.LightConfig'.localize()}
 export class LightingLayerOverride {
 	static ready() {
 		libWrapper.register(ARCHITECT.MOD_NAME, 'LightingLayer.prototype._onDragLeftStart',
-			this._onDragLeftStart.bind((<LightingLayer>(<Canvas>canvas).getLayer('LightingLayer'))),
+			this._onDragLeftStart.bind(canvas.lighting),
 			'MIXED');
 		libWrapper.register(ARCHITECT.MOD_NAME, 'LightingLayer.prototype._onClickLeft',
-			this._onClickLeft.bind((<LightingLayer>(<Canvas>canvas).getLayer('LightingLayer'))),
+			this._onClickLeft.bind(canvas.lighting),
 			'MIXED');
 		libWrapper.register(ARCHITECT.MOD_NAME, 'LightingLayer.prototype._onClickRight',
-			this._onClickRight.bind((<LightingLayer>(<Canvas>canvas).getLayer('LightingLayer'))),
+			this._onClickRight.bind(canvas.lighting),
 			'MIXED');
 	}
 

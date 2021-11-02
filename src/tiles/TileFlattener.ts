@@ -183,7 +183,7 @@ export default class TileFlattener {
 
 		// Disable ALL Other Layers
 		for (let layer of canvas.layers) {
-			if (["BackgroundLayer", "ForegroundLayer", "LightingLayer"].includes(layer.name)) continue;
+			if (["BackgroundLayer", "ForegroundLayer", "LightingLayer", "LightingLayerPF2e"].includes(layer.name)) continue;
 			try {
 				CaptureGameScreen.toggleLayer(layer.name, false)
 			} catch (error: any) {
@@ -191,6 +191,7 @@ export default class TileFlattener {
 			}
 		}
 		CaptureGameScreen.toggleLayer("LightingLayer", lights);
+		CaptureGameScreen.toggleLayer("LightingLayerPF2e", lights);
 		if (layers === TileLayerRendered.Floor)
 			CaptureGameScreen.toggleLayer("ForegroundLayer", false);
 		else if (layers === TileLayerRendered.Roof) {
