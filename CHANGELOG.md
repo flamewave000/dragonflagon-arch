@@ -1,4 +1,7 @@
 # DF Architect
+
+## Release 3.0.7 (2021-11-02)
+- FIX: Conflict with Theatre Inserts.
 - FIX: Changing compression would also change BG Transparency label.
 - FIX: Format and Compression issue when capture is a single frame.
 - FIX: Issue when holding Alt for wall snapping whilc Ctrl is pressed/locked.

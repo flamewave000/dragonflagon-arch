@@ -26,7 +26,6 @@ class _PIXIAppOverride extends PIXI.Application {
 		// Only enable the `preserveDrawingBuffer` if we are the GM
 		if (allow) {
 			super(mergeObject(options, { preserveDrawingBuffer: true, transparent: true }));
-			(<any>this.renderer).backgroundAlpha = 1.0;
 		}
 		else
 			super(options);
@@ -37,5 +36,8 @@ class _PIXIAppOverride extends PIXI.Application {
 export default class PIXIAppOverride {
 	static setup() {
 		PIXI.Application = _PIXIAppOverride;
+	}
+	static ready() {
+		(<any>canvas.app.renderer).backgroundAlpha = 1.0;
 	}
 }

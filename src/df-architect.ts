@@ -104,6 +104,7 @@ Hooks.once('ready', async function () {
 	}
 
 	await DataMigration.ready();
+	try { PIXIAppOverride.ready() } catch (error) { console.error(error) }
 	try { LayerShortcuts.ready() } catch (error) { console.error(error) }
 	try { WallShortcuts.ready() } catch (error) { console.error(error) }
 	try { WallCtrlInvert.ready() } catch (error) { console.error(error) }
