@@ -562,6 +562,8 @@ export default class CaptureGameScreen {
 			const origS = canvas.stage.scale.x;
 			const origW = canvas.app.renderer.width;
 			const origH = canvas.app.renderer.height;
+			const origR = canvas.app.renderer.resolution;
+			canvas.app.renderer.resolution = 1;
 			// Calculate dimension adjustments for offseting coordinates relative to the body
 			const body = $(document.body);
 
@@ -670,6 +672,8 @@ export default class CaptureGameScreen {
 			}
 
 			ARCHITECT.reportProgress('DF_ARCHITECT.CaptureGameScreen.ScreenCapture.Rendering'.localize(), split[0] * split[1], split[0] * split[1], true);
+			// Reset PIXI resolution (pixel scaling) **BEFORE** resetting size/scale/pivot
+			canvas.app.renderer.resolution = origR;
 			// Reset the canvas dimensions
 			boardCanvasElement.css('width', origW + 'px');
 			boardCanvasElement.css('height', origH + 'px');

@@ -1,6 +1,7 @@
 # DF Architect
 
 ## Release 3.1.0 (2021-11-02)
+- FIX: Image scaling caused by Pixel Resolution Scaling. Will now temporarily disable PRS while capturing the canvas.
 - FIX: Wall Snapping issue when hovering over an existing wall causing that wall to move instead.
 - FIX: Conflict with Theatre Inserts.
 - FIX: Changing compression would also change BG Transparency label.
