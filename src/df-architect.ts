@@ -22,7 +22,7 @@ import { QuickColourPicker } from './general/QuickColourPicker';
 import CaptureGameScreen from './general/CaptureGameScreen';
 import { LightTemplateManager, LightingLayerOverride } from './lights/LightTemplate';
 import { WallChangeType } from './walls/WallChangeType';
-import { WallAltDrop } from './walls/WallAltDrop';
+import WallAltDrop from './walls/WallAltDrop';
 import { AltLightNegativeRadius } from './lights/AltLightNegativeRadius';
 import { WallDirections } from './walls/WallDirections';
 import { DataMigration } from './core/migration';

@@ -1,6 +1,7 @@
 # DF Architect
 
-## Release 3.0.7 (2021-11-02)
+## Release 3.1.0 (2021-11-02)
+- FIX: Wall Snapping issue when hovering over an existing wall causing that wall to move instead.
 - FIX: Conflict with Theatre Inserts.
 - FIX: Changing compression would also change BG Transparency label.
 - FIX: Format and Compression issue when capture is a single frame.

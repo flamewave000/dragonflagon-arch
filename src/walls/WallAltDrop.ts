@@ -5,20 +5,20 @@ import WallCtrlInvert from "./WallCtrlInvert";
 interface WallEventData {
 	destination: PIXI.Point; preview: Wall; object: Wall; fixed: boolean;
 }
-class _WallAltDrop {
+export default class WallAltDrop {
 	private static readonly DISTANCE = "WallAltDrop.Distance";
 
-	private _visible = false;
-	private ring = new PIXI.Graphics();
+	private static _visible = false;
+	private static ring = new PIXI.Graphics();
 
-	init() {
+	static init() {
 		libWrapper.register(ARCHITECT.MOD_NAME, 'Wall.prototype._onDragLeftMove', this._handleDragMove.bind(this), 'WRAPPER');
-		libWrapper.register(ARCHITECT.MOD_NAME, 'Wall.prototype._onDragLeftDrop', this._handleDragDrop.bind(this), 'WRAPPER');
+		libWrapper.register(ARCHITECT.MOD_NAME, 'Wall.prototype._onDragLeftDrop', this.Wall_handleDragDrop, 'WRAPPER');
 		libWrapper.register(ARCHITECT.MOD_NAME, 'Wall.prototype._onDragLeftCancel', this._handleDragCancel.bind(this), 'WRAPPER');
 	}
 
-	ready() {
-		SETTINGS.register(_WallAltDrop.DISTANCE, {
+	static ready() {
+		SETTINGS.register(WallAltDrop.DISTANCE, {
 			name: 'DF_ARCHITECT.WallAltDrop.Setting.DistanceName',
 			hint: 'DF_ARCHITECT.WallAltDrop.Setting.DistanceHint',
 			config: true,
@@ -27,15 +27,15 @@ class _WallAltDrop {
 			default: 24,
 			onChange: (value) => this._drawCircle(value as number)
 		});
-		const radius: number = SETTINGS.get(_WallAltDrop.DISTANCE);
+		const radius: number = SETTINGS.get(WallAltDrop.DISTANCE);
 		this._drawCircle(radius as number);
 
 		libWrapper.register(ARCHITECT.MOD_NAME, 'WallsLayer.prototype._onDragLeftMove', this._handleDragMove.bind(this), 'WRAPPER');
-		libWrapper.register(ARCHITECT.MOD_NAME, 'WallsLayer.prototype._onDragLeftDrop', this._handleDragDrop.bind(this), 'WRAPPER');
+		libWrapper.register(ARCHITECT.MOD_NAME, 'WallsLayer.prototype._onDragLeftDrop', this.WallsLayer_handleDragDrop, 'WRAPPER');
 		libWrapper.register(ARCHITECT.MOD_NAME, 'WallsLayer.prototype._onDragLeftCancel', this._handleDragCancel.bind(this), 'WRAPPER');
 	}
 
-	private _drawCircle(radius: number) {
+	private static _drawCircle(radius: number) {
 		this.ring.clear();
 		this.ring.beginFill(0, 0)
 			.lineStyle(4, 0xEE8E26, 1.0, 1)
@@ -43,7 +43,7 @@ class _WallAltDrop {
 			.endFill();
 	}
 
-	private async _handleDragMove(wrapper: Function, event: PIXI.InteractionEvent) {
+	private static async _handleDragMove(wrapper: Function, event: PIXI.InteractionEvent) {
 		wrapper(event);
 		// If we are controlling more than one wall, ignore it
 		if ((<Canvas>canvas).walls.controlled.length > 1) return;
@@ -55,18 +55,29 @@ class _WallAltDrop {
 		}
 		this._updateCircle(true, data.destination);
 	}
-	private async _handleDragDrop(wrapper: Function, event: PIXI.InteractionEvent) {
+
+	private static async Wall_handleDragDrop(this: Wall, wrapper: Function, event: PIXI.InteractionEvent) {
 		const data = (<any>event.data) as WallEventData;
-		var wall = data.preview;
-		const destination = data.destination;
-		const fixed = data.fixed;
-		const object = data.object;
+		const { destination, fixed, object } = data;
 		await wrapper(event);
 		// If we are controlling more than one wall, ignore it
 		if ((<Canvas>canvas).walls.controlled.length > 1) return;
-		this._updateCircle(false);
+		WallAltDrop._updateCircle(false);
 		// If Alt is not pressed, or no wall is bound, return
-		if (!event.data.originalEvent.altKey || (!wall && !object)) return;
+		if (!event.data.originalEvent.altKey || (!this && !object)) return;
+		WallAltDrop._updateWallSnap(destination, fixed, event, this);
+	}
+
+	private static async WallsLayer_handleDragDrop(this: WallsLayer, wrapper: Function, event: PIXI.InteractionEvent) {
+		const data = (<any>event.data) as WallEventData;
+		const { destination, fixed, object } = data;
+		var wall = data.preview;
+		await wrapper(event);
+		// If we are controlling more than one wall, ignore it
+		if ((<Canvas>canvas).walls.controlled.length > 1) return;
+		WallAltDrop._updateCircle(false);
+		// If Alt is not pressed, or no wall is bound, return
+		if (!event.data.originalEvent.altKey || (!this && !object)) return;
 		if (wall) {
 			wall = await new Promise<Wall>((res, _) => {
 				var counter = 0;
@@ -82,14 +93,14 @@ class _WallAltDrop {
 				setTimeout(waiter, 10);
 			});
 		}
-		this._updateWallSnap(destination, fixed, event, wall);
+		WallAltDrop._updateWallSnap(destination, fixed, event, wall || object);
 	}
-	private async _handleDragCancel(wrapper: Function, event: PIXI.InteractionEvent) {
+	private static async _handleDragCancel(wrapper: Function, event: PIXI.InteractionEvent) {
 		wrapper(event);
 		this._updateCircle(false);
 	}
 
-	private _updateCircle(visible: boolean, position?: { x: number, y: number }) {
+	private static _updateCircle(visible: boolean, position?: { x: number, y: number }) {
 		if (visible) {
 			if (this._visible != visible)
 				(<Canvas>canvas).walls.addChild(this.ring);
@@ -100,9 +111,9 @@ class _WallAltDrop {
 		this._visible = visible;
 	}
 
-	private async _updateWallSnap(dest: { x: number, y: number }, fixed: boolean, event: PIXI.InteractionEvent, wall: Wall): Promise<Wall> {
+	private static async _updateWallSnap(dest: { x: number, y: number }, fixed: boolean, event: PIXI.InteractionEvent, wall: Wall): Promise<Wall> {
 		const walls = game.scenes.viewed.data.walls.filter(x => x.id != wall.data._id);
-		const radius: number = SETTINGS.get(_WallAltDrop.DISTANCE);
+		const radius: number = SETTINGS.get(this.DISTANCE);
 		const closestPoints = walls.map(wall => {
 			const [x, y] = WallsLayer.getClosestEndpoint(dest, <Wall>(<any>wall).object)
 			return { dist: Math.hypot(x - dest.x, y - dest.y), point: { x, y } };
@@ -128,5 +139,3 @@ class _WallAltDrop {
 		return wall;
 	}
 }
-
-export const WallAltDrop = new _WallAltDrop();
