@@ -42,6 +42,9 @@ function pnotify(message, title = null) {
 	if (title) options.title = title;
 	return desc('notify', () => gulp.src('package.json').pipe(notify(options)));
 }
+function pwait(timeMs) {
+	return desc(`waiting ${timeMs} ms`, (callback) => setTimeout(callback, timeMs));
+}
 /**
  * Sets the gulp name for a lambda expression
  * @param {string} name Name to be bound to the lambda
@@ -145,7 +148,7 @@ function compressDistribution() {
 		() => gulp.src(DIST + GLOB)
 			.pipe(gulp.dest(DIST + `${PACKAGE.name}/${PACKAGE.name}`))
 		// Compress the new folder into a ZIP and save it to the `bundle` folder
-		, () => gulp.src(DIST + PACKAGE.name + '/' + GLOB)
+		, () => gulp.src(DIST + /*PACKAGE.name + '/' +*/ GLOB)
 			.pipe(zip(PACKAGE.name + '.zip'))
 			.pipe(gulp.dest(BUNDLE))
 		// Copy the module.json to the bundle directory
@@ -202,16 +205,9 @@ exports.dev = gulp.series(
  * Performs a default build and then zips the result into a bundle
  */
 exports.zip = gulp.series(
-	pdel([DIST + GLOB])
+	pdel([DIST + GLOB, BUNDLE])
 	, gulp.parallel(
-		gulp.series(
-			buildSource(DIST + '.temp/', true)
-			// , () => gulp.src(DIST + PACKAGE.main.replace('.ts', '.js')).pipe(rollup('es')).pipe(gulp.dest(DIST + '.temp/'))
-			// , pdel(DIST + SOURCE)
-			, () => gulp.src(DIST + '.temp/' + GLOB).pipe(gulp.dest(DIST + SOURCE))
-			// , pdel(DIST + '.temp/')
-			, () => gulp.src(LIBS + GLOB).pipe(gulp.dest(DIST + SOURCE))
-		)
+		buildSource()
 		, outputLanguages()
 		, outputTemplates()
 		, outputStylesCSS()
@@ -220,8 +216,9 @@ exports.zip = gulp.series(
 		, outputLibraries()
 	)
 	, buildManifest()
+	, pwait(10) // <- This is here because GULP is not respecting the series request and executing compressDistribution before buildManifest has finished
 	, compressDistribution()
-	// , pdel([DIST])
+	, pdel([DIST])
 	, pnotify('Production Release built and bundled.', 'Release Complete')
 );
 /**
