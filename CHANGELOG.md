@@ -1,6 +1,5 @@
 # DF Architect
-
-## Release 3.0.7 (2021-10-31)
+- FIX: Format and Compression issue when capture is a single frame.
 - FIX: Issue when holding Alt for wall snapping whilc Ctrl is pressed/locked.
 - DEV: Migrated to a Webpack/Gulp build chain.
 

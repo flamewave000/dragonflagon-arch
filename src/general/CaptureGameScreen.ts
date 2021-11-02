@@ -683,8 +683,13 @@ export default class CaptureGameScreen {
 
 			// If there is only 1 image exists, so return it immediately
 			if (images.length == 1) {
+				// If the requested format is not PNG, convert it
+				if(format != 'image/png') {
+					const image = await GetImageMat(images[0].data);
+					resolveCapture({ data: GetImageData(image), width: image.cols, height: image.rows });
+				} else
+					resolveCapture(images[0]);
 				ARCHITECT.hideProgress();
-				resolveCapture(images[0]);
 				return;
 			}
 			// Begin Stitching the individual Rows
