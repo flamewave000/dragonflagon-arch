@@ -1,4 +1,5 @@
 # DF Architect
+- FIX: Changing compression would also change BG Transparency label.
 - FIX: Format and Compression issue when capture is a single frame.
 - FIX: Issue when holding Alt for wall snapping whilc Ctrl is pressed/locked.
 - DEV: Migrated to a Webpack/Gulp build chain.

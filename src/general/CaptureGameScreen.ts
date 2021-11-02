@@ -190,7 +190,7 @@ export default class CaptureGameScreen {
 			render: (htmlElement: HTMLElement | JQuery<HTMLElement>) => {
 				const html = $(htmlElement);
 				const compression = html.find('#compression');
-				const output = html.find('output');
+				const output = html.find('#compr-out');
 				compression.on('change', () => output.html(<string>compression.val()));
 				compression.on('input', () => compression.trigger('change'));
 				html.find('#filter-reset').on('click', (e: Event) => {

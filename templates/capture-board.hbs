@@ -18,7 +18,7 @@
 		<option value="webp" {{#if webp}}selected{{/if}}>{{localize 'DF_ARCHITECT.CaptureGameScreen.ScreenCapture.FormatWEB'}}</option>
 	</select>
 	<h3>{{localize 'DF_ARCHITECT.CaptureGameScreen.ScreenCapture.Compression'}}</h3>
-	<output class="shrink" style="min-width:2em">{{compression}}</output>
+	<output id="compr-out" class="shrink" style="min-width:2em">{{compression}}</output>
 	<input class="grow" id="compression" name="compression" type="range" min="0" max="1" step="0.01"
 		value="{{compression}}">
 	{{!-- GM ONLY START --}}
