@@ -17,6 +17,8 @@ export default class CounterUI extends Application {
 	private _hint: string = '';
 
 	static init() {
+		// Do not wrap these calls if lib-df-buttons is enabled
+		if (game.modules.get('lib-df-buttons')) return;
 		libWrapper.register(ARCHITECT.MOD_NAME, 'Sidebar.prototype.expand', function (this: Sidebar, wrapped: Function) {
 			Hooks.callAll('collapseSidebarPre', this, !this._collapsed);
 			wrapped();
@@ -86,10 +88,10 @@ export default class CounterUI extends Application {
 		/**
 		 * This catches if the FPS Meter module is enabled and displaying its counter
 		 */
-		const fpsCounter = $('div.fpsCounter');
-		if (fpsCounter.length > 0) {
-			const fpsT = fpsCounter[0].offsetTop;
-			const fpsB = fpsT + fpsCounter[0].offsetHeight;
+		if (game.modules.get('fpsmeter')) {
+			const fpsCounter = document.querySelector<HTMLElement>('div.fpsCounter');
+			const fpsT = fpsCounter.offsetTop;
+			const fpsB = fpsT + fpsCounter.offsetHeight;
 			const cuiT = this.element[0].offsetTop - 5; // Add a 5px margin to the top
 			const cuiH = this.element[0].offsetHeight + 5; // account for margin
 			// If we are touching, push us down to be 5px below the counter
@@ -98,6 +100,14 @@ export default class CounterUI extends Application {
 				|| (fpsB >= cuiT && fpsB <= cuiH)) {
 				this.element[0].style.top = `${fpsB + 5}px`;
 			}
+		}
+		/**
+		 * This catches the existance of the [Library: DF Module Buttons] module
+		 * and places ourselves at the bottom of the Sidebar instead of the top.
+		 */
+		if (game.modules.get('lib-df-buttons')) {
+			this.element[0].style.top = 'unset';
+			this.element[0].style.bottom = '8px';
 		}
 	}
 

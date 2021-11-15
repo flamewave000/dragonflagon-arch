@@ -3,7 +3,6 @@ const fs = require('fs');
 const path = require('path');
 const del = require('del');
 const zip = require('gulp-zip');
-const rename = require('gulp-rename');
 const notify = require('gulp-notify');
 const stringify = require('json-stringify-pretty-compact');
 const replace = require('gulp-replace');

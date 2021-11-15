@@ -1,5 +1,8 @@
 # DF Architect
 
+## Release 3.1.1 (2021-11-07)
+- NEW: Updated vertical position logic to handle new Library: DF Module Buttons.
+
 ## Release 3.1.0 (2021-11-02)
 - NEW: Added specialized code to deal with PF2e's breaking and heavy-handed overhaul of the FoundryVTT canvas Lighting Layer.
 - FIX: Image scaling caused by Pixel Resolution Scaling. Will now temporarily disable PRS while capturing the canvas.
