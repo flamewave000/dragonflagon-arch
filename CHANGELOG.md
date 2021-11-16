@@ -1,55 +1,56 @@
 # DF Architect
 
 ## Release 3.1.1 (2021-11-07)
-- NEW: Updated vertical position logic to handle new Library: DF Module Buttons.
+- **NEW:** Updated vertical position logic to handle new Library: DF Module Buttons.
+- **FIX #84:** Wall Type changer causing an error and failing to change the type of the selected walls.
 
 ## Release 3.1.0 (2021-11-02)
-- NEW: Added specialized code to deal with PF2e's breaking and heavy-handed overhaul of the FoundryVTT canvas Lighting Layer.
-- FIX: Image scaling caused by Pixel Resolution Scaling. Will now temporarily disable PRS while capturing the canvas.
-- FIX: Wall Snapping issue when hovering over an existing wall causing that wall to move instead.
-- FIX: Conflict with Theatre Inserts.
-- FIX: Changing compression would also change BG Transparency label.
-- FIX: Format and Compression issue when capture is a single frame.
-- FIX: Issue when holding Alt for wall snapping whilc Ctrl is pressed/locked.
-- DEV: Migrated to a Webpack/Gulp build chain.
+- **NEW:** Added specialized code to deal with PF2e's breaking and heavy-handed overhaul of the FoundryVTT canvas Lighting Layer.
+- **FIX:** Image scaling caused by Pixel Resolution Scaling. Will now temporarily disable PRS while capturing the canvas.
+- **FIX:** Wall Snapping issue when hovering over an existing wall causing that wall to move instead.
+- **FIX:** Conflict with Theatre Inserts.
+- **FIX:** Changing compression would also change BG Transparency label.
+- **FIX:** Format and Compression issue when capture is a single frame.
+- **FIX:** Issue when holding Alt for wall snapping whilc Ctrl is pressed/locked.
+- **DEV:** Migrated to a Webpack/Gulp build chain.
 
 ## Release 3.0.6 (2021-10-23)
-- FIX: Capture Canvas issue with scene with no background image.
+- **FIX:** Capture Canvas issue with scene with no background image.
 
 ## Release 3.0.5 (2021-10-19)
-- FIX: Crash when trying to hide a canvas layer that is not properly registered with FoundryVTT.
-- FIX: Crash when attempting to flatten tiles on a scene with no background image.
-- FIX: Issue with background colour being transparent by default in FoundryVTT.
-- FIX: Ctrl Lock was not being preserved across scene transitions.
+- **FIX:** Crash when trying to hide a canvas layer that is not properly registered with FoundryVTT.
+- **FIX:** Crash when attempting to flatten tiles on a scene with no background image.
+- **FIX:** Issue with background colour being transparent by default in FoundryVTT.
+- **FIX:** Ctrl Lock was not being preserved across scene transitions.
 
 ## Release 3.0.4 (2021-10-07)
-- FIX: Tiles Flattener wasn't excluding hidden tiles properly.
-- FIX: Canvas Capture will now hide the borders that appear around hovered and selected Tokens, Tiles, and Drawings.
+- **FIX:** Tiles Flattener wasn't excluding hidden tiles properly.
+- **FIX:** Canvas Capture will now hide the borders that appear around hovered and selected Tokens, Tiles, and Drawings.
 
 ## Release 3.0.3 (2021-10-05)
-- FIX: Counters overlapping due to an error when dismissing them.
+- **FIX:** Counters overlapping due to an error when dismissing them.
 
 ## Release 3.0.2 (2021-10-04)
-- FIX: _levels undefined when Levels module not installed.
-- UPDATE: Spanish Translations courtesy of [lozalojo](https://github.com/lozalojo).
+- **FIX:** _levels undefined when Levels module not installed.
+- **UPDATE:** Spanish Translations courtesy of [lozalojo](https://github.com/lozalojo).
 
 ## Release 3.0.1 (2021-09-30)
-- FIX: Tile Flattener conflict with the Levels module.
-- FIX: Tile Config thumbnail now supports animated tile sources.
-- FIX: Object Counter no longer overlaps FPS Meter.
-- NEW: Tile Flattener has new option to hide animated tiles.
+- **FIX:** Tile Flattener conflict with the Levels module.
+- **FIX:** Tile Config thumbnail now supports animated tile sources.
+- **FIX:** Object Counter no longer overlaps FPS Meter.
+- **NEW:** Tile Flattener has new option to hide animated tiles.
 
 ## Release 3.0.0 (2021-09-29)
-- FIX: Quick Colour Picker not invoking the "change" event on the colour selector elements.
-- NEW: Including OpenCV library that is only loaded when required.
-- UPDATE: Major Optimization in Capture Canvas feature, no longer need to split canvas into many images. This will be done automatically and the resulting images stitched together into a single image download.
-- UPDATE: You are now given a prompt for where to save captured image files, either on the server or on your local computer.
-- NEW: Introducing a new Canvas Capture API that any module can use.
-- NEW: New Tile Flattener feature. This uses the new Canvas Capture API to generate images from the tiles in a quick and efficient way.
-- NEW: Tile, Light, Wall, & Sound Counts. Each of these layers will display a small window in the top right of Foundry with the current number of objects in that layer. Hovering the window will display additional information.
-- NEW: Toggle the visibility of Walls, Lights, and Sounds controls while on other layers. Simply toggle the Eye button on each layer you want to see.
-- NEW: Tile Config now shows a thumbnail of the current image. As well as the width, height, and aspect ratio of the original image.
-- NEW: Tile Config now has a scale button beside the width and height. These will use the aspect ratio of the original image to set the width or height depending on which button you press.
+- **FIX:** Quick Colour Picker not invoking the "change" event on the colour selector elements.
+- **NEW:** Including OpenCV library that is only loaded when required.
+- **UPDATE:** Major Optimization in Capture Canvas feature, no longer need to split canvas into many images. This will be done automatically and the resulting images stitched together into a single image download.
+- **UPDATE:** You are now given a prompt for where to save captured image files, either on the server or on your local computer.
+- **NEW:** Introducing a new Canvas Capture API that any module can use.
+- **NEW:** New Tile Flattener feature. This uses the new Canvas Capture API to generate images from the tiles in a quick and efficient way.
+- **NEW:** Tile, Light, Wall, & Sound Counts. Each of these layers will display a small window in the top right of Foundry with the current number of objects in that layer. Hovering the window will display additional information.
+- **NEW:** Toggle the visibility of Walls, Lights, and Sounds controls while on other layers. Simply toggle the Eye button on each layer you want to see.
+- **NEW:** Tile Config now shows a thumbnail of the current image. As well as the width, height, and aspect ratio of the original image.
+- **NEW:** Tile Config now has a scale button beside the width and height. These will use the aspect ratio of the original image to set the width or height depending on which button you press.
 
 ## Release 2.1.2 (2021-08-30)
 - Fixed broken Wall Chain Lock feature.

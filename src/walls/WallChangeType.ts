@@ -23,7 +23,7 @@ class _WallChangeType {
 			wrapper(event);
 			if (SETTINGS.get(_WallChangeType.META_KEY) === 'ctrl' && !event.ctrlKey) return;
 			else if (SETTINGS.get(_WallChangeType.META_KEY) === 'alt' && !event.altKey) return;
-			const wallData = (<Canvas>canvas).walls['_getWallDataFromActiveTool'](game.activeTool) as Partial<WallData>;
+			const wallData = canvas.walls['_getWallDataFromActiveTool'](game.activeTool) as Partial<WallData>;
 			if (wallData.door === undefined)
 				wallData.door = 0;
 			else if (wallData.ds === undefined)
@@ -32,8 +32,8 @@ class _WallChangeType {
 				await (<Canvas>canvas).walls.controlled[0].document.update(wallData);
 				return;
 			}
-			const updateData = <WallData[]>(<Wall[]>(<Canvas>canvas).walls.controlled).map(it => mergeObject(it.data as any, wallData, { inplace: false } as any));
-			await WallDocument.createDocuments(updateData);
+			const updateData = <WallData[]>(<Wall[]>canvas.walls.controlled).map(it => mergeObject(it.data as any, wallData, { inplace: false } as any));
+			await canvas.scene.updateEmbeddedDocuments("Wall", <Record<string, unknown>[]><any>updateData);
 		}, 'WRAPPER');
 	}
 }
