@@ -27,16 +27,19 @@ export default class WallsCounter {
 		this._counter.count = objects.length;
 		var doors = 0;
 		var moves = 0;
+		var light = 0;
 		var sight = 0;
 		var sound = 0;
 		objects.forEach(x => {
 			if (x.data.door) doors++;
 			if (x.data.move) moves++;
-			if (x.data.sense > 0) sight++;
+			if (x.data.light > 0) light++;
+			if (x.data.sight > 0) sight++;
 			if (x.data.sound > 0) sound++;
 		});
 		this._counter.hint = `Doors: ${doors}
 Move Blocking: ${moves}
+Light Blocking: ${light}
 Sight Blocking: ${sight}
 Sound Blocking: ${sound}`;
 	}

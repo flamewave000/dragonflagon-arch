@@ -24,16 +24,20 @@ export default class LightCounter {
 		if (!SETTINGS.get('General.ShowCounters')) return;
 		const objects = canvas.lighting.objects.children as AmbientLight[];
 		this._counter.count = objects.length;
-		var local = 0;
-		var global = 0;
-		var universal = 0;
+		var normal = 0;
+		var unrestrained = 0;
+		var normalVision = 0;
+		var unrestrainedVision = 0;
 		objects.forEach(x => {
-			if (x.data.t === 'l') local++;
-			if (x.data.t === 'g') global++;
-			if (x.data.t === 'u') universal++;
+			const t = (x.data.vision ? 0x10 : 0x00) | (x.data.walls ? 0x1 : 0x0);
+			if (t == 0x01) normal++;
+			else if (t == 0x11) normalVision++;
+			else if (t == 0x00) unrestrained++;
+			else if (t == 0x10) unrestrainedVision++;
 		});
-		this._counter.hint = `Local: ${local}
-Global: ${global}
-Universal: ${universal}`;
+		this._counter.hint = `Normal: ${normal}
+Provides Vision: ${normalVision}
+Unrestrained: ${unrestrained}
+Unrestrained & Provides Vision: ${unrestrainedVision}`;
 	}
 }

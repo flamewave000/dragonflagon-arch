@@ -29,15 +29,15 @@ class _LightTemplates {
 		LightTemplateManager.currentActiveTemplate = macroId;
 		const lightData = LightTemplateManager.getCurrentTemplateData();
 		// This is just to make the colour text more visible
-		const tintColour = parseInt('0x1' + (lightData.tintColor || '#000000').substr(1));
+		const tintColour = parseInt('0x1' + (lightData.config.color || '#000000').substr(1));
 		const templateHtml = $(await renderTemplate(`modules/${ARCHITECT.MOD_NAME}/templates/cur-light-template.hbs`, {
 			name: game.macros.get(macroId).name,
 			data: lightData,
-			colorIntensity: Math.sqrt(lightData.tintAlpha).toNearest(0.05),
-			lightType: LightTemplateManager.lightTypes[lightData.t],
-			animationType: lightData.lightAnimation.type === "" ? 'None' : CONFIG.Canvas.lightAnimations[lightData.lightAnimation.type].label,
-			tintColorValue: lightData.tintColor || 'transparent',
-			tintColorLabel: lightData.tintColor || '#------',
+			colorIntensity: Math.sqrt(lightData.config.alpha).toNearest(0.05),
+			// lightType: LightTemplateManager.lightTypes[lightData.t],
+			animationType: lightData.config.animation.type === "" ? 'None' : CONFIG.Canvas.lightAnimations[lightData.config.animation.type].label,
+			tintColorValue: lightData.config.color || 'transparent',
+			tintColorLabel: lightData.config.color || '#------',
 			// Determines if the tint colour is dark or light, the HBS template will change the text colour accordingly
 			tintIsDark: ((((tintColour & 0xff0000) >> 16) + ((tintColour & 0xff00) >> 8) + (tintColour & 0xff)) / 3) < 128
 		}));
@@ -94,19 +94,19 @@ export class LightTemplateManager {
 ${'DF_ARCHITECT.LightTemplate.CreateTemplateButton.MacroDirectory'.localize()}</button>`);
 			createTemplateButton.appendTo(html.find('div.header-actions.action-buttons'));
 			createTemplateButton.on('click', async () => await this._createTemplate({
-				t: 'l',
-				dim: 30,
-				angle: 360,
-				bright: 15,
-				rotation: 0,
-				tintColor: "",
-				tintAlpha: Math.pow(0.7, 2).toNearest(0.01),
-				darknessThreshold: 0,
-				darkness: { min: 0, max: 1 } as DarknessActivation,
-				lightAnimation: {
-					intensity: 5,
-					speed: 5,
-				} as AnimationData,
+				// t: 'l',
+				// dim: 30,
+				// angle: 360,
+				// bright: 15,
+				// rotation: 0,
+				// tintColor: "",
+				// tintAlpha: Math.pow(0.7, 2).toNearest(0.01),
+				// darknessThreshold: 0,
+				// darkness: { min: 0, max: 1 } as DarknessActivation,
+				// lightAnimation: {
+				// 	intensity: 5,
+				// 	speed: 5,
+				// } as AnimationData,
 			}));
 		});
 	}
@@ -141,7 +141,7 @@ ${'DF_ARCHITECT.LightTemplate.CreateTemplateButton.LightConfig'.localize()}
 			object: duplicate(lightData),
 			lightTypes: this.lightTypes,
 			lightAnimations: animationTypes,
-			colorIntensity: Math.sqrt(lightData.tintAlpha).toNearest(0.05)
+			colorIntensity: Math.sqrt(lightData.config.alpha).toNearest(0.05)
 		}
 
 		// Render the form html
@@ -219,7 +219,7 @@ ${'DF_ARCHITECT.LightTemplate.CreateTemplateButton.LightConfig'.localize()}
 				condition: li => {
 					const macro = game.macros.get(li.data("macro-id"));
 					// Modified Section
-					return macro && !macro.getFlag(ARCHITECT.MOD_NAME, this.FLAG_IS_TEMPLATE) ? macro.owner : false;
+					return macro && !macro.getFlag(ARCHITECT.MOD_NAME, this.FLAG_IS_TEMPLATE) ? macro.isOwner : false;
 					// End Modification
 				},
 				callback: li => game.macros.get(li.data("macro-id")).sheet.render(true)
@@ -255,7 +255,7 @@ ${'DF_ARCHITECT.LightTemplate.CreateTemplateButton.LightConfig'.localize()}
 				icon: '<i class="fas fa-edit"></i>',
 				condition: li => {
 					const macro = game.macros.get(li.data("macro-id"));
-					return macro && macro.getFlag(ARCHITECT.MOD_NAME, this.FLAG_IS_TEMPLATE) ? macro.owner : false;
+					return macro && macro.getFlag(ARCHITECT.MOD_NAME, this.FLAG_IS_TEMPLATE) ? macro.isOwner : false;
 				},
 				callback: li => game.macros.get(li.data("macro-id")).sheet.render(true)
 			},

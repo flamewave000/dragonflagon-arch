@@ -17,8 +17,8 @@ class _AltLightNegativeRadius {
 		// Update the light radius
 		const radius = Math.hypot(destination.x - origin.x, destination.y - origin.y);
 		// Update the preview object data
-		preview.data.dim = -(radius * (canvas.dimensions.distance / canvas.dimensions.size));
-		preview.data.bright = preview.data.dim / 2;
+		preview.data.config.dim = -(radius * (canvas.dimensions.distance / canvas.dimensions.size));
+		preview.data.config.bright = preview.data.config.dim / 2;
 		preview.refresh();
 		// Refresh the layer display
 		preview.updateSource();

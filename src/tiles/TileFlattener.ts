@@ -47,7 +47,7 @@ export default class TileFlattener {
 	private static get margin(): Margin { return SETTINGS.get(this.PREF_MARGIN); }
 	private static get layers(): number { return SETTINGS.get(this.PREF_LAYERS); }
 	private static get folder(): string { return SETTINGS.get(this.PREF_FOLDER); }
-	private static get folderSource(): string { return SETTINGS.get(this.PREF_FOLDER_SOURCE); }
+	private static get folderSource(): FilePicker.SourceType { return SETTINGS.get(this.PREF_FOLDER_SOURCE); }
 
 	static init() {
 		//#region Register Render Configuration Settings
@@ -349,7 +349,7 @@ export default class TileFlattener {
 					await newScene.update(<any>{ thumb: thumbData.thumb }, { diff: false });
 					// If lighting was baked in, delete the scene's lights
 					if (bakedLighting)
-						await newScene.deleteEmbeddedDocuments('AmbientLight', newScene.data.lights.map(x => x._id));
+						await newScene.deleteEmbeddedDocuments('AmbientLight', newScene.data.lights.map(x => x.id));
 					dialog.close();
 				});
 				html.find('#tile').on('click', async (e) => {

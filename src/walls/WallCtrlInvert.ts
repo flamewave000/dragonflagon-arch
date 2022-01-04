@@ -2,7 +2,7 @@ import ARCHITECT from "../core/architect";
 import SETTINGS from "../core/settings";
 
 
-declare type MouseCallbacks = Record<MouseInteractionManager.EventNames, (event: PIXI.InteractionEvent | Event) => unknown>;
+declare type MouseCallbacks = Record<MouseInteractionManager.Action, (event: PIXI.InteractionEvent | Event) => unknown>;
 
 export default class WallCtrlInvert {
 	static readonly PREF_ENABLED = 'WallCtrlInvert-Enabled';

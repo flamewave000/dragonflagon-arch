@@ -28,7 +28,7 @@ class _WallJoinSplit {
 	}
 
 	private async _splitWalls() {
-		const layer = <WallsLayer>(<Canvas>canvas).getLayer('WallsLayer');
+		const layer = canvas.walls;
 		const walls = layer.controlled;
 		const newWalls: WallData[] = [];
 		for (let wall of walls) {
@@ -56,7 +56,7 @@ class _WallJoinSplit {
 	}
 	private async _joinWalls() {
 		const points = new Map<string, Wall[]>();
-		const layer = <WallsLayer>(<Canvas>canvas).getLayer('WallsLayer');
+		const layer = canvas.walls;
 		const walls = layer.controlled;
 		for (let wall of walls) {
 			const [x1, y1, x2, y2] = wall.data.c;

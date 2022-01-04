@@ -40,7 +40,7 @@ export default class ArchiveFolderMenu extends FormApplication {
 				},
 				button: event.currentTarget
 			});
-			await fp.browse();
+			await fp.browse('');
 		});
 		return html;
 	}

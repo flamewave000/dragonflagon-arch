@@ -60,6 +60,9 @@ export default class CaptureGameScreen {
 	private static _currentSession: CaptureSession = null;
 	private static _openCVPromise: Promise<void> = null;
 
+	static getLayer<T extends CanvasLayer>(key: string): T {
+		return <T>(canvas as any as {[key:string]: CanvasLayer })[key];
+	}
 
 	private static _getLayerFilter(key: string): LayerFilter {
 		if (!this._layerFilters[key])
@@ -263,7 +266,7 @@ export default class CaptureGameScreen {
 				Object.entries(this._layerFilters).forEach((layerFilter) => {
 					var [layer, filter] = layerFilter;
 					// If the layer no longer exists, remove it from list and return
-					if ((<Canvas>canvas).getLayer(layer) === null) {
+					if (this.getLayer(layer) === null) {
 						delete this._layerFilters[layer];
 						return
 					}
@@ -309,7 +312,7 @@ export default class CaptureGameScreen {
 		// Collect Hidden Items
 		const hiddenItemsSnapshot: PlaceableObject[] = [];
 		for (let layerName of this.LayersWithHiddenPlaceables) {
-			const layer = (<Canvas>canvas).getLayer(layerName) as PlaceablesLayer<any>;
+			const layer = this.getLayer(layerName) as PlaceablesLayer<any>;
 			for (let object of layer.objects.children as PlaceableObject[]) {
 				// Disable the Border/Frame of the selectable objects during the render
 				if ((<Tile>object).frame !== undefined) (<Tile>object).frame.renderable = false
@@ -374,7 +377,7 @@ export default class CaptureGameScreen {
 		}
 		// Correct Active Layer
 		const controlName = ui.controls.activeControl;
-		const control = ui.controls.controls.find(c => c.name === controlName);
+		const control = ui.controls.controls.find((c: any) => c.name === controlName);
 		if (!session.foregroundPreviouslyActive) canvas.foreground.deactivate();
 		if (control && control.layer) (<any>canvas)[control.layer].activate();
 		return true;
@@ -386,7 +389,7 @@ export default class CaptureGameScreen {
 	 * @param show true to show; false to hide.
 	 */
 	static toggleLayer(layerName: string, show: boolean) {
-		var layer: CanvasLayer | undefined = <PlaceablesLayer<any>>canvas.getLayer(layerName);
+		var layer: CanvasLayer | undefined = <PlaceablesLayer<any>>this.getLayer(layerName);
 		if (!layer) {
 			console.warn(`CaptureGameScreen::toggleLayer() - There is no registered layer for the name '${layerName}'. Attempting to find layer in layer list manually.`);
 			layer = canvas.layers.find(x => x.name === layerName);
@@ -403,7 +406,7 @@ export default class CaptureGameScreen {
 	 * @param show true to show; false to hide.
 	 */
 	static toggleHidden(layerName: string, show: boolean) {
-		const layer = <PlaceablesLayer<any>>canvas.getLayer(layerName);
+		const layer = <PlaceablesLayer<any>>this.getLayer(layerName);
 		(layer.objects.children as PlaceableObject[]).forEach(x => {
 			if (!x.data.flags.df_arch_hidden) return;
 			x.renderable = show;
@@ -415,7 +418,7 @@ export default class CaptureGameScreen {
 	 * @param show true to show; false to hide.
 	 */
 	static toggleControls(layerName: string, show: boolean) {
-		const layer = <PlaceablesLayer<any>>canvas.getLayer(layerName);
+		const layer = <PlaceablesLayer<any>>this.getLayer(layerName);
 		this._getLayerFilter(layerName).c = show;
 		// The Template Layer has specialized activation to always show template frame.
 		if (layer.name === 'TemplateLayer') {
@@ -792,7 +795,7 @@ export default class CaptureGameScreen {
 	 * @returns String containing the server file path to the image is uploaded; otherwise null if the user saved locally, or undefined if the user cancelled the process.
 	 */
 	static saveImageData({ image, dialogTitle, defaultFileName, folder, folderSource, allowDownload }
-		: { image: ImageData, dialogTitle?: string, defaultFileName?: string, folder?: string, folderSource?: string, allowDownload?: boolean })
+		: { image: ImageData, dialogTitle?: string, defaultFileName?: string, folder?: string, folderSource?: FilePicker.SourceType, allowDownload?: boolean })
 		: Promise<string> {
 		return new Promise<string>(async (res) => {
 			var resolved = false;
@@ -837,8 +840,7 @@ export default class CaptureGameScreen {
 						const file = new File([data], fileName, {});
 
 						if (!folder) {
-							const result = await new Promise<{ path: string, source: string }>((res) => {
-								var resolved = false;
+							const result = await new Promise<{ path: string, source: FilePicker.SourceType }>((res) => {
 								const picker = new FilePicker(<any>{
 									title: dialogTitle,
 									type: 'folder',
@@ -855,7 +857,7 @@ export default class CaptureGameScreen {
 									res({ path: null, source: null });
 									return tmpClose.bind(picker).call(o);
 								};
-								picker.browse();
+								picker.browse('');
 							});
 							if (!result.path) {
 								resolve(null);
@@ -864,7 +866,7 @@ export default class CaptureGameScreen {
 							folder = result.path;
 							folderSource = result.source;
 						}
-						await FilePicker.upload(<FilePicker.DataSource>folderSource, folder, file);
+						await FilePicker.upload(<FilePicker.SourceType>folderSource, folder, file);
 						resolve(folder + '/' + fileName);
 					}
 				},
