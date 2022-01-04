@@ -2,6 +2,7 @@
 
 ## Release 3.2.0 (2022-01-)
 - **UPDATED:** Migrated to FoundryVTT V9.
+- **UPDATED #101:** Migrated to new PIXI App config Hook.
 - **FIX #92 & #93:** Wall join/split now working without error.
 
 ## Release 3.1.1 (2021-11-07)
