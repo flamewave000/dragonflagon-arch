@@ -152,8 +152,8 @@
 				"Confirm": "Are you sure you wish to delete this light template?"
 			}
 		},
-		"AltLightNegativeRadius": {
-			"InvertRadiusButton": "Invert Dim/Bright radii to Light and Dark (positive/negative values)"
+		"AltLightInverted": {
+			"InvertLuminosityButton": "Invert luminosity to Light and Dark (positive/negative values)"
 		},
 		"TileFlattener": {
 			"CapturePromptTitle": "Flatten Tiles",

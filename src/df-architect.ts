@@ -23,7 +23,7 @@ import CaptureGameScreen from './general/CaptureGameScreen';
 import { LightTemplateManager, LightingLayerOverride } from './lights/LightTemplate';
 import { WallChangeType } from './walls/WallChangeType';
 import WallAltDrop from './walls/WallAltDrop';
-import { AltLightNegativeRadius } from './lights/AltLightNegativeRadius';
+import { AltLightInverted } from './lights/AltLightInverted';
 import { WallDirections } from './walls/WallDirections';
 import { DataMigration } from './core/migration';
 import TileFlattener from './tiles/TileFlattener';
@@ -113,7 +113,7 @@ Hooks.once('ready', async function () {
 	try { WallDirections.ready() } catch (error) { console.error(error) }
 	try { AltLightOrigin.ready() } catch (error) { console.error(error) }
 	try { QuickColourPicker.ready() } catch (error) { console.error(error) }
-	try { AltLightNegativeRadius.ready() } catch (error) { console.error(error) }
+	try { AltLightInverted.ready() } catch (error) { console.error(error) }
 	try { LightTemplateManager.ready() } catch (error) { console.error(error) }
 	try { LightingLayerOverride.ready() } catch (error) { console.error(error) }
 	try { ShowLayerControls.ready() } catch (error) { console.error(error) }

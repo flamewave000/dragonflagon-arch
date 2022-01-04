@@ -380,9 +380,9 @@ If you are trying to perfectly place a light source, you're going to typically h
 
 ![Show Light Origin Demo Video](.assets/lights-showorigin.gif)
 
-### Hold Alt for Darkness (Negative Light Radius)
+### Hold Alt for Darkness (Negative Light Luminosity)
 
-If you hold the `Alt` key while dragging out a new light, it will use a negative radius instead and create a patch of darkness. You will also find a button in the Light Config for quickly switching a light's radius between positive and negative (Light / Dark).
+If you hold the `Alt` key while dragging out a new light, it will use a negative luminosity instead and create a patch of darkness. You will also find a button in the Light Config for quickly inverting a light's luminosity between positive and negative (Light / Dark).
 
 ![Dark Light](.assets/lights-alt-dark.gif)
 
