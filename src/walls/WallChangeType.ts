@@ -3,11 +3,11 @@ import ARCHITECT from "../core/architect";
 import SETTINGS from "../core/settings";
 
 
-class _WallChangeType {
+export default class WallChangeType {
 	private static readonly META_KEY = 'WallChangeType.MetaKey';
 
-	ready() {
-		SETTINGS.register(_WallChangeType.META_KEY, {
+	static ready() {
+		SETTINGS.register(WallChangeType.META_KEY, {
 			name: 'DF_ARCHITECT.WallChangeType.Setting.MetaKeyName',
 			hint: 'DF_ARCHITECT.WallChangeType.Setting.MetaKeyHint',
 			config: true,
@@ -21,8 +21,8 @@ class _WallChangeType {
 		});
 		libWrapper.register(ARCHITECT.MOD_NAME, 'SceneControls.prototype._onClickTool', async (wrapper: Function, event: MouseEvent) => {
 			wrapper(event);
-			if (SETTINGS.get(_WallChangeType.META_KEY) === 'ctrl' && !event.ctrlKey) return;
-			else if (SETTINGS.get(_WallChangeType.META_KEY) === 'alt' && !event.altKey) return;
+			if (SETTINGS.get(WallChangeType.META_KEY) === 'ctrl' && !event.ctrlKey) return;
+			else if (SETTINGS.get(WallChangeType.META_KEY) === 'alt' && !event.altKey) return;
 			const wallData = canvas.walls['_getWallDataFromActiveTool'](game.activeTool) as Partial<WallData>;
 			if (wallData.door === undefined)
 				wallData.door = 0;
@@ -37,5 +37,3 @@ class _WallChangeType {
 		}, 'WRAPPER');
 	}
 }
-
-export const WallChangeType = new _WallChangeType();

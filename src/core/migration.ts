@@ -7,7 +7,7 @@ interface Version {
 	core: string
 }
 
-export class DataMigration {
+export default class DataMigration {
 	private static readonly PREF_DATA_VERSION = 'data-version';
 	private static previous: Version;
 	private static current: Version;
@@ -22,7 +22,7 @@ export class DataMigration {
 	}
 	static async ready() {
 		this.current = {
-			core: game.data.version,
+			core: game.version,
 			arch: (game.modules.get('df-architect').data as any).version
 		};
 		this.previous = SETTINGS.get(this.PREF_DATA_VERSION);

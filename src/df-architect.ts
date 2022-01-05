@@ -12,20 +12,20 @@ import ARCHITECT from "./core/architect";
 SETTINGS.init(ARCHITECT.MOD_NAME);
 
 import PIXIAppOverride from './general/PIXIAppOverride';
-import { LayerShortcuts } from "./general/LayerShortcuts";
-import { AltGridSnap } from './general/AltGridSnap';
+import LayerShortcuts from "./general/LayerShortcuts";
+import AltGridSnap from './general/AltGridSnap';
 import WallCtrlInvert from './walls/WallCtrlInvert';
-import { WallShortcuts } from './walls/WallShortcuts';
-import { WallJoinSplit } from './walls/WallJoinSplit';
-import { AltLightOrigin } from './lights/AltLightOrigin';
+import WallShortcuts from './walls/WallShortcuts';
+import WallJoinSplit from './walls/WallJoinSplit';
+import AltLightOrigin from './lights/AltLightOrigin';
 import { QuickColourPicker } from './general/QuickColourPicker';
 import CaptureGameScreen from './general/CaptureGameScreen';
 import { LightTemplateManager, LightingLayerOverride } from './lights/LightTemplate';
-import { WallChangeType } from './walls/WallChangeType';
+import WallChangeType from './walls/WallChangeType';
 import WallAltDrop from './walls/WallAltDrop';
-import { AltLightInverted } from './lights/AltLightInverted';
-import { WallDirections } from './walls/WallDirections';
-import { DataMigration } from './core/migration';
+import AltLightInverted from './lights/AltLightInverted';
+import WallDirections from './walls/WallDirections';
+import DataMigration from './core/migration';
 import TileFlattener from './tiles/TileFlattener';
 import LightCounter from './lights/LightCounter';
 import WallsCounter from './walls/WallCounter';
@@ -38,23 +38,14 @@ import CounterUI from './core/CounterUI';
 Hooks.once('init', function () {
 	if (!game.modules.get('lib-wrapper')?.active) return;
 	if (!game.modules.get('colorsettings')?.active) return;
-	if (!game.modules.get('lib-df-hotkeys')?.active) return;
-
-	SETTINGS.registerMenu('hotkeys', {
-		icon: 'fas fa-keyboard',
-		label: 'Architect Hotkey Bindings',
-		restricted: true,
-		type: Hotkeys.createConfig('DF Architect Hotkeys', [
-			`${ARCHITECT.MOD_NAME}\..+`,
-			{ group: 'general', hotkeys: [`${ARCHITECT.MOD_NAME}\..+`] }
-		]),
-	});
 
 	ARCHITECT.DrawArchitectGraphicToConsole();
 	try { DataMigration.init() } catch (error) { console.error(error) }
 	// WARNING! ShowLayerControls needs to come before AltGridSnap
 	try { ShowLayerControls.init() } catch (error) { console.error(error) }
 	try { AltGridSnap.init() } catch (error) { console.error(error) }
+	try { LayerShortcuts.init() } catch (error) { console.error(error) }
+	try { WallShortcuts.init() } catch (error) { console.error(error) }
 	try { WallCtrlInvert.init() } catch (error) { console.error(error) }
 	try { WallJoinSplit.init() } catch (error) { console.error(error) }
 	try { WallAltDrop.init() } catch (error) { console.error(error) }
@@ -79,7 +70,6 @@ Hooks.once('init', function () {
 Hooks.once('setup', function () {
 	if (!game.modules.get('lib-wrapper')?.active) return;
 	if (!game.modules.get('colorsettings')?.active) return;
-	if (!game.modules.get('lib-df-hotkeys')?.active) return;
 	PIXIAppOverride.setup();
 });
 
@@ -96,17 +86,10 @@ Hooks.once('ready', async function () {
 			ui.notifications.error('DF_ARCHITECT.ErrorColourSettingsMissing'.localize());
 		return;
 	}
-	if (!game.modules.get('lib-df-hotkeys')?.active) {
-		console.error('Missing Library: DF Hotkeys module dependency');
-		if (game.user.isGM)
-			ui.notifications.error('DF_ARCHITECT.ErrorLibDFHotkeysMissing'.localize());
-		return;
-	}
 
 	await DataMigration.ready();
 	try { PIXIAppOverride.ready() } catch (error) { console.error(error) }
 	try { LayerShortcuts.ready() } catch (error) { console.error(error) }
-	try { WallShortcuts.ready() } catch (error) { console.error(error) }
 	try { WallCtrlInvert.ready() } catch (error) { console.error(error) }
 	try { WallChangeType.ready() } catch (error) { console.error(error) }
 	try { WallAltDrop.ready() } catch (error) { console.error(error) }
@@ -123,4 +106,12 @@ Hooks.once('ready', async function () {
 	try { WallsCounter.ready() } catch (error) { console.error(error) }
 	try { TileCounter.ready() } catch (error) { console.error(error) }
 	try { SoundCounter.ready() } catch (error) { console.error(error) }
+
+	/** !! This is a temporary fix due to keybindings being initialized before localizations !! **/
+	game.keybindings.actions.forEach(x => {
+		if(x.namespace !== ARCHITECT.MOD_NAME) return;
+		x.name = x.name.localize();
+		x.hint = x.hint?.localize();
+	});
+	/******************************/
 });

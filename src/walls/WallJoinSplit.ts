@@ -1,11 +1,11 @@
 import { WallData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs";
 import SETTINGS from "../core/settings";
 
-class _WallJoinSplit {
+export default class WallJoinSplit {
 	static readonly PREF_ENABLED = 'WallJoinSplit-Enabled';
-	get enabled(): boolean { return SETTINGS.get(_WallJoinSplit.PREF_ENABLED) }
-	set enabled(value: boolean) { SETTINGS.set(_WallJoinSplit.PREF_ENABLED, value) }
-	init() {
+	static get enabled(): boolean { return SETTINGS.get(WallJoinSplit.PREF_ENABLED) }
+	static set enabled(value: boolean) { SETTINGS.set(WallJoinSplit.PREF_ENABLED, value) }
+	static init() {
 		Hooks.on('getSceneControlButtons', (controls: SceneControl[]) => {
 			const isGM = game.user.isGM;
 			const wallsControls = controls.find(x => x.name === 'walls');
@@ -27,7 +27,7 @@ class _WallJoinSplit {
 		});
 	}
 
-	private async _splitWalls() {
+	private static async _splitWalls() {
 		const layer = canvas.walls;
 		const walls = layer.controlled;
 		const newWalls: WallData[] = [];
@@ -54,7 +54,7 @@ class _WallJoinSplit {
 			wall.control({ releaseOthers: false });
 		}
 	}
-	private async _joinWalls() {
+	private static async _joinWalls() {
 		const points = new Map<string, Wall[]>();
 		const layer = canvas.walls;
 		const walls = layer.controlled;
@@ -78,5 +78,3 @@ class _WallJoinSplit {
 		for (let wall of result) wall.object.control();
 	}
 }
-
-export const WallJoinSplit = new _WallJoinSplit();

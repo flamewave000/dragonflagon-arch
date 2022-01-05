@@ -13,7 +13,7 @@
 				"--app=http://localhost:30000"
 			],
 			"sourceMapPathOverrides": {
-				"webpack://df-architect/./*": "${workspaceFolder}/*"
+				"webpack://df-architect/./src/*": "${workspaceFolder}/src/*"
 			}
 		},
 		{
@@ -24,7 +24,7 @@
 			"url": "http://localhost:30000/game",
 			"webRoot": "${workspaceFolder}/src",
 			"sourceMapPathOverrides": {
-				"webpack://df-architect/./*": "${workspaceFolder}/*"
+				"webpack://df-architect/./src/*": "${workspaceFolder}/src/*"
 			}
 		}
 	]

@@ -2,36 +2,36 @@ import ARCHITECT from "../core/architect";
 import SETTINGS from "../core/settings";
 
 
-class _AltLightOrigin {
+export default class AltLightOrigin {
 	private static readonly LIGHTING_LAYER = 'lighting';
 	private static readonly KEYEVENT_UP = 'keyup';
 	private static readonly KEYEVENT_DOWN = 'keydown';
 	static readonly PREF_COLOUR1 = 'AltLightOrigin.Colour1';
 	static readonly PREF_COLOUR2 = 'AltLightOrigin.Colour2';
-	private _showCrosshairs = false;
-	get showCrosshairs() { return this._showCrosshairs; }
-	private _alternateColour = false;
-	get alternateColour() { return this._alternateColour; }
+	private static _showCrosshairs = false;
+	static get showCrosshairs() { return this._showCrosshairs; }
+	private static _alternateColour = false;
+	static get alternateColour() { return this._alternateColour; }
 
-	private _controls: Set<AltLightControlIcon> = new Set();
-	register(control: AltLightControlIcon) {
+	private static _controls: Set<AltLightControlIcon> = new Set();
+	static register(control: AltLightControlIcon) {
 		this._controls.add(control);
 	}
-	deregister(control: AltLightControlIcon) {
+	static deregister(control: AltLightControlIcon) {
 		this._controls.delete(control);
 	}
-	init() {
+	static init() {
 		libWrapper.register(ARCHITECT.MOD_NAME, 'AmbientLight.prototype._drawControlIcon', () => {
 			const size = Math.max(Math.round(((<Canvas>canvas).dimensions.size * 0.5) / 20) * 20, 40);
-			let icon = new AltLightControlIcon(this, { texture: CONFIG.controlIcons.light, size: size });
+			let icon = new AltLightControlIcon({ texture: CONFIG.controlIcons.light, size: size });
 			icon.x -= (size * 0.5);
 			icon.y -= (size * 0.5);
 			return icon;
 		}, 'OVERRIDE');
 	}
-	ready() {
+	static ready() {
 		// @ts-ignore
-		new window.Ardittristan.ColorSetting(ARCHITECT.MOD_NAME, _AltLightOrigin.PREF_COLOUR1, {
+		new window.Ardittristan.ColorSetting(ARCHITECT.MOD_NAME, AltLightOrigin.PREF_COLOUR1, {
 			name: "DF_ARCHITECT.AltLightOrigin.Settings.Colour1_Name",
 			hint: "DF_ARCHITECT.AltLightOrigin.Settings.Colour1_Hint",
 			label: "DF_ARCHITECT.AltLightOrigin.Settings.Colour1_Name",
@@ -40,7 +40,7 @@ class _AltLightOrigin {
 			scope: "world",
 		});
 		// @ts-ignore
-		new window.Ardittristan.ColorSetting(ARCHITECT.MOD_NAME, _AltLightOrigin.PREF_COLOUR2, {
+		new window.Ardittristan.ColorSetting(ARCHITECT.MOD_NAME, AltLightOrigin.PREF_COLOUR2, {
 			name: "DF_ARCHITECT.AltLightOrigin.Settings.Colour2_Name",
 			hint: "DF_ARCHITECT.AltLightOrigin.Settings.Colour2_Hint",
 			label: "DF_ARCHITECT.AltLightOrigin.Settings.Colour2_Name",
@@ -50,18 +50,18 @@ class _AltLightOrigin {
 		});
 
 		Hooks.on('renderSceneControls', (controls: SceneControls) => {
-			if (controls.activeControl === _AltLightOrigin.LIGHTING_LAYER) {
-				window.addEventListener(_AltLightOrigin.KEYEVENT_DOWN, this._keyEventHandler.bind(this));
-				window.addEventListener(_AltLightOrigin.KEYEVENT_UP, this._keyEventHandler.bind(this));
+			if (controls.activeControl === AltLightOrigin.LIGHTING_LAYER) {
+				window.addEventListener(AltLightOrigin.KEYEVENT_DOWN, this._keyEventHandler.bind(this));
+				window.addEventListener(AltLightOrigin.KEYEVENT_UP, this._keyEventHandler.bind(this));
 			}
 			else {
-				window.removeEventListener(_AltLightOrigin.KEYEVENT_DOWN, this._keyEventHandler.bind(this));
-				window.removeEventListener(_AltLightOrigin.KEYEVENT_UP, this._keyEventHandler.bind(this));
+				window.removeEventListener(AltLightOrigin.KEYEVENT_DOWN, this._keyEventHandler.bind(this));
+				window.removeEventListener(AltLightOrigin.KEYEVENT_UP, this._keyEventHandler.bind(this));
 			}
 		});
 	}
 
-	private _keyEventHandler(event: KeyboardEvent) {
+	private static _keyEventHandler(event: KeyboardEvent) {
 		if (event.repeat
 			|| (event.code !== 'ShiftLeft'
 				&& event.code !== 'ShiftRight'
@@ -73,8 +73,7 @@ class _AltLightOrigin {
 	}
 }
 class AltLightControlIcon extends ControlIcon {
-	altLightOrigin: _AltLightOrigin;
-	constructor(altLightOrigin: _AltLightOrigin, {
+	constructor({
 		texture,
 		size = 40,
 		borderColor = 0xFF5500,
@@ -86,12 +85,11 @@ class AltLightControlIcon extends ControlIcon {
 		tint?: number | null;
 	}) {
 		super({ texture, size, borderColor, tint });
-		this.altLightOrigin = altLightOrigin;
-		altLightOrigin.register(this);
+		AltLightOrigin.register(this);
 	}
 	/** @override */
 	async draw() {
-		if (!this.altLightOrigin?.showCrosshairs) {
+		if (!AltLightOrigin.showCrosshairs) {
 			this.icon.alpha = 1;
 			if (!this.icon.texture) return this;
 			return super.draw();
@@ -106,10 +104,10 @@ class AltLightControlIcon extends ControlIcon {
 			return parseInt('0x' + colorStr);
 		}
 
-		// // Draw icon
-		var colour = parseColour(SETTINGS.get<string>(this.altLightOrigin.alternateColour ? _AltLightOrigin.PREF_COLOUR2 : _AltLightOrigin.PREF_COLOUR1));
+		// Draw icon
+		var colour = parseColour(SETTINGS.get<string>(AltLightOrigin.alternateColour ? AltLightOrigin.PREF_COLOUR2 : AltLightOrigin.PREF_COLOUR1));
 		if (isNaN(colour))
-			colour = parseColour(SETTINGS.default(this.altLightOrigin.alternateColour ? _AltLightOrigin.PREF_COLOUR2 : _AltLightOrigin.PREF_COLOUR1));
+			colour = parseColour(SETTINGS.default(AltLightOrigin.alternateColour ? AltLightOrigin.PREF_COLOUR2 : AltLightOrigin.PREF_COLOUR1));
 		this.bg.clear()
 			.lineStyle(1, colour, 1.0)
 			.moveTo(this.rect[0]-1, this.rect[1]-1)
@@ -132,8 +130,6 @@ class AltLightControlIcon extends ControlIcon {
 		baseTexture?: boolean;
 	}) {
 		super.destroy(options);
-		this.altLightOrigin.deregister(this);
+		AltLightOrigin.deregister(this);
 	}
 }
-
-export const AltLightOrigin = new _AltLightOrigin();

@@ -2,13 +2,13 @@ import ARCHITECT from "../core/architect";
 
 interface Invert { inverted: boolean };
 
-class _AltLightInverted {
-	ready() {
+export default class AltLightInverted {
+	static ready() {
 		libWrapper.register(ARCHITECT.MOD_NAME, 'LightingLayer.prototype._onDragLeftMove',
 			this._onDragLeftMove.bind(canvas.lighting), 'WRAPPER');
 		Hooks.on('renderAmbientLightConfig', this._renderLightConfig.bind(this));
 	}
-	private _onDragLeftMove(this: LightingLayer, wrapper: Function, event: PIXI.InteractionEvent) {
+	private static _onDragLeftMove(this: LightingLayer, wrapper: Function, event: PIXI.InteractionEvent) {
 		const preview = (event.data as any).preview as AmbientLight;
 		if (event.data.originalEvent.altKey) {
 			if (!(preview.data.flags['df-architect'] as Invert)?.inverted) {
@@ -23,7 +23,7 @@ class _AltLightInverted {
 		}
 		return wrapper(event);
 	}
-	private _renderLightConfig(app: AmbientLightConfig, html: JQuery<HTMLElement>, data: any) {
+	private static _renderLightConfig(app: AmbientLightConfig, html: JQuery<HTMLElement>, data: any) {
 		const button = $(`<button type="button" style="flex:0;padding-left:8.5px" name="invert-radius" title="${'DF_ARCHITECT.AltLightInverted.InvertLuminosityButton'.localize()}"><i class="fas fa-adjust"></i></button>`);
 		html.find('input[name="config.luminosity"]').parent().before(button);
 		button.on('click', (event) => {
@@ -34,5 +34,3 @@ class _AltLightInverted {
 		});
 	}
 }
-
-export const AltLightInverted = new _AltLightInverted();

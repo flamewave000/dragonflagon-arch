@@ -22,20 +22,15 @@ export default class WallCtrlInvert {
 			onChange: () => this._patchWallsLayer()
 		});
 
-		Hotkeys.registerShortcut({
-			name: `${ARCHITECT.MOD_NAME}.ctrlInvert`,
-			label: 'DF_ARCHITECT.WallCtrlInvert.Label',
-			default: {
-				key: Hotkeys.keys.KeyC,
-				alt: true,
-				ctrl: false,
-				shift: false
-			},
-			onKeyDown: async _ => {
+		game.keybindings.register(ARCHITECT.MOD_NAME, 'ctrlInvert', {
+			restricted: true,
+			name: 'DF_ARCHITECT.WallCtrlInvert.Name',
+			editable: [{ key: 'KeyC', modifiers: [ KeyboardManager.MODIFIER_KEYS.ALT ] }],
+			onDown: <any> (async () => {
 				await SETTINGS.set(WallCtrlInvert.PREF_ENABLED, !this.enabled)
 				this._patchWallsLayer();
 				ui.controls.initialize();
-			}
+			})
 		});
 
 		Hooks.on('getSceneControlButtons', (controls: SceneControl[]) => {
@@ -44,7 +39,7 @@ export default class WallCtrlInvert {
 			wallsControls.tools.splice(wallsControls.tools.findIndex(x => x.name === 'snap'), 0, {
 				icon: 'fas fa-link',
 				name: 'ctrlInvert',
-				title: 'DF_ARCHITECT.WallCtrlInvert.Label',
+				title: 'DF_ARCHITECT.WallCtrlInvert.Title',
 				visible: isGM,
 				toggle: true,
 				active: this.enabled,

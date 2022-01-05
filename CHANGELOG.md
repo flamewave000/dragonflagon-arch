@@ -3,6 +3,7 @@
 ## Release 3.2.0 (2022-01-)
 - **UPDATED:** Migrated to FoundryVTT V9.
 - **UPDATED #101:** Migrated to new PIXI App config Hook.
+- **UPDATED #89:** Migrated to new FVTTv9 Core Keybinding API.
 - **FIX #92 & #93:** Wall join/split now working without error.
 - **FIX #94:** Fixed light luminosity inversion.
 - **FIX #91:** Fixed Colour Picker magnifier alignment.

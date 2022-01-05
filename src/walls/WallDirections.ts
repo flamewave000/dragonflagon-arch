@@ -8,9 +8,9 @@ interface WallExt extends Wall {
 	rightLabel: PIXI.Text;
 }
 
-class _WallDirections {
+export default class WallDirections {
 	static readonly PREF_ALLOW_UNSELECTED_INVERT = "WallDirections.AllowUnselectedInvert";
-	init() {
+	static init() {
 		try {
 			libWrapper.register(ARCHITECT.MOD_NAME, 'Wall.prototype.draw', this._onWallDraw, 'OVERRIDE');
 			libWrapper.register(ARCHITECT.MOD_NAME, 'Wall.prototype.refresh', this._onWallRefresh, 'WRAPPER');
@@ -23,8 +23,8 @@ class _WallDirections {
 		}
 	}
 
-	ready() {
-		SETTINGS.register(_WallDirections.PREF_ALLOW_UNSELECTED_INVERT, {
+	static ready() {
+		SETTINGS.register(WallDirections.PREF_ALLOW_UNSELECTED_INVERT, {
 			scope: 'world',
 			name: 'DF_ARCHITECT.WallDirections.Setting.AllowUnselectedInvertName',
 			hint: 'DF_ARCHITECT.WallDirections.Setting.AllowUnselectedInvertHint',
@@ -34,15 +34,15 @@ class _WallDirections {
 		});
 	}
 
-	private _onControlOrRelease(this: PlaceableObject, wrapper: Function, ...args: any[]) {
+	private static _onControlOrRelease(this: PlaceableObject, wrapper: Function, ...args: any[]) {
 		const result = wrapper(...args);
 		if (game.scenes.viewed.walls.has(this.id))
 			this.refresh();
 		return result;
 	}
 
-	private async _reverseWallDirection(this: Wall) {
-		if (SETTINGS.get(_WallDirections.PREF_ALLOW_UNSELECTED_INVERT) && !this._controlled) return;
+	private static async _reverseWallDirection(this: Wall) {
+		if (SETTINGS.get(WallDirections.PREF_ALLOW_UNSELECTED_INVERT) && !this._controlled) return;
 		if (this.data.dir) {
 			await this.document.update(<DeepPartial<WallData>>{ dir: this.data.dir === 1 ? 2 : 1 });
 		} else {
@@ -51,7 +51,7 @@ class _WallDirections {
 		}
 	}
 
-	private async _onWallDraw(this: WallExt): Promise<Wall> {
+	private static async _onWallDraw(this: WallExt): Promise<Wall> {
 		this.clear();
 
 		// Draw wall components
@@ -76,7 +76,7 @@ class _WallDirections {
 		if (this.id) this.activateListeners();
 		return this;
 	}
-	private _onWallRefresh(this: WallExt, wrapper: Function): Wall {
+	private static _onWallRefresh(this: WallExt, wrapper: Function): Wall {
 		wrapper();
 		if (!this._controlled || this.data.dir) {
 			this.leftLabel.renderable = false;
@@ -104,5 +104,3 @@ class _WallDirections {
 		return this;
 	}
 }
-
-export const WallDirections = new _WallDirections();

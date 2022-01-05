@@ -3,7 +3,6 @@
 		"ModName": "Dragon Flagon Architect",
 		"ErrorColourSettingsMissing": "DF Architect: 'lib - ColorSettings' module required. Please install and activate 'lib - ColorSettings'",
 		"ErrorLibWrapperMissing": "DF Architect: 'libWrapper' module required. Please install and activate 'libWrapper'.",
-		"ErrorLibDFHotkeysMissing": "DF Architect: 'Library: DF Hotkeys' module required. Please install and activate 'Library: DF Hotkeys'.",
 		"General": {
 			"Cancel": "Cancel",
 			"ShowCounterName": "Show Object Counters",
@@ -16,7 +15,6 @@
 			"Negative": "I'll Reload Myself"
 		},
 		"LayerShortcuts.Settings": {
-			"Title": "DF Architect: Layers Keyboard Shortcuts",
 			"Description": "Shortcuts for switching between the canvas layers.",
 			"Reset": "Reset to Defaults",
 			"Save": "Save",
@@ -40,9 +38,7 @@
 			}
 		},
 		"WallShortcuts.Settings": {
-			"Title": "DF Architect: Wall Type Switching",
-			"Description": "Hotkeys assigned to switch between the different wall types",
-			"Label_WallType": "Wall Type"
+			"Description": "Hotkeys assigned to switch between the different wall types"
 		},
 		"AltGridSnap": {
 			"Label": "Alternate Grid Snap",
@@ -55,8 +51,8 @@
 			}
 		},
 		"WallCtrlInvert": {
-			"Label": "Lock Wall Chaining",
-			"Title": "Wall Chaining",
+			"Title": "Lock Wall Chaining",
+			"Name": "Toggle Wall Chaining Lock",
 			"Hotkey": "Toggle chain lock: "
 		},
 		"WallJoinSplit": {
