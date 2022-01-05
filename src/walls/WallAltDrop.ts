@@ -31,7 +31,7 @@ export default class WallAltDrop {
 		this._drawCircle(radius as number);
 
 		libWrapper.register(ARCHITECT.MOD_NAME, 'WallsLayer.prototype._onDragLeftMove', this._handleDragMove.bind(this), 'WRAPPER');
-		libWrapper.register(ARCHITECT.MOD_NAME, 'WallsLayer.prototype._onDragLeftDrop', this.WallsLayer_handleDragDrop, 'WRAPPER');
+		// libWrapper.register(ARCHITECT.MOD_NAME, 'WallsLayer.prototype._onDragLeftDrop', this.WallsLayer_handleDragDrop, 'WRAPPER');
 		libWrapper.register(ARCHITECT.MOD_NAME, 'WallsLayer.prototype._onDragLeftCancel', this._handleDragCancel.bind(this), 'WRAPPER');
 	}
 
@@ -68,7 +68,7 @@ export default class WallAltDrop {
 		WallAltDrop._updateWallSnap(destination, fixed, event, this);
 	}
 
-	private static async WallsLayer_handleDragDrop(this: WallsLayer, wrapper: Function, event: PIXI.InteractionEvent) {
+	static async WallsLayer_handleDragDrop(this: WallsLayer, wrapper: Function, event: PIXI.InteractionEvent) {
 		const data = (<any>event.data) as WallEventData;
 		const { destination, fixed, object } = data;
 		var wall = data.preview;
@@ -125,7 +125,8 @@ export default class WallAltDrop {
 		const p0 = fixed ? wall.coords.slice(2, 4) : wall.coords.slice(0, 2);
 		const coords = fixed ? target.concat(p0) : p0.concat(target);
 		// If we are chaining walls, move the new wall's origin to the target point
-		if (game.keyboard.isCtrl(event) || WallCtrlInvert.enabled) {
+		if ((game.keyboard.isModifierActive(KeyboardManager.MODIFIER_KEYS.CONTROL) && !WallCtrlInvert.enabled)
+			|| (!game.keyboard.isModifierActive(KeyboardManager.MODIFIER_KEYS.CONTROL) && WallCtrlInvert.enabled)) {
 			(<any>event.data).preview.data.c[0] = target[0];
 			(<any>event.data).preview.data.c[1] = target[1];
 		}
