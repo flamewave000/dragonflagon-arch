@@ -53,15 +53,15 @@ export default class CaptureGameScreen {
 	static readonly PREF_BG_HIDE = 'CaptureGameScreen.BG.Hide';
 	static readonly PREF_BG_COLO = 'CaptureGameScreen.BG.Colour';
 	static readonly PREF_BG_ALPH = 'CaptureGameScreen.BG.Alpha';
-	static readonly LayersWithInvisiblePlaceables = ['WallsLayer', 'LightingLayer', 'SoundsLayer', 'TemplateLayer', 'NotesLayer', 'LightingLayerPF2e'];
-	static readonly LayersWithHiddenPlaceables = ['BackgroundLayer', 'TokenLayer', 'DrawingsLayer', 'ForegroundLayer'];
+	static readonly LayersWithInvisiblePlaceables = ['walls', 'lighting', 'sounds', 'templates', 'notes'];
+	static readonly LayersWithHiddenPlaceables = ['background', 'tokens', 'drawings', 'foreground'];
 	private static _layerFilters: { [key: string]: LayerFilter };
 	private static _captureInProgress = false;
 	private static _currentSession: CaptureSession = null;
 	private static _openCVPromise: Promise<void> = null;
 
 	static getLayer<T extends CanvasLayer>(key: string): T {
-		return <T>(canvas as any as {[key:string]: CanvasLayer })[key];
+		return <T>(canvas as any as { [key: string]: CanvasLayer })[key];
 	}
 
 	private static _getLayerFilter(key: string): LayerFilter {
@@ -104,16 +104,16 @@ export default class CaptureGameScreen {
 			ui.notifications.warn('DF_ARCHITECT.CaptureGameScreen.ScreenCapture.WarningNoScene'.localize());
 			return;
 		}
-		const layerToConfig = (layer: CanvasLayer): any => {
-			var label = ('LAYERS.' + layer.name).localize();
+		const layerToConfig = (name: string, layer: CanvasLayer): any => {
+			var label = ('LAYERS.' + name).localize();
 			if (label.startsWith('LAYERS.'))
-				label = `"${layer.name}"`;
+				label = 'LAYERS.unknown'.localize().replace('{0}', name[0].titleCase());
 			return {
-				label, name: layer.name,
-				active: layer.name !== 'NotesLayer' ? layer._active : layer._active || game.settings.get("core", (<any>layer.constructor).TOGGLE_SETTING),
-				hasControls: this.LayersWithInvisiblePlaceables.includes(layer.name),
-				hasHidden: this.LayersWithHiddenPlaceables.includes(layer.name),
-				filter: mergeObject({ s: true, h: false, c: false }, this._getLayerFilter(layer.name))
+				label, name: name,
+				active: name !== 'notes' ? layer._active : layer._active || game.settings.get("core", (<any>layer.constructor).TOGGLE_SETTING),
+				hasControls: this.LayersWithInvisiblePlaceables.includes(name),
+				hasHidden: this.LayersWithHiddenPlaceables.includes(name),
+				filter: mergeObject({ s: true, h: false, c: false }, this._getLayerFilter(name))
 			}
 		};
 		const data = {
@@ -124,7 +124,7 @@ export default class CaptureGameScreen {
 			webp: SETTINGS.get(this.PREF_FRMT) === 'webp',
 			all: SETTINGS.get(this.PREF_TRGT) === 'all',
 			pads: SETTINGS.get(this.PREF_PADS),
-			layers: (<Canvas>canvas).layers.map(x => layerToConfig(x)),
+			layers: Object.keys(CONFIG.Canvas.layers).map(x => layerToConfig(x, <CanvasLayer>(<any>CONFIG.Canvas.layers[x]).layerClass.instance)),
 			bg: {
 				hide: SETTINGS.get<boolean>(this.PREF_BG_HIDE),
 				alph: SETTINGS.get<number>(this.PREF_BG_ALPH),
@@ -391,12 +391,8 @@ export default class CaptureGameScreen {
 	static toggleLayer(layerName: string, show: boolean) {
 		var layer: CanvasLayer | undefined = <PlaceablesLayer<any>>this.getLayer(layerName);
 		if (!layer) {
-			console.warn(`CaptureGameScreen::toggleLayer() - There is no registered layer for the name '${layerName}'. Attempting to find layer in layer list manually.`);
-			layer = canvas.layers.find(x => x.name === layerName);
-			if (!layer) {
-				console.error(`CaptureGameScreen::toggleLayer() - Could not find any layer with the name '${layerName}'`);
-				return;
-			}
+			console.error(`CaptureGameScreen::toggleLayer() - There is no registered layer for the name '${layerName}'. Attempting to find layer in layer list manually.`);
+			return;
 		}
 		layer.renderable = show;
 	}
@@ -691,7 +687,7 @@ export default class CaptureGameScreen {
 			// If there is only 1 image exists, so return it immediately
 			if (images.length == 1) {
 				// If the requested format is not PNG, convert it
-				if(format != 'image/png') {
+				if (format != 'image/png') {
 					const image = await GetImageMat(images[0].data);
 					resolveCapture({ data: GetImageData(image), width: image.cols, height: image.rows });
 				} else

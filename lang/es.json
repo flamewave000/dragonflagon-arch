@@ -200,21 +200,17 @@
 		}
 	},
 	"LAYERS": {
-		"BackgroundLayer": "Capa de fondo/baldosas",
-		"ForegroundLayer": "Capa de primer plano/techos",
-		"DrawingsLayer": "Capa de dibujo",
-		"GridLayer": "Capa de rejilla",
-		"WallsLayer": "Capa de muros",
-		"TemplateLayerPF2e": "Capa de plantillas",
-		"TemplateLayer": "Capa de plantillas",
-		"NotesLayer": "Capa de notas",
-		"TokenLayer": "Capa de iconos",
-		"LightingLayerPF2e": "Capa de iluminación",
-		"LightingLayer": "Capa de iluminación",
-		"SoundsLayer": "Capa de sonidos",
-		"SightLayerPF2e": "Capa de visión",
-		"SightLayer": "Capa de visión",
-		"EffectsLayer": "Capa de efectos",
-		"ControlsLayer": "Capa de controles"
+		"background": "Capa de fondo/baldosas",
+		"foreground": "Capa de primer plano/techos",
+		"drawings": "Capa de dibujo",
+		"grid": "Capa de rejilla",
+		"walls": "Capa de muros",
+		"templates": "Capa de plantillas",
+		"notes": "Capa de notas",
+		"tokens": "Capa de iconos",
+		"lighting": "Capa de iluminación",
+		"sounds": "Capa de sonidos",
+		"sight": "Capa de visión",
+		"controls": "Capa de controles"
 	}
 }

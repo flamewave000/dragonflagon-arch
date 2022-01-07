@@ -196,21 +196,19 @@
 		}
 	},
 	"LAYERS": {
-		"BackgroundLayer": "Background/Tiles Layer",
-		"ForegroundLayer": "Foreground/Roofs Layer",
-		"DrawingsLayer": "Drawings Layer",
-		"GridLayer": "Grid Layer",
-		"WallsLayer": "Walls Layer",
-		"TemplateLayerPF2e": "Template Layer",
-		"TemplateLayer": "Template Layer",
-		"NotesLayer": "Notes Layer",
-		"TokenLayer": "Token Layer",
-		"LightingLayerPF2e": "Lighting Layer",
-		"LightingLayer": "Lighting Layer",
-		"SoundsLayer": "Sounds Layer",
-		"SightLayerPF2e": "Sight Layer",
-		"SightLayer": "Sight Layer",
-		"EffectsLayer": "Effects Layer",
-		"ControlsLayer": "Controls Layer"
+		"background": "Background/Tiles Layer",
+		"foreground": "Foreground/Roofs Layer",
+		"drawings": "Drawings Layer",
+		"grid": "Grid Layer",
+		"walls": "Walls Layer",
+		"templates": "Template Layer",
+		"notes": "Notes Layer",
+		"tokens": "Token Layer",
+		"lighting": "Lighting Layer",
+		"sounds": "Sounds Layer",
+		"sight": "Sight Layer",
+		"controls": "Controls Layer",
+		"weather": "Weather Layer",
+		"unknown": "\"{0} Layer\""
 	}
 }

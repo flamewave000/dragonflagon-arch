@@ -182,18 +182,17 @@ export default class TileFlattener {
 		}
 
 		// Disable ALL Other Layers
-		for (let layer of canvas.layers) {
-			if (["BackgroundLayer", "ForegroundLayer", "LightingLayer", "LightingLayerPF2e"].includes(layer.name)) continue;
+		for (let layer of Object.keys(CONFIG.Canvas.layers)) {
+			if (["background", "foreground", "lighting"].includes(layer)) continue;
 			try {
-				CaptureGameScreen.toggleLayer(layer.name, false)
+				CaptureGameScreen.toggleLayer(layer, false);
 			} catch (error: any) {
 				console.error(error);
 			}
 		}
-		CaptureGameScreen.toggleLayer("LightingLayer", lights);
-		CaptureGameScreen.toggleLayer("LightingLayerPF2e", lights);
+		CaptureGameScreen.toggleLayer("lighting", lights);
 		if (layers === TileLayerRendered.Floor)
-			CaptureGameScreen.toggleLayer("ForegroundLayer", false);
+			CaptureGameScreen.toggleLayer("foreground", false);
 		else if (layers === TileLayerRendered.Roof) {
 			// Hide all tiles on the background layer
 			for (let tile of canvas.background.tiles) {
@@ -218,8 +217,8 @@ export default class TileFlattener {
 				this.promptForTileFlattening();
 				return;
 			}
-			CaptureGameScreen.toggleHidden("BackgroundLayer", hidden && !select && layers !== TileLayerRendered.Roof);
-			CaptureGameScreen.toggleHidden("ForegroundLayer", hidden && !select);
+			CaptureGameScreen.toggleHidden("background", hidden && !select && layers !== TileLayerRendered.Roof);
+			CaptureGameScreen.toggleHidden("foreground", hidden && !select);
 			await waitForDOMUpdate();
 
 			if (typeof _levels !== 'undefined') {

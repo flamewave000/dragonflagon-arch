@@ -1,3 +1,4 @@
+import CaptureGameScreen from "../general/CaptureGameScreen";
 import { LightTemplateManager } from "../lights/LightTemplate";
 import ARCHITECT from "./architect";
 import SETTINGS from "./settings";
@@ -33,9 +34,10 @@ export default class DataMigration {
 
 	private static async performMigration() {
 		ui.notifications.info(game.i18n.localize('DF Architect is migrating your saved data to the latest version, please wait and <b>do not</b> refresh the page...'), { permanent: true });
-		await new Promise((resolve) => {
+		await new Promise(async (resolve) => {
 			// This is the start of the migration chain
-			this.migrateToCore_0_8_8();
+			await this.migrateToCore_0_8_8();
+			await this.migrateToCore_0_9_241();
 			resolve(undefined);
 		});
 		ui.notifications.info(game.i18n.localize('DF Architect has finished migrating your data!'), { permanent: true });
@@ -75,5 +77,50 @@ export default class DataMigration {
 			await (<any>macro.data).document.update({ command });
 			console.log(macro.data.command);
 		}
+	}
+
+	private static async migrateToCore_0_9_241() {
+		if (this.previous.core >= '9.241') return;
+		const layers: { [key: string]: any } = SETTINGS.get(CaptureGameScreen.PREF_LYRS);
+		const newLayers = [
+			'background',
+			'controls',
+			'drawings',
+			'effects',
+			'foreground',
+			'grid',
+			'lighting',
+			'notes',
+			'sight',
+			'sounds',
+			'templates',
+			'tokens',
+			'walls'];
+
+		const layerMap = new Map([
+			['BackgroundLayer', 'background'],
+			['ControlsLayer', 'controls'],
+			['DrawingsLayer', 'drawings'],
+			['EffectsLayer', 'effects'],
+			['ForegroundLayer', 'foreground'],
+			['GridLayer', 'grid'],
+			['LightingLayerPF2e', 'lighting'],
+			['NotesLayer', 'notes'],
+			['SightLayerPF2e', 'sight'],
+			['SoundsLayer', 'sounds'],
+			['TemplateLayerPF2e', 'templates'],
+			['TokenLayer', 'tokens'],
+			['WallsLayer', 'walls']]
+		);
+		if (layers['DarkvisionLayerPF2e'] !== undefined) delete layers['DarkvisionLayerPF2e'];
+		for (const layer of Object.keys(layers)) {
+			// Map the layer data to the new layer name
+			if (layerMap.has(layer))
+				layers[layerMap.get(layer)] = layers[layer];
+			// Delete the old layer name if it is not in the new layer list
+			if (!newLayers.includes(layer))
+				delete layers[layer];
+		}
+		await SETTINGS.set(CaptureGameScreen.PREF_LYRS, layers);
 	}
 }
