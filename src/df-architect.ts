@@ -106,12 +106,4 @@ Hooks.once('ready', async function () {
 	try { WallsCounter.ready() } catch (error) { console.error(error) }
 	try { TileCounter.ready() } catch (error) { console.error(error) }
 	try { SoundCounter.ready() } catch (error) { console.error(error) }
-
-	/** !! This is a temporary fix due to keybindings being initialized before localizations !! **/
-	game.keybindings.actions.forEach(x => {
-		if(x.namespace !== ARCHITECT.MOD_NAME) return;
-		x.name = x.name.localize();
-		x.hint = x.hint?.localize();
-	});
-	/******************************/
 });

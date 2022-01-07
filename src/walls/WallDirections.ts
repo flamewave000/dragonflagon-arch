@@ -6,13 +6,15 @@ interface WallExt extends Wall {
 	[key: string]: any;
 	leftLabel: PIXI.Text;
 	rightLabel: PIXI.Text;
+	drawLabels?: boolean;
+	style?: PIXI.TextStyle;
 }
 
 export default class WallDirections {
 	static readonly PREF_ALLOW_UNSELECTED_INVERT = "WallDirections.AllowUnselectedInvert";
 	static init() {
 		try {
-			libWrapper.register(ARCHITECT.MOD_NAME, 'Wall.prototype.draw', this._onWallDraw, 'OVERRIDE');
+			libWrapper.register(ARCHITECT.MOD_NAME, 'Wall.prototype.draw', this._onWallDraw, 'WRAPPER');
 			libWrapper.register(ARCHITECT.MOD_NAME, 'Wall.prototype.refresh', this._onWallRefresh, 'WRAPPER');
 			libWrapper.register(ARCHITECT.MOD_NAME, 'Wall.prototype.control', this._onControlOrRelease, 'WRAPPER');
 			libWrapper.register(ARCHITECT.MOD_NAME, 'Wall.prototype.release', this._onControlOrRelease, 'WRAPPER');
@@ -51,32 +53,28 @@ export default class WallDirections {
 		}
 	}
 
-	private static async _onWallDraw(this: WallExt): Promise<Wall> {
-		this.clear();
-
-		// Draw wall components
-		this.directionIcon = this.data.dir ? this.addChild(this._drawDirection()) : null;
-		this.line = this.addChild(new PIXI.Graphics());
-		this.endpoints = this.addChild(new PIXI.Graphics());
-		const style = new PIXI.TextStyle({
-			align: 'center',
-			fill: this._getWallColor(),
-			fontSize: 12,
-			stroke: 0,
-			strokeThickness: 2,
-			lineHeight: 0
-		});
-		this.leftLabel = this.addChild(new PIXI.Text("L", style));
-		this.rightLabel = this.addChild(new PIXI.Text("R", style));
-
-		// Draw current wall
-		this.refresh();
-
-		// Enable interactivity, only if the Tile has a true ID
-		if (this.id) this.activateListeners();
-		return this;
+	private static async _onWallDraw(this: WallExt, wrapper: () => any): Promise<Wall> {
+		this.drawLabels = true;
+		return wrapper();
 	}
 	private static _onWallRefresh(this: WallExt, wrapper: Function): Wall {
+		if (this.drawLabels) {
+			this.drawLabels = false;
+			if (!this.style) {
+				this.style = new PIXI.TextStyle({
+					align: 'center',
+					fill: this._getWallColor(),
+					fontSize: 12,
+					stroke: 0,
+					strokeThickness: 2,
+					lineHeight: 0
+				});
+			}
+			this.style.fill = this._getWallColor();
+			this.leftLabel = this.addChild(new PIXI.Text("L", this.style));
+			this.rightLabel = this.addChild(new PIXI.Text("R", this.style));
+		}
+
 		wrapper();
 		if (!this._controlled || this.data.dir) {
 			this.leftLabel.renderable = false;
