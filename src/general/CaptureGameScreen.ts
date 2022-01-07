@@ -60,10 +60,6 @@ export default class CaptureGameScreen {
 	private static _currentSession: CaptureSession = null;
 	private static _openCVPromise: Promise<void> = null;
 
-	static getLayer<T extends CanvasLayer>(key: string): T {
-		return <T>(canvas as any as { [key: string]: CanvasLayer })[key];
-	}
-
 	private static _getLayerFilter(key: string): LayerFilter {
 		if (!this._layerFilters[key])
 			this._layerFilters[key] = { s: true };
@@ -266,7 +262,7 @@ export default class CaptureGameScreen {
 				Object.entries(this._layerFilters).forEach((layerFilter) => {
 					var [layer, filter] = layerFilter;
 					// If the layer no longer exists, remove it from list and return
-					if (this.getLayer(layer) === null) {
+					if (ARCHITECT.getLayer(layer) === null) {
 						delete this._layerFilters[layer];
 						return
 					}
@@ -312,7 +308,7 @@ export default class CaptureGameScreen {
 		// Collect Hidden Items
 		const hiddenItemsSnapshot: PlaceableObject[] = [];
 		for (let layerName of this.LayersWithHiddenPlaceables) {
-			const layer = this.getLayer(layerName) as PlaceablesLayer<any>;
+			const layer = ARCHITECT.getLayer<PlaceablesLayer<any>>(layerName);
 			for (let object of layer.objects.children as PlaceableObject[]) {
 				// Disable the Border/Frame of the selectable objects during the render
 				if ((<Tile>object).frame !== undefined) (<Tile>object).frame.renderable = false
@@ -389,7 +385,7 @@ export default class CaptureGameScreen {
 	 * @param show true to show; false to hide.
 	 */
 	static toggleLayer(layerName: string, show: boolean) {
-		var layer: CanvasLayer | undefined = <PlaceablesLayer<any>>this.getLayer(layerName);
+		var layer: CanvasLayer | undefined = ARCHITECT.getLayer<PlaceablesLayer<any>>(layerName);
 		if (!layer) {
 			console.error(`CaptureGameScreen::toggleLayer() - There is no registered layer for the name '${layerName}'. Attempting to find layer in layer list manually.`);
 			return;
@@ -402,7 +398,7 @@ export default class CaptureGameScreen {
 	 * @param show true to show; false to hide.
 	 */
 	static toggleHidden(layerName: string, show: boolean) {
-		const layer = <PlaceablesLayer<any>>this.getLayer(layerName);
+		const layer = ARCHITECT.getLayer<PlaceablesLayer<any>>(layerName);
 		(layer.objects.children as PlaceableObject[]).forEach(x => {
 			if (!x.data.flags.df_arch_hidden) return;
 			x.renderable = show;
@@ -414,7 +410,7 @@ export default class CaptureGameScreen {
 	 * @param show true to show; false to hide.
 	 */
 	static toggleControls(layerName: string, show: boolean) {
-		const layer = <PlaceablesLayer<any>>this.getLayer(layerName);
+		const layer = ARCHITECT.getLayer<PlaceablesLayer<any>>(layerName);
 		this._getLayerFilter(layerName).c = show;
 		// The Template Layer has specialized activation to always show template frame.
 		if (layer.name === 'TemplateLayer') {

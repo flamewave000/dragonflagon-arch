@@ -54,6 +54,7 @@ export default class AltGridSnap {
 			onDown: () => {
 				if (this.enabled)
 					this.toggled = !this.toggled;
+				return this.enabled;
 			}
 		});
 
@@ -89,10 +90,10 @@ export default class AltGridSnap {
 		});
 	}
 
-	static get enabled() {
+	static get enabled(): boolean {
 		return SETTINGS.get(AltGridSnap.PREF_ENABLED);
 	}
-	static get toggled() {
+	static get toggled(): boolean {
 		return SETTINGS.get(AltGridSnap.PREF_TOGGLED);
 	}
 	static set toggled(value: boolean) {

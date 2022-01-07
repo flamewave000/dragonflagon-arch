@@ -32,6 +32,7 @@ export default class WallCtrlInvert {
 			onDown: <any>(async () => {
 				await SETTINGS.set(WallCtrlInvert.PREF_ENABLED, !this.enabled)
 				ui.controls.initialize();
+				return true;
 			})
 		});
 

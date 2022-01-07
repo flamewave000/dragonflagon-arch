@@ -15,7 +15,8 @@ export default class LayerShortcuts {
 				const layer1 = SETTINGS.get(LayerShortcuts.PREF_LAYER_SWAP_LAYER1);
 				const layer2 = SETTINGS.get(LayerShortcuts.PREF_LAYER_SWAP_LAYER2);
 				const layer = ui.controls.activeControl === layer1 ? layer2 : layer1;
-				(ui.controls as any)._onClickLayer({ preventDefault: () => { }, currentTarget: { dataset: { control: layer } } })
+				(ui.controls as any)._onClickLayer({ preventDefault: () => { }, currentTarget: { dataset: { control: layer } } });
+				return true;
 			}
 		});
 		// #endregion
@@ -38,8 +39,10 @@ export default class LayerShortcuts {
 				name: layer[1].replace('Layer', ' Layer'),
 				hint: 'DF_ARCHITECT.LayerShortcuts.Settings.Description',
 				editable: [{ key: `Digit${++count}`, modifiers: [KeyboardManager.MODIFIER_KEYS.CONTROL] }],
-				onDown: () =>
-					(ui.controls as any)._onClickLayer({ preventDefault: () => { }, currentTarget: { dataset: { control: layer[0] } } })
+				onDown: () => {
+					ARCHITECT.getLayer(layer[0])?.activate();
+					return true;
+				}
 			});
 		}
 		// #endregion

@@ -50,6 +50,14 @@ export default class ARCHITECT {
 		return new Blob(byteArrays, { type: contentType });
 	}
 
+	
+	static getLayer<T extends CanvasLayer>(key: string): T {
+		const layer = <T>(canvas as any as { [key: string]: CanvasLayer })[key];
+		if(!layer)
+			return <T>(<any>CONFIG.Canvas.layers[key].layerClass).instance;
+		return layer;
+	}
+
 	private static readonly GR_BG_HI = '44';
 	private static readonly GR_BG_LO = '08';
 	private static readonly GR_BG_BDR = '36a';
