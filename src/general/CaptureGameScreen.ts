@@ -1,5 +1,7 @@
 import ARCHITECT from "../core/architect";
 import SETTINGS from "../core/settings";
+import TileRender from "./capture/TileExt";
+import DrawingRender from "./capture/DrawingExt";
 
 interface LayerFilter {
 	s: boolean;  // show layer
@@ -38,6 +40,7 @@ interface ImageData {
 interface CaptureSession {
 	id: number;
 	hiddenItemsSnapshot: PlaceableObject[];
+	occludedItemsSnapshot: Tile[];
 	foregroundPreviouslyActive: boolean;
 }
 
@@ -93,6 +96,15 @@ export default class CaptureGameScreen {
 		});
 
 		Handlebars.registerHelper('add', (lhs, rhs) => lhs + rhs);
+
+		libWrapper.register(ARCHITECT.MOD_NAME, 'Tile.prototype.refresh', function (this: Tile, wrapper: any, ...args: any) {
+			if (CaptureGameScreen._captureInProgress) return TileRender.bind(this)();
+			return wrapper(...args);
+		}, 'MIXED');
+		libWrapper.register(ARCHITECT.MOD_NAME, 'Drawing.prototype.refresh', function (this: Drawing, wrapper: any, ...args: any) {
+			if (CaptureGameScreen._captureInProgress) return DrawingRender.bind(this)();
+			return wrapper(...args);
+		}, 'MIXED');
 	}
 
 	static async promptForCapture() {
@@ -307,25 +319,31 @@ export default class CaptureGameScreen {
 		CaptureGameScreen._captureInProgress = true;
 		// Collect Hidden Items
 		const hiddenItemsSnapshot: PlaceableObject[] = [];
+		const occludedItemsSnapshot: Tile[] = [];
 		for (let layerName of this.LayersWithHiddenPlaceables) {
 			const layer = ARCHITECT.getLayer<PlaceablesLayer<any>>(layerName);
 			for (let object of layer.objects.children as PlaceableObject[]) {
 				// Disable the Border/Frame of the selectable objects during the render
-				if ((<Tile>object).frame !== undefined) (<Tile>object).frame.renderable = false
-				else if ((<any | Token>object).border !== undefined) (<any | Token>object).border.renderable = false
+				if ((<Tile>object).frame !== undefined) (<Tile>object).frame.visible = false
+				else if ((<any | Token>object).border !== undefined) (<any | Token>object).border.visible = false
+				if (object instanceof Tile && object.data.occlusion.mode !== CONST.TILE_OCCLUSION_MODES.NONE) {
+					object.data.flags.df_arch_occl = object.data.occlusion.mode;
+					object.data.occlusion.mode = CONST.TILE_OCCLUSION_MODES.NONE;
+					occludedItemsSnapshot.push(object);
+				}
 				// If the object is not hidden, ignore it
 				if ((<any>object.data).hidden === undefined || !(<any>object.data).hidden) continue;
-				object.renderable = false;
 				(<any>object.data).hidden = false;
 				object.data.flags.df_arch_hidden = true;
 				hiddenItemsSnapshot.push(object);
 				object.refresh();
+				object.visible = false;
 			}
 		}
 		const foregroundPreviouslyActive = canvas.foreground._active;
 		if (foregroundPreviouslyActive)
 			canvas.foreground.activate();
-		CaptureGameScreen._currentSession = { hiddenItemsSnapshot, foregroundPreviouslyActive, id: new Date().getTime() };
+		CaptureGameScreen._currentSession = { hiddenItemsSnapshot, occludedItemsSnapshot, foregroundPreviouslyActive, id: new Date().getTime() };
 		return CaptureGameScreen._currentSession;
 	}
 
@@ -347,8 +365,13 @@ export default class CaptureGameScreen {
 		// Correct Hidden Items
 		for (let object of session.hiddenItemsSnapshot as any[]) {
 			object.data.hidden = true;
-			object.renderable = true;
+			object.visible = true;
 			delete object.data.flags.df_arch_hidden;
+		}
+		// Correct Occluded Items
+		for (let object of session.occludedItemsSnapshot) {
+			object.data.occlusion.mode = <any>object.data.flags.df_arch_occl;
+			delete object.data.flags.df_arch_occl;
 		}
 
 		// Correct Layers
@@ -356,8 +379,8 @@ export default class CaptureGameScreen {
 			if (this.LayersWithHiddenPlaceables.includes(layer.name))
 				layer.objects.children.forEach(object => {
 					// Disable the Border/Frame of the selectable objects during the render
-					if ((<Tile>object).frame !== undefined) (<Tile>object).frame.renderable = true
-					else if ((<any | Token>object).border !== undefined) (<any | Token>object).border.renderable = true
+					if ((<Tile>object).frame !== undefined) (<Tile>object).frame.visible = true
+					else if ((<any | Token>object).border !== undefined) (<any | Token>object).border.visible = true
 				});
 
 			layer.renderable = true;
@@ -401,7 +424,7 @@ export default class CaptureGameScreen {
 		const layer = ARCHITECT.getLayer<PlaceablesLayer<any>>(layerName);
 		(layer.objects.children as PlaceableObject[]).forEach(x => {
 			if (!x.data.flags.df_arch_hidden) return;
-			x.renderable = show;
+			x.visible = show;
 		});
 	}
 	/**
@@ -418,8 +441,7 @@ export default class CaptureGameScreen {
 				if (layer.objects) {
 					layer.placeables.forEach(p => {
 						try {
-							p.controlIcon.visible = true;
-							(<MeasuredTemplate>p).ruler.visible = true;
+							p.hud.children.forEach((x: PIXI.Graphics) => x.visible = true);
 						} catch (err) {
 							console.error(err);
 						}
@@ -430,8 +452,7 @@ export default class CaptureGameScreen {
 					layer.objects.visible = true;
 					layer.placeables.forEach(p => {
 						try {
-							p.controlIcon.visible = false;
-							(<MeasuredTemplate>p).ruler.visible = false;
+							p.hud.children.forEach((x: PIXI.Graphics) => x.visible = false);
 						} catch (err) {
 							console.error(err);
 						}
@@ -543,8 +564,13 @@ export default class CaptureGameScreen {
 			await CaptureGameScreen.loadOpenCV();
 
 			// Activate the Foreground layer so it draws properly
-			if (!canvas.foreground._active) {
+			if (!canvas.foreground._active && CaptureGameScreen._layerFilters['foreground'].s) {
 				canvas.foreground.activate();
+				// Iterate over filters to insure any that needs controls show are restored
+				for(const layer of Object.keys(CaptureGameScreen._layerFilters)) {
+					if (!CaptureGameScreen._layerFilters[layer].s || !CaptureGameScreen._layerFilters[layer].c) continue;
+					CaptureGameScreen.toggleControls(layer, true);
+				}
 				const resolve = resolveCapture;
 				const reject = rejectCapture;
 				resolveCapture = v => { canvas.foreground.deactivate(); resolve(v) };
