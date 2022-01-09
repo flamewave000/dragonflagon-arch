@@ -11,7 +11,7 @@ export default async function(this: Tile) {
 		this.tile.position.set(aw/2, ah/2);
 		this.tile.rotation = r;
 		// Tile appearance
-		this.tile.alpha = this.data.hidden ? Math.min(0.5, this.data.alpha) : this.data.alpha;
+		this.tile.alpha = 1;//this.data.hidden ? Math.min(0.5, this.data.alpha) : this.data.alpha;
 		// if ( this.occlusionFilter ) this.occlusionFilter.uniforms.alpha = this.data.alpha;
 		this.tile.tint = this.data.tint ? foundry.utils.colorStringToHex(this.data.tint) : 0xFFFFFF;
 	}

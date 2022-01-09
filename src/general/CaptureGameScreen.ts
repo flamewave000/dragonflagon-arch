@@ -44,6 +44,28 @@ interface CaptureSession {
 	foregroundPreviouslyActive: boolean;
 }
 
+const afterDOMUpdate = (block: () => void, delay = 10) => setTimeout(block, delay);
+const waitForDOMUpdate = async (delay = 10) => new Promise<void>(res => afterDOMUpdate(res, delay));
+const DELETE_RESOURCES = (resources: any | any[]) => {
+	// If a single resource was given
+	if (!(resources instanceof Array)) {
+		// Delete it if it is alive
+		if (resources !== null && resources !== undefined && !resources.isDeleted())
+			resources.delete();
+		return;
+	}
+	// Iterate over all resources given
+	for (let res of resources) {
+		if (res === null || res === undefined) continue;
+		// If item is an Array, recurse!
+		if (res instanceof Array) DELETE_RESOURCES(res);
+		// If the item is already dead, ignore!
+		else if (res.isDeleted()) continue;
+		// Delete the alive resource
+		else res.delete();
+	}
+}
+
 export default class CaptureGameScreen {
 	private static readonly SPLIT_DIM = 1024 * 4; // Maximum 64MiB Raw Image
 	private static readonly WARNING_SIZE = CaptureGameScreen.SPLIT_DIM * CaptureGameScreen.SPLIT_DIM;
@@ -58,15 +80,19 @@ export default class CaptureGameScreen {
 	static readonly PREF_BG_ALPH = 'CaptureGameScreen.BG.Alpha';
 	static readonly LayersWithInvisiblePlaceables = ['walls', 'lighting', 'sounds', 'templates', 'notes'];
 	static readonly LayersWithHiddenPlaceables = ['background', 'tokens', 'drawings', 'foreground'];
+	private static _dialogLayerFilters: { [key: string]: LayerFilter };
 	private static _layerFilters: { [key: string]: LayerFilter };
 	private static _captureInProgress = false;
 	private static _currentSession: CaptureSession = null;
 	private static _openCVPromise: Promise<void> = null;
 
-	private static _getLayerFilter(key: string): LayerFilter {
-		if (!this._layerFilters[key])
-			this._layerFilters[key] = { s: true };
-		return this._layerFilters[key];
+	static getLayerState(key: string): LayerFilter {
+		return <LayerFilter>duplicate(this._layerFilters[key]);
+	}
+	private static _getDialogLayerFilter(key: string): LayerFilter {
+		if (!this._dialogLayerFilters[key])
+			this._dialogLayerFilters[key] = { s: true };
+		return this._dialogLayerFilters[key];
 	}
 	static init() {
 		SETTINGS.register(this.PREF_ALLOW_PC, {
@@ -86,7 +112,7 @@ export default class CaptureGameScreen {
 		SETTINGS.register(this.PREF_BG_COLO, { scope: 'client', config: false, type: String, default: '#999999' });
 		SETTINGS.register(this.PREF_BG_ALPH, { scope: 'client', config: false, type: Number, default: 100 });
 
-		this._layerFilters = SETTINGS.get(this.PREF_LYRS);
+		this._dialogLayerFilters = SETTINGS.get(this.PREF_LYRS);
 
 		Hooks.on('renderSettings', (settings: Settings, html: JQuery<HTMLElement>, data: {}) => {
 			if (!SETTINGS.get(this.PREF_ALLOW_PC) && !game.user.isGM) return;
@@ -121,7 +147,7 @@ export default class CaptureGameScreen {
 				active: name !== 'notes' ? layer._active : layer._active || game.settings.get("core", (<any>layer.constructor).TOGGLE_SETTING),
 				hasControls: this.LayersWithInvisiblePlaceables.includes(name),
 				hasHidden: this.LayersWithHiddenPlaceables.includes(name),
-				filter: mergeObject({ s: true, h: false, c: false }, this._getLayerFilter(name))
+				filter: mergeObject({ s: true, h: false, c: false }, this._getDialogLayerFilter(name))
 			}
 		};
 		const data = {
@@ -206,7 +232,7 @@ export default class CaptureGameScreen {
 				compression.on('input', () => compression.trigger('change'));
 				html.find('#filter-reset').on('click', (e: Event) => {
 					e.preventDefault();
-					Object.entries(this._layerFilters).forEach((layerFilter) => {
+					Object.entries(this._dialogLayerFilters).forEach((layerFilter) => {
 						var [layer, filter] = layerFilter;
 						if (!filter.s) {
 							this.toggleLayer(layer, true);
@@ -230,18 +256,18 @@ export default class CaptureGameScreen {
 				html.find('.dfarch-capture-form section>div>input').on('change', async (event: Event) => {
 					const element = <HTMLInputElement>event.currentTarget;
 					if (element.id.endsWith('-show')) {
-						this._getLayerFilter(element.value).s = element.checked;
+						this._getDialogLayerFilter(element.value).s = element.checked;
 						this.toggleLayer(element.value, element.checked);
 					}
 					else if (element.id.endsWith('-hidden')) {
-						this._getLayerFilter(element.value).h = element.checked;
+						this._getDialogLayerFilter(element.value).h = element.checked;
 						this.toggleHidden(element.value, element.checked);
 					}
 					else {
-						this._getLayerFilter(element.value).c = element.checked;
+						this._getDialogLayerFilter(element.value).c = element.checked;
 						this.toggleControls(element.value, element.checked);
 					}
-					await SETTINGS.set(this.PREF_LYRS, this._layerFilters);
+					await SETTINGS.set(this.PREF_LYRS, this._dialogLayerFilters);
 				});
 				html.find('#bg-hide').on('change', (e: Event) => {
 					const hide = (<HTMLInputElement>e.currentTarget).checked;
@@ -271,11 +297,11 @@ export default class CaptureGameScreen {
 						.val(game.scenes.viewed.data.backgroundColor)
 						.trigger('change');
 				});
-				Object.entries(this._layerFilters).forEach((layerFilter) => {
+				Object.entries(this._dialogLayerFilters).forEach((layerFilter) => {
 					var [layer, filter] = layerFilter;
 					// If the layer no longer exists, remove it from list and return
 					if (ARCHITECT.getLayer(layer) === null) {
-						delete this._layerFilters[layer];
+						delete this._dialogLayerFilters[layer];
 						return
 					}
 					this.toggleLayer(layer, filter.s);
@@ -317,6 +343,11 @@ export default class CaptureGameScreen {
 		if (CaptureGameScreen._captureInProgress)
 			if (throwOnError) throw Error('Capture In Progress'); else return null;
 		CaptureGameScreen._captureInProgress = true;
+		// Reset the layer filters
+		this._layerFilters = {};
+		for (const layer of Object.keys(CONFIG.Canvas.layers)) {
+			this._layerFilters[layer] = { s: true };
+		}
 		// Collect Hidden Items
 		const hiddenItemsSnapshot: PlaceableObject[] = [];
 		const occludedItemsSnapshot: Tile[] = [];
@@ -341,8 +372,6 @@ export default class CaptureGameScreen {
 			}
 		}
 		const foregroundPreviouslyActive = canvas.foreground._active;
-		if (foregroundPreviouslyActive)
-			canvas.foreground.activate();
 		CaptureGameScreen._currentSession = { hiddenItemsSnapshot, occludedItemsSnapshot, foregroundPreviouslyActive, id: new Date().getTime() };
 		return CaptureGameScreen._currentSession;
 	}
@@ -352,10 +381,12 @@ export default class CaptureGameScreen {
 	 * @param session The {@link CaptureSession} object returned by {@link beginCapture}
 	 * @returns 
 	 */
-	static endCapture(session: CaptureSession): boolean {
+	static async endCapture(session: CaptureSession): Promise<boolean> {
 		if (!CaptureGameScreen._captureInProgress) return false;
 		if (session === null || session.id !== CaptureGameScreen._currentSession?.id) return false;
 		CaptureGameScreen._captureInProgress = false;
+		// Reset the layer filters
+		this._layerFilters = {};
 		// Cleanup Background
 		if (!!canvas.background.bg)
 			canvas.background.bg.visible = true;
@@ -399,8 +430,9 @@ export default class CaptureGameScreen {
 		// Correct Active Layer
 		const controlName = ui.controls.activeControl;
 		const control = ui.controls.controls.find((c: any) => c.name === controlName);
-		if (!session.foregroundPreviouslyActive) canvas.foreground.deactivate();
 		if (control && control.layer) (<any>canvas)[control.layer].activate();
+		await waitForDOMUpdate();
+		if (session.foregroundPreviouslyActive) canvas.foreground.activate();
 		return true;
 	}
 
@@ -410,12 +442,20 @@ export default class CaptureGameScreen {
 	 * @param show true to show; false to hide.
 	 */
 	static toggleLayer(layerName: string, show: boolean) {
+		if (!this._captureInProgress) {
+			console.error("Layer toggling requires a Capture Session to be started. Please call `beginCapture()` first.");
+			return;
+		}
 		var layer: CanvasLayer | undefined = ARCHITECT.getLayer<PlaceablesLayer<any>>(layerName);
 		if (!layer) {
 			console.error(`CaptureGameScreen::toggleLayer() - There is no registered layer for the name '${layerName}'. Attempting to find layer in layer list manually.`);
 			return;
 		}
 		layer.renderable = show;
+		if (layerName in this._layerFilters)
+			this._layerFilters[layerName].s = show;
+		else
+			this._layerFilters[layerName] = { s: show };
 	}
 	/**
 	 * Toggle the visibility of hidden entities on the given layer.
@@ -423,11 +463,19 @@ export default class CaptureGameScreen {
 	 * @param show true to show; false to hide.
 	 */
 	static toggleHidden(layerName: string, show: boolean) {
+		if (!this._captureInProgress) {
+			console.error("Hidden Placeables toggling requires a Capture Session to be started. Please call `beginCapture()` first.");
+			return;
+		}
 		const layer = ARCHITECT.getLayer<PlaceablesLayer<any>>(layerName);
 		(layer.objects.children as PlaceableObject[]).forEach(x => {
 			if (!x.data.flags.df_arch_hidden) return;
 			x.visible = show;
 		});
+		if (layerName in this._layerFilters)
+			this._layerFilters[layerName].h = show;
+		else
+			this._layerFilters[layerName] = { s: true, h: show };
 	}
 	/**
 	 * Toggle the visibility of entity controls on the given layer.
@@ -435,8 +483,12 @@ export default class CaptureGameScreen {
 	 * @param show true to show; false to hide.
 	 */
 	static toggleControls(layerName: string, show: boolean) {
+		if (!this._captureInProgress) {
+			console.error("Controls toggling requires a Capture Session to be started. Please call `beginCapture()` first.");
+			return;
+		}
 		const layer = ARCHITECT.getLayer<PlaceablesLayer<any>>(layerName);
-		this._getLayerFilter(layerName).c = show;
+		this._getDialogLayerFilter(layerName).c = show;
 		// The Template Layer has specialized activation to always show template frame.
 		if (layer.name === 'TemplateLayer') {
 			if (show) {
@@ -492,6 +544,10 @@ export default class CaptureGameScreen {
 				if (layer.preview) layer.preview.removeChildren();
 			}
 		}
+		if (layerName in this._layerFilters)
+			this._layerFilters[layerName].c = show;
+		else
+			this._layerFilters[layerName] = { s: true, c: show };
 	}
 
 	static async captureView({ format, quality }: { format: string, quality: number }): Promise<ImageData> {
@@ -517,28 +573,6 @@ export default class CaptureGameScreen {
 	 */
 	static async captureCanvas({ format, quality, keepPadding, view }
 		: { format: string, quality: number, keepPadding?: boolean, view?: { x: number, y: number, w: number, h: number, s: number } }): Promise<ImageData> {
-		const afterDOMUpdate = (block: () => void) => setTimeout(block, 10);
-		const waitForDOMUpdate = async () => new Promise<void>(res => afterDOMUpdate(res));
-		const DELETE_RESOURCES = (resources: any | any[]) => {
-			// If a single resource was given
-			if (!(resources instanceof Array)) {
-				// Delete it if it is alive
-				if (resources !== null && resources !== undefined && !resources.isDeleted())
-					resources.delete();
-				return;
-			}
-			// Iterate over all resources given
-			for (let res of resources) {
-				if (res === null || res === undefined) continue;
-				// If item is an Array, recurse!
-				if (res instanceof Array) DELETE_RESOURCES(res);
-				// If the item is already dead, ignore!
-				else if (res.isDeleted()) continue;
-				// Delete the alive resource
-				else res.delete();
-			}
-		}
-
 		const targetImage = new Image();
 		const targetCanvas = document.createElement('canvas') as HTMLCanvasElement;
 		const targetContext = targetCanvas.getContext('2d');
@@ -569,7 +603,7 @@ export default class CaptureGameScreen {
 			if (!canvas.foreground._active && CaptureGameScreen._layerFilters['foreground'].s) {
 				canvas.foreground.activate();
 				// Iterate over filters to insure any that needs controls show are restored
-				for(const layer of Object.keys(CaptureGameScreen._layerFilters)) {
+				for (const layer of Object.keys(CaptureGameScreen._layerFilters)) {
 					if (!CaptureGameScreen._layerFilters[layer].s || !CaptureGameScreen._layerFilters[layer].c) continue;
 					CaptureGameScreen.toggleControls(layer, true);
 				}
@@ -578,6 +612,8 @@ export default class CaptureGameScreen {
 				resolveCapture = v => { canvas.foreground.deactivate(); resolve(v) };
 				rejectCapture = e => { canvas.foreground.deactivate(); reject(e) };
 			}
+			// Must wait for DOM to update or image may be taken before some layers finish redrawing
+			await waitForDOMUpdate(100);
 
 			// Save the previous orientation of the canvas stage
 			const origX = canvas.stage.pivot.x;

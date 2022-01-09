@@ -166,6 +166,7 @@ export default class TileFlattener {
 			for (let tile of allTiles) {
 				tilesPreHidden.set(tile.data._id, [tile, tile.data.hidden]);
 				tile.data.hidden = !controlledIDs.includes(tile.id);
+				tile.refresh();
 			}
 		}
 		// If we are not rendering animated tiles
@@ -181,6 +182,18 @@ export default class TileFlattener {
 			}
 		}
 
+		// Pre-Hide all tiles on the background layer before canvas capture starts
+		if (layers === TileLayerRendered.Roof) {
+			for (let tile of canvas.background.tiles) {
+				if (!tilesPreHidden.has(tile.data._id))
+					tilesPreHidden.set(tile.data._id, [tile, tile.data.hidden]);
+				tile.data.hidden = true;
+			}
+		}
+
+		// Begin the Canvas Capture Process
+		const session = CaptureGameScreen.beginCapture(false);
+
 		// Disable ALL Other Layers
 		for (let layer of Object.keys(CONFIG.Canvas.layers)) {
 			if (["background", "foreground", "lighting"].includes(layer)) continue;
@@ -193,21 +206,11 @@ export default class TileFlattener {
 		CaptureGameScreen.toggleLayer("lighting", lights);
 		if (layers === TileLayerRendered.Floor)
 			CaptureGameScreen.toggleLayer("foreground", false);
-		else if (layers === TileLayerRendered.Roof) {
-			// Hide all tiles on the background layer
-			for (let tile of canvas.background.tiles) {
-				if (!tilesPreHidden.has(tile.data._id))
-					tilesPreHidden.set(tile.data._id, [tile, tile.data.hidden]);
-				tile.data.hidden = true;
-			}
-		}
-		// Update the Background Image
+		// Update the Background Image if it exists
 		if (!!canvas.background.bg)
 			canvas.background.bg.visible = showBG;
 		(<any>canvas.app.renderer).backgroundAlpha = 0;
 
-		// Begin the Canvas Capture Process
-		const session = CaptureGameScreen.beginCapture(false);
 		const waitForDOMUpdate = async () => new Promise<void>(res => setTimeout(res, 10));
 		await waitForDOMUpdate();
 		var image: ImageData;
@@ -218,7 +221,7 @@ export default class TileFlattener {
 				return;
 			}
 			CaptureGameScreen.toggleHidden("background", hidden && !select && layers !== TileLayerRendered.Roof);
-			CaptureGameScreen.toggleHidden("foreground", hidden && !select);
+			CaptureGameScreen.toggleHidden("foreground", hidden && !select && layers !== TileLayerRendered.Floor);
 			await waitForDOMUpdate();
 
 			if (typeof _levels !== 'undefined') {
@@ -355,7 +358,7 @@ export default class TileFlattener {
 					e.preventDefault();
 					const x = (game.scenes.viewed.data.width - width) / 2;
 					const y = (game.scenes.viewed.data.height - height) / 2;
-					await Tile.create(<any>{ img: filePath, x, y, z: 0, width, height });
+					await game.scenes.viewed.createEmbeddedDocuments(TileDocument.documentName, [{ img: filePath, x, y, z: 0, width, height }]);
 					dialog.close();
 				});
 			}
