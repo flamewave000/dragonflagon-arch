@@ -1,11 +1,11 @@
 {
-	"name": "{{name}}",
-	"title": "{{title}}",
-	"description": "{{description}}",
-	"version": "{{version}}",
+	"name": "df-architect",
+	"title": "DF Architect",
+	"description": "Architect for FoundryVTT provides a major overhaul of the Walls and Lighting features, as well as a few extra fun things like the Colour Picker and Alternate Grid Snap.",
+	"version": "3.2.0",
 	"author": "flamewave000#0001",
-	"minimumCoreVersion": "0.8.9",
-	"compatibleCoreVersion": "0.8.9",
+	"minimumCoreVersion": "9",
+	"compatibleCoreVersion": "9.242",
 	"dependencies": [ { "name": "lib-wrapper" }, { "name": "colorsettings" } ],
 	"esmodules": "{{sources}}",
 	"styles": "{{css}}",
@@ -19,28 +19,28 @@
 			"label": "Light Templates: D&D5e",
 			"path": "packs/lights-dnd5e.db",
 			"entity": "Macro",
-			"module": "{{name}}"
+			"module": "df-architect"
 		},
 		{
 			"name": "lights-pf1e",
 			"label": "Light Templates: Pathfinder 1E",
 			"path": "packs/lights-pf1e.db",
 			"entity": "Macro",
-			"module": "{{name}}"
+			"module": "df-architect"
 		},
 		{
 			"name": "lights-pf2e",
 			"label": "Light Templates: Pathfinder 2E",
 			"path": "packs/lights-pf2e.db",
 			"entity": "Macro",
-			"module": "{{name}}"
+			"module": "df-architect"
 		}
 	],
 	"bugs":		"https://github.com/flamewave000/dragonflagon-arch/issues/new/choose",
 	"url":		"https://github.com/flamewave000/dragonflagon-arch",
 	"license":	"https://raw.githubusercontent.com/flamewave000/dragonflagon-arch/master/LICENSE",
-	"manifest":	"https://dragonflagon.cafe/mods/man/{{name}}",
-	"download":	"https://dragonflagon.cafe/mods/pak/{{name}}",
+	"manifest":	"https://dragonflagon.cafe/mods/man/df-architect",
+	"download":	"https://dragonflagon.cafe/mods/pak/df-architect",
 	"readme":	"https://github.com/flamewave000/dragonflagon-arch/blob/master/README.md",
 	"changelog":"https://github.com/flamewave000/dragonflagon-arch/blob/master/CHANGELOG.md",
 	"manifestPlusVersion": "1.0.0",

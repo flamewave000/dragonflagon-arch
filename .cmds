@@ -1,0 +1,23 @@
+#!/bin/bash
+
+SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
+
+git_tag() {
+	MANIFEST="$SCRIPT_DIR/module.json"
+	MODULE_NAME=$(npx json "name" <"$MANIFEST")
+	MODULE_VERS=$(npx json "version" <"$MANIFEST")
+	echo "Tagging ${MODULE_NAME}_${MODULE_VERS}"
+	git tag -d ${MODULE_NAME}_${MODULE_VERS} 2>/dev/null
+	git tag ${MODULE_NAME}_${MODULE_VERS} &&
+		git push -f origin ${MODULE_NAME}_${MODULE_VERS}
+	echo "Tagged current commit as \"${MODULE_NAME}_${MODULE_VERS}\""
+}
+
+COMMAND="$1"
+shift
+case $COMMAND in
+"tag") git_tag ;;
+*) echo "Unknown Command: $COMMAND" ;;
+esac
+
+exit 0

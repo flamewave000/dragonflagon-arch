@@ -1,6 +1,6 @@
 # DF Architect
 
-## Release 3.2.0 (2022-01-)
+## Pre-Release 3.2.0 (2022-01-09)
 - **UPDATED:** Migrated to FoundryVTT V9.
 - **UPDATED #101:** Migrated to new PIXI App config Hook.
 - **UPDATED #89:** Migrated to new FVTTv9 Core Keybinding API.
@@ -10,6 +10,9 @@
 - **FIX #91:** Fixed Colour Picker magnifier alignment.
 - **FIX #90:** Fixed and improved performance of Wall Chain Locking feature.
 - **FIX #87:** Fixed door render.
+- **FIX #100:** Corrected rendering issues for capturing the game canvas.
+- **FIX #99:** Corrected rendering and UX issues for running the Tile Flattener.
+- **REMOVED:** Temporarily Removed Light Templating features. Will be back before public release.
 
 ## Release 3.1.1 (2021-11-07)
 - **NEW:** Updated vertical position logic to handle new Library: DF Module Buttons.

@@ -28,7 +28,6 @@ function reloadPackage(cb) { PACKAGE = JSON.parse(fs.readFileSync('package.json'
 function DEV_DIST() { return DEV_DIR + PACKAGE.name + '/'; }
 console.log(DEV_DIST());
 
-String.prototype.replaceAll = function (pattern, replace) { return this.split(pattern).join(replace); }
 function pdel(patterns, options) { return desc(`deleting ${patterns}`, () => { return del(patterns, options); }); }
 function plog(message) { return desc('plog', (cb) => { cb(); console.log(message); }); }
 function pnotify(message, title = null) {
@@ -119,10 +118,6 @@ function buildManifest(output = null) {
 			const css = files.filter(e => e.endsWith('css'));
 			fs.readFile('module.json', (err, data) => {
 				const module = data.toString() // Inject the data into the module.json
-					.replaceAll('{{name}}', PACKAGE.name)
-					.replaceAll('{{title}}', PACKAGE.title)
-					.replaceAll('{{version}}', PACKAGE.version)
-					.replaceAll('{{description}}', PACKAGE.description)
 					.replace('"{{sources}}"', stringify(js, { indent: '\t' }))
 					.replace('"{{css}}"', stringify(css, { indent: '\t' }));
 				fs.writeFile(output + 'module.json', module, cb); // save the module to the distribution directory
