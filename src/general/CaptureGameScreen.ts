@@ -375,13 +375,15 @@ export default class CaptureGameScreen {
 		}
 
 		// Correct Layers
-		for (let layer of (<Canvas>canvas).layers as PlaceablesLayer<any>[]) {
-			if (this.LayersWithHiddenPlaceables.includes(layer.name))
-				layer.objects.children.forEach(object => {
-					// Disable the Border/Frame of the selectable objects during the render
-					if ((<Tile>object).frame !== undefined) (<Tile>object).frame.visible = true
-					else if ((<any | Token>object).border !== undefined) (<any | Token>object).border.visible = true
-				});
+		for (let layerName of Object.keys(CONFIG.Canvas.layers)) {
+			const layer = ARCHITECT.getLayer<PlaceablesLayer<any>>(layerName);
+			if (this.LayersWithHiddenPlaceables.includes(layerName)) {
+				for (let object of layer.objects.children as PlaceableObject[]) {
+					// Enable the Border/Frame of the selectable objects after the render
+					if ((<Tile>object).frame !== undefined) (<Tile>object).frame.visible = true;
+					else if ((<any | Token>object).border !== undefined) (<any | Token>object).border.visible = true;
+				}
+			}
 
 			layer.renderable = true;
 			layer.deactivate();
