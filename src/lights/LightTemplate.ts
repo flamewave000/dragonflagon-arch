@@ -83,7 +83,7 @@ export class LightTemplateManager {
 
 	static ready() {
 		if (!game.user.isGM) return;
-		Hooks.on('renderLightConfig', this._renderLightConfig.bind(this));
+		Hooks.on('renderAmbientLightConfig', this._renderLightConfig.bind(this));
 		Hooks.on('renderMacroConfig', this._renderMacroConfig.bind(this));
 		Hooks.on('renderSceneControls', (controls: SceneControls) => {
 			if (game.user.isGM && controls.activeControl !== 'lighting')
@@ -111,16 +111,19 @@ ${'DF_ARCHITECT.LightTemplate.CreateTemplateButton.MacroDirectory'.localize()}</
 		});
 	}
 
-	private static _renderLightConfig(app: LightConfig, html: JQuery<HTMLElement>, data: any) {
-		const button = $(`<button type="button" style="margin-bottom:0.25em" name="save-template">
+	private static _renderLightConfig(app: AmbientLightConfig, html: JQuery<HTMLElement>, data: any) {
+		const button = $(`<button type="button" name="save-template">
 <i class="far fa-lightbulb"></i>
 ${'DF_ARCHITECT.LightTemplate.CreateTemplateButton.LightConfig'.localize()}
 </button>`);
-		html.find('button[name="submit"]').before(button);
+		html.find('footer.sheet-footer').prepend(button);
 		button.on('click', (event) => {
 			event.preventDefault();
 			this._createTemplate(duplicate((<AmbientLightDocument>app.object).data) as Partial<AmbientLightData>);
 		});
+		html.find('a.item[data-tab="basic"]').on('click', () => button.show());
+		html.find('a.item[data-tab="animation"]').on('click', () => button.show());
+		html.find('a.item[data-tab="advanced"]').on('click', () => button.hide());
 	}
 
 	private static async _renderMacroConfig(app: MacroConfig, html: JQuery<HTMLElement>, data: Macro) {

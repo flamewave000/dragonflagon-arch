@@ -1,5 +1,8 @@
 # DF Architect
 
+## Pre-Release 3.2.1 (2022-01-)
+- **FIX #96:** Create Light Template button fixed.
+
 ## Pre-Release 3.2.0 (2022-01-09)
 - **UPDATED:** Migrated to FoundryVTT V9.
 - **UPDATED #101:** Migrated to new PIXI App config Hook.

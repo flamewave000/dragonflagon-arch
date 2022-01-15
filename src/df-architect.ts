@@ -20,7 +20,7 @@ import WallJoinSplit from './walls/WallJoinSplit';
 import AltLightOrigin from './lights/AltLightOrigin';
 import { QuickColourPicker } from './general/QuickColourPicker';
 import CaptureGameScreen from './general/CaptureGameScreen';
-// import { LightTemplateManager, LightingLayerOverride } from './lights/LightTemplate';
+import { LightTemplateManager, LightingLayerOverride } from './lights/LightTemplate';
 import WallChangeType from './walls/WallChangeType';
 import WallAltDrop from './walls/WallAltDrop';
 import AltLightInverted from './lights/AltLightInverted';
@@ -52,7 +52,7 @@ Hooks.once('init', function () {
 	try { WallDirections.init() } catch (error) { console.error(error) }
 	try { AltLightOrigin.init() } catch (error) { console.error(error) }
 	try { CaptureGameScreen.init() } catch (error) { console.error(error) }
-	// try { LightTemplateManager.init() } catch (error) { console.error(error) }
+	try { LightTemplateManager.init() } catch (error) { console.error(error) }
 	try { TileFlattener.init() } catch (error) { console.error(error) }
 	try { TileConfigExt.init() } catch (error) { console.error(error) }
 	try { CounterUI.init() } catch (error) { console.error(error) }
@@ -97,8 +97,8 @@ Hooks.once('ready', async function () {
 	try { AltLightOrigin.ready() } catch (error) { console.error(error) }
 	try { QuickColourPicker.ready() } catch (error) { console.error(error) }
 	try { AltLightInverted.ready() } catch (error) { console.error(error) }
-	// try { LightTemplateManager.ready() } catch (error) { console.error(error) }
-	// try { LightingLayerOverride.ready() } catch (error) { console.error(error) }
+	try { LightTemplateManager.ready() } catch (error) { console.error(error) }
+	try { LightingLayerOverride.ready() } catch (error) { console.error(error) }
 	try { ShowLayerControls.ready() } catch (error) { console.error(error) }
 	// WARNING: The *Counters need to go after ShowLayerControls so they don't
 	// accidentally pick up the layer activations during initialization

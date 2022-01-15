@@ -130,7 +130,7 @@
 		},
 		"LightTemplate": {
 			"CreateTemplateButton": {
-				"LightConfig": "Crear plantilla desde esta fuente de luz",
+				"LightConfig": "Crear plantilla",
 				"MacroDirectory": "Crear plantilla de fuente de luz"
 			},
 			"ContextMenu": {

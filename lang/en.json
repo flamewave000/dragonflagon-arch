@@ -126,7 +126,7 @@
 		},
 		"LightTemplate": {
 			"CreateTemplateButton": {
-				"LightConfig": "Create Template from this Light",
+				"LightConfig": "Create Template",
 				"MacroDirectory": "Create Light Template"
 			},
 			"ContextMenu": {
