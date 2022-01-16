@@ -1,28 +1,30 @@
 <div id="dfarch-cur-light-template">
 	<a class="button" title="{{localize 'DF_ARCHITECT.LightTemplate.CurrentTemplate.EditButton'}}"><i class="fas fa-pencil-alt"></i></a>
-	<h2 style="text-align:center;grid-column-end:4">{{localize 'DF_ARCHITECT.LightTemplate.CurrentTemplate.Label'}}</h2>
+	<h3 style="text-align:center;grid-column-end:4">{{localize 'DF_ARCHITECT.LightTemplate.CurrentTemplate.Label'}}</h3>
 	<a class="button" title="{{localize 'DF_ARCHITECT.LightTemplate.CurrentTemplate.ExitButton'}}"><i class="fas fa-times"></i></a>
 	<h1>{{name}}</h1>
-	<h2>{{localize "LIGHT.LightType"}}:</h2>
-	<p>{{localize lightType}}</p>
-	<h2>{{localize "LIGHT.LightDim" }}:</h2>
-	<p>{{data.dim}}</p>
-	<h2>{{localize "LIGHT.LightBright" }}:</h2>
-	<p>{{data.bright}}</p>
-	<h2>{{localize "LIGHT.LightAngle" }}:</h2>
-	<p>{{data.angle}}</p>
-	<h2>{{localize "LIGHT.LightRotation" }}:</h2>
-	<p>{{data.rotation}}</p>
-	<h2>{{localize 'LIGHT.DarknessRange' }}:</h2>
-	<p>{{ localize 'Between' }} {{data.darkness.min}} {{ localize 'and' }} {{data.darkness.max}}</p>
-	<h2>{{localize "LIGHT.LightColor" }}:</h2>
-	<p style="padding:0"><code style="padding:0.25em;background-color:{{tintColorValue}};color:#{{#if tintIsDark}}fff{{else}}000{{/if}}">{{tintColorLabel}}</code></p>
-	<h2>{{localize "LIGHT.LightAlpha" }}:</h2>
-	<p>{{colorIntensity}}</p>
-	<h2>{{localize "LIGHT.AnimationType"}}:</h2>
-	<p>{{localize animationType}}</p>
-	<h2>{{localize "LIGHT.AnimationSpeed"}}:</h2>
-	<p>{{data.lightAnimation.speed}}</p>
-	<h2>{{localize "LIGHT.AnimationIntensity"}}:</h2>
-	<p>{{data.lightAnimation.intensity}}</p>
+
+	<h2>Basic</h2>
+		<h3>{{localize "LIGHT.Radius"}}:</h3><p>{{localize "LIGHT.Dim"}} {{data.config.dim}}, {{localize "LIGHT.Bright"}} {{data.config.bright}}</p>
+		<h3>{{localize "LIGHT.Angle"}}:</h3><p>{{data.config.angle}}</p>
+		<h3>{{localize "LIGHT.Rotation"}}:</h3><p>{{data.rotation}}</p>
+		<h3>{{localize "LIGHT.Color"}}:</h3><p style="padding:0"><code style="padding:0.25em;background-color:{{tintColorValue}};color:#{{#if tintIsDark}}fff{{else}}000{{/if}}">{{tintColorLabel}}</code></p>
+		<h3>{{localize "LIGHT.Alpha"}}:</h3><p>{{colorIntensity}}</p>
+		<h3>{{localize "LIGHT.DarknessRange"}}:</h3><p>{{ localize 'Between' }} {{data.config.darkness.min}} {{ localize 'and' }} {{data.config.darkness.max}}</p>
+
+	<h2>Animation</h2>
+		<h3>{{localize "LIGHT.AnimationType"}}:</h3><p>{{localize animationType}}</p>
+		<h3>{{localize "LIGHT.AnimationSpeed"}}:</h3><p>{{data.config.animation.speed}}</p>
+		<h3>{{localize "LIGHT.AnimationReverse"}}:</h3><p>{{data.config.animation.reverse}}</p>
+		<h3>{{localize "LIGHT.AnimationIntensity"}}:</h3><p>{{data.config.animation.intensity}}</p>
+
+	<h2>Advanced</h2>
+		<h3>{{localize "LIGHT.Walls"}}:</h3><p>{{data.walls}}</p>
+		<h3>{{localize "LIGHT.Vision"}}:</h3><p>{{data.vision}}</p>
+		<h3>{{localize "LIGHT.ColorationTechnique"}}:</h3><p>{{coloration}}</p>
+		<h3>{{localize "LIGHT.Luminosity"}}:</h3><p>{{data.config.luminosity}}</p>
+		<h3>{{localize "LIGHT.Gradual"}}:</h3><p>{{data.config.gradual}}</p>
+		<h3>{{localize "LIGHT.Saturation"}}:</h3><p>{{data.config.saturation}}</p>
+		<h3>{{localize "LIGHT.Contrast"}}:</h3><p>{{data.config.contrast}}</p>
+		<h3>{{localize "LIGHT.Shadows"}}:</h3><p>{{data.config.shadows}}</p>
 </div>

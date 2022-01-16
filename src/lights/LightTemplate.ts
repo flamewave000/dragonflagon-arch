@@ -6,6 +6,10 @@ declare global {
 	const LightTemplates: _LightTemplates;
 }
 
+declare class AdaptiveLightingShader {
+	static COLORATION_TECHNIQUES: { [key: string]: { id: number, label: string } }
+}
+
 class _LightTemplates {
 	/**
 	 * Activates the given Light Template provided by the Macro ID.
@@ -23,27 +27,28 @@ class _LightTemplates {
 		}
 
 		LightTemplateManager.currentActiveTemplate = macroId;
-		// const lightData = LightTemplateManager.getCurrentTemplateData();
-		// // This is just to make the colour text more visible
-		// const tintColour = parseInt('0x1' + (lightData.config.color || '#000000').substr(1));
-		// const templateHtml = $(await renderTemplate(`modules/${ARCHITECT.MOD_NAME}/templates/cur-light-template.hbs`, {
-		// 	name: game.macros.get(macroId).name,
-		// 	data: lightData,
-		// 	colorIntensity: Math.sqrt(lightData.config.alpha).toNearest(0.05),
-		// 	// lightType: LightTemplateManager.lightTypes[lightData.t],
-		// 	animationType: lightData.config.animation.type === "" ? 'None' : CONFIG.Canvas.lightAnimations[lightData.config.animation.type].label,
-		// 	tintColorValue: lightData.config.color || 'transparent',
-		// 	tintColorLabel: lightData.config.color || '#------',
-		// 	// Determines if the tint colour is dark or light, the HBS template will change the text colour accordingly
-		// 	tintIsDark: ((((tintColour & 0xff0000) >> 16) + ((tintColour & 0xff00) >> 8) + (tintColour & 0xff)) / 3) < 128
-		// }));
-		// const rect = $('#controls .active .control-tools')[0].getBoundingClientRect();
-		// templateHtml.css('left', rect.right + 10 + 'px');
-		// templateHtml.css('top', rect.top + 'px');
-		// const buttons = templateHtml.find('a');
-		// buttons.first().on('click', () => game.macros.get(macroId).sheet.render(true));
-		// buttons.last().on('click', this.deactivate.bind(this));
-		// templateHtml.appendTo(document.body);
+		const lightData = LightTemplateManager.getCurrentTemplateData();
+		// This is just to make the colour text more visible
+		const tintColour = parseInt('0x1' + (lightData.config.color || '#000000').substring(1));
+		const templateHtml = $(await renderTemplate(`modules/${ARCHITECT.MOD_NAME}/templates/cur-light-template.hbs`, {
+			name: game.macros.get(macroId).name,
+			data: lightData,
+			colorIntensity: Math.sqrt(lightData.config.alpha).toNearest(0.05),
+			// lightType: LightTemplateManager.lightTypes[lightData.t],
+			animationType: lightData.config.animation.type === "" ? 'None' : CONFIG.Canvas.lightAnimations[lightData.config.animation.type].label,
+			tintColorValue: lightData.config.color || 'transparent',
+			tintColorLabel: lightData.config.color || '#------',
+			// Determines if the tint colour is dark or light, the HBS template will change the text colour accordingly
+			tintIsDark: ((((tintColour & 0xff0000) >> 16) + ((tintColour & 0xff00) >> 8) + (tintColour & 0xff)) / 3) < 128,
+			coloration: Object.entries(AdaptiveLightingShader.COLORATION_TECHNIQUES).find(x => x[1].id === lightData.config.coloration)[1].label.localize()
+		}));
+		const rect = $('nav#controls ol.active')[0].getBoundingClientRect();
+		templateHtml.css('left', rect.right + 10 + 'px');
+		templateHtml.css('top', rect.top + 'px');
+		const buttons = templateHtml.find('a');
+		buttons.first().on('click', () => game.macros.get(macroId).sheet.render(true));
+		buttons.last().on('click', this.deactivate.bind(this));
+		templateHtml.appendTo(document.body);
 	}
 
 	deactivate() {
@@ -367,10 +372,8 @@ class TemplateLightDocument {
 		};
 		this.macro = macro;
 	}
-	updateSource() {
-	}
-	refresh() {
-	}
+	updateSource() { }
+	refresh() { }
 	async update(data: Partial<AmbientLightData>) {
 		const newData = foundry.utils.expandObject(data);
 		const img = newData.img;

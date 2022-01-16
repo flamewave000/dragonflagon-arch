@@ -18,6 +18,15 @@
 	h2 {
 		color: #fff;
 		font-size: small;
+		grid-column-start: 2;
+		grid-column-end: 4;
+		text-align: left;
+		text-transform: capitalize;
+		margin: 0.5em 0 0 0;
+	}
+	h3 {
+		color: #fff;
+		font-size: small;
 		text-decoration: none;
 		text-align: right;
 		grid-column: 2;
