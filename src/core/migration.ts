@@ -1,3 +1,4 @@
+import { AmbientLightData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs";
 import CaptureGameScreen from "../general/CaptureGameScreen";
 import { LightTemplateManager } from "../lights/LightTemplate";
 import ARCHITECT from "./architect";
@@ -33,15 +34,18 @@ export default class DataMigration {
 	}
 
 	private static async performMigration() {
-		ui.notifications.info(game.i18n.localize('DF Architect is migrating your saved data to the latest version, please wait and <b>do not</b> refresh the page...'), { permanent: true });
-		await new Promise(async (resolve) => {
-			// This is the start of the migration chain
-			await this.migrateToCore_0_8_8();
-			await this.migrateToCore_0_9_241();
-			await this.migrateLightTemplates_3_3_x();
-			resolve(undefined);
-		});
-		ui.notifications.info(game.i18n.localize('DF Architect has finished migrating your data!'), { permanent: true });
+		var migrating = false;
+		const migrationOccurring = () => {
+			if (migrating) return;
+			migrating = true;
+			ui.notifications.info(game.i18n.localize('DF Architect is migrating your saved data to the latest version, please wait and <b>do not</b> refresh the page...'), { permanent: true });
+		};
+		// This is the start of the migration chain
+		await this.migrateToCore_0_8_8(migrationOccurring);
+		await this.migrateToCore_0_9_241(migrationOccurring);
+		await this.migrateLightTemplates_3_2_x(migrationOccurring);
+		if (migrating)
+			ui.notifications.info(game.i18n.localize('DF Architect has finished migrating your data!'), { permanent: true });
 	}
 
 	// Example migration function
@@ -63,8 +67,9 @@ export default class DataMigration {
 	// 	// Invoke next migration in chain
 	// }
 
-	private static async migrateToCore_0_8_8() {
+	private static async migrateToCore_0_8_8(notifyMigration: () => void) {
 		if (this.previous.core >= '0.8.8') return;
+		notifyMigration();
 		for (let macroID of game.macros.keys()) {
 			const macro = game.macros.get(macroID);
 			if (!macro.getFlag(ARCHITECT.MOD_NAME, LightTemplateManager.FLAG_IS_TEMPLATE)) continue;
@@ -80,8 +85,9 @@ export default class DataMigration {
 		}
 	}
 
-	private static async migrateToCore_0_9_241() {
+	private static async migrateToCore_0_9_241(notifyMigration: () => void) {
 		if (this.previous.core >= '9.241') return;
+		notifyMigration();
 		const layers: { [key: string]: any } = SETTINGS.get(CaptureGameScreen.PREF_LYRS);
 		const newLayers = [
 			'background',
@@ -125,55 +131,65 @@ export default class DataMigration {
 		await SETTINGS.set(CaptureGameScreen.PREF_LYRS, layers);
 	}
 
-	private static async migrateLightTemplates_3_3_x() {
-		if (this.previous.arch >= '3.3.1') return;
+	private static async migrateLightTemplates_3_2_x(notifyMigration: () => void) {
+		if (this.previous.arch >= '3.2.0') return;
+		notifyMigration();
 
-		// Convert macro light data to new light data structure
-		// Change the default image in light template macros (if still referencing the old one) to the Foundry light image
 		const oldImage = "modules/df-architect/templates/lightbulb.svg";
 		const newImage = "icons/svg/light.svg";
-
-		const t1 = {
-			"t": 'l',
-			"dim": 30,
-			"angle": 360,
-			"bright": 15,
-			"rotation": 0,
-			"tintColor": "",
-			"tintAlpha": Math.pow(0.7, 2).toNearest(0.01),
-			"darknessThreshold": 0,
-			"darkness": { "min": 0, "max": 1 },
-			"lightAnimation": {
-				"intensity": 5,
-				"speed": 5,
-			}
-		};
-		const t2 = {
-			"rotation": 0,
-			"walls": true,
-			"vision": false,
-			"config": {
-				"alpha": 0.5,
-				"angle": 0,
-				"bright": 10.040040724345102,
-				"coloration": 1,
-				"dim": 20.080081448690205,
-				"gradual": true,
-				"luminosity": 0.5,
-				"saturation": 0,
-				"contrast": 0,
-				"shadows": 0,
-				"animation": {
-					"speed": 5,
-					"intensity": 5,
-					"reverse": false
+		for (const macro of game.macros) {
+			// Ignore regular macros
+			if (!macro.getFlag(ARCHITECT.MOD_NAME, LightTemplateManager.FLAG_IS_TEMPLATE)) continue;
+			const oldLightData = LightTemplateManager.extractLightDataFromMacroCommand(macro.data.command) as {
+				t: string,
+				dim: number,
+				angle: number,
+				bright: number,
+				rotation: number,
+				tintColor: string,
+				tintAlpha: number,
+				darkness: {
+					min: number,
+					max: number
 				},
-				"darkness": {
-					"min": 0,
-					"max": 1
+				lightAnimation: {
+					type: string,
+					intensity: number,
+					speed: number
+				},
+				config?: any
+			};
+			// Ignore macros that may have already been converted
+			if (!!oldLightData.config) continue;
+			// Change the default image in light template macros (if still referencing the old one) to the Foundry light image
+			const img = macro.data.img === oldImage ? newImage : macro.data.img;
+			const newLightData: AmbientLightData = <any>{
+				rotation: oldLightData.rotation,
+				walls: oldLightData.t !== 'u',
+				vision: oldLightData.t !== 'l',
+				config: <any>{
+					alpha: oldLightData.tintAlpha,
+					angle: oldLightData.angle,
+					bright: Math.abs(oldLightData.bright),
+					dim: Math.abs(oldLightData.dim),
+					coloration: 1,
+					gradual: true,
+					// Convert the negative radius to negative luminosity for creating patches of "darkness"
+					luminosity: oldLightData.bright < 0 || oldLightData.dim < 0 ? -0.5 : 0.5,
+					saturation: 0,
+					contrast: 0,
+					shadows: 0,
+					animation: <any>{
+						type: oldLightData.lightAnimation.type ?? '',
+						speed: oldLightData.lightAnimation.speed,
+						intensity: oldLightData.lightAnimation.intensity,
+						reverse: false
+					},
+					darkness: <any>oldLightData.darkness
 				}
-			},
-			"flags": {}
+			}
+			macro.update({ img, command: LightTemplateManager.generateCommandData(newLightData) })
 		}
+
 	}
 }
