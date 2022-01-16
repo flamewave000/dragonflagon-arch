@@ -3,6 +3,7 @@
 ## Pre-Release 3.2.1 (2022-01-)
 - **FIX #96:** Create Light Template button fixed.
 - **FIX #98:** Light Template config updated to use the native AmbientLightConfig dialog instead of a custom one.
+- **FIX #97:** Hotbar context menu shows correct labels for macros and light templates.
 
 ## Pre-Release 3.2.0 (2022-01-09)
 - **UPDATED:** Migrated to FoundryVTT V9.

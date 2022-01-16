@@ -74,7 +74,7 @@ export class LightTemplateManager {
 	}
 
 	static init() {
-		libWrapper.register(ARCHITECT.MOD_NAME, 'Hotbar.prototype._contextMenu', this._contextMenu.bind(this), 'OVERRIDE');
+		libWrapper.register(ARCHITECT.MOD_NAME, 'Hotbar.prototype._getEntryContextOptions', this._getEntryContextOptions.bind(this), 'OVERRIDE');
 	}
 
 	static ready() {
@@ -220,8 +220,8 @@ ${'DF_ARCHITECT.LightTemplate.CreateTemplateButton.LightConfig'.localize()}
 	 * Unfortunately, by the design of this core function, I must duplicate the
 	 * Foundry Core code here in order to add a custom option.
 	 */
-	private static _contextMenu(html: JQuery<HTMLElement>) {
-		new ContextMenu(html, ".macro", [
+	private static _getEntryContextOptions(): ContextMenu.Item[] {
+		return [
 			{
 				name: "MACRO.Edit",
 				icon: '<i class="fas fa-edit"></i>',
@@ -231,20 +231,24 @@ ${'DF_ARCHITECT.LightTemplate.CreateTemplateButton.LightConfig'.localize()}
 					return macro && !macro.getFlag(ARCHITECT.MOD_NAME, this.FLAG_IS_TEMPLATE) ? macro.isOwner : false;
 					// End Modification
 				},
-				callback: li => game.macros.get(li.data("macro-id")).sheet.render(true)
+				callback: li => {
+					const macro = game.macros.get(li.data("macro-id"));
+					macro.sheet.render(true);
+				}
 			},
 			{
-				name: "MACRO.Remove", icon: '<i class="fas fa-times"></i>',
+				name: "MACRO.Remove",
+				icon: '<i class="fas fa-times"></i>',
 				// Modified Section
 				condition: li => !game.macros.get(li.data("macro-id")).getFlag(ARCHITECT.MOD_NAME, this.FLAG_IS_TEMPLATE),
 				// End Modification
-				callback: li => game.user.assignHotbarMacro(null, li.data("slot"))
+				callback: li => game.user.assignHotbarMacro(null, Number(li.data("slot")))
 			},
 			{
-				name: "MACRO.Delete", icon: '<i class="fas fa-trash"></i>',
+				name: "MACRO.Delete",
+				icon: '<i class="fas fa-trash"></i>',
 				condition: li => {
 					const macro = game.macros.get(li.data("macro-id"));
-					// @ts-ignore
 					// Modified Section
 					return macro && !macro.getFlag(ARCHITECT.MOD_NAME, this.FLAG_IS_TEMPLATE) ? macro.isOwner : false;
 					// End Modification
@@ -253,8 +257,9 @@ ${'DF_ARCHITECT.LightTemplate.CreateTemplateButton.LightConfig'.localize()}
 					const macro = game.macros.get(li.data("macro-id"));
 					return Dialog.confirm({
 						title: `${game.i18n.localize("MACRO.Delete")} ${macro.name}`,
-						content: game.i18n.localize("MACRO.DeleteWarning"),
-						yes: () => macro.delete()
+						content: `<h4>${game.i18n.localize("AreYouSure")}</h4><p>${game.i18n.localize("MACRO.DeleteWarning")}</p>`,
+						// @ts-ignore
+						yes: macro.delete.bind(macro)
 					});
 				}
 			},
@@ -292,7 +297,7 @@ ${'DF_ARCHITECT.LightTemplate.CreateTemplateButton.LightConfig'.localize()}
 				}
 			},
 			// End Modification
-		]);
+		];
 	}
 
 	static generateCommandData(lightData: Partial<AmbientLightData>) {
