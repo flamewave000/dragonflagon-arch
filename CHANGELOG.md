@@ -1,11 +1,12 @@
 # DF Architect
 
-## Pre-Release 3.2.1 (2022-01-)
+## Pre-Release 3.2.1 (2022-01-16)
 - **FIX #96:** Create Light Template button fixed.
 - **FIX #98:** Light Template config updated to use the native AmbientLightConfig dialog instead of a custom one.
 - **FIX #97:** Hotbar context menu shows correct labels for macros and light templates.
 - **FIX #95:** Light Templates can now be activated and placed as normal.
 - **UPDATE #103:** Existing light templates will now be migrated to the new V9 data model.
+- **UPDATE #88:** Pre-fab light template compendiums updated to the new V9 data model.
 
 ## Pre-Release 3.2.0 (2022-01-09)
 - **UPDATED:** Migrated to FoundryVTT V9.
