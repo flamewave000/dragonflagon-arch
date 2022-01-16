@@ -9,6 +9,9 @@ declare global {
 	const LightTemplates: _LightTemplates;
 }
 
+declare class AdaptiveLightingShader {
+	static COLORATION_TECHNIQUES: object;
+}
 
 class _LightTemplates {
 	/**
@@ -70,13 +73,6 @@ export class LightTemplateManager {
 		return this.extractLightDataFromMacroCommand(game.macros.get(this.currentActiveTemplate).data.command);
 	}
 
-	static get lightTypes(): { [key: string]: string } {
-		return Object.entries(CONST.SOURCE_TYPES).reduce((obj: { [key: string]: string }, e) => {
-			obj[e[1]] = `LIGHT.Type${e[0].titleCase()}`;
-			return obj;
-		}, {});
-	}
-
 	static init() {
 		libWrapper.register(ARCHITECT.MOD_NAME, 'Hotbar.prototype._contextMenu', this._contextMenu.bind(this), 'OVERRIDE');
 	}
@@ -108,83 +104,92 @@ ${'DF_ARCHITECT.LightTemplate.CreateTemplateButton.MacroDirectory'.localize()}</
 				// 	speed: 5,
 				// } as AnimationData,
 			}));
+			const t2 = {
+				"rotation": 0,
+				"walls": true,
+				"vision": false,
+				"config": {
+					"alpha": 0.5,
+					"angle": 0,
+					"bright": 10.040040724345102,
+					"coloration": 1,
+					"dim": 20.080081448690205,
+					"gradual": true,
+					"luminosity": 0.5,
+					"saturation": 0,
+					"contrast": 0,
+					"shadows": 0,
+					"animation": {
+						"speed": 5,
+						"intensity": 5,
+						"reverse": false
+					},
+					"darkness": {
+						"min": 0,
+						"max": 1
+					}
+				},
+				"flags": {}
+			}
 		});
 	}
 
 	private static _renderLightConfig(app: AmbientLightConfig, html: JQuery<HTMLElement>, data: any) {
-		const button = $(`<button type="button" name="save-template">
+		let extraButton: JQuery<HTMLButtonElement>;
+		// If we are rendering one of our template light configs
+		if ((<any>app).df_light_template) {
+			const template = app.object as any as TemplateLightDocument;
+			// Remove the XY position fields
+			html.find('input[name="x"]').parentsUntil('div.tab').remove();
+			html.find('a.configure-sheet').remove();
+			html.find('nav.sheet-tabs').before(`<header class="sheet-header">
+	<img src="${template.macro.data.img}" data-edit="img" title="New Macro" height="64" width="64">
+	<h1><input name="name" type="text" value="${template.macro.data.name}" placeholder=" Name"></h1>
+</header>`);
+			html.find('button[name="submit"]').html('<i class="far fa-save"></i> ' + 'DF_ARCHITECT.LightTemplate.TemplateConfig.SaveButton'.localize());
+			extraButton = $(`<button type="button" class="execute">
+	<i class="far fa-lightbulb"></i>
+	${'DF_ARCHITECT.LightTemplate.TemplateConfig.UseButton'.localize()}
+	</button>`);
+			html.find('button[name="submit"]').before(extraButton);
+			extraButton.on('click', () => LightTemplates.activate(template.macro.id));
+			app.element[0].style.height = '';
+			app.element[0].style.width = '';
+			app.setPosition({ width: 480 });
+		}
+		// Otherwise we are rendering a regular light config
+		else {
+			// Add the "Create Template" button to the config
+			extraButton = $(`<button type="button" name="save-template">
 <i class="far fa-lightbulb"></i>
 ${'DF_ARCHITECT.LightTemplate.CreateTemplateButton.LightConfig'.localize()}
 </button>`);
-		html.find('footer.sheet-footer').prepend(button);
-		button.on('click', (event) => {
-			event.preventDefault();
-			this._createTemplate(duplicate((<AmbientLightDocument>app.object).data) as Partial<AmbientLightData>);
-		});
-		html.find('a.item[data-tab="basic"]').on('click', () => button.show());
-		html.find('a.item[data-tab="animation"]').on('click', () => button.show());
-		html.find('a.item[data-tab="advanced"]').on('click', () => button.hide());
+			html.find('footer.sheet-footer').prepend(extraButton);
+			extraButton.on('click', (event) => {
+				event.preventDefault();
+				this._createTemplate(duplicate((<AmbientLightDocument>app.object).data) as Partial<AmbientLightData>);
+			});
+		}
+		// Show/Hide the create template button depending on which tab is selected
+		if (html.find('a.item[data-tab="advanced"]').hasClass('active'))
+			extraButton.hide();
+		html.find('a.item[data-tab="basic"]').on('click', () => extraButton.show());
+		html.find('a.item[data-tab="animation"]').on('click', () => extraButton.show());
+		html.find('a.item[data-tab="advanced"]').on('click', () => extraButton.hide());
 	}
 
-	private static async _renderMacroConfig(app: MacroConfig, html: JQuery<HTMLElement>, data: Macro) {
-		const macro = new Macro(data.data as MacroData);
+	private static async _renderMacroConfig(app: MacroConfig, html: JQuery<HTMLElement>, data: MacroConfig.Data<any>) {
+		const macro = data.document;
 		if (!macro.getFlag(ARCHITECT.MOD_NAME, this.FLAG_IS_TEMPLATE))
 			return;
-		html.find('div.form-group').remove();
-		html.find('footer').remove();
-
-		// Generate the same kind of lighting configuration data as LightConfig does
-		const animationTypes: { [key: string]: string } = { "": "None" };
-		for (let [k, v] of Object.entries(CONFIG.Canvas.lightAnimations)) {
-			animationTypes[k] = v.label;
-		}
-
-		const lightData = this.extractLightDataFromMacroCommand((data.data as MacroData).command);
-		const htmlData = {
-			object: duplicate(lightData),
-			lightTypes: this.lightTypes,
-			lightAnimations: animationTypes,
-			colorIntensity: Math.sqrt(lightData.config.alpha).toNearest(0.05)
-		}
-
-		// Render the form html
-		const content = $(await renderTemplate(`modules/${ARCHITECT.MOD_NAME}/templates/light-template.hbs`, htmlData));
-		content.find('button.execute').on('click', () => LightTemplates.activate(macro.id));
-		html.find('header.sheet-header').after(content);
-
-
-		html.find('button.eyedropper').on('click', async (event: JQuery.ClickEvent) => {
-			event.preventDefault();
-			const colour = await QuickColourPicker.requestColourPick(app);
-			if (colour === false) return;
-			app.element.find('input[name="tintColor"]').val(colour);
-			app.element.find('input[data-edit="tintColor"]').val(colour);
-		});
-
+		html.remove();
+		html.toggle
+		setTimeout(() => app.close(), 10);
+		const lightData = this.extractLightDataFromMacroCommand(macro.data.command);
+		const config = new AmbientLightConfig(<any>new TemplateLightDocument(macro, lightData), { editable: true });
 		// @ts-ignore
-		// Replace the MacroConfig's update function with our own
-		app._updateObject = async (_: Event, formData: any) => {
-			formData.tintAlpha = Math.pow(formData.tintAlpha, 2).toNearest(0.01);
-			formData.flags = lightData.flags;
-			formData = expandObject(formData);
-			const name = formData.name;
-			const img = formData.img;
-			delete formData.name;
-			delete formData.img;
-			await macro.update({
-				command: this.generateCommandData(formData),
-				name: name,
-				img: img
-			});
-			// If we are editing the currently selected light template, update the UI
-			if (this.currentActiveTemplate === macro.id)
-				await LightTemplates.activate(macro.id);
-		}
-
-		// Resizes the config menu to accommodate the new elements.
-		app.element[0].style.height = '';
-		app.element[0].style.width = '';
-		app.setPosition({ width: 480 });
+		config.df_light_template = true;
+		config.render(true, { editable: true });
 	}
 
 	/**
@@ -197,11 +202,12 @@ ${'DF_ARCHITECT.LightTemplate.CreateTemplateButton.LightConfig'.localize()}
 		delete lightData.x;
 		delete lightData.y;
 		delete lightData.hidden;
+		if (lightData.config.angle == 0) lightData.config.angle = 360;
 		// Create the Macro
 		const macro = await Macro.create({
 			name: 'Light Template ' + new Date().toISOString().replace(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}).+/, '$4$5$6'),
 			author: game.userId,
-			img: `modules/${ARCHITECT.MOD_NAME}/templates/lightbulb.svg`,
+			img: `icons/svg/light.svg`,
 			scope: "global",
 			type: 'script',
 			command: this.generateCommandData(lightData)
@@ -290,10 +296,10 @@ ${'DF_ARCHITECT.LightTemplate.CreateTemplateButton.LightConfig'.localize()}
 	}
 
 	static generateCommandData(lightData: Partial<AmbientLightData>) {
-		return `const ld=${JSON.stringify(lightData, null, '')};\nLightTemplates.activate(this.id,ld);`
+		return `const ld=${JSON.stringify(lightData, null, '')};\nLightTemplates.activate(this.id,ld);`;
 	}
 	static extractLightDataFromMacroCommand(commandString: string): Partial<AmbientLightData> {
-		return JSON.parse(/const ld=(.+);/.exec(commandString)[1]) as Partial<AmbientLightData>
+		return JSON.parse(/const +ld *= *(.+);/.exec(commandString)[1]) as Partial<AmbientLightData>;
 	}
 }
 
@@ -343,5 +349,39 @@ export class LightingLayerOverride {
 		this.sources.set(preview.sourceId, preview.source);
 		this.deactivateAnimation();
 		return preview.draw();
+	}
+}
+
+class TemplateLightDocument {
+	apps: any = {};
+	macro: Macro;
+	data: Partial<AmbientLightData>;
+	get id() { return this.macro.id; }
+	get name() { return this.macro.name; }
+	get object() { return this; }
+	get isOwner() { return this.macro.isOwner; }
+	constructor(macro: Macro, data: Partial<AmbientLightData>) {
+		this.data = data;
+		this.data.toObject = () => <any>data;
+		this.data.reset = function () {
+			delete this.toObject;
+			delete this.reset;
+		};
+		this.macro = macro;
+	}
+	updateSource() {
+	}
+	refresh() {
+	}
+	update(data: Partial<AmbientLightData>) {
+		this.data.reset();
+		console.log(data);
+	}
+	testUserPermission(user: any, permission: any, { exact = false } = {}) {
+		return this.macro.testUserPermission(user, permission, { exact });
+	}
+
+	static metadata = {
+		label: 'Light Template'
 	}
 }

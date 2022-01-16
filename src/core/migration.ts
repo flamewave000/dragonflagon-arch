@@ -38,6 +38,7 @@ export default class DataMigration {
 			// This is the start of the migration chain
 			await this.migrateToCore_0_8_8();
 			await this.migrateToCore_0_9_241();
+			await this.migrateLightTemplates_3_3_x();
 			resolve(undefined);
 		});
 		ui.notifications.info(game.i18n.localize('DF Architect has finished migrating your data!'), { permanent: true });
@@ -122,5 +123,57 @@ export default class DataMigration {
 				delete layers[layer];
 		}
 		await SETTINGS.set(CaptureGameScreen.PREF_LYRS, layers);
+	}
+
+	private static async migrateLightTemplates_3_3_x() {
+		if (this.previous.arch >= '3.3.1') return;
+
+		// Convert macro light data to new light data structure
+		// Change the default image in light template macros (if still referencing the old one) to the Foundry light image
+		const oldImage = "modules/df-architect/templates/lightbulb.svg";
+		const newImage = "icons/svg/light.svg";
+
+		const t1 = {
+			"t": 'l',
+			"dim": 30,
+			"angle": 360,
+			"bright": 15,
+			"rotation": 0,
+			"tintColor": "",
+			"tintAlpha": Math.pow(0.7, 2).toNearest(0.01),
+			"darknessThreshold": 0,
+			"darkness": { "min": 0, "max": 1 },
+			"lightAnimation": {
+				"intensity": 5,
+				"speed": 5,
+			}
+		};
+		const t2 = {
+			"rotation": 0,
+			"walls": true,
+			"vision": false,
+			"config": {
+				"alpha": 0.5,
+				"angle": 0,
+				"bright": 10.040040724345102,
+				"coloration": 1,
+				"dim": 20.080081448690205,
+				"gradual": true,
+				"luminosity": 0.5,
+				"saturation": 0,
+				"contrast": 0,
+				"shadows": 0,
+				"animation": {
+					"speed": 5,
+					"intensity": 5,
+					"reverse": false
+				},
+				"darkness": {
+					"min": 0,
+					"max": 1
+				}
+			},
+			"flags": {}
+		}
 	}
 }
