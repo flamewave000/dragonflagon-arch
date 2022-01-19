@@ -142,7 +142,7 @@ function compressDistribution() {
 		() => gulp.src(DIST + GLOB)
 			.pipe(gulp.dest(DIST + `${PACKAGE.name}/${PACKAGE.name}`))
 		// Compress the new folder into a ZIP and save it to the `bundle` folder
-		, () => gulp.src(DIST + /*PACKAGE.name + '/' +*/ GLOB)
+		, () => gulp.src(`${DIST}${PACKAGE.name}/${GLOB}`)
 			.pipe(zip(PACKAGE.name + '.zip'))
 			.pipe(gulp.dest(BUNDLE))
 		// Copy the module.json to the bundle directory
