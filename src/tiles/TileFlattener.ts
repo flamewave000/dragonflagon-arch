@@ -341,10 +341,17 @@ export default class TileFlattener {
 					}, { save: true });
 					// Get the tiles that were rendered
 					var tiles: TileData[] = newScene.data.tiles.map(x => x.data);
-					if (layersRendered === TileLayerRendered.Floor)
-						tiles = tiles.filter(x => !x.overhead);
-					else if (layersRendered === TileLayerRendered.Roof)
-						tiles = tiles.filter(x => x.overhead);
+					if (this.renderSelected) {
+						tiles = canvas.background.controlled.map(x => x.data);
+					} else {
+						if (layersRendered === TileLayerRendered.Floor)
+							tiles = tiles.filter(x => !x.overhead);
+						else if (layersRendered === TileLayerRendered.Roof)
+							tiles = tiles.filter(x => x.overhead);
+						if (!this.renderHidden) {
+							tiles = tiles.filter(x => !x.hidden);
+						}
+					}
 					// Delete the rendered tiles
 					await newScene.deleteEmbeddedDocuments('Tile', tiles.map(x => x._id));
 					const thumbData = await (<any>newScene).createThumbnail();

@@ -1,5 +1,8 @@
 # DF Architect
 
+## Release 3.2.2 (2022-01-)
+- **FIX #109:** Tile Flattener will now only delete the relevant tiles when cloning the scene.
+
 ## Pre-Release 3.2.1 (2022-01-16)
 - **FIX #96:** Create Light Template button fixed.
 - **FIX #98:** Light Template config updated to use the native AmbientLightConfig dialog instead of a custom one.
