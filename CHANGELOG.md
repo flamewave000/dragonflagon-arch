@@ -1,7 +1,8 @@
 # DF Architect
 
-## Release 3.2.2 (2022-01-)
+## Release 3.2.2 (2022-01-19)
 - **FIX #109:** Tile Flattener will now only delete the relevant tiles when cloning the scene.
+- **FIX #111:** Tile Flattener now respects selected tile rotation when calculating region of canvas to render.
 
 ## Pre-Release 3.2.1 (2022-01-16)
 - **FIX #96:** Create Light Template button fixed.

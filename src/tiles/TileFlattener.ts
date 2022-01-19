@@ -239,10 +239,16 @@ export default class TileFlattener {
 					b: Number.MIN_VALUE,
 				};
 				for (let tile of controlledTiles) {
-					if (tile.x < rect.l) rect.l = tile.x;
-					if (tile.y < rect.t) rect.t = tile.y;
-					if (tile.x + tile.width > rect.r) rect.r = tile.x + tile.width;
-					if (tile.y + tile.height > rect.b) rect.b = tile.y + tile.height;
+					const bounds: { minX: number, minY: number, maxX: number, maxY: number } = {
+						minX: tile.center.x - (tile.width / 2),
+						minY: tile.center.y - (tile.height / 2),
+						maxX: tile.center.x + (tile.width / 2),
+						maxY: tile.center.y + (tile.height / 2)
+					}
+					if (bounds.minX < rect.l) rect.l = bounds.minX;
+					if (bounds.minY < rect.t) rect.t = bounds.minY;
+					if (bounds.maxX > rect.r) rect.r = bounds.maxX;
+					if (bounds.maxY > rect.b) rect.b = bounds.maxY;
 				}
 				image = await CaptureGameScreen.captureCanvas({
 					format: 'image/' + format, quality,
