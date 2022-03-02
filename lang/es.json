@@ -152,8 +152,8 @@
 				"Confirm": "¿Está seguro que quiere borrar esta plantilla ligera?"
 			}
 		},
-		"AltLightNegativeRadius": {
-			"InvertRadiusButton": "Invertir los radios tenue / brillante a claro y oscuro (valores positivos / negativos)"
+		"AltLightInverted": {
+			"InvertLuminosityButton": "Invertir luminosidad de luz a oscuridad (valores positivo/negativo)"
 		},
 		"TileFlattener": {
 			"CapturePromptTitle": "Aplanar baldosas",
@@ -211,6 +211,8 @@
 		"lighting": "Capa de iluminación",
 		"sounds": "Capa de sonidos",
 		"sight": "Capa de visión",
-		"controls": "Capa de controles"
+		"controls": "Capa de controles",
+		"weather": "Capa de clima",
+		"unknown": "\"Capa {0}\""
 	}
 }
