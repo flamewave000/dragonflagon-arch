@@ -1,12 +1,21 @@
 import ARCHITECT from "../core/architect";
 import SETTINGS from "../core/settings";
-import CaptureGameScreen from "./CaptureGameScreen";
 
 export default class ShowLayerControls {
 	private static readonly PREF_WALLS = 'ShowLayerControls.WallsLayer';
 	private static readonly PREF_LIGHT = 'ShowLayerControls.LightingLayer';
 	private static readonly PREF_SOUND = 'ShowLayerControls.SoundsLayer';
 	private static _ready = false;
+
+	private static get showWalls(): boolean {
+		return game.user.isGM && SETTINGS.get(ShowLayerControls.PREF_WALLS);
+	}
+	private static get showLights(): boolean {
+		return game.user.isGM && SETTINGS.get(ShowLayerControls.PREF_WALLS);
+	}
+	private static get showSounds(): boolean {
+		return game.user.isGM && SETTINGS.get(ShowLayerControls.PREF_WALLS);
+	}
 
 
 	static init() {
@@ -15,7 +24,7 @@ export default class ShowLayerControls {
 		SETTINGS.register(this.PREF_SOUND, { config: false, scope: 'client', type: Boolean, default: false });
 
 		Hooks.on('getSceneControlButtons', (controls: SceneControl[]) => {
-			const data: Partial<SceneControlTool> = { icon: 'fas fa-eye', name: 'flatten', toggle: true }
+			if (!game.user.isGM) return;
 			controls.find(x => x.name === 'walls').tools.unshift({
 				icon: 'fas fa-eye', name: 'flatten', toggle: true,
 				active: SETTINGS.get(this.PREF_WALLS),
@@ -36,18 +45,57 @@ export default class ShowLayerControls {
 			});
 		});
 
+		Hooks.on('updateWall', () => {
+			if (!game.user.isGM) return;
+			const refreshLayer = (layer: any) => {
+				layer._active = true;
+				layer.objects.children.forEach((x: any) => { x.updateSource(); x.refresh() });
+				layer._active = false;
+			}
+			if (this.showLights)
+				refreshLayer(canvas.lighting);
+			if (this.showSounds)
+				refreshLayer(canvas.sounds);
+		});
+
+		Hooks.on('deleteWall', () => {
+			if (!game.user.isGM) return;
+			const refreshLayer = (layer: any) => {
+				layer._active = true;
+				layer.objects.children.forEach((x: any) => { x.updateSource(); x.refresh() });
+				layer._active = false;
+			}
+			if (this.showLights)
+				refreshLayer(canvas.lighting);
+			if (this.showSounds)
+				refreshLayer(canvas.sounds);
+		});
+	}
+
+	static ready() {
+		this._ready = true;
+		const walls = this.showWalls;
+		const light = this.showLights;
+		const sound = this.showSounds;
+		if (walls) { canvas.walls.activate(); canvas.walls.deactivate(); }
+		if (light) { canvas.lighting.activate(); canvas.lighting.deactivate(); }
+		if (sound) { canvas.sounds.activate(); canvas.sounds.deactivate(); }
+		if (walls || light || sound)
+			setTimeout(() => canvas.tokens.activate(), 1);
+
+		if (!game.user.isGM) return;
 		libWrapper.register(ARCHITECT.MOD_NAME, 'PlaceablesLayer.prototype.deactivate', function (this: PlaceablesLayer<any>, wrapped: Function) {
 			if (!ShowLayerControls._ready) return wrapped();
 			var toggled: boolean = false;
 			switch (this.name) {
 				case 'WallsLayer':
-					toggled = SETTINGS.get(ShowLayerControls.PREF_WALLS);
+					toggled = ShowLayerControls.showWalls;
 					break;
 				case 'LightingLayer':
-					toggled = SETTINGS.get(ShowLayerControls.PREF_LIGHT);
+					toggled = ShowLayerControls.showLights;
 					break;
 				case 'SoundsLayer':
-					toggled = SETTINGS.get(ShowLayerControls.PREF_SOUND);
+					toggled = ShowLayerControls.showSounds;
 					break;
 			}
 			// If we are not on one of our layers, or we are not keeping the controls on
@@ -57,30 +105,6 @@ export default class ShowLayerControls {
 			if (this.preview) this.preview.removeChildren();
 			return this;
 		}, 'MIXED');
-
-		Hooks.on('updateWall', () => {
-			const refreshLayer = (layer: any) => {
-				layer._active = true;
-				layer.objects.children.forEach((x: any) => { x.updateSource(); x.refresh() });
-				layer._active = false;
-			}
-			if (SETTINGS.get(ShowLayerControls.PREF_LIGHT))
-				refreshLayer(canvas.lighting);
-			if (SETTINGS.get(ShowLayerControls.PREF_SOUND))
-				refreshLayer(canvas.sounds);
-		});
-	}
-
-	static ready() {
-		this._ready = true;
-		const walls = SETTINGS.get(ShowLayerControls.PREF_WALLS);
-		const light = SETTINGS.get(ShowLayerControls.PREF_LIGHT);
-		const sound = SETTINGS.get(ShowLayerControls.PREF_SOUND);
-		if (walls) { canvas.walls.activate(); canvas.walls.deactivate(); }
-		if (light) { canvas.lighting.activate(); canvas.lighting.deactivate(); }
-		if (sound) { canvas.sounds.activate(); canvas.sounds.deactivate(); }
-		if (walls || light || sound)
-			setTimeout(() => canvas.tokens.activate(), 1);
 	}
 
 	private static toggleWalls(toggled: boolean) {

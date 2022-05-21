@@ -1,5 +1,8 @@
 # DF Architect
 
+## Release 3.2.3 (2022-05-21)
+- **FIX:** Occasionally a player would be able to see the walls when the DM has the "See Walls on other layers" toggled on.
+
 ## Release 3.2.2 (2022-01-19)
 - **FIX #109:** Tile Flattener will now only delete the relevant tiles when cloning the scene.
 - **FIX #111:** Tile Flattener now respects selected tile rotation when calculating region of canvas to render.
