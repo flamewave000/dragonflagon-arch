@@ -5,6 +5,7 @@
 - **FIX #118:** Create Template button in Macro Folder working again.
 - **FIX #127:** Light Template image is now editable again.
 - **FIX #125:** Fixed error when Game Canvas is disabled.
+- **FIX #122:** Fixed Wall Auto-Snap not working when creating a new wall.
 
 ## Release 3.2.2 (2022-01-19)
 - **FIX #109:** Tile Flattener will now only delete the relevant tiles when cloning the scene.

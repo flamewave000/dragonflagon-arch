@@ -32,6 +32,14 @@ export default class WallAltDrop {
 
 		libWrapper.register(ARCHITECT.MOD_NAME, 'WallsLayer.prototype._onDragLeftMove', this._handleDragMove.bind(this), 'WRAPPER');
 		// libWrapper.register(ARCHITECT.MOD_NAME, 'WallsLayer.prototype._onDragLeftDrop', this.WallsLayer_handleDragDrop, 'WRAPPER');
+		libWrapper.register(ARCHITECT.MOD_NAME, 'WallsLayer.prototype._getWallEndpointCoordinates', (wrapper: any, point: { x: number, y: number }, { snap = true } = {}) => {
+			const altPressed = game.keyboard.isModifierActive(KeyboardManager.MODIFIER_KEYS.ALT);
+			if (altPressed) {
+				snap = false;
+				point = WallAltDrop._getClosestPoint(point)?.point ?? point;
+			}
+			return wrapper(point, { snap });
+		}, 'WRAPPER');
 		libWrapper.register(ARCHITECT.MOD_NAME, 'WallsLayer.prototype._onDragLeftCancel', this._handleDragCancel.bind(this), 'WRAPPER');
 	}
 
@@ -111,16 +119,27 @@ export default class WallAltDrop {
 		this._visible = visible;
 	}
 
-	private static async _updateWallSnap(dest: { x: number, y: number }, fixed: boolean, event: PIXI.InteractionEvent, wall: Wall): Promise<Wall> {
-		const walls = game.scenes.viewed.data.walls.filter(x => x.id != wall.data._id);
+	private static _getClosestPoint(dest: { x: number, y: number }, wallId?: string): {
+		dist: number;
+		point: {
+			x: number;
+			y: number;
+		};
+	} {
+		const walls = game.scenes.viewed.data.walls.filter(x => x.id != wallId);
 		const radius: number = SETTINGS.get(this.DISTANCE);
 		const closestPoints = walls.map(wall => {
 			const [x, y] = WallsLayer.getClosestEndpoint(dest, <Wall>(<any>wall).object)
 			return { dist: Math.hypot(x - dest.x, y - dest.y), point: { x, y } };
 		}).filter(x => x.dist <= radius).sort((a, b) => a.dist - b.dist);
+		return closestPoints[0];
+	}
+
+	private static async _updateWallSnap(dest: { x: number, y: number }, fixed: boolean, event: PIXI.InteractionEvent, wall: Wall): Promise<Wall> {
+		const closestPoint = this._getClosestPoint(dest, wall.data._id);
 		// If there are no points nearby
-		if (closestPoints.length == 0) return wall;
-		const target: PointArray = [closestPoints[0].point.x, closestPoints[0].point.y];
+		if (!closestPoint) return wall;
+		const target: PointArray = [closestPoint.point.x, closestPoint.point.y];
 
 		const p0 = fixed ? wall.coords.slice(2, 4) : wall.coords.slice(0, 2);
 		const coords = fixed ? target.concat(p0) : p0.concat(target);
@@ -136,7 +155,8 @@ export default class WallAltDrop {
 			return wall;
 		}
 		(<WallsLayer>wall.layer)['last'].point = target;
-		await wall.document.update(<any>{ c: coords });
+		if (wall.document.data._id)
+			await wall.document.update(<any>{ c: coords });
 		return wall;
 	}
 }
