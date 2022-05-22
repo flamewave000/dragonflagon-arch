@@ -31,7 +31,6 @@ export default class WallAltDrop {
 		this._drawCircle(radius as number);
 
 		libWrapper.register(ARCHITECT.MOD_NAME, 'WallsLayer.prototype._onDragLeftMove', this._handleDragMove.bind(this), 'WRAPPER');
-		// libWrapper.register(ARCHITECT.MOD_NAME, 'WallsLayer.prototype._onDragLeftDrop', this.WallsLayer_handleDragDrop, 'WRAPPER');
 		libWrapper.register(ARCHITECT.MOD_NAME, 'WallsLayer.prototype._getWallEndpointCoordinates', (wrapper: any, point: { x: number, y: number }, { snap = true } = {}) => {
 			const altPressed = game.keyboard.isModifierActive(KeyboardManager.MODIFIER_KEYS.ALT);
 			if (altPressed) {

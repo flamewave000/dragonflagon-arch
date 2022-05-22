@@ -42,7 +42,9 @@
 			}
 		},
 		"WallShortcuts.Settings": {
-			"Description": "Teclas para cambiar entre los distintos tipos de muros"
+			"Description": "Teclas para cambiar entre los distintos tipos de muros",
+			"ToggleForceSnapName": "Toggle Forzar ajuste a la cuadrícula",
+			"ToggleForceSnapHint": "Alterna la opción Forzar ajuste a la cuadrícula en la capa de paredes."
 		},
 		"AltGridSnap": {
 			"Label": "Ajuste alternativo a la rejilla",

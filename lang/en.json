@@ -38,7 +38,9 @@
 			}
 		},
 		"WallShortcuts.Settings": {
-			"Description": "Hotkeys assigned to switch between the different wall types"
+			"Description": "Hotkeys assigned to switch between the different wall types",
+			"ToggleForceSnapName": "Toggle Force Snap to Grid",
+			"ToggleForceSnapHint": "Toggles the Force Snap to Grid option on the walls layer."
 		},
 		"AltGridSnap": {
 			"Label": "Alternate Grid Snap",
