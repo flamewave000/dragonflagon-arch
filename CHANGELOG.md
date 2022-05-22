@@ -1,5 +1,8 @@
 # DF Architect
 
+## Release 3.3.0 (2022-05-22)
+- **NEW #119:** Switching wall types via hotkey while creating a new wall will also change that new wall to the selected type.
+
 ## Release 3.2.3 (2022-05-21)
 - **FIX:** Occasionally a player would be able to see the walls when the DM has the "See Walls on other layers" toggled on.
 - **FIX #118:** Create Template button in Macro Folder working again.
