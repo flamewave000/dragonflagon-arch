@@ -22,7 +22,6 @@ I hate big walls of text, so I've done my best to provide some images and animat
 
 ## Dependencies
 
-- [Library: DF Hotkeys](https://foundryvtt.com/packages/lib-df-hotkeys/) This is used for all the key bindings for various actions.
 - [libWrapper](https://foundryvtt.com/packages/lib-wrapper) This is used where ever DF Architect needs to patch FoundryVTT Core functionality. This helps it play nicer with other modules and avoid conflicts.
 - [lib - ColorSettings](https://foundryvtt.com/packages/colorsettings) This module makes colour selections in the FoundryVTT modules settings much easier for you.
 
@@ -352,9 +351,13 @@ There is also a setting that, if enabled, will allow you to quickly invert the o
 
 ### Wall Type Hotkey
 
-There now hotkeys for quickly switching to the different wall types.
+There are now hotkeys for quickly switching to the different wall types. If you switch a wall type with a hotkey while in the middle of creating a new wall, it will also update that wall to the new type.
 
 ![Wall Type Hotkeys](.assets/walls-walltype-hotkeys.png)
+
+### Wall Force Snap to Grid Hotkey and Patch
+
+There is also now a hotkey defined for toggling FoundryVTT's "Force Snap to Grid" feature. Also, this feature has been patched so that holding shift will properly ignore grid snapping when this feature is on.
 
 ### Wall Type Switching
 
