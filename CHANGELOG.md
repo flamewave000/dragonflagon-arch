@@ -7,6 +7,7 @@
 - **FIX #125:** Fixed error when Game Canvas is disabled.
 - **FIX #122:** Fixed Wall Auto-Snap not working when creating a new wall.
 - **FIX #117:** Fixed alternate snap button rendering when on Main Control Bar.
+- **FIX #126:** Detect legacy layers and filter them out of the Canvas Capture layer management.
 
 ## Release 3.2.2 (2022-01-19)
 - **FIX #109:** Tile Flattener will now only delete the relevant tiles when cloning the scene.
