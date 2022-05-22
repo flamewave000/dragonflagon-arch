@@ -2,6 +2,8 @@
 
 ## Release 3.2.3 (2022-05-21)
 - **FIX:** Occasionally a player would be able to see the walls when the DM has the "See Walls on other layers" toggled on.
+- **FIX #118:** Create Template button in Macro Folder working again.
+- **FIX #127:** Light Template image is now editable again.
 
 ## Release 3.2.2 (2022-01-19)
 - **FIX #109:** Tile Flattener will now only delete the relevant tiles when cloning the scene.

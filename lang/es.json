@@ -145,7 +145,8 @@
 			},
 			"TemplateConfig": {
 				"SaveButton": "Guardar plantilla",
-				"UseButton": "Activar plantilla"
+				"UseButton": "Activar plantilla",
+				"ImageTitle": "Imagen de plantilla de luz"
 			},
 			"Delete": {
 				"Title": "Borrar plantilla ligera:",

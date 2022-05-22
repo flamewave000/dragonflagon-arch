@@ -141,7 +141,8 @@
 			},
 			"TemplateConfig": {
 				"SaveButton": "Save Template",
-				"UseButton": "Activate Template"
+				"UseButton": "Activate Template",
+				"ImageTitle": "Light Template Image"
 			},
 			"Delete": {
 				"Title": "Delete Light Template:",

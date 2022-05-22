@@ -88,47 +88,32 @@ export class LightTemplateManager {
 ${'DF_ARCHITECT.LightTemplate.CreateTemplateButton.MacroDirectory'.localize()}</button>`);
 			createTemplateButton.appendTo(html.find('div.header-actions.action-buttons'));
 			createTemplateButton.on('click', async () => await this._createTemplate({
-				// t: 'l',
-				// dim: 30,
-				// angle: 360,
-				// bright: 15,
-				// rotation: 0,
-				// tintColor: "",
-				// tintAlpha: Math.pow(0.7, 2).toNearest(0.01),
-				// darknessThreshold: 0,
-				// darkness: { min: 0, max: 1 } as DarknessActivation,
-				// lightAnimation: {
-				// 	intensity: 5,
-				// 	speed: 5,
-				// } as AnimationData,
-			}));
-			const t2 = {
 				"rotation": 0,
 				"walls": true,
 				"vision": false,
-				"config": {
+				"config": <any>{
 					"alpha": 0.5,
 					"angle": 0,
-					"bright": 10.040040724345102,
+					"bright": 15,
 					"coloration": 1,
-					"dim": 20.080081448690205,
+					"dim": 30,
 					"gradual": true,
 					"luminosity": 0.5,
 					"saturation": 0,
 					"contrast": 0,
 					"shadows": 0,
-					"animation": {
+					"animation": <any>{
 						"speed": 5,
 						"intensity": 5,
 						"reverse": false
 					},
-					"darkness": {
+					"darkness": <any>{
 						"min": 0,
 						"max": 1
 					}
 				},
 				"flags": {}
-			}
+			}));
 		});
 	}
 
@@ -140,10 +125,24 @@ ${'DF_ARCHITECT.LightTemplate.CreateTemplateButton.MacroDirectory'.localize()}</
 			// Remove the XY position fields
 			html.find('input[name="x"]').parentsUntil('div.tab').remove();
 			html.find('a.configure-sheet').remove();
-			html.find('nav.sheet-tabs').before(`<header class="sheet-header">
-	<img src="${template.macro.data.img}" data-edit="img" title="New Macro" height="64" width="64">
-	<h1><input name="name" type="text" value="${template.macro.data.name}" placeholder=" Name"></h1>
-</header>`);
+			const header = $(`<header class="sheet-header">
+			<img src="${template.macro.data.img}" data-edit="img" title="${'DF_ARCHITECT.LightTemplate.TemplateConfig.ImageTitle'.localize()}" height="64" width="64">
+			<h1><input name="name" type="text" value="${template.macro.data.name}" placeholder=" Name"></h1>
+		</header>`);
+			header.find('img').on('click', (event, element) => {
+				const fp = new FilePicker({
+					type: "image",
+					current: template.macro.data.img,
+					callback: path => {
+						(event.target as HTMLImageElement).src = path;
+						template.macro.data.img = path;
+					},
+					top: app.position.top + 40,
+					left: app.position.left + 10
+				});
+				fp.browse("");
+			});
+			html.find('nav.sheet-tabs').before(header);
 			html.find('button[name="submit"]').html('<i class="far fa-save"></i> ' + 'DF_ARCHITECT.LightTemplate.TemplateConfig.SaveButton'.localize());
 			extraButton = $(`<button type="button" class="execute">
 	<i class="far fa-lightbulb"></i>
@@ -385,6 +384,7 @@ class TemplateLightDocument {
 	testUserPermission(user: any, permission: any, { exact = false } = {}) {
 		return this.macro.testUserPermission(user, permission, { exact });
 	}
+	prepareData() { }
 
 	static metadata = {
 		label: 'Light Template'
