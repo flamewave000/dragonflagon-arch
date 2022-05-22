@@ -25,6 +25,7 @@ export default class PIXIAppOverride {
 		})
 	}
 	static ready() {
+		if (!canvas.app) return;
 		(<any>canvas.app.renderer).backgroundAlpha = 1.0;
 	}
 }
