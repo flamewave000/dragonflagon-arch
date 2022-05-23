@@ -4,6 +4,7 @@
 - **NEW #119:** Switching wall types via hotkey while creating a new wall will also change that new wall to the selected type.
 - **NEW #120:** Added new hotkey for toggling Force Snap to Grid on the Walls layer.
 - **NEW #120:** Added a patch that will prevent Force Snap to Grid when holding the Shift key. Holding Shift normally bypasses any snapping, but except when the Force Snap to Grid was turned on. This fixes that abnormal behaviour.
+- **NEW #115:** New Wall Gap detection feature. Allows you to search for and close small gaps in your wall connections. This feature was requested by [itamarcu](https://github.com/itamarcu) and based on the design of his most excellent macro.
 
 ## Release 3.2.3 (2022-05-21)
 - **FIX:** Occasionally a player would be able to see the walls when the DM has the "See Walls on other layers" toggled on.

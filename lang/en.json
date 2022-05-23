@@ -61,6 +61,16 @@
 			"Split_Label": "Split the selected walls into two walls each",
 			"Join_Label": "Merge the selected line of walls into a single wall"
 		},
+		"WallGapFiller": {
+			"SettingName": "Wall Gap Filler Distance",
+			"SettingHint": "The maximum distance two wall endpoints need to be for them to be joined by the Wall Gap Filler feature",
+			"ToolButtonLabel": "Find Wall Gaps",
+			"DetectGapsLabel": "Detecting Wall Gaps...",
+			"NoGaps": "No gaps detected",
+			"DialogTitle": "Gap Detection",
+			"GapsDetected": "{count} gaps were detected. Do you wish to close them?",
+			"ProgressLabel": "Closing Gaps {0}/{1}"
+		},
 		"WallChangeType.Setting": {
 			"MetaKeyName": "Quick Wall Change Key",
 			"MetaKeyHint": "Which key would you like to hold down when clicking a wall type control to change the current selection of walls to that wall type?",

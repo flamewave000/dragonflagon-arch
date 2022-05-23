@@ -13,6 +13,7 @@ I hate big walls of text, so I've done my best to provide some images and animat
 ## Contributions
 - The original featureset was Commissioned by Anathema.
 - Spanish Localization - Courtesy of [lozalojo](https://github.com/lozalojo)
+- Wall Gap Feature - Referenced the excellent macro created by [itamarcu](https://github.com/itamarcu)
 
 ---
 
@@ -374,6 +375,12 @@ Each selected wall segment will be divided into 2 wall segments. This can be ver
 The selected contiguous wall segments will be joined into a single wall. Useful when you have a couple of chained walls that really could just be one.
 
 ![Wall Joining and Splitting Demo](.assets/walls-join-split.gif)
+
+### Wall Gap Fill
+
+Sometimes when placing walls, the joints between them may not be perfectly aligned. When this happens you can see sight artifacts as tokens will be able to see through the small gap. These gaps can be very difficult to spot, so this feature will automatically detect all wall endpoints that have a gap less than a customizable distance. It will then mark those gaps with a green circle, and ask if you would like to close them. If you click yes, it will go through and close all of the detected gaps by moving them to the average midpoint between them.
+
+![Wall Gap Closing Demo](.assets/walls-fill-gaps.gif)
 
 ## Lighting Features
 
