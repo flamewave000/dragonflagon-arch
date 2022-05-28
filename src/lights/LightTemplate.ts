@@ -28,6 +28,8 @@ class _LightTemplates {
 
 		LightTemplateManager.currentActiveTemplate = macroId;
 		const lightData = LightTemplateManager.getCurrentTemplateData();
+		lightData.config.bright = Math.roundDecimals(lightData.config.bright, 2);
+		lightData.config.dim = Math.roundDecimals(lightData.config.dim, 2);
 		// This is just to make the colour text more visible
 		const tintColour = parseInt('0x1' + (lightData.config.color || '#000000').substring(1));
 		const templateHtml = $(await renderTemplate(`modules/${ARCHITECT.MOD_NAME}/templates/cur-light-template.hbs`, {
