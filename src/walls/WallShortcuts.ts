@@ -1,4 +1,5 @@
 import ARCHITECT from "../core/architect";
+import libWrapperShared from "../general/libWrapperShared";
 
 
 export default class WallShortcuts {
@@ -49,7 +50,7 @@ export default class WallShortcuts {
 		});
 
 		libWrapper.register(ARCHITECT.MOD_NAME, 'WallsLayer.prototype._onDragLeftStart', this._patchForceSnap, 'WRAPPER');
-		libWrapper.register(ARCHITECT.MOD_NAME, 'WallsLayer.prototype._onDragLeftDrop', this._patchForceSnap, 'WRAPPER');
+		libWrapperShared.register('WallsLayer.prototype._onDragLeftDrop', this._patchForceSnap);
 	}
 
 	private static _patchForceSnap(wrapper: (event: any) => any, event: any) {

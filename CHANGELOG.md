@@ -2,6 +2,7 @@
 
 ## Release 3.3.1 (2022-05-28)
 - **FIX #124:** Fix issue where enabling the See Walls on other layers would also enable it for the lights and sounds.
+- **Fix #129:** Corrected issue with multiple libWrapper registrations for the same function. This was preventing wall-chaining and the force grid snap patch from working together.
 
 ## Release 3.3.0 (2022-05-22)
 - **NEW #119:** Switching wall types via hotkey while creating a new wall will also change that new wall to the selected type.
