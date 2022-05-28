@@ -11,10 +11,10 @@ export default class ShowLayerControls {
 		return game.user.isGM && SETTINGS.get(ShowLayerControls.PREF_WALLS);
 	}
 	private static get showLights(): boolean {
-		return game.user.isGM && SETTINGS.get(ShowLayerControls.PREF_WALLS);
+		return game.user.isGM && SETTINGS.get(ShowLayerControls.PREF_LIGHT);
 	}
 	private static get showSounds(): boolean {
-		return game.user.isGM && SETTINGS.get(ShowLayerControls.PREF_WALLS);
+		return game.user.isGM && SETTINGS.get(ShowLayerControls.PREF_SOUND);
 	}
 
 

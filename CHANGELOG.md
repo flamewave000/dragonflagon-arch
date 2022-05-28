@@ -1,5 +1,8 @@
 # DF Architect
 
+## Release 3.3.1 (2022-05-28)
+- **FIX #124:** Fix issue where enabling the See Walls on other layers would also enable it for the lights and sounds.
+
 ## Release 3.3.0 (2022-05-22)
 - **NEW #119:** Switching wall types via hotkey while creating a new wall will also change that new wall to the selected type.
 - **NEW #120:** Added new hotkey for toggling Force Snap to Grid on the Walls layer.

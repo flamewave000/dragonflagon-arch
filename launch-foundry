@@ -1,2 +1,2 @@
 #!/bin/bash
-"$1" "$2/resources/app/main.js" --dataPath="$3"
+node "/var/www/foundryvtt/resources/app/main.js" --dataPath="/var/www/foundrydata"
