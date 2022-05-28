@@ -1,5 +1,4 @@
-import ARCHITECT from "../core/architect";
-import SETTINGS from "../core/settings";
+import ARCHITECT from "./architect";
 
 type Wrapper = (...args: any) => unknown;
 type Handler = (wrapped: Wrapper, ...args: any) => unknown;
@@ -8,14 +7,14 @@ class Registration {
 	nextId = 0;
 	wrappers = new Map<number, Handler>();
 
-	handler(wrapped: Wrapper, ...args: any) {
+	handler(context: any, wrapped: Wrapper, ...args: any) {
 		const wrappers = [...this.wrappers.values()];
-		let current = (...args: any) => wrappers[0](wrapped, ...args);
+		let current = (...args: any) => wrappers[0].call(context, wrapped, ...args);
 		for (let c = 1; c < wrappers.length; c++) {
 			const next = current;
-			current = (...args: any) => wrappers[c](next, ...args);
+			current = (...args: any) => wrappers[c].call(context, next, ...args);
 		}
-		current(...args);
+		current.apply(context, args);
 	}
 }
 
@@ -26,7 +25,9 @@ export default class libWrapperShared {
 		let registration = this.registrations.get(target);
 		if (!registration) {
 			registration = new Registration();
-			libWrapper.register(ARCHITECT.MOD_NAME, target, registration.handler.bind(registration), 'WRAPPER');
+			libWrapper.register(ARCHITECT.MOD_NAME, target,
+				function (this: any, wrapped: Wrapper, ...args: any) { registration.handler(this, wrapped, ...args); },
+				'WRAPPER');
 			this.registrations.set(target, registration);
 		}
 		const id = registration.nextId++;

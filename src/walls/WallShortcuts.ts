@@ -1,5 +1,5 @@
 import ARCHITECT from "../core/architect";
-import libWrapperShared from "../general/libWrapperShared";
+import libWrapperShared from "../core/libWrapperShared";
 
 
 export default class WallShortcuts {

@@ -1,7 +1,6 @@
 import ARCHITECT from "../core/architect";
 import SETTINGS from "../core/settings";
-import libWrapperShared from "../general/libWrapperShared";
-import WallAltDrop from "./WallAltDrop";
+import libWrapperShared from "../core/libWrapperShared";
 
 export default class WallCtrlInvert {
 	static readonly PREF_ENABLED = 'WallCtrlInvert-Enabled';
@@ -61,7 +60,7 @@ export default class WallCtrlInvert {
 
 	private static _onDragLeftDrop(this: WallsLayer, wrapper: (arg: any) => void, event: PIXI.InteractionEvent) {
 		WallCtrlInvert._invertKeyboardMap = true;
-		const result = WallAltDrop.WallsLayer_handleDragDrop.bind(this)(wrapper, event);
+		const result = wrapper(event);
 		WallCtrlInvert._invertKeyboardMap = false;
 		return result;
 	}

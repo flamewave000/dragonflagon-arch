@@ -1,5 +1,6 @@
 import ARCHITECT from "../core/architect";
 import SETTINGS from "../core/settings";
+import libWrapperShared from "../core/libWrapperShared";
 import WallCtrlInvert from "./WallCtrlInvert";
 
 interface WallEventData {
@@ -40,6 +41,7 @@ export default class WallAltDrop {
 			return wrapper(point, { snap });
 		}, 'WRAPPER');
 		libWrapper.register(ARCHITECT.MOD_NAME, 'WallsLayer.prototype._onDragLeftCancel', this._handleDragCancel.bind(this), 'WRAPPER');
+		libWrapperShared.register('WallsLayer.prototype._onDragLeftDrop', this.WallsLayer_onDragLeftDrop);
 	}
 
 	private static _drawCircle(radius: number) {
@@ -75,11 +77,12 @@ export default class WallAltDrop {
 		WallAltDrop._updateWallSnap(destination, fixed, event, this);
 	}
 
-	static async WallsLayer_handleDragDrop(this: WallsLayer, wrapper: Function, event: PIXI.InteractionEvent) {
+	private static async WallsLayer_onDragLeftDrop(this: WallsLayer, wrapper: Function, event: PIXI.InteractionEvent) {
 		const data = (<any>event.data) as WallEventData;
 		const { destination, fixed, object } = data;
 		var wall = data.preview;
 		await wrapper(event);
+		if (event.type === 'mousemove') return;
 		// If we are controlling more than one wall, ignore it
 		if ((<Canvas>canvas).walls.controlled.length > 1) return;
 		WallAltDrop._updateCircle(false);
@@ -90,17 +93,17 @@ export default class WallAltDrop {
 				var counter = 0;
 				const waiter = () => {
 					counter += 10;
-					if (wall.data._id === "preview") {
+					if (!wall.data._id) {
 						if (counter > 2000) res(undefined);
 						else setTimeout(waiter, 100);
 						return;
 					}
-					res(game.scenes.viewed.data.walls.find(x => x.id === (<Canvas>canvas).walls['last'].id).object as Wall);
+					res(game.scenes.viewed.data.walls.find(x => x.id === (<Canvas>canvas).walls['last'].id)?.object as Wall);
 				}
 				setTimeout(waiter, 10);
 			});
 		}
-		WallAltDrop._updateWallSnap(destination, fixed, event, wall || object);
+		WallAltDrop._updateWallSnap(destination, fixed, event, wall ?? object);
 	}
 	private static async _handleDragCancel(wrapper: Function, event: PIXI.InteractionEvent) {
 		wrapper(event);
