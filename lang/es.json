@@ -65,6 +65,16 @@
 			"Split_Label": "Dividir los muros seleccionado en dos partes cada uno",
 			"Join_Label": "Unir las líneas de muros seleccionados en un único muro"
 		},
+		"WallGapFiller": {
+			"SettingName": "Distancia de relleno de huecos entre muros",
+			"SettingHint": "La distancia máxima entre los puntos extremos de dos muros que determina si hay huecos entre muros cuando se usa la característica de relleno de huecos entre muros",
+			"ToolButtonLabel": "Buscar huecos entre muros",
+			"DetectGapsLabel": "Detectando huecos entre muros...",
+			"NoGaps": "No se han detectado huecos",
+			"DialogTitle": "Detección de huecos",
+			"GapsDetected": "Se han detectado {count} huecos. ¿Quiere corregirlos?",
+			"ProgressLabel": "Corrigiendo hueco {0}/{1}"
+		},
 		"WallChangeType.Setting": {
 			"MetaKeyName": "Tecla de cambio rápido de pared",
 			"MetaKeyHint": "¿Qué tecla le gustaría mantener presionada al hacer clic en un control de tipo de muro para cambiar la selección actual de muros a ese tipo de muro?",
