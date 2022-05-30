@@ -50,7 +50,7 @@ export default class AltGridSnap {
 
 		game.keybindings.register(ARCHITECT.MOD_NAME, 'AltSnapGrid.Toggle', {
 			name: 'DF_ARCHITECT.AltGridSnap.Hotkey_Toggle',
-			editable: [{ key: 'KeyS', modifiers: [ KeyboardManager.MODIFIER_KEYS.ALT ] }],
+			editable: [{ key: 'KeyS', modifiers: [KeyboardManager.MODIFIER_KEYS.ALT] }],
 			onDown: () => {
 				if (this.enabled)
 					this.toggled = !this.toggled;
@@ -81,12 +81,20 @@ export default class AltGridSnap {
 		Hooks.on('renderSceneControls', (app: SceneControls, html: JQuery<HTMLElement>, data: any) => {
 			if (!SETTINGS.get(AltGridSnap.PREF_PLACE_ON_CONTROL_BAR)) return;
 			const button = $(`
-<li class="control-tool toggle" id="df-arch-altSnap" style="line-height:0" title="${'DF_ARCHITECT.AltGridSnap.Label'.localize()}">
+<li class="scene-control toggle" id="df-arch-altSnap" style="line-height:0" title="${'DF_ARCHITECT.AltGridSnap.Label'.localize()}">
 	<i class="df df-alt-snap"></i>
 </li>`);
-			button.on('click', () => this.toggled = !button.hasClass('active'))
+			button.on('click', () => {
+				if (button.hasClass('active')) {
+					this.toggled = false;
+					button.removeClass('active');
+				} else {
+					this.toggled = true;
+					button.addClass('active');
+				}
+			});
 			if (this.toggled) button.addClass('active');
-			html.append(button);
+			html.find('.main-controls').append(button);
 		});
 	}
 

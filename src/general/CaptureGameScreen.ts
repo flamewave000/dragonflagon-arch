@@ -158,7 +158,17 @@ export default class CaptureGameScreen {
 			webp: SETTINGS.get(this.PREF_FRMT) === 'webp',
 			all: SETTINGS.get(this.PREF_TRGT) === 'all',
 			pads: SETTINGS.get(this.PREF_PADS),
-			layers: Object.keys(CONFIG.Canvas.layers).map(x => layerToConfig(x, <CanvasLayer>(<any>CONFIG.Canvas.layers[x]).layerClass.instance)),
+			layers: Object.keys(CONFIG.Canvas.layers)
+				.filter(x => {
+					const properlyDefined = !!CONFIG.Canvas.layers[x].layerClass;
+					const message = `Invalid layer registration '{name}'. This may be from a module that has not been updated for FoundryVTT V9+. You will need to disable the module providing this layer in order to prevent it being visible in any renders.`;
+					if (!properlyDefined) {
+						const name = typeof CONFIG.Canvas.layers.simplefog === 'function' && (<any>CONFIG.Canvas.layers[x]).name ? (<any>CONFIG.Canvas.layers[x]).name : x;
+						console.warn(message.replace('{name}', name));
+					}
+					return properlyDefined;
+				})
+				.map(x => layerToConfig(x, <CanvasLayer>(<any>CONFIG.Canvas.layers[x]).layerClass.instance)),
 			bg: {
 				hide: SETTINGS.get<boolean>(this.PREF_BG_HIDE),
 				alph: SETTINGS.get<number>(this.PREF_BG_ALPH),

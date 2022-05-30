@@ -1,5 +1,26 @@
 # DF Architect
 
+## Release 3.3.1 (2022-05-28)
+- **FIX #124:** Fix issue where enabling the See Walls on other layers would also enable it for the lights and sounds.
+- **Fix #129:** Corrected issue with multiple libWrapper registrations for the same function. This was preventing wall-chaining and the force grid snap patch from working together.
+- **FIX:** Some errors were cropping up when using the Alt Wall Drop for auto snapping.
+- **FIX:** Fractional radii for light templates will now be rounded to nearest 3 decimal places when displayed in the Active Template UI. This stops the UI from becoming obnoxiously wide.
+
+## Release 3.3.0 (2022-05-22)
+- **NEW #119:** Switching wall types via hotkey while creating a new wall will also change that new wall to the selected type.
+- **NEW #120:** Added new hotkey for toggling Force Snap to Grid on the Walls layer.
+- **NEW #120:** Added a patch that will prevent Force Snap to Grid when holding the Shift key. Holding Shift normally bypasses any snapping, but except when the Force Snap to Grid was turned on. This fixes that abnormal behaviour.
+- **NEW #115:** New Wall Gap detection feature. Allows you to search for and close small gaps in your wall connections. This feature was requested by [itamarcu](https://github.com/itamarcu) and based on the design of his most excellent macro.
+
+## Release 3.2.3 (2022-05-21)
+- **FIX:** Occasionally a player would be able to see the walls when the DM has the "See Walls on other layers" toggled on.
+- **FIX #118:** Create Template button in Macro Folder working again.
+- **FIX #127:** Light Template image is now editable again.
+- **FIX #125:** Fixed error when Game Canvas is disabled.
+- **FIX #122:** Fixed Wall Auto-Snap not working when creating a new wall.
+- **FIX #117:** Fixed alternate snap button rendering when on Main Control Bar.
+- **FIX #126:** Detect legacy layers and filter them out of the Canvas Capture layer management.
+
 ## Release 3.2.2 (2022-01-19)
 - **FIX #109:** Tile Flattener will now only delete the relevant tiles when cloning the scene.
 - **FIX #111:** Tile Flattener now respects selected tile rotation when calculating region of canvas to render.

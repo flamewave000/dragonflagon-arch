@@ -34,6 +34,7 @@ import SoundCounter from './sounds/SoundCounter';
 import ShowLayerControls from './general/ShowLayerControls';
 import TileConfigExt from './tiles/TileConfigExt';
 import CounterUI from './core/CounterUI';
+import WallGapFiller from './walls/WallGapFiller';
 
 Hooks.once('init', function () {
 	if (!game.modules.get('lib-wrapper')?.active) return;
@@ -48,6 +49,7 @@ Hooks.once('init', function () {
 	try { WallShortcuts.init() } catch (error) { console.error(error) }
 	try { WallCtrlInvert.init() } catch (error) { console.error(error) }
 	try { WallJoinSplit.init() } catch (error) { console.error(error) }
+	try { WallGapFiller.init() } catch (error) { console.error(error) }
 	try { WallAltDrop.init() } catch (error) { console.error(error) }
 	try { WallDirections.init() } catch (error) { console.error(error) }
 	try { AltLightOrigin.init() } catch (error) { console.error(error) }
@@ -92,6 +94,7 @@ Hooks.once('ready', async function () {
 	try { LayerShortcuts.ready() } catch (error) { console.error(error) }
 	try { WallCtrlInvert.ready() } catch (error) { console.error(error) }
 	try { WallChangeType.ready() } catch (error) { console.error(error) }
+	try { WallGapFiller.ready() } catch (error) { console.error(error) }
 	try { WallAltDrop.ready() } catch (error) { console.error(error) }
 	try { WallDirections.ready() } catch (error) { console.error(error) }
 	try { AltLightOrigin.ready() } catch (error) { console.error(error) }

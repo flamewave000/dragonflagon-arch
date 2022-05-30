@@ -1,10 +1,11 @@
 import ARCHITECT from "../core/architect";
 import SETTINGS from "../core/settings";
-import WallAltDrop from "./WallAltDrop";
+import libWrapperShared from "../core/libWrapperShared";
 
 export default class WallCtrlInvert {
 	static readonly PREF_ENABLED = 'WallCtrlInvert-Enabled';
 	private static _invertKeyboardMap = false;
+	private static _onDragLeftDropRegistrationId = -1;
 	static get enabled(): boolean { return SETTINGS.get(WallCtrlInvert.PREF_ENABLED) }
 	static set enabled(value: boolean) { SETTINGS.set(WallCtrlInvert.PREF_ENABLED, value) }
 
@@ -17,10 +18,10 @@ export default class WallCtrlInvert {
 			onChange: toggled => {
 				if (toggled) {
 					libWrapper.register(ARCHITECT.MOD_NAME, 'KeyboardManager.prototype.isModifierActive', this._isModifierActive, 'WRAPPER');
-					libWrapper.register(ARCHITECT.MOD_NAME, 'WallsLayer.prototype._onDragLeftDrop', this._onDragLeftDrop, 'WRAPPER');
+					this._onDragLeftDropRegistrationId = libWrapperShared.register('WallsLayer.prototype._onDragLeftDrop', this._onDragLeftDrop);
 				} else {
 					libWrapper.unregister(ARCHITECT.MOD_NAME, 'KeyboardManager.prototype.isModifierActive', false);
-					libWrapper.unregister(ARCHITECT.MOD_NAME, 'WallsLayer.prototype._onDragLeftDrop', false);
+					libWrapperShared.unregister('WallsLayer.prototype._onDragLeftDrop', this._onDragLeftDropRegistrationId);
 				}
 			}
 		});
@@ -54,12 +55,12 @@ export default class WallCtrlInvert {
 	static ready() {
 		if (!SETTINGS.get(WallCtrlInvert.PREF_ENABLED)) return;
 		libWrapper.register(ARCHITECT.MOD_NAME, 'KeyboardManager.prototype.isModifierActive', this._isModifierActive, 'WRAPPER');
-		libWrapper.register(ARCHITECT.MOD_NAME, 'WallsLayer.prototype._onDragLeftDrop', this._onDragLeftDrop, 'WRAPPER');
+		this._onDragLeftDropRegistrationId = libWrapperShared.register('WallsLayer.prototype._onDragLeftDrop', this._onDragLeftDrop);
 	}
 
 	private static _onDragLeftDrop(this: WallsLayer, wrapper: (arg: any) => void, event: PIXI.InteractionEvent) {
 		WallCtrlInvert._invertKeyboardMap = true;
-		const result = WallAltDrop.WallsLayer_handleDragDrop.bind(this)(wrapper, event);
+		const result = wrapper(event);
 		WallCtrlInvert._invertKeyboardMap = false;
 		return result;
 	}
