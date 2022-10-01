@@ -1,4 +1,3 @@
-import { AmbientLightData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs";
 import ARCHITECT from "../core/architect";
 import CounterUI from "../core/CounterUI";
 import SETTINGS from "../core/settings";
@@ -31,7 +30,7 @@ export default class LightCounter {
 		var normalVision = 0;
 		var unrestrainedVision = 0;
 		objects.forEach(x => {
-			const t = ((x.document as AmbientLightData).vision ? 0x10 : 0x00) | ((x.document as AmbientLightData).walls ? 0x1 : 0x0);
+			const t = (x.document.vision ? 0x10 : 0x00) | (x.document.walls ? 0x1 : 0x0);
 			if (t == 0x01) normal++;
 			else if (t == 0x11) normalVision++;
 			else if (t == 0x00) unrestrained++;

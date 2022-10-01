@@ -2,6 +2,7 @@ import ARCHITECT from "../core/architect";
 import SETTINGS from "../core/settings";
 import libWrapperShared from "../core/libWrapperShared";
 import WallCtrlInvert from "./WallCtrlInvert";
+import { WallData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs";
 
 interface WallEventData {
 	destination: PIXI.Point; preview: Wall; object: Wall; fixed: boolean;
@@ -128,7 +129,7 @@ export default class WallAltDrop {
 			y: number;
 		};
 	} {
-		const walls = game.scenes.viewed.data.walls.filter(x => x.id != wallId);
+		const walls = game.scenes.viewed.walls.filter(x => x.id != wallId);
 		const radius: number = SETTINGS.get(this.DISTANCE);
 		const closestPoints = walls.map(wall => {
 			const [x, y] = WallsLayer.getClosestEndpoint(dest, <Wall>(<any>wall).object)
@@ -138,7 +139,7 @@ export default class WallAltDrop {
 	}
 
 	private static async _updateWallSnap(dest: { x: number, y: number }, fixed: boolean, event: PIXI.InteractionEvent, wall: Wall): Promise<Wall> {
-		const closestPoint = this._getClosestPoint(dest, wall.data._id);
+		const closestPoint = this._getClosestPoint(dest, wall.document._id);
 		// If there are no points nearby
 		if (!closestPoint) return wall;
 		const target: PointArray = [closestPoint.point.x, closestPoint.point.y];
@@ -148,16 +149,16 @@ export default class WallAltDrop {
 		// If we are chaining walls, move the new wall's origin to the target point
 		if ((game.keyboard.isModifierActive(KeyboardManager.MODIFIER_KEYS.CONTROL) && !WallCtrlInvert.enabled)
 			|| (!game.keyboard.isModifierActive(KeyboardManager.MODIFIER_KEYS.CONTROL) && WallCtrlInvert.enabled)) {
-			(<any>event.data).preview.data.c[0] = target[0];
-			(<any>event.data).preview.data.c[1] = target[1];
+			(<any>event.data).object.document.c[0] = target[0];
+			(<any>event.data).object.document.c[1] = target[1];
 		}
 		// If we collapsed the wall, delete it
 		if ((coords[0] === coords[2]) && (coords[1] === coords[3])) {
-			await wall.document.delete();
+			await (wall.document as WallDocument).delete();
 			return wall;
 		}
 		(<WallsLayer>wall.layer)['last'].point = target;
-		if (wall.document.data._id)
+		if ((wall.document as WallData)._id)
 			await wall.document.update(<any>{ c: coords });
 		return wall;
 	}

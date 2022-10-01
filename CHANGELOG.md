@@ -1,5 +1,8 @@
 # DF Architect
 
+## Release 4.0.0 (2022-10-01)
+- **UPDATE:** Made the wall counter hint a little more descriptive of all the different wall types.
+
 ## Release 3.3.1 (2022-05-28)
 - **FIX #124:** Fix issue where enabling the See Walls on other layers would also enable it for the lights and sounds.
 - **Fix #129:** Corrected issue with multiple libWrapper registrations for the same function. This was preventing wall-chaining and the force grid snap patch from working together.

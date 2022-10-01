@@ -1,4 +1,3 @@
-import { WallData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs";
 import ARCHITECT from "../core/architect";
 import CounterUI from "../core/CounterUI";
 import SETTINGS from "../core/settings";
@@ -36,16 +35,15 @@ export default class WallsCounter {
 		var soundBlock = 0;
 		var soundLimit = 0;
 		objects.forEach(x => {
-			const data = x.document as WallData;
-			if (data.door == foundry.CONST.WALL_DOOR_TYPES.DOOR) doors++;
-			if (data.door == foundry.CONST.WALL_DOOR_TYPES.SECRET) secretDoors++;
-			if (data.move == foundry.CONST.WALL_MOVEMENT_TYPES.NORMAL) moves++;
-			if (data.light == foundry.CONST.WALL_SENSE_TYPES.NORMAL) lightBlock++;
-			if (data.light == foundry.CONST.WALL_SENSE_TYPES.LIMITED) lightLimit++;
-			if (data.sight == foundry.CONST.WALL_SENSE_TYPES.NORMAL) sightBlock++;
-			if (data.sight == foundry.CONST.WALL_SENSE_TYPES.LIMITED) sightLimit++;
-			if (data.sound == foundry.CONST.WALL_SENSE_TYPES.NORMAL) soundBlock++;
-			if (data.sound == foundry.CONST.WALL_SENSE_TYPES.LIMITED) soundLimit++;
+			if (x.document.door == foundry.CONST.WALL_DOOR_TYPES.DOOR) doors++;
+			if (x.document.door == foundry.CONST.WALL_DOOR_TYPES.SECRET) secretDoors++;
+			if (x.document.move == foundry.CONST.WALL_MOVEMENT_TYPES.NORMAL) moves++;
+			if (x.document.light == foundry.CONST.WALL_SENSE_TYPES.NORMAL) lightBlock++;
+			if (x.document.light == foundry.CONST.WALL_SENSE_TYPES.LIMITED) lightLimit++;
+			if (x.document.sight == foundry.CONST.WALL_SENSE_TYPES.NORMAL) sightBlock++;
+			if (x.document.sight == foundry.CONST.WALL_SENSE_TYPES.LIMITED) sightLimit++;
+			if (x.document.sound == foundry.CONST.WALL_SENSE_TYPES.NORMAL) soundBlock++;
+			if (x.document.sound == foundry.CONST.WALL_SENSE_TYPES.LIMITED) soundLimit++;
 		});
 		this._counter.hint = `Doors: ${doors}
 Secret Doors: ${secretDoors}

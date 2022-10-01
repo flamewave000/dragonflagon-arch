@@ -45,10 +45,11 @@ export default class WallDirections {
 
 	private static async _reverseWallDirection(this: Wall) {
 		if (SETTINGS.get(WallDirections.PREF_ALLOW_UNSELECTED_INVERT) && !this._controlled) return;
-		if (this.data.dir) {
-			await this.document.update(<DeepPartial<WallData>>{ dir: this.data.dir === 1 ? 2 : 1 });
+		const data = this.document;
+		if (data.dir) {
+			await this.document.update(<DeepPartial<WallData>>{ dir: data.dir === 1 ? 2 : 1 });
 		} else {
-			const data = this.data.c.slice(2).concat(this.data.c.slice(0, 2));
+			const data = this.document.c.slice(2).concat(this.document.c.slice(0, 2));
 			await this.document.update(<DeepPartial<WallData>>{ c: data });
 		}
 	}
@@ -76,13 +77,13 @@ export default class WallDirections {
 		}
 
 		wrapper();
-		if (!this._controlled || this.data.dir) {
+		if (!this._controlled || (this.document as WallData).dir) {
 			this.leftLabel.renderable = false;
 			this.rightLabel.renderable = false;
 			return this;
 		}
-		const [x1, y1] = this.data.c.slice(0, 2);
-		const [x2, y2] = this.data.c.slice(2);
+		const [x1, y1] = (this.document as WallData).c.slice(0, 2);
+		const [x2, y2] = (this.document as WallData).c.slice(2);
 		const [cx, cy] = [(x1 + x2) / 2, (y1 + y2) / 2]; // calculate the center
 		const [px, py] = [-(y2 - y1), x2 - x1]; // Calculate the line perpendicular
 		const magnitude = Math.hypot(px, py);

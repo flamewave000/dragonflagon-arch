@@ -74,7 +74,7 @@ export default class WallJoinSplit {
 		delete wallData._id;
 		wallData.c = endpoints.reduce((r, x) => r.concat(JSON.parse(x[0])), [] as number[]) as [number, number, number, number];
 		await game.scenes.viewed.deleteEmbeddedDocuments('Wall', walls.map(x => x.id));
-		const result = <WallDocument[]>await game.scenes.viewed.createEmbeddedDocuments('Wall', <any[]>[wallData]);
+		const result = <WallDocument[]><any[]>await game.scenes.viewed.createEmbeddedDocuments('Wall', <any[]>[wallData]);
 		for (let wall of result) wall.object.control();
 	}
 }
