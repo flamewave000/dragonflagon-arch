@@ -32,8 +32,9 @@ export default class WallChangeType {
 				await (<Canvas>canvas).walls.controlled[0].document.update(wallData);
 				return;
 			}
-			const updateData = <WallData[]>(<Wall[]>canvas.walls.controlled).map(it => mergeObject(it.data as any, wallData, { inplace: false } as any));
-			await canvas.scene.updateEmbeddedDocuments("Wall", <Record<string, unknown>[]><any>updateData);
+			const updateData = canvas.walls.controlled.map(it => mergeObject({ _id: it.document._id }, wallData));
+			await canvas.scene.updateEmbeddedDocuments("Wall", <any[]>updateData);
+			canvas.walls.controlled.forEach(x => x.refresh());
 		}, 'WRAPPER');
 	}
 }
