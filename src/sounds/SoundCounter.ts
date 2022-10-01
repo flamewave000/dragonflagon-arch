@@ -1,3 +1,4 @@
+import { AmbientSoundData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs";
 import ARCHITECT from "../core/architect";
 import CounterUI from "../core/CounterUI";
 import SETTINGS from "../core/settings";
@@ -25,7 +26,7 @@ export default class SoundCounter {
 		if (!SETTINGS.get('General.ShowCounters')) return;
 		const objects = canvas.sounds.objects.children as AmbientSound[];
 		this._counter.count = objects.length;
-		this._counter.hint = `Normal Sounds: ${objects.filter(x => x.data.walls).length}
-Unrestrained Sounds: ${objects.filter(x => !x.data.walls).length}`;
+		this._counter.hint = `Normal Sounds: ${objects.filter(x => (x.document as AmbientSoundData).walls).length}
+Unrestrained Sounds: ${objects.filter(x => !(x.document as AmbientSoundData).walls).length}`;
 	}
 }

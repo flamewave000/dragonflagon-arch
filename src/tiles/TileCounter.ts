@@ -23,8 +23,9 @@ export default class TileCounter {
 
 	static updateCount() {
 		if (!SETTINGS.get('General.ShowCounters')) return;
-		this._counter.count = canvas.background.objects.children.length + canvas.foreground.objects.children.length;
-		this._counter.hint = `Floors: ${canvas.background.objects.children.length}
-Roofs: ${canvas.foreground.objects.children.length}`;
+		const children = canvas.tiles.objects.children.map(x => (x as any).document.overhead);
+		this._counter.count = children.length;
+		this._counter.hint = `Floors: ${children.filter(x => !x).length}
+Roofs: ${children.filter(x => x).length}`;
 	}
 }
