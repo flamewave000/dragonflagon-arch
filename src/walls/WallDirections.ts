@@ -4,10 +4,12 @@ import SETTINGS from "../core/settings";
 
 interface WallExt extends Wall {
 	[key: string]: any;
-	leftLabel: PIXI.Text;
-	rightLabel: PIXI.Text;
-	drawLabels?: boolean;
-	style?: PIXI.TextStyle;
+	dfArchWallExt: {
+		leftLabel: PIXI.Text;
+		rightLabel: PIXI.Text;
+		drawLabels?: boolean;
+		style?: PIXI.TextStyle;
+	}
 }
 
 export default class WallDirections {
@@ -55,31 +57,35 @@ export default class WallDirections {
 	}
 
 	private static async _onWallDraw(this: WallExt, wrapper: () => any): Promise<Wall> {
-		this.drawLabels = true;
+		const style = new PIXI.TextStyle({
+			align: 'center',
+			fill: this._getWallColor(),
+			fontSize: 12,
+			stroke: 0,
+			strokeThickness: 2,
+			lineHeight: 0
+		});
+		this.dfArchWallExt = {
+			leftLabel: new PIXI.Text("L", style),
+			rightLabel: new PIXI.Text("R", style),
+			drawLabels: true,
+			style
+		};
 		return wrapper();
 	}
 	private static _onWallRefresh(this: WallExt, wrapper: Function): Wall {
-		if (this.drawLabels) {
-			this.drawLabels = false;
-			if (!this.style) {
-				this.style = new PIXI.TextStyle({
-					align: 'center',
-					fill: this._getWallColor(),
-					fontSize: 12,
-					stroke: 0,
-					strokeThickness: 2,
-					lineHeight: 0
-				});
-			}
-			this.style.fill = this._getWallColor();
-			this.leftLabel = this.addChild(new PIXI.Text("L", this.style));
-			this.rightLabel = this.addChild(new PIXI.Text("R", this.style));
+		if (this.dfArchWallExt.drawLabels) {
+			delete this.dfArchWallExt.drawLabels;
+			this.dfArchWallExt.style.fill = this._getWallColor();
+			this.addChild(this.dfArchWallExt.leftLabel);
+			this.addChild(this.dfArchWallExt.rightLabel);
 		}
-
 		wrapper();
-		if (!this._controlled || (this.document as WallData).dir) {
-			this.leftLabel.renderable = false;
-			this.rightLabel.renderable = false;
+		if (!this.controlled || (this.document as WallData).dir) {
+			if (this.dfArchWallExt?.leftLabel)
+				this.dfArchWallExt.leftLabel.renderable = false;
+			if (this.dfArchWallExt?.rightLabel)
+				this.dfArchWallExt.rightLabel.renderable = false;
 			return this;
 		}
 		const [x1, y1] = (this.document as WallData).c.slice(0, 2);
@@ -92,14 +98,14 @@ export default class WallDirections {
 		const [lx, ly] = [cx - (nx * labelOffset), cy - (ny * labelOffset)]; // Calculate the position of the Left label
 		const [rx, ry] = [(nx * labelOffset) + cx, (ny * labelOffset) + cy]; // Calculate the position of the Right label
 		// Update left/right label positioning
-		this.leftLabel.x = lx - (this.leftLabel.width / 2);
-		this.leftLabel.y = ly - (this.leftLabel.height / 2);
-		this.leftLabel.style.fill = this._getWallColor();
-		this.leftLabel.renderable = true;
-		this.rightLabel.x = rx - (this.rightLabel.width / 2);
-		this.rightLabel.y = ry - (this.rightLabel.height / 2);
-		this.rightLabel.style.fill = this._getWallColor();
-		this.rightLabel.renderable = true;
+		this.dfArchWallExt.leftLabel.x = lx - (this.dfArchWallExt.leftLabel.width / 2);
+		this.dfArchWallExt.leftLabel.y = ly - (this.dfArchWallExt.leftLabel.height / 2);
+		this.dfArchWallExt.leftLabel.style.fill = this._getWallColor();
+		this.dfArchWallExt.leftLabel.renderable = true;
+		this.dfArchWallExt.rightLabel.x = rx - (this.dfArchWallExt.rightLabel.width / 2);
+		this.dfArchWallExt.rightLabel.y = ry - (this.dfArchWallExt.rightLabel.height / 2);
+		this.dfArchWallExt.rightLabel.style.fill = this._getWallColor();
+		this.dfArchWallExt.rightLabel.renderable = true;
 		return this;
 	}
 }
