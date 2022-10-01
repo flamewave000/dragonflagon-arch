@@ -11,14 +11,14 @@ export default class AltLightInverted {
 	private static _onDragLeftMove(this: LightingLayer, wrapper: Function, event: PIXI.InteractionEvent) {
 		const preview = (event.data as any).preview as AmbientLight;
 		if (event.data.originalEvent.altKey) {
-			if (!(preview.data.flags['df-architect'] as Invert)?.inverted) {
-				preview.data.flags['df-architect'] = { inverted: true }
-				preview.data.config.luminosity = -preview.data.config.luminosity;
+			if (!(preview.document.flags['df-architect'] as Invert)?.inverted) {
+				preview.document.flags['df-architect'] = { inverted: true }
+				preview.document.config.luminosity = -preview.document.config.luminosity;
 			}
 		} else {
-			if ((preview.data.flags['df-architect'] as Invert)?.inverted) {
-				delete preview.data.flags['df-architect'];
-				preview.data.config.luminosity = -preview.data.config.luminosity;
+			if ((preview.document.flags['df-architect'] as Invert)?.inverted) {
+				delete preview.document.flags['df-architect'];
+				preview.document.config.luminosity = -preview.document.config.luminosity;
 			}
 		}
 		return wrapper(event);
