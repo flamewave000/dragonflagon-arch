@@ -54,14 +54,12 @@ export default class CounterUI extends Application {
 	}
 	set hint(value: string) {
 		this._hint = value;
-		this.element.attr('title', value);
 	}
 
 	getData(options?: any): any {
 		return {
 			count: this._count,
-			label: this._label,
-			hint: this._hint
+			label: this._label
 		};
 	}
 
@@ -109,6 +107,9 @@ export default class CounterUI extends Application {
 			this.element[0].style.top = 'unset';
 			this.element[0].style.bottom = '8px';
 		}
+
+		// Add listener for activating the tooltip
+		this.element.on('pointerenter', e => ((<any>game).tooltip as TooltipManager).activate(e.target, { text: this._hint, direction: "LEFT" }));
 	}
 
 	close(options: Application.CloseOptions = {}): Promise<void> {

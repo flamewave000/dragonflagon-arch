@@ -45,14 +45,16 @@ export default class WallsCounter {
 			if (x.document.sound == foundry.CONST.WALL_SENSE_TYPES.NORMAL) soundBlock++;
 			if (x.document.sound == foundry.CONST.WALL_SENSE_TYPES.LIMITED) soundLimit++;
 		});
-		this._counter.hint = `Doors: ${doors}
-Secret Doors: ${secretDoors}
-Move Blocking: ${moves}
+		this._counter.hint = `<pre style="margin:0">
+         Doors: ${doors}
+  Secret Doors: ${secretDoors}<br>
+ Move Blocking: ${moves}<br>
 Light Blocking: ${lightBlock}
-Light Limiting: ${lightLimit}
+Light Limiting: ${lightLimit}<br>
 Sight Blocking: ${sightBlock}
-Sight Limiting: ${sightLimit}
+Sight Limiting: ${sightLimit}<br>
 Sound Blocking: ${soundBlock}
-Sound Limiting: ${soundLimit}`;
+Sound Limiting: ${soundLimit}
+</pre>`;
 	}
 }

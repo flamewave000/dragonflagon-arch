@@ -25,7 +25,9 @@ export default class SoundCounter {
 		if (!SETTINGS.get('General.ShowCounters')) return;
 		const objects = canvas.sounds.objects.children as AmbientSound[];
 		this._counter.count = objects.length;
-		this._counter.hint = `Normal Sounds: ${objects.filter(x => x.document.walls).length}
-Unrestrained Sounds: ${objects.filter(x => !x.document.walls).length}`;
+		this._counter.hint = `<pre style="margin:0">
+      Normal Sounds: ${objects.filter(x => x.document.walls).length}
+Unrestrained Sounds: ${objects.filter(x => !x.document.walls).length}
+</pre>`;
 	}
 }

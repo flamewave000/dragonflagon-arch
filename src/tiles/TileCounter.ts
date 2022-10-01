@@ -25,7 +25,9 @@ export default class TileCounter {
 		if (!SETTINGS.get('General.ShowCounters')) return;
 		const children = (canvas.tiles.objects.children as Tile[]).map(x => x.document.overhead);
 		this._counter.count = children.length;
-		this._counter.hint = `Floors: ${children.filter(x => !x).length}
-Roofs: ${children.filter(x => x).length}`;
+		this._counter.hint = `<pre style="margin:0">
+Floors: ${children.filter(x => !x).length}
+ Roofs: ${children.filter(x => x).length}
+</pre>`;
 	}
 }

@@ -36,9 +36,11 @@ export default class LightCounter {
 			else if (t == 0x00) unrestrained++;
 			else if (t == 0x10) unrestrainedVision++;
 		});
-		this._counter.hint = `Normal: ${normal}
-Provides Vision: ${normalVision}
-Unrestrained: ${unrestrained}
-Unrestrained & Provides Vision: ${unrestrainedVision}`;
+		this._counter.hint = `<pre style="margin:0">
+                        Normal: ${normal}
+               Provides Vision: ${normalVision}
+                  Unrestrained: ${unrestrained}
+Unrestrained & Provides Vision: ${unrestrainedVision}
+</pre>`;
 	}
 }
