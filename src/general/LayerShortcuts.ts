@@ -25,7 +25,7 @@ export default class LayerShortcuts {
 		const layers: string[][] = [
 			['tokens', CONFIG.Canvas.layers['tokens'].layerClass.name],
 			['templates', CONFIG.Canvas.layers['templates'].layerClass.name],
-			['background', CONFIG.Canvas.layers['background'].layerClass.name],
+			['tiles', CONFIG.Canvas.layers['tiles'].layerClass.name],
 			['drawings', CONFIG.Canvas.layers['drawings'].layerClass.name],
 			['walls', CONFIG.Canvas.layers['walls'].layerClass.name],
 			['lighting', CONFIG.Canvas.layers['lighting'].layerClass.name],

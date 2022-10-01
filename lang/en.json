@@ -209,8 +209,8 @@
 		}
 	},
 	"LAYERS": {
-		"background": "Background/Tiles Layer",
-		"foreground": "Foreground/Roofs Layer",
+		"tiles": "Tiles Layer",
+		"foreground_deprecated": "Foreground/Roofs Layer",
 		"drawings": "Drawings Layer",
 		"grid": "Grid Layer",
 		"walls": "Walls Layer",
@@ -219,7 +219,7 @@
 		"tokens": "Token Layer",
 		"lighting": "Lighting Layer",
 		"sounds": "Sounds Layer",
-		"sight": "Sight Layer",
+		"sight_deprecated": "Sight Layer",
 		"controls": "Controls Layer",
 		"weather": "Weather Layer",
 		"unknown": "\"{0} Layer\""
