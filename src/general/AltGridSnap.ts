@@ -39,7 +39,7 @@ export default class AltGridSnap {
 			onChange: () => { this._patchSquareGrid(); ui.controls.initialize() }
 		});
 		SETTINGS.register(AltGridSnap.PREF_PLACE_ON_CONTROL_BAR, {
-			scope: 'client',
+			scope: 'world',
 			config: true,
 			name: 'DF_ARCHITECT.AltGridSnap.Setting.PlaceOnControlBarName',
 			hint: 'DF_ARCHITECT.AltGridSnap.Setting.PlaceOnControlBarHint',
@@ -49,6 +49,7 @@ export default class AltGridSnap {
 		});
 
 		game.keybindings.register(ARCHITECT.MOD_NAME, 'AltSnapGrid.Toggle', {
+			restricted: true,
 			name: 'DF_ARCHITECT.AltGridSnap.Hotkey_Toggle',
 			editable: [{ key: 'KeyS', modifiers: [KeyboardManager.MODIFIER_KEYS.ALT] }],
 			onDown: () => {

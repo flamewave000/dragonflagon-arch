@@ -6,7 +6,7 @@ export default class LayerShortcuts {
 	private static readonly PREF_LAYER_SWAP_LAYER2 = "LayerShortcutsSettingsLayer-SwapLayer2";
 	static init() {
 		// #region Register and bind the layer hot-swap Hotkey
-		game.keybindings.register(ARCHITECT.MOD_NAME, 'AltSnapGrid.Toggle', {
+		game.keybindings.register(ARCHITECT.MOD_NAME, 'LayerShortcuts.QuickSwap', {
 			restricted: true,
 			name: 'DF_ARCHITECT.LayerShortcuts.Settings.QuickSwap.Title'.localize(),
 			hint: 'DF_ARCHITECT.LayerShortcuts.Settings.QuickSwap.Info'.localize(),
