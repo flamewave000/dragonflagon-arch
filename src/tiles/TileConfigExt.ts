@@ -33,7 +33,7 @@ export default class TileConfigExt {
 
 	private static updateTileConfig(config: TileConfig, html: JQuery<HTMLElement>, data: TileData) {
 		// Update the image preview
-		const imgInput = html.find('input[name="img"]');
+		const imgInput = html.find('input[name="texture.src"]');
 		imgInput.parent().parent().before($(this._previewImageHTML));
 		imgInput.on('change', () => this.updateImagePreview(config));
 		this.updateImagePreview(config);
@@ -66,7 +66,7 @@ export default class TileConfigExt {
 		const imgPreview = config.element.find('#img-preview')[0] as HTMLImageElement;
 		const animPreview = config.element.find('#anim-preview')[0] as HTMLVideoElement;
 		const info = config.element.find('#img-data')[0] as HTMLOutputElement;
-		const source = config.element.find('input[name="img"]').val() as string;
+		const source = config.element.find('input[name="texture.src"]').val() as string;
 		if (VideoHelper.hasVideoExtension(source)) {
 			$(imgPreview).hide();
 			$(animPreview).show();
