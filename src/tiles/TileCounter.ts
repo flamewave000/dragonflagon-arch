@@ -5,13 +5,13 @@ import SETTINGS from "../core/settings";
 export default class TileCounter {
 	private static _counter = new CounterUI(0, 'Tiles');
 	static ready() {
-		libWrapper.register(ARCHITECT.MOD_NAME, 'BackgroundLayer.prototype.activate', (wrapped: Function) => {
+		libWrapper.register(ARCHITECT.MOD_NAME, 'TilesLayer.prototype.activate', (wrapped: Function) => {
 			wrapped();
 			this.updateCount();
 			if (SETTINGS.get('General.ShowCounters'))
 				this._counter.render(true);
 		}, 'WRAPPER');
-		libWrapper.register(ARCHITECT.MOD_NAME, 'BackgroundLayer.prototype.deactivate', (wrapped: Function) => {
+		libWrapper.register(ARCHITECT.MOD_NAME, 'TilesLayer.prototype.deactivate', (wrapped: Function) => {
 			wrapped();
 			if (this._counter.rendered && canvas.activeLayer?.name !== 'ForegroundLayer')
 				this._counter.close();
