@@ -76,7 +76,11 @@ export default class TileFlattener {
 				name: 'flatten',
 				button: true,
 				title: 'DF_ARCHITECT.TileFlattener.Label',
-				onClick: this.promptForTileFlattening.bind(this)
+				//! TEMPORARY DISABLING OF TILE FLATTENER
+				//! Get rid of this line
+				onClick: () => ui.notifications.warn("Tile Flattener is temporarily unavailable until the Canvas Capture's layer filtering feature can be fixed")
+				//! Reactivate this line
+				// onClick: this.promptForTileFlattening.bind(this)
 			});
 		});
 	}

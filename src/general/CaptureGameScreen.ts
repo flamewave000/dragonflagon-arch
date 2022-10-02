@@ -114,10 +114,14 @@ export default class CaptureGameScreen {
 
 		this._dialogLayerFilters = SETTINGS.get(this.PREF_LYRS);
 
+		//! TEMPORARY DISABLING OF CANVAS CAPTURE
 		Hooks.on('renderSettings', (settings: Settings, html: JQuery<HTMLElement>, data: {}) => {
 			if (!SETTINGS.get(this.PREF_ALLOW_PC) && !game.user.isGM) return;
 			const captureButton = $(`<div><button data-action="screen-capture"><i class="fas fa-camera"></i>${'DF_ARCHITECT.CaptureGameScreen.ScreenCapture.Label'.localize()}</button></div>`);
-			captureButton.find('button').on('click', CaptureGameScreen.promptForCapture.bind(CaptureGameScreen));
+			//! Remove this line
+			captureButton.find('button').on('click', () => ui.notifications.warn("Canvas Capture is temporarily unavailable until the layer filtering feature can be fixed"));
+			//! Re-enable this line of code
+			// captureButton.find('button').on('click', CaptureGameScreen.promptForCapture.bind(CaptureGameScreen));
 			html.find('#game-details').after(captureButton);
 		});
 

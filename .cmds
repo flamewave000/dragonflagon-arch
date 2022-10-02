@@ -4,7 +4,7 @@ SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 
 git_tag() {
 	MANIFEST="$SCRIPT_DIR/module.json"
-	MODULE_NAME=$(npx json "name" <"$MANIFEST")
+	MODULE_NAME=$(npx json "id" <"$MANIFEST")
 	MODULE_VERS=$(npx json "version" <"$MANIFEST")
 	echo "Tagging ${MODULE_NAME}_${MODULE_VERS}"
 	git tag -d ${MODULE_NAME}_${MODULE_VERS} 2>/dev/null
