@@ -8,7 +8,7 @@ declare global {
 }
 
 declare class AdaptiveLightingShader {
-	static COLORATION_TECHNIQUES: { [key: string]: { id: number, label: string } }
+	static SHADER_TECHNIQUES: { [key: string]: { id: number, label: string } }
 }
 
 class _LightTemplates {
@@ -43,7 +43,7 @@ class _LightTemplates {
 			tintColorLabel: lightData.config.color || '#------',
 			// Determines if the tint colour is dark or light, the HBS template will change the text colour accordingly
 			tintIsDark: ((((tintColour & 0xff0000) >> 16) + ((tintColour & 0xff00) >> 8) + (tintColour & 0xff)) / 3) < 128,
-			coloration: Object.entries(AdaptiveLightingShader.COLORATION_TECHNIQUES).find(x => x[1].id === lightData.config.coloration)[1].label.localize()
+			coloration: Object.entries(AdaptiveLightingShader.SHADER_TECHNIQUES).find(x => x[1].id === lightData.config.coloration)[1].label.localize()
 		}));
 		const rect = $('nav#controls ol.active')[0].getBoundingClientRect();
 		templateHtml.css('left', rect.right + 10 + 'px');
@@ -71,7 +71,7 @@ export class LightTemplateManager {
 	static currentActiveTemplate: string | null = null;
 	static getCurrentTemplateData(): Partial<AmbientLightData> | null {
 		if (this.currentActiveTemplate === null) return null;
-		return this.extractLightDataFromMacroCommand(game.macros.get(this.currentActiveTemplate).data.command);
+		return this.extractLightDataFromMacroCommand((game.macros.get(this.currentActiveTemplate) as any).command);
 	}
 
 	static init() {
@@ -363,8 +363,8 @@ export class LightingLayerOverride {
 		const doc = new AmbientLightDocument(mergeObject(templateData, { x: origin.x, y: origin.y, dim: 0, bright: 0 }), { parent: canvas.scene });
 		const preview = new AmbientLight(doc);
 		(<any>event.data).preview = this.preview.addChild(preview);
-		this.sources.set(preview.sourceId, preview.source);
-		this.deactivateAnimation();
+		canvas.effects.lightSources.set(preview.sourceId, preview.source);
+		canvas.effects.deactivateAnimation();
 		return preview.draw();
 	}
 }
