@@ -7,7 +7,7 @@ export default class WallChangeType {
 	private static readonly META_KEY = 'WallChangeType.MetaKey';
 
 	static ready() {
-		SETTINGS.register(WallChangeType.META_KEY, {
+		SETTINGS.register<string>(WallChangeType.META_KEY, {
 			name: 'DF_ARCHITECT.WallChangeType.Setting.MetaKeyName',
 			hint: 'DF_ARCHITECT.WallChangeType.Setting.MetaKeyHint',
 			config: true,

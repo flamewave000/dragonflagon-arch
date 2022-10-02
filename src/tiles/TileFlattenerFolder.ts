@@ -4,7 +4,7 @@ import TileFlattener from "./TileFlattener";
 
 export default class ArchiveFolderMenu extends FormApplication {
 	static get defaultOptions() {
-		return mergeObject(FormApplication.defaultOptions as Partial<FormApplication.Options>, {
+		return mergeObject(FormApplication.defaultOptions as Partial<FormApplicationOptions>, {
 			width: 400,
 			height: 125,
 			resizable: false,
@@ -14,7 +14,7 @@ export default class ArchiveFolderMenu extends FormApplication {
 			submitOnClose: false,
 			submitOnChange: false,
 			closeOnSubmit: true
-		}) as FormApplication.Options;
+		}) as FormApplicationOptions;
 	}
 
 	private folder = SETTINGS.get<string>(TileFlattener.PREF_FOLDER);
@@ -27,7 +27,7 @@ export default class ArchiveFolderMenu extends FormApplication {
 	async _renderInner(data: any): Promise<JQuery<HTMLElement>> {
 		const html = await super._renderInner(data);
 		const input = html.find('input#dfce-ca-folder-path')[0] as HTMLInputElement;
-		html.find('label>button').on('click', async event => {
+		html.find('label>button').on('click', async (event: any) => {
 			event.preventDefault();
 			const fp = new FilePicker(<any>{
 				current: SETTINGS.get(TileFlattener.PREF_FOLDER),

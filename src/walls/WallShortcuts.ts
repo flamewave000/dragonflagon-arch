@@ -29,7 +29,6 @@ export default class WallShortcuts {
 						// @ts-expect-error
 						const data: { [key: string]: number } = <any>canvas.walls._getWallDataFromActiveTool(game.activeTool);
 						for (const key of Object.keys(data)) {
-							// @ts-expect-error
 							canvas.walls.preview.children[0].document.data[key] = data[key];
 						}
 					}

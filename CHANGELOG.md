@@ -2,6 +2,7 @@
 
 ## Release 4.0.0 (2022-10-01)
 - **UPDATE:** Made the wall counter hint a little more descriptive of all the different wall types.
+- **UPDATE:** When you enable the option to display walls, lights, or sounds on other layers, their layer icons will slowly flash blue to indicate this.
 
 ## Release 3.3.1 (2022-05-28)
 - **FIX #124:** Fix issue where enabling the See Walls on other layers would also enable it for the lights and sounds.

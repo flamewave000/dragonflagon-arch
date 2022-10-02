@@ -1,8 +1,8 @@
 import ARCHITECT from "./architect";
 
 export default class CounterUI extends Application {
-	static get defaultOptions(): Application.Options {
-		return <Application.Options>mergeObject(<Partial<Application.Options>>Application.defaultOptions, {
+	static get defaultOptions(): ApplicationOptions {
+		return <ApplicationOptions>mergeObject(<Partial<ApplicationOptions>>Application.defaultOptions, {
 			title: null,
 			height: 100,
 			width: 100,
@@ -109,7 +109,7 @@ export default class CounterUI extends Application {
 		}
 
 		// Add listener for activating the tooltip
-		this.element.on('pointerenter', e => ((<any>game).tooltip as TooltipManager).activate(e.target, { text: this._hint, direction: "LEFT" }));
+		this.element.on('pointerenter', (e: any) => ((<any>game).tooltip as TooltipManager).activate(e.target, { text: this._hint, direction: "LEFT" }));
 	}
 
 	close(options: Application.CloseOptions = {}): Promise<void> {

@@ -26,7 +26,7 @@ export default class AltLightInverted {
 	private static _renderLightConfig(app: AmbientLightConfig, html: JQuery<HTMLElement>, data: any) {
 		const button = $(`<button type="button" style="flex:0;padding-left:8.5px" name="invert-radius" title="${'DF_ARCHITECT.AltLightInverted.InvertLuminosityButton'.localize()}"><i class="fas fa-adjust"></i></button>`);
 		html.find('input[name="config.luminosity"]').parent().before(button);
-		button.on('click', (event) => {
+		button.on('click', (event: any) => {
 			event.preventDefault();
 			const luminosity = html.find('input[name="config.luminosity"]');
 			luminosity.val((-parseFloat(<string>luminosity.val())));

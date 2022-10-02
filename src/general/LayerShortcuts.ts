@@ -59,7 +59,7 @@ export default class LayerShortcuts {
 			return result;
 		}
 
-		SETTINGS.register<String>(LayerShortcuts.PREF_LAYER_SWAP_LAYER1, {
+		SETTINGS.register<string>(LayerShortcuts.PREF_LAYER_SWAP_LAYER1, {
 			name: 'DF_ARCHITECT.LayerShortcuts.Settings.QuickSwap.Layer1_Name',
 			hint: 'DF_ARCHITECT.LayerShortcuts.Settings.QuickSwap.Layer1_Hint',
 			choices: getLayers(),
@@ -68,7 +68,7 @@ export default class LayerShortcuts {
 			config: true,
 			default: 'walls'
 		});
-		SETTINGS.register<String>(LayerShortcuts.PREF_LAYER_SWAP_LAYER2, {
+		SETTINGS.register<string>(LayerShortcuts.PREF_LAYER_SWAP_LAYER2, {
 			name: 'DF_ARCHITECT.LayerShortcuts.Settings.QuickSwap.Layer2_Name',
 			hint: 'DF_ARCHITECT.LayerShortcuts.Settings.QuickSwap.Layer2_Hint',
 			choices: getLayers(),

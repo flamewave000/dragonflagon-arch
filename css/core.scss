@@ -61,3 +61,13 @@ i.df.df-alt-split {
 		margin: 0;
 	}
 }
+
+.df-arch-layervisible {
+	animation: color-change 2s infinite;
+}
+
+@keyframes color-change {
+	0% { color: var(--color-text-light-heading); }
+	50% { color: cornflowerblue; }
+	100% { color: var(--color-text-light-heading); }
+}

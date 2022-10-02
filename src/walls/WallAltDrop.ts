@@ -99,7 +99,8 @@ export default class WallAltDrop {
 						else setTimeout(waiter, 100);
 						return;
 					}
-					res(game.scenes.viewed.data.walls.find(x => x.id === (<Canvas>canvas).walls['last'].id)?.object as Wall);
+					// @ts-expect-error
+					res(game.scenes.viewed.data.walls.find(x => x.id === (<Canvas>canvas).walls.last.id)?.object as Wall);
 				}
 				setTimeout(waiter, 10);
 			});

@@ -219,7 +219,7 @@ ${'DF_ARCHITECT.LightTemplate.CreateTemplateButton.LightConfig'.localize()}
 	 * Unfortunately, by the design of this core function, I must duplicate the
 	 * Foundry Core code here in order to add a custom option.
 	 */
-	private static _getEntryContextOptions(): ContextMenu.Item[] {
+	private static _getEntryContextOptions(): ContextMenuEntry[] {
 		return [
 			{
 				name: "MACRO.Edit",

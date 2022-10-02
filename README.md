@@ -74,7 +74,7 @@ These are some of the general features that are available outside of the Game Bo
 
 ### See Walls/Lights/Sounds on other Layers
 
-The walls, lighting, and wounds layers now have a toggle button that allows you to see them from other layers. This is very handy for map building when you are placing lights and such and want to try and line things up, or see exactly what walls/lights/sounds you're interacting with.
+The walls, lighting, and wounds layers now have a toggle button that allows you to see them from other layers. This is very handy for map building when you are placing lights and such and want to try and line things up, or see exactly what walls/lights/sounds you're interacting with. When this feature is active on the wall/light/sound, the icon for that layer will slowly flash blue to indicate that this is turned on.
 
 ![view walls, lights, and sounds on other layers](.assets/general-view-layers.gif)
 
