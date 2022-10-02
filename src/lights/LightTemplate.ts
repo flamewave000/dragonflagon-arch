@@ -1,4 +1,5 @@
-import { AmbientLightData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs";
+import { AmbientLightDataProperties } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/ambientLightData";
+import { AmbientLightData, LightData, MacroData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs";
 import ARCHITECT from "../core/architect";
 
 declare global {
@@ -96,23 +97,25 @@ ${'DF_ARCHITECT.LightTemplate.CreateTemplateButton.MacroDirectory'.localize()}</
 				"config": <any>{
 					"alpha": 0.5,
 					"angle": 0,
+					"animation": <any>{
+						"intensity": 5,
+						"reverse": false,
+						"speed": 5,
+						"type": ''
+					},
+					"attenuation": 0.5,
 					"bright": 15,
+					"color": null,
 					"coloration": 1,
+					"contrast": 0,
+					"darkness": <any>{
+						"max": 1,
+						"min": 0
+					},
 					"dim": 30,
-					"gradual": true,
 					"luminosity": 0.5,
 					"saturation": 0,
-					"contrast": 0,
 					"shadows": 0,
-					"animation": <any>{
-						"speed": 5,
-						"intensity": 5,
-						"reverse": false
-					},
-					"darkness": <any>{
-						"min": 0,
-						"max": 1
-					}
 				},
 				"flags": {}
 			}));
@@ -128,8 +131,8 @@ ${'DF_ARCHITECT.LightTemplate.CreateTemplateButton.MacroDirectory'.localize()}</
 			html.find('input[name="x"]').parentsUntil('div.tab').remove();
 			html.find('a.configure-sheet').remove();
 			const header = $(`<header class="sheet-header">
-			<img src="${template.macro.data.img}" data-edit="img" title="${'DF_ARCHITECT.LightTemplate.TemplateConfig.ImageTitle'.localize()}" height="64" width="64">
-			<h1><input name="name" type="text" value="${template.macro.data.name}" placeholder=" Name"></h1>
+			<img src="${template.macro.img}" data-edit="img" title="${'DF_ARCHITECT.LightTemplate.TemplateConfig.ImageTitle'.localize()}" height="64" width="64">
+			<h1><input name="name" type="text" value="${template.macro.name}" placeholder=" Name"></h1>
 		</header>`);
 			header.find('img').on('click', (event, element) => {
 				const fp = new FilePicker({
@@ -184,7 +187,7 @@ ${'DF_ARCHITECT.LightTemplate.CreateTemplateButton.LightConfig'.localize()}
 		html.remove();
 		html.toggle
 		setTimeout(() => app.close(), 10);
-		const lightData = this.extractLightDataFromMacroCommand(macro.data.command);
+		const lightData = this.extractLightDataFromMacroCommand((macro as any).command);
 		const config = new AmbientLightConfig(<any>new TemplateLightDocument(macro, lightData), { editable: true });
 		// @ts-ignore
 		config.df_light_template = true;
@@ -366,21 +369,35 @@ export class LightingLayerOverride {
 	}
 }
 
-class TemplateLightDocument {
+class TemplateLightDocument implements AmbientLightDataProperties {
 	apps: any = {};
 	macro: Macro;
-	data: Partial<AmbientLightData>;
+
+	_id: string;
+	x: number;
+	y: number;
+	rotation: number;
+	walls: boolean;
+	vision: boolean;
+	config: LightData;
+	hidden: boolean;
+	flags: Record<string, unknown>;
+
+	get uuid() { return this.macro.id; }
 	get id() { return this.macro.id; }
 	get name() { return this.macro.name; }
 	get object() { return this; }
 	get isOwner() { return this.macro.isOwner; }
 	constructor(macro: Macro, data: Partial<AmbientLightData>) {
-		this.data = data;
-		this.data.toObject = () => <any>data;
-		this.data.reset = function () {
-			delete this.toObject;
-			delete this.reset;
-		};
+		this._id = data._id;
+		this.x = data.x;
+		this.y = data.y;
+		this.rotation = data.rotation;
+		this.walls = data.walls;
+		this.vision = data.vision;
+		this.config = data.config;
+		this.hidden = data.hidden;
+		this.flags = data.flags;
 		this.macro = macro;
 	}
 	updateSource() { }
@@ -397,6 +414,10 @@ class TemplateLightDocument {
 		return this.macro.testUserPermission(user, permission, { exact });
 	}
 	prepareData() { }
+	clone() { return this; }
+	toObject() { return this; }
+
+	_onUpdate(_change: any, { _render }: { _render: boolean }, _userId: string) { }
 
 	static metadata = {
 		label: 'Light Template'
