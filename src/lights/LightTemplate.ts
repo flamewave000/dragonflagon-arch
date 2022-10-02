@@ -225,6 +225,7 @@ ${'DF_ARCHITECT.LightTemplate.CreateTemplateButton.LightConfig'.localize()}
 				name: "MACRO.Edit",
 				icon: '<i class="fas fa-edit"></i>',
 				condition: li => {
+					if (li.hasClass('inactive')) return false;
 					const macro = game.macros.get(li.data("macro-id"));
 					// Modified Section
 					return macro && !macro.getFlag(ARCHITECT.MOD_NAME, this.FLAG_IS_TEMPLATE) ? macro.isOwner : false;
@@ -239,7 +240,10 @@ ${'DF_ARCHITECT.LightTemplate.CreateTemplateButton.LightConfig'.localize()}
 				name: "MACRO.Remove",
 				icon: '<i class="fas fa-times"></i>',
 				// Modified Section
-				condition: li => !game.macros.get(li.data("macro-id")).getFlag(ARCHITECT.MOD_NAME, this.FLAG_IS_TEMPLATE),
+				condition: li => {
+					if (li.hasClass('inactive')) return false;
+					return !game.macros.get(li.data("macro-id")).getFlag(ARCHITECT.MOD_NAME, this.FLAG_IS_TEMPLATE)
+				},
 				// End Modification
 				callback: li => game.user.assignHotbarMacro(null, Number(li.data("slot")))
 			},
@@ -247,6 +251,7 @@ ${'DF_ARCHITECT.LightTemplate.CreateTemplateButton.LightConfig'.localize()}
 				name: "MACRO.Delete",
 				icon: '<i class="fas fa-trash"></i>',
 				condition: li => {
+					if (li.hasClass('inactive')) return false;
 					const macro = game.macros.get(li.data("macro-id"));
 					// Modified Section
 					return macro && !macro.getFlag(ARCHITECT.MOD_NAME, this.FLAG_IS_TEMPLATE) ? macro.isOwner : false;
@@ -267,6 +272,7 @@ ${'DF_ARCHITECT.LightTemplate.CreateTemplateButton.LightConfig'.localize()}
 				name: "DF_ARCHITECT.LightTemplate.ContextMenu.Edit",
 				icon: '<i class="fas fa-edit"></i>',
 				condition: li => {
+					if (li.hasClass('inactive')) return false;
 					const macro = game.macros.get(li.data("macro-id"));
 					return macro && macro.getFlag(ARCHITECT.MOD_NAME, this.FLAG_IS_TEMPLATE) ? macro.isOwner : false;
 				},
@@ -275,13 +281,17 @@ ${'DF_ARCHITECT.LightTemplate.CreateTemplateButton.LightConfig'.localize()}
 			{
 				name: "DF_ARCHITECT.LightTemplate.ContextMenu.Remove",
 				icon: '<i class="fas fa-times"></i>',
-				condition: li => <boolean>game.macros.get(li.data("macro-id")).getFlag(ARCHITECT.MOD_NAME, this.FLAG_IS_TEMPLATE),
+				condition: li => {
+					if (li.hasClass('inactive')) return false;
+					return <boolean>game.macros.get(li.data("macro-id")).getFlag(ARCHITECT.MOD_NAME, this.FLAG_IS_TEMPLATE)
+				},
 				callback: li => game.user.assignHotbarMacro(null, li.data("slot"))
 			},
 			{
 				name: "DF_ARCHITECT.LightTemplate.ContextMenu.Delete",
 				icon: '<i class="fas fa-trash"></i>',
 				condition: li => {
+					if (li.hasClass('inactive')) return false;
 					const macro = game.macros.get(li.data("macro-id"));
 					// @ts-ignore
 					return macro && macro.getFlag(ARCHITECT.MOD_NAME, this.FLAG_IS_TEMPLATE) ? macro.isOwner : false;
