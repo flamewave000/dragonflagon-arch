@@ -213,8 +213,8 @@
 		}
 	},
 	"LAYERS": {
-		"background": "Capa de fondo/baldosas",
-		"foreground": "Capa de primer plano/techos",
+		"tiles": "Capa de baldosas",
+		"foreground_deprecated": "Capa de primer plano/techos",
 		"drawings": "Capa de dibujo",
 		"grid": "Capa de rejilla",
 		"walls": "Capa de muros",
@@ -223,7 +223,7 @@
 		"tokens": "Capa de iconos",
 		"lighting": "Capa de iluminación",
 		"sounds": "Capa de sonidos",
-		"sight": "Capa de visión",
+		"sight_deprecated": "Capa de visión",
 		"controls": "Capa de controles",
 		"weather": "Capa de clima",
 		"unknown": "\"Capa {0}\""
