@@ -6,41 +6,12 @@
 	"repository": {
 		"url": "https://github.com/flamewave000/dragonflagon-arch"
 	},
-	"main": "src/df-architect.ts",
-	"scripts": {
-		"start": "npm run-script devwatch",
-		"build": "npx gulp --sm             --color 2>&1 | sed 's|'$(pwd)'/||g'",
-		"watch": "npx gulp watch --sm       --color 2>&1 | sed 's|'$(pwd)'/||g'",
-		"clean": "npx gulp clean",
-		"devbuild": "npx gulp dev --sm      --color 2>&1 | sed 's|'$(pwd)'/||g'",
-		"devwatch": "npx gulp devWatch --sm --color 2>&1 | sed 's|'$(pwd)'/||g'",
-		"devclean": "npx gulp devClean",
-		"stage": "npx gulp zip --sm         --color 2>&1 | sed 's|'$(pwd)'/||g'",
-		"prod": "npx gulp zip --sm --min    --color 2>&1 | sed 's|'$(pwd)'/||g'",
-		"launch": "./launch-foundry",
-		"tag": "./.cmds tag",
-		"release": "npm run tag && npm run prod"
-	},
 	"devDependencies": {
-		"@league-of-foundry-developers/foundry-vtt-types": "^9.238.0",
-		"acorn": "^8.5.0",
-		"del": "^6.0.0",
-		"gulp": "^4.0.2",
-		"gulp-cli": "^2.3.0",
-		"gulp-concat": "^2.6.1",
-		"gulp-jsonminify": "^1.1.0",
-		"gulp-notify": "^3.2.0",
-		"gulp-replace": "^1.1.3",
-		"gulp-sass": "^5.0.0",
-		"gulp-zip": "^5.0.2",
-		"json": "^11.0.0",
-		"json-stringify-pretty-compact": "^3.0.0",
-		"sass": "^1.43.4",
-		"terser-webpack-plugin": "^5.2.4",
-		"ts-loader": "^9.4.1",
-		"typescript": "^4.8.4",
-		"webpack": "^5.74.0",
-		"webpack-cli": "^4.9.1",
-		"webpack-stream": "^7.0.0"
+		"@types/jquery": "^3.5.32",
+		"@wstaeblein/json-translator": "^0.7.2",
+		"eslint": "^9.20.1",
+		"globals": "^15.15.0",
+		"pixi.js": "^7.4.2",
+		"sass": "^1.84.0"
 	}
 }

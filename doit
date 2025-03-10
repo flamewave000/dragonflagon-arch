@@ -1,0 +1,122 @@
+@ DragonFlagon Architect
+doit_utl = "doit -t .doit-files/utl.doit"
+
+init {
+	@ Initializes the module directory for development
+	$ npm install
+	$ touch .devenv
+	$ echo "\n\e[32mPlease run '\e[33mdoit env <foundry-path> <foundry-data>\e[32m'\e[0m"
+}
+
+clean {
+	@ Cleans up the module directory
+	$$$
+	rm -Rf node_modules
+	rm -Rf release
+	rm -f package-lock.json
+	sleep 0.5 && rm -Rf .doit || echo "\e[91mThis failure may be due to a doit programming still running. Maybe you have 'doit launch' running in the background?\e[0m" &
+	$$$
+}
+
+tag {
+	@ Tag the current commit for release of the currently targetted module
+	$$$
+	MODULE_NAME="df-architect"
+	MODULE_VERS=`jq -r .version "$$MODULE_NAME/module.json"`
+	TAG_NAME="$${MODULE_NAME}_$$MODULE_VERS"
+	echo "Tagging $$TAG_NAME"
+	git tag -d $$TAG_NAME 2>/dev/null
+	git tag $$TAG_NAME && git push -f origin $$TAG_NAME
+	echo "Tagged current commit as \"$$TAG_NAME\""
+	$$$
+}
+
+
+FILES = "./css ./lang ./libs ./packs ./src ./templates ./CHANGELOG.md ./LICENSE ./module.json README.md"
+
+build {
+	@ Copy the module's compiled package to the set foundry data directory
+	$$$
+	MODULE="df-architect"
+	FDATA="$$(jq -r .data .devenv)/Data/modules/$$MODULE"
+	rm -Rf "$$FDATA"
+	mkdir "$$FDATA" || exit
+	cp -Lr $FILES "$$FDATA" || exit
+	$doit_utl proc_sass "$$FDATA" || exit
+	$doit_utl proc_module "$$FDATA" || exit
+	echo "\e[90m$date_string\e[32m Copied \e[34m$$MODULE\e[32m to \e[33m$$FDATA"
+	$$$
+}
+
+release {
+	@ Package the module for release
+	$$$
+	MODULE="df-architect"
+	VERSION=`jq -r .version "./module.json"`
+	DIR="release/$${MODULE}_$$VERSION"
+	rm -Rf "$$DIR"
+	rm -Rf "release/bundle"
+	mkdir -p "release/bundle" || exit
+	cp -Lr $FILES "release/bundle/" || exit
+	$doit_utl proc_sass "release/bundle" || exit
+	$doit_utl proc_module "release/bundle" || exit
+
+	mkdir -p "$$DIR" && \
+		cp "release/bundle/module.json" "$$DIR" && \
+	 	(cd "release/bundle" ; zip -r "../../$$DIR/$$MODULE.zip" "./") || exit
+	rm -R "release/bundle" || exit
+
+	if command -v -- explorer.exe > /dev/null 2>&1; then
+		$doit_utl confirm '"Do you want to open the bundle in explorer?"' Y && explorer.exe "$$(wslpath -w "$$DIR")"
+	elif command -v -- browse > /dev/null 2>&1; then
+		$doit_utl confirm '"Do you want to open the bundle in file browser?"' Y && browse "$$DIR"
+	elif command -v -- open > /dev/null 2>&1; then
+		$doit_utl confirm '"Do you want to open the bundle in finder?"' Y && open "$$DIR"
+	fi
+	$$$
+}
+
+watch {
+	@ Watches the module source for file changes and executes `build` if a change occurs
+	$$$
+	find $FILES | entr doit build
+	$$$
+}
+
+lint {
+	@ Run ESLint to check validity of files
+	$ npx eslint 'src/**/*.{js,mjs}'
+}
+
+env {
+	@ Set the foundry environment
+	req f-path @ Path to the Foundry Install directory
+	req f-data @ Path to the Foundry Data directory
+	json_set = doit_utl + " set_json_value"
+	$$$
+	if [ "$#" -ne 0 ]; then
+		$doit_utl gen_env_file || exit
+		$json_set .devenv .path '"$1"' || exit
+		$json_set .devenv .data '"$2"' || exit
+	fi
+	echo "\e[32mFoundry Path: \e[34m$$(jq -r .path .devenv)\e[0m"
+	echo "\e[32mFoundry Data: \e[34m$$(jq -r .data .devenv)\e[0m"
+	$$$
+}
+
+getref {
+	@@@
+	Create a sym-link to the foundry.js file found in the set environment.
+	This reference is used for type hinting and for checking on how Foundry
+	does certain things.
+	@@@
+	$$$
+	rm -f fvtt-scripts
+	ln -s "$$(jq -r .path .devenv)/resources/app/public/scripts/" fvtt-scripts
+	$$$
+}
+
+launch {
+	@ Launch the foundry server
+	$ sudo $$(which node) "$$(jq -r .path .devenv)/resources/app/main.js" --dataPath="$$(jq -r .data .devenv)"
+}

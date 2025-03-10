@@ -1,2 +1,0 @@
-#!/bin/bash
-node "/var/www/foundryvtt/resources/app/main.js" --dataPath="/var/www/foundrydata"

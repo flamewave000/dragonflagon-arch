@@ -1,0 +1,84 @@
+
+doit_utl = "doit -t .doit-files/utl.doit"
+
+proc_module {
+%%%
+import os
+import glob
+in_file = '$1'
+out_file = '$2'
+src_files = ',\n\t\t'.join([f'"{os.path.relpath(x, in_file)}"' for x in glob.glob(in_file + "/src/**/*.*js", recursive=True)] + [f'"{os.path.relpath(x, in_file)}"' for x in glob.glob(in_file + "/common/**/*.*js", recursive=True)])
+css_files = ',\n\t\t'.join([f'"{os.path.relpath(x, in_file)}"' for x in glob.glob(in_file + "/css/**/*.css", recursive=True)])
+if len(out_file) == 0:
+	out_file = in_file
+file = ''
+with open(in_file + "/module.json", "r") as manifest:
+	file = manifest.read()
+file = file.replace("\"{{sources}}\"", f"[\n\t\t{src_files}\n\t]")
+file = file.replace("\"{{css}}\"", f"[\n\t\t{css_files}\n\t]")
+with open(out_file + "/module.json", "w") as manifest:
+	manifest.write(file)
+%%%
+}
+
+proc_sass {
+%%%
+import os
+import glob
+import subprocess
+from pathlib import Path
+files = glob.glob("$1/css/*.scss", recursive=False)
+if len(files) == 0:
+	exit(0)
+print("\033[90m$date_string\033[32m Processing SASS:\033[0m", end='')
+args = ['npx', 'sass', '--no-source-map']
+for file in files:
+	filename = Path(file).stem
+	args.append(f"{file}:$1/css/{filename}.css")
+	print(f" {filename}.scss", end='')
+print('')
+subprocess.run(args)
+for file in files:
+	os.remove(file)
+%%%
+}
+
+gen_env_file:$ if [ ! -e ".devenv" ] ; then echo '{"path":"","data":""}' | jq --tab > .devenv ; fi
+set_json_value:$ contents=`jq --tab '$2 = $3' '$1'` && echo "$$contents" > '$1'
+test:$ echo "success" "$@"
+glob_ls:$ cd $1 && find . -type f -name "$2" -exec ls {} \; | sed 's/^.\///'
+quoted_ls:$ $doit_utl glob_ls $1 $2 | awk '{printf("\"%s\", ", $$0)}' | sed 's/, $$//'
+confirm {
+	$$$
+	__exec() {
+		# https://djm.me/ask
+		local prompt default reply
+		while true; do
+			if [ "$${2:-}" = "Y" ]; then
+				prompt="Y/n"
+				default=Y
+			elif [ "$${2:-}" = "N" ]; then
+				prompt="y/N"
+				default=N
+			else
+				prompt="y/n"
+				default=
+			fi
+			# Ask the question (not using "read -p" as it uses stderr not stdout)
+			printf "\e[33m$$1 \e[32m[$$prompt] \e[0m"
+			# Read the answer (use /dev/tty in case stdin is redirected from somewhere else)
+			read reply </dev/tty
+			# Default?
+			if [ -z "$$reply" ]; then
+				reply=$$default
+			fi
+			# Check if the reply is valid
+			case "$$reply" in
+			Y* | y*) return 0 ;;
+			N* | n*) return 1 ;;
+			esac
+		done
+	}
+	__exec $@ && exit 0 || exit 1
+	$$$
+}
