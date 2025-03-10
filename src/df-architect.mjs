@@ -15,7 +15,7 @@ import AltLightOrigin from './lights/AltLightOrigin.mjs';
 // import { LightTemplateManager, LightingLayerOverride } from './lights/LightTemplate.mjs';
 // import WallChangeType from './walls/WallChangeType.mjs';
 // import WallAltDrop from './walls/WallAltDrop.mjs';
-// import AltLightInverted from './lights/AltLightInverted.mjs';
+import AltLightInverted from './lights/AltLightInverted.mjs';
 // import WallDirections from './walls/WallDirections.mjs';
 import DataMigration from './core/migration.mjs';
 // import TileFlattener from './tiles/TileFlattener.mjs';
@@ -91,7 +91,7 @@ Hooks.once('ready', async function () {
 	// try { WallDirections.ready() } catch (error) { console.error(error) }
 	try { AltLightOrigin.ready() } catch (error) { console.error(error) }
 	// try { QuickColourPicker.ready() } catch (error) { console.error(error) }
-	// try { AltLightInverted.ready() } catch (error) { console.error(error) }
+	try { AltLightInverted.ready() } catch (error) { console.error(error) }
 	// try { LightTemplateManager.ready() } catch (error) { console.error(error) }
 	// try { LightingLayerOverride.ready() } catch (error) { console.error(error) }
 	// try { ShowLayerControls.ready() } catch (error) { console.error(error) }
