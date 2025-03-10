@@ -1,40 +1,32 @@
-
-declare global {
-	interface LenientGlobalVariableTypes {
-		game: never; // the type doesn't matter
-		canvas: never;
-	}
-}
-
-import DECLARATIONS from './core/declarations'; DECLARATIONS();
-import SETTINGS from './core/settings';
-import ARCHITECT from "./core/architect";
+import DECLARATIONS from './core/declarations.mjs'; DECLARATIONS();
+import SETTINGS from './core/settings.mjs';
+import ARCHITECT from "./core/architect.mjs";
 SETTINGS.init(ARCHITECT.MOD_NAME);
 
-import PIXIAppOverride from './general/PIXIAppOverride';
-import LayerShortcuts from "./general/LayerShortcuts";
-import AltGridSnap from './general/AltGridSnap';
-import WallCtrlInvert from './walls/WallCtrlInvert';
-import WallShortcuts from './walls/WallShortcuts';
-import WallJoinSplit from './walls/WallJoinSplit';
-import AltLightOrigin from './lights/AltLightOrigin';
-import { QuickColourPicker } from './general/QuickColourPicker';
-import CaptureGameScreen from './general/CaptureGameScreen';
-import { LightTemplateManager, LightingLayerOverride } from './lights/LightTemplate';
-import WallChangeType from './walls/WallChangeType';
-import WallAltDrop from './walls/WallAltDrop';
-import AltLightInverted from './lights/AltLightInverted';
-import WallDirections from './walls/WallDirections';
-import DataMigration from './core/migration';
-import TileFlattener from './tiles/TileFlattener';
-import LightCounter from './lights/LightCounter';
-import WallsCounter from './walls/WallCounter';
-import TileCounter from './tiles/TileCounter';
-import SoundCounter from './sounds/SoundCounter';
-import ShowLayerControls from './general/ShowLayerControls';
-import TileConfigExt from './tiles/TileConfigExt';
-import CounterUI from './core/CounterUI';
-import WallGapFiller from './walls/WallGapFiller';
+import PIXIAppOverride from './general/PIXIAppOverride.mjs';
+import LayerShortcuts from "./general/LayerShortcuts.mjs";
+import AltGridSnap from './general/AltGridSnap.mjs';
+import WallCtrlInvert from './walls/WallCtrlInvert.mjs';
+import WallShortcuts from './walls/WallShortcuts.mjs';
+import WallJoinSplit from './walls/WallJoinSplit.mjs';
+import AltLightOrigin from './lights/AltLightOrigin.mjs';
+import { QuickColourPicker } from './general/QuickColourPicker.mjs';
+import CaptureGameScreen from './general/CaptureGameScreen.mjs';
+import { LightTemplateManager, LightingLayerOverride } from './lights/LightTemplate.mjs';
+import WallChangeType from './walls/WallChangeType.mjs';
+import WallAltDrop from './walls/WallAltDrop.mjs';
+import AltLightInverted from './lights/AltLightInverted.mjs';
+import WallDirections from './walls/WallDirections.mjs';
+import DataMigration from './core/migration.mjs';
+import TileFlattener from './tiles/TileFlattener.mjs';
+import LightCounter from './lights/LightCounter.mjs';
+import WallsCounter from './walls/WallCounter.mjs';
+import TileCounter from './tiles/TileCounter.mjs';
+import SoundCounter from './sounds/SoundCounter.mjs';
+import ShowLayerControls from './general/ShowLayerControls.mjs';
+import TileConfigExt from './tiles/TileConfigExt.mjs';
+import CounterUI from './core/CounterUI.mjs';
+import WallGapFiller from './walls/WallGapFiller.mjs';
 
 Hooks.once('init', function () {
 	if (!game.modules.get('lib-wrapper')?.active) return;

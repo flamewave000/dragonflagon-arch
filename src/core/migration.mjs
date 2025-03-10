@@ -2,7 +2,7 @@
 // import CaptureGameScreen from "../general/CaptureGameScreen";
 // import { LightTemplateManager } from "../lights/LightTemplate";
 // import ARCHITECT from "./architect";
-import SETTINGS from "./settings";
+import SETTINGS from "./settings.mjs";
 
 interface Version {
 	arch: string,

@@ -1,6 +1,6 @@
-import ARCHITECT from "../core/architect";
-import SETTINGS from "../core/settings";
-import libWrapperShared from "../core/libWrapperShared";
+import ARCHITECT from "../core/architect.mjs";
+import SETTINGS from "../core/settings.mjs";
+import libWrapperShared from "../core/libWrapperShared.mjs";
 
 export default class WallCtrlInvert {
 	static readonly PREF_ENABLED = 'WallCtrlInvert-Enabled';

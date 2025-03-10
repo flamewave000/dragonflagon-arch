@@ -1,6 +1,6 @@
-import ARCHITECT from "../core/architect";
-import SETTINGS from "../core/settings";
-import TileFlattener from "./TileFlattener";
+import ARCHITECT from "../core/architect.mjs";
+import SETTINGS from "../core/settings.mjs";
+import TileFlattener from "./TileFlattener.mjs";
 
 export default class ArchiveFolderMenu extends FormApplication {
 	static get defaultOptions() {

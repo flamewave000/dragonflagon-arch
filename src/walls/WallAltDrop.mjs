@@ -1,7 +1,7 @@
-import ARCHITECT from "../core/architect";
-import SETTINGS from "../core/settings";
-import libWrapperShared from "../core/libWrapperShared";
-import WallCtrlInvert from "./WallCtrlInvert";
+import ARCHITECT from "../core/architect.mjs";
+import SETTINGS from "../core/settings.mjs";
+import libWrapperShared from "../core/libWrapperShared.mjs";
+import WallCtrlInvert from "./WallCtrlInvert.mjs";
 import { WallData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs";
 
 interface WallEventData {

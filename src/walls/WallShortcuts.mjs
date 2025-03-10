@@ -1,5 +1,5 @@
-import ARCHITECT from "../core/architect";
-import libWrapperShared from "../core/libWrapperShared";
+import ARCHITECT from "../core/architect.mjs";
+import libWrapperShared from "../core/libWrapperShared.mjs";
 
 
 export default class WallShortcuts {

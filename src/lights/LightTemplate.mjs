@@ -1,6 +1,6 @@
 import { AmbientLightDataProperties } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/ambientLightData";
 import { AmbientLightData, LightData, MacroData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs";
-import ARCHITECT from "../core/architect";
+import ARCHITECT from "../core/architect.mjs";
 
 declare global {
 	// class MacroConfig extends BaseEntitySheet { }

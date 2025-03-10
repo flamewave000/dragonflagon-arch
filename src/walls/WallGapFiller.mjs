@@ -1,5 +1,5 @@
 import { WallData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs";
-import SETTINGS from "../core/settings";
+import SETTINGS from "../core/settings.mjs";
 
 
 interface WallGap {

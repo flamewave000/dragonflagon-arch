@@ -1,4 +1,4 @@
-import ARCHITECT from "../core/architect";
+import ARCHITECT from "../core/architect.mjs";
 
 interface Invert { inverted: boolean };
 

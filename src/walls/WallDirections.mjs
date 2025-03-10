@@ -1,6 +1,6 @@
 import { WallData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs";
-import ARCHITECT from "../core/architect";
-import SETTINGS from "../core/settings";
+import ARCHITECT from "../core/architect.mjs";
+import SETTINGS from "../core/settings.mjs";
 
 interface WallExt extends Wall {
 	[key: string]: any;

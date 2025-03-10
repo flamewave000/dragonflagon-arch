@@ -1,6 +1,6 @@
-import ARCHITECT from "../core/architect";
-import CounterUI from "../core/CounterUI";
-import SETTINGS from "../core/settings";
+import ARCHITECT from "../core/architect.mjs";
+import CounterUI from "../core/CounterUI.mjs";
+import SETTINGS from "../core/settings.mjs";
 
 export default class WallsCounter {
 	private static _counter = new CounterUI(0, 'Walls');

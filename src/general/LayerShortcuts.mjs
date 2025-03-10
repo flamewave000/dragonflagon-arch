@@ -1,5 +1,5 @@
-import ARCHITECT from "../core/architect";
-import SETTINGS from "../core/settings";
+import ARCHITECT from "../core/architect.mjs";
+import SETTINGS from "../core/settings.mjs";
 
 export default class LayerShortcuts {
 	private static readonly PREF_LAYER_SWAP_LAYER1 = "LayerShortcutsSettingsLayer-SwapLayer1";

@@ -1,4 +1,4 @@
-import ARCHITECT from "./architect";
+import ARCHITECT from "./architect.mjs";
 
 export default class CounterUI extends Application {
 	static get defaultOptions(): ApplicationOptions {

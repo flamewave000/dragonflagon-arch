@@ -1,7 +1,7 @@
-import ARCHITECT from "../core/architect";
-import SETTINGS from "../core/settings";
-import TileRender from "./capture/TileExt";
-import DrawingRender from "./capture/DrawingExt";
+import ARCHITECT from "../core/architect.mjs";
+import SETTINGS from "../core/settings.mjs";
+import TileRender from "./capture/TileExt.mjs";
+import DrawingRender from "./capture/DrawingExt.mjs";
 
 interface LayerFilter {
 	s: boolean;  // show layer

@@ -1,5 +1,5 @@
-import ARCHITECT from "../core/architect";
-import SETTINGS from "../core/settings";
+import ARCHITECT from "../core/architect.mjs";
+import SETTINGS from "../core/settings.mjs";
 
 declare global {
 	interface SquareGrid {
