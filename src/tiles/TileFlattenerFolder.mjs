@@ -4,7 +4,7 @@ import TileFlattener from "./TileFlattener.mjs";
 
 export default class ArchiveFolderMenu extends FormApplication {
 	static get defaultOptions() {
-		return mergeObject(FormApplication.defaultOptions as Partial<FormApplicationOptions>, {
+		return foundry.utils.mergeObject(FormApplication.defaultOptions as Partial<FormApplicationOptions>, {
 			width: 400,
 			height: 125,
 			resizable: false,

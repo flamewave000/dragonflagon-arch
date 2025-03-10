@@ -1,12 +1,20 @@
+/// <reference path="../../fvtt-scripts/foundry.js" />
+
 export default class ARCHITECT {
 	static MOD_NAME = 'df-architect'
 
-	static reportProgress(context: string, progress: number, total: number, keepAlive: boolean = false) {
+	/**
+	 * @param {string} context
+	 * @param {number} progress
+	 * @param {number} total
+	 * @param {boolean} [keepAlive] default: false
+	 */
+	static reportProgress(context, progress, total, keepAlive = false) {
 		const loader = document.getElementById("loading");
 		const pct = Math.round((progress / total) * 100);
-		loader.querySelector<HTMLElement>("#context").textContent = context + ` (${progress}/${total})`;
-		loader.querySelector<HTMLElement>("#loading-bar").style.width = `${pct}%`;
-		loader.querySelector<HTMLElement>("#progress").textContent = `${pct}%`;
+		loader.querySelector("#context").textContent = context + ` (${progress}/${total})`;
+		loader.querySelector("#loading-bar").style.width = `${pct}%`;
+		loader.querySelector("#progress").textContent = `${pct}%`;
 		loader.style.display = "block";
 		if ((pct === 100) && !loader.hidden && !keepAlive) $(loader).fadeOut(2000);
 	}
@@ -15,7 +23,7 @@ export default class ARCHITECT {
 	}
 
 	static requestReload() {
-		const dialog: Dialog = new Dialog({
+		const dialog = new Dialog({
 			title: 'DF_ARCHITECT.ReloadRequired.Title'.localize(),
 			content: 'DF_ARCHITECT.ReloadRequired.Content'.localize(),
 			default: 'yes',
@@ -35,9 +43,16 @@ export default class ARCHITECT {
 		dialog.render(true);
 	}
 
-	static Base64ToBlob(b64Data: string, contentType: string, sliceSize = 512) {
+	/**
+	 * @param {string} b64Data
+	 * @param {string} contentType
+	 * @param {number} sliceSize Default: 512
+	 * @returns {Blob}
+	 */
+	static Base64ToBlob(b64Data, contentType, sliceSize = 512) {
 		const byteCharacters = atob(b64Data);
-		const byteArrays: Uint8Array[] = [];
+		/**@type {Uint8Array[]}*/
+		const byteArrays = [];
 		for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
 			const slice = byteCharacters.slice(offset, offset + sliceSize);
 			const byteNumbers = new Array<number>(slice.length);
@@ -50,19 +65,24 @@ export default class ARCHITECT {
 		return new Blob(byteArrays, { type: contentType });
 	}
 
-	
-	static getLayer<T extends CanvasLayer>(key: string): T {
-		const layer = <T>(canvas as any as { [key: string]: CanvasLayer })[key];
+	/**
+	 * @template {T extends CanvasLayer}
+	 * @param {string} key
+	 * @returns {T}
+	 */
+	static getLayer(key) {
+		/**@type { { [key: string]: CanvasLayer } }*/
+		const layer = canvas[key];
 		if(!layer)
-			return <T>(<any>CONFIG.Canvas.layers[key].layerClass).instance;
+			return CONFIG.Canvas.layers[key].layerClass.instance;
 		return layer;
 	}
 
-	private static readonly GR_BG_HI = '44';
-	private static readonly GR_BG_LO = '08';
-	private static readonly GR_BG_BDR = '36a';
-	private static readonly GR_BG_TCT = '4d4';
-	private static GRAPHIC: string[] = [
+	/**@readonly*/static #GR_BG_HI = '44';
+	/**@readonly*/static #GR_BG_LO = '08';
+	/**@readonly*/static #GR_BG_BDR = '36a';
+	/**@readonly*/static #GR_BG_TCT = '4d4';
+	/**@type {string[]}*/static #GRAPHIC = [
 		"%c                                                                      %c%c",
 		"%c  ╭────────────────────────────────────────────────────────────────╮  %c%c",
 		"%c  │ %c ______  ╭╮  ○    ◌   __  ○     ◌ __        ╭╮    ○   __       %c│  ",
@@ -76,17 +96,18 @@ export default class ARCHITECT {
 		"%c                                                                      %c%c"];
 	static DrawArchitectGraphicToConsole() {
 		const css = [];
-		const loEnd = parseInt(this.GR_BG_LO, 16);
-		const hiEnd = parseInt(this.GR_BG_HI, 16);
-		const bdr = `;color:#${this.GR_BG_BDR}`;
-		const tct = `;color:#${this.GR_BG_TCT}`;
-		for (let c = 0; c < this.GRAPHIC.length; c++) {
-			var bg: number | string = Math.trunc((((this.GRAPHIC.length - 1) - c) / (this.GRAPHIC.length - 1)) * (hiEnd - loEnd)) + loEnd;
+		const loEnd = parseInt(this.#GR_BG_LO, 16);
+		const hiEnd = parseInt(this.#GR_BG_HI, 16);
+		const bdr = `;color:#${this.#GR_BG_BDR}`;
+		const tct = `;color:#${this.#GR_BG_TCT}`;
+		for (let c = 0; c < this.#GRAPHIC.length; c++) {
+			/**@type {number | string}*/
+			var bg = Math.trunc((((this.#GRAPHIC.length - 1) - c) / (this.#GRAPHIC.length - 1)) * (hiEnd - loEnd)) + loEnd;
 			bg = 'background:#' + (bg < 16 ? '0' + bg.toString(16) : bg.toString(16)).repeat(3);
 			css.push(bg + bdr);
 			css.push(bg + tct);
 			css.push(bg + bdr);
 		}
-		console.log(ARCHITECT.GRAPHIC.join('\n'), ...css);
+		console.log(ARCHITECT.#GRAPHIC.join('\n'), ...css);
 	}
 };

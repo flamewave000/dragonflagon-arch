@@ -1,21 +1,18 @@
-// import { AmbientLightData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs";
-// import CaptureGameScreen from "../general/CaptureGameScreen";
-// import { LightTemplateManager } from "../lights/LightTemplate";
-// import ARCHITECT from "./architect";
 import SETTINGS from "./settings.mjs";
 
-interface Version {
-	arch: string,
-	core: string
-}
+/**
+ * @typedef {object} Version
+ * @property {string} arch
+ * @property {string} core
+ */
 
 export default class DataMigration {
-	private static readonly PREF_DATA_VERSION = 'data-version';
-	private static previous: Version;
-	private static current: Version;
+	/**@readonly*/static #PREF_DATA_VERSION = 'data-version';
+	/**@type {Version}*/static #previous;
+	/**@type {Version}*/static #current;
 
 	static init() {
-		SETTINGS.register(this.PREF_DATA_VERSION, {
+		SETTINGS.register(this.#PREF_DATA_VERSION, {
 			scope: 'world',
 			config: false,
 			type: Object,
@@ -23,17 +20,17 @@ export default class DataMigration {
 		});
 	}
 	static async ready() {
-		this.current = {
+		this.#current = {
 			core: game.version,
-			arch: (game.modules.get('df-architect') as any).version
+			arch: game.modules.get('df-architect').version
 		};
-		this.previous = SETTINGS.get(this.PREF_DATA_VERSION);
-		if (this.current.core === this.previous.core && this.current.arch === this.previous.arch) return;
-		await this.performMigration();
-		await SETTINGS.set(this.PREF_DATA_VERSION, this.current);
+		this.#previous = SETTINGS.get(this.#PREF_DATA_VERSION);
+		if (this.#current.core === this.#previous.core && this.#current.arch === this.#previous.arch) return;
+		await this.#performMigration();
+		await SETTINGS.set(this.#PREF_DATA_VERSION, this.#current);
 	}
 
-	private static async performMigration() {
+	static async #performMigration() {
 		var migrating = false;
 		const migrationOccurring = () => {
 			if (migrating) return;
@@ -51,15 +48,15 @@ export default class DataMigration {
 
 	// Example migration function
 	// private async migrateToCore_0_X_X() {
-	// 	if (this.previous.core < '0.X.X') {
+	// 	if (this.#previous.core < '0.X.X') {
 	// 		// perform data migration for Core 0.x.x
 	// 	}
-	// 	while (this.previous.arch < 'X.X.X') {
-	// 		switch (this.previous.arch) {
+	// 	while (this.#previous.arch < 'X.X.X') {
+	// 		switch (this.#previous.arch) {
 	// 			case 'x.x.x':
 	// 				// Perform migration to x.x.x
 	// 				// Update migration data state
-	// 				this.previous.arch = 'x.x.x'
+	// 				this.#previous.arch = 'x.x.x'
 	// 				break;
 	// 			default:
 	// 			// Perform migration from an unknown
@@ -69,7 +66,7 @@ export default class DataMigration {
 	// }
 
 	// private static async migrateToCore_0_9_241(notifyMigration: () => void) {
-	// 	if (this.previous.core >= '9.241') return;
+	// 	if (this.#previous.core >= '9.241') return;
 	// 	notifyMigration();
 	// 	const layers: { [key: string]: any } = SETTINGS.get(CaptureGameScreen.PREF_LYRS);
 	// 	const newLayers = [
@@ -115,7 +112,7 @@ export default class DataMigration {
 	// }
 
 	// private static async migrateLightTemplates_3_2_x(notifyMigration: () => void) {
-	// 	if (this.previous.arch >= '3.2.0') return;
+	// 	if (this.#previous.arch >= '3.2.0') return;
 	// 	notifyMigration();
 
 	// 	const oldImage = "modules/df-architect/templates/lightbulb.svg";

@@ -1,13 +1,57 @@
+/**
+ * @typedef {object} SettingSubmenuConfig
+ * @property {string} 				name		Primary text displayed as a labal for the input
+ * @property {string} 				hint		Hint text displayed as a sublabel
+ * @property {string} 				label		The text label used in the button
+ * @property {string} 				icon		A Font Awesome icon used in the submenu button
+ * @property {FormApplicationClass}	type		A FormApplication subclass which should be created
+ * @property {boolean}				restricted	Restrict this submenu to gamemaster only?
+ */
+
+/**
+ * @template Type
+ * @typedef SettingsConfig
+ * @property {string} 						name			Primary text displayed as a labal for the input
+ * @property {string} 						hint			Hint text displayed as a sublabel
+ * @property {"world" | "client"}			scope			This specifies a client-stored setting
+ * @property {boolean}						config			This specifies that the setting appears in the configuration view
+ * @property {() => Type}					type			The type constructor for the setting (ie: Boolean, String, Number, MyClass)
+ * @property {boolean}						requiresReload 	This will prompt the GM to have all clients reload the application for the setting to take effect.
+ * @property {Type}							default			The default value for the setting
+ * @property { {[key: string]: string } }	choices			If choices are defined, the resulting setting will be a select menu. The {@link type} should be `String`
+ * @property {(newValue: Type) => void}		onChange		A callback function which triggers when the setting is changed
+ */
+
 export default class SETTINGS {
-	private static _MOD_NAME: string;
-	static init(moduleName: string) {
-		this._MOD_NAME = moduleName;
+	static MOD_NAME;
+	/** @param {string} moduleName */
+	static init(moduleName) {
+		this.MOD_NAME = moduleName;
 	}
-	static register<T>(key: string, config: ClientSettings.PartialSettingConfig<T>) { game.settings.register(SETTINGS._MOD_NAME, key, config); }
-	static registerMenu(key: string, config: ClientSettings.PartialSettingSubmenuConfig) { game.settings.registerMenu(SETTINGS._MOD_NAME, key, config); }
-	static get<T>(key: string): T { return <T>game.settings.get(SETTINGS._MOD_NAME, key); }
-	static async set<T>(key: string, value: T): Promise<T> { return await game.settings.set(SETTINGS._MOD_NAME, key, value); }
-	static default<T>(key: string): T { return <T>game.settings.settings.get(SETTINGS._MOD_NAME + '.' + key).default; }
-	/** helper for referencing a Typed constructor for the `type` field of a setting { type: SETTINGS.typeOf<MyClass>() } */
-	static typeOf<T>(): ConstructorOf<T> { return Object as any; }
+	/**
+	 * @param {string} key
+	 * @param {SettingsConfig<*>} config
+	 */
+	static register(key, config) { game.settings.register(SETTINGS.MOD_NAME, key, config); }
+	/**
+	 * @param {string} key
+	 * @param {SettingSubmenuConfig} config
+	 */
+	static registerMenu(key, config) { game.settings.registerMenu(SETTINGS.MOD_NAME, key, config); }
+	/**
+	 * @param {string} key
+	 * @returns {any}
+	 */
+	static get(key) { return game.settings.get(SETTINGS.MOD_NAME, key); }
+	/**
+	 * @param {string} key
+	 * @param {any} value
+	 * @returns {Promise<any>}
+	 */
+	static async set(key, value) { return await game.settings.set(SETTINGS.MOD_NAME, key, value); }
+	/**
+	 * @param {string} key
+	 * @returns {any}
+	 */
+	static default(key) { return game.settings.settings.get((SETTINGS.MOD_NAME + '.' + key)).default; }
 }

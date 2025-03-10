@@ -1,8 +1,9 @@
+/// <reference path="../../fvtt-scripts/foundry.js" />
 import ARCHITECT from "./architect.mjs";
 
 export default class CounterUI extends Application {
-	static get defaultOptions(): ApplicationOptions {
-		return <ApplicationOptions>mergeObject(<Partial<ApplicationOptions>>Application.defaultOptions, {
+	static get defaultOptions() {
+		return foundry.utils.mergeObject(Application.defaultOptions, {
 			title: null,
 			height: 100,
 			width: 100,
@@ -12,58 +13,77 @@ export default class CounterUI extends Application {
 			popOut: false,
 		});
 	}
-	private _count: number = 0;
-	private _label: string = '';
-	private _hint: string = '';
+	#_count = 0;
+	#_label = '';
+	#_hint = '';
 
 	static init() {
 		// Do not wrap these calls if lib-df-buttons is enabled
 		if (game.modules.get('lib-df-buttons')?.active) return;
-		libWrapper.register(ARCHITECT.MOD_NAME, 'Sidebar.prototype.expand', function (this: Sidebar, wrapped: Function) {
-			Hooks.callAll('collapseSidebarPre', this, !this._collapsed);
-			wrapped();
-		}, 'WRAPPER');
-		libWrapper.register(ARCHITECT.MOD_NAME, 'Sidebar.prototype.collapse', function (this: Sidebar, wrapped: Function) {
-			Hooks.callAll('collapseSidebarPre', this, !this._collapsed);
-			wrapped();
-		}, 'WRAPPER');
+		libWrapper.register(ARCHITECT.MOD_NAME, 'Sidebar.prototype.expand',
+			/**
+			 * @this {Sidebar}
+			 * @param {Function} wrapped
+			 */
+			function (wrapped) {
+				Hooks.callAll('collapseSidebarPre', this, !this._collapsed);
+				wrapped();
+			}, 'WRAPPER');
+		libWrapper.register(ARCHITECT.MOD_NAME, 'Sidebar.prototype.collapse',
+			/**
+			 * @this {Sidebar}
+			 * @param {Function} wrapped
+			 */
+			function (wrapped) {
+				Hooks.callAll('collapseSidebarPre', this, !this._collapsed);
+				wrapped();
+			}, 'WRAPPER');
 	}
 
-	constructor(count: number, label: string) {
+	/**
+	 * @param {number} count
+	 * @param {string} label
+	 */
+	constructor(count, label) {
 		super();
-		this._count = count;
+		this.#_count = count;
 		this.label = label;
 	}
 
-	get count(): number {
-		return this._count;
+	/**@type {number}*/
+	get count() {
+		return this.#_count;
 	}
-	set count(value: number) {
-		this._count = value;
+	set count(value) {
+		this.#_count = value;
 		this.element.find('#count').val(value);
 	}
-	get label(): string {
-		return this._label;
+	/**@type {string}*/
+	get label() {
+		return this.#_label;
 	}
-	set label(value: string) {
-		this._label = value;
+	set label(value) {
+		this.#_label = value;
 		this.element.find('#label').val(value);
 	}
-	get hint(): string {
-		return this._hint;
+	/**@type {string}*/
+	get hint() {
+		return this.#_hint;
 	}
-	set hint(value: string) {
-		this._hint = value;
+	set hint(value) {
+		this.#_hint = value;
 	}
 
-	getData(options?: any): any {
+	/**@param {*} [options]*/
+	getData(options) {
 		return {
-			count: this._count,
-			label: this._label
+			count: this.#_count,
+			label: this.#_label
 		};
 	}
 
-	_injectHTML(html: JQuery) {
+	/**@param {JQuery<HTMLElement>} html*/
+	_injectHTML(html) {
 		document.body.appendChild(html[0]);
 		this._element = html;
 		const width = html[0].offsetWidth;
@@ -76,10 +96,15 @@ export default class CounterUI extends Application {
 		});
 	}
 
-	async _render(force = false, options = {}): Promise<void> {
-		Hooks.on('collapseSidebarPre', this._handleSidebarCollapse.bind(this));
+	/**
+	 * @param {boolean} force
+	 * @param {object} [options]
+	 * @returns {Promise<void>}
+	 */
+	async _render(force = false, options = {}) {
+		Hooks.on('collapseSidebarPre', this.#_handleSidebarCollapse.bind(this));
 		await super._render(force, options);
-		if ((<any>ui.sidebar)._collapsed) {
+		if (ui.sidebar._collapsed) {
 			this.element.css('right', '35px');
 		}
 
@@ -87,7 +112,7 @@ export default class CounterUI extends Application {
 		 * This catches if the FPS Meter module is enabled and displaying its counter
 		 */
 		if (game.modules.get('fpsmeter')?.active) {
-			const fpsCounter = document.querySelector<HTMLElement>('div.fpsCounter');
+			const fpsCounter = document.querySelector < HTMLElement > ('div.fpsCounter');
 			const fpsT = fpsCounter.offsetTop;
 			const fpsB = fpsT + fpsCounter.offsetHeight;
 			const cuiT = this.element[0].offsetTop - 5; // Add a 5px margin to the top
@@ -109,25 +134,29 @@ export default class CounterUI extends Application {
 		}
 
 		// Add listener for activating the tooltip
-		this.element.on('pointerenter', (e: any) => ((<any>game).tooltip as TooltipManager).activate(e.target, { text: this._hint, direction: "LEFT" }));
+		this.element.on('pointerenter', e => /**@type {TooltipManager}*/(game.tooltip).activate(e.target, { text: this.#_hint, direction: "LEFT" }));
 	}
 
-	close(options: Application.CloseOptions = {}): Promise<void> {
-		Hooks.off('collapseSidebarPre', this._handleSidebarCollapse.bind(this));
+	/**
+	 * @param {object} [options]
+	 * @returns {Promise<void>}
+	 */
+	close(options = {}) {
+		Hooks.off('collapseSidebarPre', this.#_handleSidebarCollapse.bind(this));
 		/**********************************/
 		/****** COPIED FROM FOUNDRY *******/
 		/**********************************/
 		const states = Application.RENDER_STATES;
-		if (!options.force && ![states.RENDERED, states.ERROR].includes(<any>this._state)) return undefined;
+		if (!options.force && ![states.RENDERED, states.ERROR].includes(this._state)) return undefined;
 		this._state = states.CLOSING;
 
 		// Get the element
 		let el = this.element;
-		if (!el) return <any>(this._state = states.CLOSED);
+		if (!el) return (this._state = states.CLOSED);
 		el.css({ minHeight: 0 });
 
 		// Dispatch Hooks for closing the base and subclass applications
-		for (let cls of (<any>this.constructor)._getInheritanceChain()) {
+		for (let cls of this.constructor._getInheritanceChain()) {
 
 			/**
 			 * A hook event that fires whenever this Application is closed.
@@ -143,7 +172,7 @@ export default class CounterUI extends Application {
 		/**********************************/
 
 		// Animate closing the element
-		return new Promise<void>(resolve => {
+		return new Promise(resolve => {
 			el.animate({
 				padding: '.5em 0',
 				width: '0'
@@ -160,7 +189,11 @@ export default class CounterUI extends Application {
 		});
 	}
 
-	private _handleSidebarCollapse(sideBar: Sidebar, collapsed: boolean) {
+	/**
+	 * @param {Sidebar} sideBar
+	 * @param {boolean} collapsed
+	 */
+	#_handleSidebarCollapse(sideBar, collapsed) {
 		if (collapsed) {
 			this.element.delay(250).animate({ right: '35px' }, 150);
 		} else {

@@ -32,7 +32,7 @@ export default class WallChangeType {
 				await (<Canvas>canvas).walls.controlled[0].document.update(wallData);
 				return;
 			}
-			const updateData = canvas.walls.controlled.map(it => mergeObject({ _id: it.document._id }, wallData));
+			const updateData = canvas.walls.controlled.map(it => foundry.utils.mergeObject({ _id: it.document._id }, wallData));
 			await canvas.scene.updateEmbeddedDocuments("Wall", <any[]>updateData);
 			canvas.walls.controlled.forEach(x => x.refresh());
 		}, 'WRAPPER');

@@ -37,10 +37,10 @@ export default class WallJoinSplit {
 			var midY = (y1 + y2) / 2;
 			//@ts-expect-error
 			[midX, midY] = layer._getWallEndpointCoordinates(new PIXI.Point(midX, midY), {snap:false});
-			const wall1 = duplicate(wall.document._source) as WallData;
+			const wall1 = foundry.utils.duplicate(wall.document._source) as WallData;
 			wall1.c = [x1, y1, midX, midY];
 			delete wall1._id;
-			const wall2 = duplicate(wall.document._source) as WallData;
+			const wall2 = foundry.utils.duplicate(wall.document._source) as WallData;
 			wall2.c = [midX, midY, x2, y2];
 			delete wall2._id;
 			newWalls.push(wall1, wall2)
@@ -70,7 +70,7 @@ export default class WallJoinSplit {
 			return;
 		}
 		const endpoints = [...points.entries()].filter(x => x[1].length == 1);
-		const wallData = duplicate(endpoints[0][1][0].document._source) as WallData;
+		const wallData = foundry.utils.duplicate(endpoints[0][1][0].document._source) as WallData;
 		delete wallData._id;
 		wallData.c = endpoints.reduce((r, x) => r.concat(JSON.parse(x[0])), [] as number[]) as [number, number, number, number];
 		await game.scenes.viewed.deleteEmbeddedDocuments('Wall', walls.map(x => x.id));

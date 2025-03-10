@@ -169,7 +169,7 @@ ${'DF_ARCHITECT.LightTemplate.CreateTemplateButton.LightConfig'.localize()}
 			html.find('footer.sheet-footer').prepend(extraButton);
 			extraButton.on('click', (event) => {
 				event.preventDefault();
-				this._createTemplate(duplicate((<AmbientLightDocument>app.object).data) as Partial<AmbientLightData>);
+				this._createTemplate(foundry.utils.duplicate((<AmbientLightDocument>app.object).data) as Partial<AmbientLightData>);
 			});
 		}
 		// Show/Hide the create template button depending on which tab is selected
@@ -219,7 +219,7 @@ ${'DF_ARCHITECT.LightTemplate.CreateTemplateButton.LightConfig'.localize()}
 	}
 
 	/**
-	 * Unfortunately, by the design of this core function, I must duplicate the
+	 * Unfortunately, by the design of this core function, I must foundry.utils.duplicate the
 	 * Foundry Core code here in order to add a custom option.
 	 */
 	private static _getEntryContextOptions(): ContextMenuEntry[] {
@@ -342,7 +342,7 @@ export class LightingLayerOverride {
 		if (templateData === null || !event.data.originalEvent.ctrlKey)
 			return wrapper(event);
 		const origin: { x: number, y: number } = (<any>event.data).origin;
-		canvas.scene.createEmbeddedDocuments(AmbientLight.embeddedName, [mergeObject(templateData, { x: origin.x, y: origin.y }) as any], {});
+		canvas.scene.createEmbeddedDocuments(AmbientLight.embeddedName, [foundry.utils.mergeObject(templateData, { x: origin.x, y: origin.y }) as any], {});
 	}
 
 	static _onClickRight(this: LightingLayer, wrapper: Function, event: PIXI.InteractionEvent) {
@@ -360,7 +360,7 @@ export class LightingLayerOverride {
 			return wrapper(event);
 		const origin: { x: number, y: number } = (<any>event.data).origin;
 		// Create the preview source
-		const doc = new AmbientLightDocument(mergeObject(templateData, { x: origin.x, y: origin.y, dim: 0, bright: 0 }), { parent: canvas.scene });
+		const doc = new AmbientLightDocument(foundry.utils.mergeObject(templateData, { x: origin.x, y: origin.y, dim: 0, bright: 0 }), { parent: canvas.scene });
 		const preview = new AmbientLight(doc);
 		(<any>event.data).preview = this.preview.addChild(preview);
 		canvas.effects.lightSources.set(preview.sourceId, preview.source);

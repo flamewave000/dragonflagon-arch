@@ -87,7 +87,7 @@ export default class CaptureGameScreen {
 	private static _openCVPromise: Promise<void> = null;
 
 	static getLayerState(key: string): LayerFilter {
-		return <LayerFilter>duplicate(this._layerFilters[key]);
+		return <LayerFilter>foundry.utils.duplicate(this._layerFilters[key]);
 	}
 	private static _getDialogLayerFilter(key: string): LayerFilter {
 		if (!this._dialogLayerFilters[key])
@@ -151,7 +151,7 @@ export default class CaptureGameScreen {
 				active: name !== 'notes' ? layer._active : layer._active || game.settings.get("core", (<any>layer.constructor).TOGGLE_SETTING),
 				hasControls: this.LayersWithInvisiblePlaceables.includes(name),
 				hasHidden: this.LayersWithHiddenPlaceables.includes(name),
-				filter: mergeObject({ s: true, h: false, c: false }, this._getDialogLayerFilter(name))
+				filter: foundry.utils.mergeObject({ s: true, h: false, c: false }, this._getDialogLayerFilter(name))
 			}
 		};
 		const data = {
