@@ -1,32 +1,41 @@
+/// <reference path="../../fvtt-scripts/foundry.js" />
 import ARCHITECT from "../core/architect.mjs";
 import SETTINGS from "../core/settings.mjs";
 
 
 export default class AltLightOrigin {
-	private static readonly LIGHTING_LAYER = 'lighting';
-	private static readonly KEYEVENT_UP = 'keyup';
-	private static readonly KEYEVENT_DOWN = 'keydown';
-	static readonly PREF_COLOUR1 = 'AltLightOrigin.Colour1';
-	static readonly PREF_COLOUR2 = 'AltLightOrigin.Colour2';
-	private static _showCrosshairs = false;
-	static get showCrosshairs() { return this._showCrosshairs; }
-	private static _alternateColour = false;
-	static get alternateColour() { return this._alternateColour; }
+	/**@readonly*/static #LIGHTING_LAYER = 'lighting';
+	/**@readonly*/static #KEYEVENT_UP = 'keyup';
+	/**@readonly*/static #KEYEVENT_DOWN = 'keydown';
+	/**@readonly*/static PREF_COLOUR1 = 'AltLightOrigin.Colour1';
+	/**@readonly*/static PREF_COLOUR2 = 'AltLightOrigin.Colour2';
+	static #showCrosshairs = false;
+	static get showCrosshairs() { return this.#showCrosshairs; }
+	static #alternateColour = false;
+	static get alternateColour() { return this.#alternateColour; }
 
-	private static _controls: Set<AltLightControlIcon> = new Set();
-	static register(control: AltLightControlIcon) {
-		this._controls.add(control);
+	/**@type {Set<AltLightControlIcon>}*/
+	static #controls = new Set();
+	/**@param {AltLightControlIcon} control*/
+	static register(control) {
+		this.#controls.add(control);
 	}
-	static deregister(control: AltLightControlIcon) {
-		this._controls.delete(control);
+	/**@param {AltLightControlIcon} control*/
+	static deregister(control) {
+		this.#controls.delete(control);
 	}
 	static init() {
-		libWrapper.register(ARCHITECT.MOD_NAME, 'AmbientLight.prototype._drawControlIcon', () => {
-			const size = Math.max(Math.round(((<Canvas>canvas).dimensions.size * 0.5) / 20) * 20, 40);
+		libWrapper.register(ARCHITECT.MOD_NAME, 'AmbientLight.prototype._draw', function () {
+			this.field = this.addChild(new PIXI.Graphics());
+			this.field.eventMode = "none";
+
+			const size = Math.max(Math.round((canvas.dimensions.size * 0.5) / 20) * 20, 40);
 			let icon = new AltLightControlIcon({ texture: CONFIG.controlIcons.light, size: size });
 			icon.x -= (size * 0.5);
 			icon.y -= (size * 0.5);
-			return icon;
+			this.controlIcon = this.addChild(icon);
+
+			this.initializeLightSource();
 		}, 'OVERRIDE');
 	}
 	static ready() {
@@ -49,40 +58,38 @@ export default class AltLightOrigin {
 			scope: "world",
 		});
 
-		Hooks.on('renderSceneControls', (controls: SceneControls) => {
-			if (controls.activeControl === AltLightOrigin.LIGHTING_LAYER) {
-				window.addEventListener(AltLightOrigin.KEYEVENT_DOWN, this._keyEventHandler.bind(this));
-				window.addEventListener(AltLightOrigin.KEYEVENT_UP, this._keyEventHandler.bind(this));
+		Hooks.on('renderSceneControls', (/**@type {SceneControls}*/controls) => {
+			if (controls.activeControl === AltLightOrigin.#LIGHTING_LAYER) {
+				window.addEventListener(AltLightOrigin.#KEYEVENT_DOWN, this.#_keyEventHandler.bind(this));
+				window.addEventListener(AltLightOrigin.#KEYEVENT_UP, this.#_keyEventHandler.bind(this));
 			}
 			else {
-				window.removeEventListener(AltLightOrigin.KEYEVENT_DOWN, this._keyEventHandler.bind(this));
-				window.removeEventListener(AltLightOrigin.KEYEVENT_UP, this._keyEventHandler.bind(this));
+				window.removeEventListener(AltLightOrigin.#KEYEVENT_DOWN, this.#_keyEventHandler.bind(this));
+				window.removeEventListener(AltLightOrigin.#KEYEVENT_UP, this.#_keyEventHandler.bind(this));
 			}
 		});
 	}
 
-	private static _keyEventHandler(event: KeyboardEvent) {
+	/**@param {KeyboardEvent} event*/
+	static #_keyEventHandler(event) {
 		if (event.repeat
 			|| (event.code !== 'ShiftLeft'
 				&& event.code !== 'ShiftRight'
 				&& event.code !== 'AltLeft'
 				&& event.code !== 'AltRight')) return;
-		this._showCrosshairs = event.shiftKey;
-		this._alternateColour = event.altKey;
-		this._controls.forEach(x => x.draw());
+		this.#showCrosshairs = event.shiftKey;
+		this.#alternateColour = event.altKey;
+		this.#controls.forEach(x => x.draw());
 	}
 }
 class AltLightControlIcon extends ControlIcon {
+	state = 0;
+	/**@param { {texture:string,size?:number,borderColor?:number,tint?:number|null} } param0*/
 	constructor({
 		texture,
 		size = 40,
 		borderColor = 0xFF5500,
 		tint = null
-	}: {
-		texture: string;
-		size?: number;
-		borderColor?: number;
-		tint?: number | null;
 	}) {
 		super({ texture, size, borderColor, tint });
 		AltLightOrigin.register(this);
@@ -92,44 +99,57 @@ class AltLightControlIcon extends ControlIcon {
 		if (!AltLightOrigin.showCrosshairs) {
 			this.icon.alpha = 1;
 			if (!this.icon.texture) return this;
+			if (this.state != 0) {
+				this.state = 0;
+				this.bg.clear().beginFill(0x000000, 0.4).lineStyle(2, 0x000000, 1.0).drawRoundedRect(...this.rect, 5).endFill();
+			}
 			return super.draw();
 		}
+		if (this.state == 1 && !AltLightOrigin.alternateColour && AltLightOrigin.showCrosshairs) return this;
+		if (this.state == 2 && AltLightOrigin.alternateColour && AltLightOrigin.showCrosshairs) return this;
+
 		this.icon.alpha = 0;
 		// Draw border
 		this.border.clear().lineStyle(2, this.borderColor, 1.0).drawRoundedRect(...this.rect, 5).endFill();
 		this.border.visible = false;
-		const parseColour = (colorStr: string) => {
-			if (colorStr.startsWith('#')) colorStr = colorStr.substr(1);
-			if (colorStr.length === 8) colorStr = colorStr.substr(0, 6);
-			return parseInt('0x' + colorStr);
-		}
 
-		// Draw icon
-		var colour = parseColour(SETTINGS.get<string>(AltLightOrigin.alternateColour ? AltLightOrigin.PREF_COLOUR2 : AltLightOrigin.PREF_COLOUR1));
-		if (isNaN(colour))
-			colour = parseColour(SETTINGS.default(AltLightOrigin.alternateColour ? AltLightOrigin.PREF_COLOUR2 : AltLightOrigin.PREF_COLOUR1));
-		this.bg.clear()
-			.lineStyle(1, colour, 1.0)
-			.moveTo(this.rect[0]-1, this.rect[1]-1)
-			.lineTo(this.rect[2]-1, this.rect[3]-1)
-			.moveTo(this.rect[2]-1, this.rect[1]-1)
-			.lineTo(this.rect[0]-1, this.rect[3]-1)
-			.lineStyle(2, colour, 1.0)
-			.drawEllipse(
-				this.rect[0] + (this.rect[2] / 2),
-				this.rect[1] + (this.rect[3] / 2),
-				this.rect[2] / 2,
-				this.rect[3] / 2
-			)
-			.endFill();
+		if (!AltLightOrigin.alternateColour && this.state != 1 || AltLightOrigin.alternateColour && this.state != 2) {
+			this.state = AltLightOrigin.alternateColour ? 2 : 1;
+			// Draw icon
+			const colorstr = AltLightOrigin.alternateColour ? AltLightOrigin.PREF_COLOUR2 : AltLightOrigin.PREF_COLOUR1;
+			var colour = this.#parseColour(SETTINGS.get(colorstr));
+			if (isNaN(colour))
+				colour = this.#parseColour(SETTINGS.default(colorstr));
+			this.bg.clear()
+				.lineStyle(1, colour, 1.0)
+				.moveTo(this.rect[0] - 1, this.rect[1] - 1)
+				.lineTo(this.rect[2] - 1, this.rect[3] - 1)
+				.moveTo(this.rect[2] - 1, this.rect[1] - 1)
+				.lineTo(this.rect[0] - 1, this.rect[3] - 1)
+				.lineStyle(2, colour, 1.0)
+				.drawEllipse(
+					this.rect[0] + (this.rect[2] / 2),
+					this.rect[1] + (this.rect[3] / 2),
+					this.rect[2] / 2,
+					this.rect[3] / 2
+				)
+				.endFill();
+		}
 		return this;
 	}
-	destroy(options?: {
-		children?: boolean;
-		texture?: boolean;
-		baseTexture?: boolean;
-	}) {
-		super.destroy(options);
+	/**@param { {children?:boolean,texture?:boolean,baseTexture?:boolean} } [options]*/
+	destroy(options) {
 		AltLightOrigin.deregister(this);
+		super.destroy(options);
+	}
+
+	/**
+	 * @param {string} colorStr
+	 * @returns {number}
+	 */
+	#parseColour(/**@type {string}*/colorStr) {
+		if (colorStr.startsWith('#')) colorStr = colorStr.substr(1);
+		if (colorStr.length === 8) colorStr = colorStr.substr(0, 6);
+		return parseInt('0x' + colorStr);
 	}
 }

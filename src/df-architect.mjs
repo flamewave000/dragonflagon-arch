@@ -9,7 +9,7 @@ import AltGridSnap from './general/AltGridSnap.mjs';
 // import WallCtrlInvert from './walls/WallCtrlInvert.mjs';
 // import WallShortcuts from './walls/WallShortcuts.mjs';
 // import WallJoinSplit from './walls/WallJoinSplit.mjs';
-// import AltLightOrigin from './lights/AltLightOrigin.mjs';
+import AltLightOrigin from './lights/AltLightOrigin.mjs';
 // import { QuickColourPicker } from './general/QuickColourPicker.mjs';
 // import CaptureGameScreen from './general/CaptureGameScreen.mjs';
 // import { LightTemplateManager, LightingLayerOverride } from './lights/LightTemplate.mjs';
@@ -44,7 +44,7 @@ Hooks.once('init', function () {
 	// try { WallGapFiller.init() } catch (error) { console.error(error) }
 	// try { WallAltDrop.init() } catch (error) { console.error(error) }
 	// try { WallDirections.init() } catch (error) { console.error(error) }
-	// try { AltLightOrigin.init() } catch (error) { console.error(error) }
+	try { AltLightOrigin.init() } catch (error) { console.error(error) }
 	// try { CaptureGameScreen.init() } catch (error) { console.error(error) }
 	// try { LightTemplateManager.init() } catch (error) { console.error(error) }
 	// try { TileFlattener.init() } catch (error) { console.error(error) }
@@ -89,7 +89,7 @@ Hooks.once('ready', async function () {
 	// try { WallGapFiller.ready() } catch (error) { console.error(error) }
 	// try { WallAltDrop.ready() } catch (error) { console.error(error) }
 	// try { WallDirections.ready() } catch (error) { console.error(error) }
-	// try { AltLightOrigin.ready() } catch (error) { console.error(error) }
+	try { AltLightOrigin.ready() } catch (error) { console.error(error) }
 	// try { QuickColourPicker.ready() } catch (error) { console.error(error) }
 	// try { AltLightInverted.ready() } catch (error) { console.error(error) }
 	// try { LightTemplateManager.ready() } catch (error) { console.error(error) }
