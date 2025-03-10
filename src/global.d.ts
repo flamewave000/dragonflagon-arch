@@ -1,5 +1,7 @@
 import * as globalFoundry from '../fvtt-scripts/foundry-esm';
 import * as globalPIXI from 'pixi.js';
+import "./types/libWrapper";
+import "./types/TooltipManager";
 
 
 declare global {
@@ -15,6 +17,9 @@ declare global {
 	}
 	interface Indexable<V> {
 		[key: string]: V
+	}
+	interface SquareGrid {
+		_DFArch_getSnappedPosition(x: number, y: number, interval: number | null): { x: number; y: number }
 	}
 }
 

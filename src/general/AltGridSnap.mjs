@@ -1,16 +1,12 @@
+/// <reference path="../../fvtt-scripts/foundry.js" />
+/// <reference path="../global.d.ts" />
 import ARCHITECT from "../core/architect.mjs";
 import SETTINGS from "../core/settings.mjs";
 
-declare global {
-	interface SquareGrid {
-		_DFArch_getSnappedPosition(x: number, y: number, interval: number | null): { x: number; y: number }
-	}
-}
-
 export default class AltGridSnap {
-	static readonly PREF_ENABLED = 'AltGridSnap.Enabled';
-	static readonly PREF_TOGGLED = 'AltGridSnap.Toggled';
-	static readonly PREF_PLACE_ON_CONTROL_BAR = 'AltGridSnap.PlaceOnControlBar';
+	/**@readonly*/static PREF_ENABLED = 'AltGridSnap.Enabled';
+	/**@readonly*/static PREF_TOGGLED = 'AltGridSnap.Toggled';
+	/**@readonly*/static PREF_PLACE_ON_CONTROL_BAR = 'AltGridSnap.PlaceOnControlBar';
 
 	static init() {
 		SETTINGS.register(AltGridSnap.PREF_TOGGLED, {
@@ -18,13 +14,13 @@ export default class AltGridSnap {
 			config: false,
 			type: Boolean,
 			default: false,
-			onChange: (value: Boolean) => {
+			onChange: value => {
 				if (SETTINGS.get(AltGridSnap.PREF_PLACE_ON_CONTROL_BAR)) {
 					const button = $('ol#controls>li#df-arch-altSnap');
 					if (value) button.addClass('active');
 					else button.removeClass('active');
 				} else {
-					ui.controls.control.tools.find(t => t.name === 'altSnap').active = <boolean>value;
+					ui.controls.control.tools.find(t => t.name === 'altSnap').active = value;
 					ui.controls.render();
 				}
 			}
@@ -36,7 +32,7 @@ export default class AltGridSnap {
 			hint: 'DF_ARCHITECT.AltGridSnap.Setting.EnabledHint',
 			type: Boolean,
 			default: false,
-			onChange: () => { this._patchSquareGrid(); ui.controls.initialize() }
+			onChange: () => { this.#_patchSquareGrid(); ui.controls.initialize() }
 		});
 		SETTINGS.register(AltGridSnap.PREF_PLACE_ON_CONTROL_BAR, {
 			scope: 'world',
@@ -60,9 +56,9 @@ export default class AltGridSnap {
 		});
 
 		if (this.enabled)
-			this._patchSquareGrid();
+			this.#_patchSquareGrid();
 
-		Hooks.on('getSceneControlButtons', (controls: SceneControl[]) => {
+		Hooks.on('getSceneControlButtons', (/**@type {SceneControl[]}*/ controls) => {
 			if (!this.enabled) return;
 			if (SETTINGS.get(AltGridSnap.PREF_PLACE_ON_CONTROL_BAR)) return;
 			const isGM = game.user.isGM;
@@ -75,54 +71,73 @@ export default class AltGridSnap {
 					visible: isGM,
 					toggle: true,
 					active: enabled,
-					onClick: (toggled: boolean) => this.toggled = toggled
+					onClick: toggled => this.toggled = toggled
 				});
 			}
 		});
-		Hooks.on('renderSceneControls', (app: SceneControls, html: JQuery<HTMLElement>, data: any) => {
-			if (!SETTINGS.get(AltGridSnap.PREF_PLACE_ON_CONTROL_BAR)) return;
-			const button = $(`
+		Hooks.on('renderSceneControls',
+			/**
+			 * @param {SceneControls} _app
+			 * @param {JQuery<HTMLElement>} html
+			 * @param {any} [_data]
+			 */
+			(_app, html, _data) => {
+				if (!SETTINGS.get(AltGridSnap.PREF_PLACE_ON_CONTROL_BAR)) return;
+				const button = $(`
 <li class="scene-control toggle" id="df-arch-altSnap" style="line-height:0" title="${'DF_ARCHITECT.AltGridSnap.Label'.localize()}">
 	<i class="df df-alt-snap"></i>
 </li>`);
-			button.on('click', () => {
-				if (button.hasClass('active')) {
-					this.toggled = false;
-					button.removeClass('active');
-				} else {
-					this.toggled = true;
-					button.addClass('active');
-				}
+				button.on('click', () => {
+					if (button.hasClass('active')) {
+						this.toggled = false;
+						button.removeClass('active');
+					} else {
+						this.toggled = true;
+						button.addClass('active');
+					}
+				});
+				if (this.toggled) button.addClass('active');
+				html.find('.main-controls').append(button);
 			});
-			if (this.toggled) button.addClass('active');
-			html.find('.main-controls').append(button);
-		});
 	}
 
-	static get enabled(): boolean {
+	/**@type {boolean}*/
+	static get enabled() {
 		return SETTINGS.get(AltGridSnap.PREF_ENABLED);
 	}
-	static get toggled(): boolean {
+	/**@type {boolean}*/
+	static get toggled() {
 		return SETTINGS.get(AltGridSnap.PREF_TOGGLED);
 	}
-	static set toggled(value: boolean) {
+	static set toggled(value) {
 		SETTINGS.set(AltGridSnap.PREF_TOGGLED, value);
 	}
 
-	private static _patchSquareGrid() {
+	static #_patchSquareGrid() {
 		if (this.enabled)
-			libWrapper.register(ARCHITECT.MOD_NAME, 'SquareGrid.prototype.getSnappedPosition', this._SquareGrid_getSnappedPosition, 'WRAPPER');
+			libWrapper.register(ARCHITECT.MOD_NAME, 'SquareGrid.prototype.getSnappedPoint', this.#_SquareGrid_getSnappedPoint, 'WRAPPER');
 		else
-			libWrapper.unregister(ARCHITECT.MOD_NAME, 'SquareGrid.prototype.getSnappedPosition');
+			libWrapper.unregister(ARCHITECT.MOD_NAME, 'SquareGrid.prototype.getSnappedPoint');
 	}
 
-	private static _SquareGrid_getSnappedPosition(wrapped: Function, x: number, y: number, interval: number | null): { x: number; y: number } {
+	/**
+	 * @param {(...args: any) => any} wrapped
+	 * @param {number} x
+	 * @param {number} y
+	 * @param {number|null} interval
+	 * @returns { {x: number, y: number} }
+	 */
+	static #_SquareGrid_getSnappedPoint(wrapped, point, { mode, resolution = 1 }) {
 		if (AltGridSnap.enabled && AltGridSnap.toggled) {
-			if (!interval) interval = 1;
-			const altGs = (canvas as Canvas).dimensions.size / (interval * 2);
-			const result = wrapped(x - altGs, y - altGs, interval);
+			const M = CONST.GRID_SNAPPING_MODES;
+			let altGs = 0;
+			if (mode & M.CENTER && (mode & M.VERTEX || mode & M.CORNER) && mode & M.SIDE_MIDPOINT)
+				altGs = /**@type {Canvas}*/(canvas).dimensions.size / (4 * resolution);
+			else
+				altGs = /**@type {Canvas}*/(canvas).dimensions.size / (2 * resolution);
+			const result = wrapped({ x: point.x - altGs, y: point.y - altGs }, { mode, resolution });
 			return { x: result.x + altGs, y: result.y + altGs };
 		}
-		return wrapped(x, y, interval);
+		return wrapped(point, { mode, resolution });
 	}
 }

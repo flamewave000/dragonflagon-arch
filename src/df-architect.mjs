@@ -5,7 +5,7 @@ SETTINGS.init(ARCHITECT.MOD_NAME);
 
 // import PIXIAppOverride from './general/PIXIAppOverride.mjs';
 // import LayerShortcuts from "./general/LayerShortcuts.mjs";
-// import AltGridSnap from './general/AltGridSnap.mjs';
+import AltGridSnap from './general/AltGridSnap.mjs';
 // import WallCtrlInvert from './walls/WallCtrlInvert.mjs';
 // import WallShortcuts from './walls/WallShortcuts.mjs';
 // import WallJoinSplit from './walls/WallJoinSplit.mjs';
@@ -34,9 +34,9 @@ Hooks.once('init', function () {
 
 	ARCHITECT.DrawArchitectGraphicToConsole();
 	try { DataMigration.init() } catch (error) { console.error(error) }
-	// // WARNING! ShowLayerControls needs to come before AltGridSnap
+	//! WARNING! ShowLayerControls needs to come before AltGridSnap
 	// try { ShowLayerControls.init() } catch (error) { console.error(error) }
-	// try { AltGridSnap.init() } catch (error) { console.error(error) }
+	try { AltGridSnap.init() } catch (error) { console.error(error) }
 	// try { LayerShortcuts.init() } catch (error) { console.error(error) }
 	// try { WallShortcuts.init() } catch (error) { console.error(error) }
 	// try { WallCtrlInvert.init() } catch (error) { console.error(error) }
@@ -95,8 +95,8 @@ Hooks.once('ready', async function () {
 	// try { LightTemplateManager.ready() } catch (error) { console.error(error) }
 	// try { LightingLayerOverride.ready() } catch (error) { console.error(error) }
 	// try { ShowLayerControls.ready() } catch (error) { console.error(error) }
-	// // WARNING: The *Counters need to go after ShowLayerControls so they don't
-	// // accidentally pick up the layer activations during initialization
+	//! WARNING: The *Counters need to go after ShowLayerControls so they don't
+	//! accidentally pick up the layer activations during initialization
 	// try { LightCounter.ready() } catch (error) { console.error(error) }
 	// try { WallsCounter.ready() } catch (error) { console.error(error) }
 	// try { TileCounter.ready() } catch (error) { console.error(error) }
