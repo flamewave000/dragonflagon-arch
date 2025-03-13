@@ -2,7 +2,7 @@
 	"id": "df-architect",
 	"title": "DF Architect",
 	"description": "Architect for FoundryVTT provides a major overhaul of the Walls and Lighting features, as well as a few extra fun things like the Colour Picker and Alternate Grid Snap.",
-	"version": "6.0.0",
+	"version": "5.0.0",
 	"authors": [ { "name": "flamewave000", "discord": "flamewave000", "url": "https://github.com/flamewave000" } ],
 	"compatibility": { "minimum": 12, "verified": 12.331 },
 	"relationships": {

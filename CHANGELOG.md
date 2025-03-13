@@ -3,6 +3,9 @@
 ## Release 5.0.0 (2025-03-10)
 - **UPDATE:** Migrated to v12.
 - **UPDATE:** Downgraded TS -> JS (such sad).
+- **UNAVAILABLE:** Light Templates: Will be available in subsequent release.
+- **UNAVAILABLE:** Gameboard Capture: May not be made available.
+- **UNAVAILABLE:** Tile Flattener: May not be made available.
 
 ## Release 4.0.0 (2022-10-01)
 - **NEW:** 90% of the core features have been migrated to V10. All but the Canvas Capture and Tile Flattener.

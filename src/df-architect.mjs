@@ -24,7 +24,7 @@ import WallsCounter from './walls/WallCounter.mjs';
 import TileCounter from './tiles/TileCounter.mjs';
 import SoundCounter from './sounds/SoundCounter.mjs';
 import ShowLayerControls from './general/ShowLayerControls.mjs';
-// import TileConfigExt from './tiles/TileConfigExt.mjs';
+import TileConfigExt from './tiles/TileConfigExt.mjs';
 import CounterUI from './core/CounterUI.mjs';
 import WallGapFiller from './walls/WallGapFiller.mjs';
 
@@ -48,7 +48,7 @@ Hooks.once('init', function () {
 	// try { CaptureGameScreen.init() } catch (error) { console.error(error) }
 	// try { LightTemplateManager.init() } catch (error) { console.error(error) }
 	// try { TileFlattener.init() } catch (error) { console.error(error) }
-	// try { TileConfigExt.init() } catch (error) { console.error(error) }
+	try { TileConfigExt.init() } catch (error) { console.error(error) }
 	try { CounterUI.init() } catch (error) { console.error(error) }
 
 	SETTINGS.register('General.ShowCounters', {

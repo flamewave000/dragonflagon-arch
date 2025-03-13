@@ -44,8 +44,8 @@ i.df.df-alt-split {
 	img,
 	video {
 		flex: 0 0;
-		width: 100px;
-		height: 100px;
+		max-width: 200px;
+		max-height: 100px;
 		object-fit: contain;
 	}
 	output {

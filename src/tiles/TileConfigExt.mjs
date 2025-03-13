@@ -1,7 +1,13 @@
-import { TileData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs";
+/// <reference path="../../fvtt-scripts/foundry.js" />
 import SETTINGS from "../core/settings.mjs";
 
-function reduce(numerator: number, denominator: number) {
+/**
+ * Reduce a fraction to minimum denominator
+ * @param {number} numerator
+ * @param {number} denominator
+ * @returns {[number, number]}
+ */
+function reduce(numerator, denominator) {
 	var a = numerator;
 	var b = denominator;
 	var c;
@@ -12,15 +18,15 @@ function reduce(numerator: number, denominator: number) {
 }
 
 export default class TileConfigExt {
-	private static readonly PREF_SHOW_CONTROLS = 'TileConfigExt.ShowControls';
-	private static _previewImageHTML = `<section class="df-arch-tile-config">
+	/**@readonly*/static #PREF_SHOW_CONTROLS = 'TileConfigExt.ShowControls';
+	static #previewImageHTML = `<section class="df-arch-tile-config">
 	<img id="img-preview" style="display: none;">
 	<video id="anim-preview" style="display: none;" autoplay muted loop></video>
 	<output id="img-data" />
 </section>`;
 
 	static init() {
-		SETTINGS.register(this.PREF_SHOW_CONTROLS, {
+		SETTINGS.register(this.#PREF_SHOW_CONTROLS, {
 			name: 'DF_ARCHITECT.TileConfigExt.SettingControlsName',
 			hint: 'DF_ARCHITECT.TileConfigExt.SettingControlsHint',
 			config: true,
@@ -28,52 +34,58 @@ export default class TileConfigExt {
 			type: Boolean,
 			default: true
 		});
-		Hooks.on('renderTileConfig', this.updateTileConfig.bind(this));
+		Hooks.on('renderTileConfig', this.#updateTileConfig.bind(this));
 	}
 
-	private static updateTileConfig(config: TileConfig, html: JQuery<HTMLElement>, data: TileData) {
+	/**
+	 * @param {TileConfig} config
+	 * @param {JQuery<HTMLElement>} html
+	 * @param {TileDocument} data
+	 */
+	static #updateTileConfig(config, html, data) {
 		// Update the image preview
-		const imgInput = html.find('input[name="texture.src"]');
-		imgInput.parent().parent().before($(this._previewImageHTML));
-		imgInput.on('change', () => this.updateImagePreview(config));
-		this.updateImagePreview(config);
+		const imgInput = html.find('file-picker[name="texture.src"]');
+		imgInput.parent().parent().before($(this.#previewImageHTML));
+		imgInput.on('change', () => this.#updateImagePreview(config));
+		this.#updateImagePreview(config);
 		// Add the ratio scale buttons
 		const horTitle = 'Scale the width to the aspect ratio relative to the current height'.localize();
 		const verTitle = 'Scale the height to the aspect ratio relative to the current width'.localize();
 		const width = html.find('input[name="width"]');
 		const height = html.find('input[name="height"]');
-		width.after($(`<button class="df-arch-scale" title="${horTitle}"><i class="fas fa-arrows-alt-h"></i></button>`)
+		width.after($(`<button class="df-arch-scale" data-tooltip="${horTitle}"><i class="fas fa-arrows-alt-h"></i></button>`)
 			.on('click', e => {
 				e.preventDefault();
-				const ratio = (<any>config).ratio.num / (<any>config).ratio.den;
-				width.val(Math.round(parseInt(height.val() as string) * ratio))
+				const ratio = config.ratio.num / config.ratio.den;
+				width.val(Math.round(parseInt(height.val()) * ratio))
 					.trigger('change');
 			}));
-		height.after($(`<button class="df-arch-scale" title="${verTitle}"><i class="fas fa-arrows-alt-v"></i></button>`)
+		height.after($(`<button class="df-arch-scale" data-tooltip="${verTitle}"><i class="fas fa-arrows-alt-v"></i></button>`)
 			.on('click', e => {
 				e.preventDefault();
-				const ratio = (<any>config).ratio.num / (<any>config).ratio.den;
-				height.val(Math.round(parseInt(width.val() as string) / ratio))
+				const ratio = config.ratio.num / config.ratio.den;
+				height.val(Math.round(parseInt(width.val()) / ratio))
 					.trigger('change');
 			}));
-		config.setPosition({ left: (<Application.Position>config.position).left, top: (<Application.Position>config.position).top });
+		config.setPosition({ left: config.position.left, top: config.position.top });
 	}
 
-	private static updateImagePreview(config: TileConfig) {
-		if (config.element.find('input[name="img"]').val() === "") return;
+	/**@param {TileConfig} config*/
+	static #updateImagePreview(config) {
+		if (config.element.find('file-picker[name="texture.src"]').val() === "") return;
 		const labelDimens = 'DF_ARCHITECT.TileConfigExt.LabelDimens'.localize();
 		const labelAspect = 'DF_ARCHITECT.TileConfigExt.LabelAspect'.localize();
-		const imgPreview = config.element.find('#img-preview')[0] as HTMLImageElement;
-		const animPreview = config.element.find('#anim-preview')[0] as HTMLVideoElement;
-		const info = config.element.find('#img-data')[0] as HTMLOutputElement;
-		const source = config.element.find('input[name="texture.src"]').val() as string;
+		/**@type  {HTMLImageElement}*/const imgPreview = config.element.find('#img-preview')[0];
+		/**@type  {HTMLVideoElement}*/const animPreview = config.element.find('#anim-preview')[0];
+		/**@type {HTMLOutputElement}*/const info = config.element.find('#img-data')[0];
+		/**@type            {string}*/const source = config.element.find('file-picker[name="texture.src"]').val();
 		if (VideoHelper.hasVideoExtension(source)) {
 			$(imgPreview).hide();
 			$(animPreview).show();
-			animPreview.controls = SETTINGS.get(this.PREF_SHOW_CONTROLS);
+			animPreview.controls = SETTINGS.get(this.#PREF_SHOW_CONTROLS);
 			animPreview.addEventListener('loadedmetadata', () => {
 				const [num, den] = reduce(animPreview.videoWidth, animPreview.videoHeight);
-				(<any>config).ratio = { num, den };
+				config.ratio = { num, den };
 				info.innerHTML = `<b>${labelDimens}</b><br>${animPreview.videoWidth}px x ${animPreview.videoHeight}px<br><br><b>${labelAspect}</b><br>${num}:${den}`;
 			});
 			animPreview.src = source;
@@ -85,8 +97,9 @@ export default class TileConfigExt {
 			const image = new Image();
 			image.onload = () => {
 				const [num, den] = reduce(image.width, image.height);
-				(<any>config).ratio = { num, den };
+				config.ratio = { num, den };
 				info.innerHTML = `<b>${labelDimens}</b><br>${image.width}px x ${image.height}px<br><br><b>${labelAspect}</b><br>${num}:${den}`;
+				requestAnimationFrame(() => config.setPosition({}));
 			};
 			image.src = imgPreview.src;
 		}
