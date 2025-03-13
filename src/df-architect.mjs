@@ -8,7 +8,7 @@ import LayerShortcuts from "./general/LayerShortcuts.mjs";
 import AltGridSnap from './general/AltGridSnap.mjs';
 import WallCtrlInvert from './walls/WallCtrlInvert.mjs';
 import WallShortcuts from './walls/WallShortcuts.mjs';
-// import WallJoinSplit from './walls/WallJoinSplit.mjs';
+import WallJoinSplit from './walls/WallJoinSplit.mjs';
 import AltLightOrigin from './lights/AltLightOrigin.mjs';
 // import { QuickColourPicker } from './general/QuickColourPicker.mjs';
 // import CaptureGameScreen from './general/CaptureGameScreen.mjs';
@@ -40,7 +40,7 @@ Hooks.once('init', function () {
 	try { LayerShortcuts.init() } catch (error) { console.error(error) }
 	try { WallShortcuts.init() } catch (error) { console.error(error) }
 	try { WallCtrlInvert.init() } catch (error) { console.error(error) }
-	// try { WallJoinSplit.init() } catch (error) { console.error(error) }
+	try { WallJoinSplit.init() } catch (error) { console.error(error) }
 	// try { WallGapFiller.init() } catch (error) { console.error(error) }
 	try { WallAltDrop.init() } catch (error) { console.error(error) }
 	try { WallDirections.init() } catch (error) { console.error(error) }
