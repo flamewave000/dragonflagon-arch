@@ -2,7 +2,7 @@
 
 ![console-graphic](.assets/console-graphic.png)
 
-![v12 Progress](https://progress-bar.xyz/15/?scale=26&suffix=/26&title=FoundryVTT%20V12%20Progress&prefix=Features:%20&width=400&style=for-the-badge)
+![v12 Progress](https://progress-bar.xyz/16/?scale=26&suffix=/26&title=FoundryVTT%20V12%20Progress&prefix=Features:%20&width=400&style=for-the-badge)
 
 ![Forge Installs](https://img.shields.io/badge/dynamic/json?color=red&label=Forge%20Installs&query=package.installs&suffix=%25&url=https%3A%2F%2Fforge-vtt.com%2Fapi%2Fbazaar%2Fpackage%2Fdf-architect)
 ![Latest Version](https://img.shields.io/badge/dynamic/json?label=Latest%20Release&prefix=v&query=package.versions%5B0%5D&url=https%3A%2F%2Fforge-vtt.com%2Fapi%2Fbazaar%2Fpackage%2Fdf-architect)

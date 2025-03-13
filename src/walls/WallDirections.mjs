@@ -1,26 +1,29 @@
-import { WallData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs";
+/// <reference path="../../fvtt-scripts/foundry-esm.js" />
 import ARCHITECT from "../core/architect.mjs";
 import SETTINGS from "../core/settings.mjs";
 
-interface WallExt extends Wall {
-	[key: string]: any;
-	dfArchWallExt: {
-		leftLabel: PIXI.Text;
-		rightLabel: PIXI.Text;
-		drawLabels?: boolean;
-		style?: PIXI.TextStyle;
-	}
-}
+/**
+ * @typedef {object} ArchWallExt
+ * @property {PIXI.Text} leftLabel
+ * @property {PIXI.Text} rightLabel
+ * @property {boolean} [drawLabels]
+ * @property {PIXI.TextStyle} [style]
+ */
+
+/**
+ * @typedef {object} WallExt
+ * @property {ArchWallExt} [dfArchWallExt]
+ */
 
 export default class WallDirections {
-	static readonly PREF_ALLOW_UNSELECTED_INVERT = "WallDirections.AllowUnselectedInvert";
+	/**@readonly*/ static PREF_ALLOW_UNSELECTED_INVERT = "WallDirections.AllowUnselectedInvert";
 	static init() {
 		try {
-			libWrapper.register(ARCHITECT.MOD_NAME, 'Wall.prototype.draw', this._onWallDraw, 'WRAPPER');
-			libWrapper.register(ARCHITECT.MOD_NAME, 'Wall.prototype.refresh', this._onWallRefresh, 'WRAPPER');
-			libWrapper.register(ARCHITECT.MOD_NAME, 'Wall.prototype.control', this._onControlOrRelease, 'WRAPPER');
-			libWrapper.register(ARCHITECT.MOD_NAME, 'Wall.prototype.release', this._onControlOrRelease, 'WRAPPER');
-			libWrapper.register(ARCHITECT.MOD_NAME, 'Wall.prototype._onClickRight2', this._reverseWallDirection, 'OVERRIDE');
+			libWrapper.register(ARCHITECT.MOD_NAME, 'Wall.prototype.draw', this.#onWallDraw, 'WRAPPER');
+			libWrapper.register(ARCHITECT.MOD_NAME, 'Wall.prototype._refreshLine', this.#onWallRefresh, 'WRAPPER');
+			libWrapper.register(ARCHITECT.MOD_NAME, 'Wall.prototype.control', this.#onControlOrRelease, 'WRAPPER');
+			libWrapper.register(ARCHITECT.MOD_NAME, 'Wall.prototype.release', this.#onControlOrRelease, 'WRAPPER');
+			libWrapper.register(ARCHITECT.MOD_NAME, 'Wall.prototype._onClickRight2', this.#reverseWallDirection, 'OVERRIDE');
 		}
 		catch (e) {
 			console.error("Could not initialize Wall Direction Labels", e);
@@ -38,25 +41,41 @@ export default class WallDirections {
 		});
 	}
 
-	private static _onControlOrRelease(this: PlaceableObject, wrapper: Function, ...args: any[]) {
+	/**
+	 * @this {PlaceableObject}
+	 * @param {Function} wrapper
+	 * @param  {...any} args
+	 * @returns {unknown}
+	 */
+	static #onControlOrRelease(wrapper, ...args) {
 		const result = wrapper(...args);
 		if (game.scenes.viewed.walls.has(this.id))
 			this.refresh();
 		return result;
 	}
 
-	private static async _reverseWallDirection(this: Wall) {
-		if (SETTINGS.get(WallDirections.PREF_ALLOW_UNSELECTED_INVERT) && !this._controlled) return;
+	/**
+	 * @this {Wall}
+	 * @returns {Promise<unknown>}
+	 */
+	static async #reverseWallDirection() {
+		if (!SETTINGS.get(WallDirections.PREF_ALLOW_UNSELECTED_INVERT) && !this.controlled) return;
 		const data = this.document;
 		if (data.dir) {
-			await this.document.update(<DeepPartial<WallData>>{ dir: data.dir === 1 ? 2 : 1 });
+			await this.document.update({ dir: data.dir === 1 ? 2 : 1 });
 		} else {
 			const data = this.document.c.slice(2).concat(this.document.c.slice(0, 2));
-			await this.document.update(<DeepPartial<WallData>>{ c: data });
+			await this.document.update({ c: data });
 		}
+		this.refresh();
 	}
 
-	private static async _onWallDraw(this: WallExt, wrapper: () => any): Promise<Wall> {
+	/**
+	 * @this {Wall & WallExt}
+	 * @param {Function} wrapper
+	 * @returns {Promise<Wall>}
+	 */
+	static async #onWallDraw(wrapper) {
 		const style = new PIXI.TextStyle({
 			align: 'center',
 			fill: this._getWallColor(),
@@ -73,23 +92,28 @@ export default class WallDirections {
 		};
 		return wrapper();
 	}
-	private static _onWallRefresh(this: WallExt, wrapper: Function): Wall {
+	/**
+	 * @this {Wall & WallExt}
+	 * @param {Function} wrapper
+	 * @returns {Wall}
+	 */
+	static #onWallRefresh(wrapper, ...args) {
 		if (this.dfArchWallExt.drawLabels) {
 			delete this.dfArchWallExt.drawLabels;
 			this.dfArchWallExt.style.fill = this._getWallColor();
 			this.addChild(this.dfArchWallExt.leftLabel);
 			this.addChild(this.dfArchWallExt.rightLabel);
 		}
-		wrapper();
-		if (!this.controlled || (this.document as WallData).dir) {
+		wrapper(...args);
+		if (!this.controlled || this.document.dir) {
 			if (this.dfArchWallExt?.leftLabel)
 				this.dfArchWallExt.leftLabel.renderable = false;
 			if (this.dfArchWallExt?.rightLabel)
 				this.dfArchWallExt.rightLabel.renderable = false;
 			return this;
 		}
-		const [x1, y1] = (this.document as WallData).c.slice(0, 2);
-		const [x2, y2] = (this.document as WallData).c.slice(2);
+		const [x1, y1] = this.document.c.slice(0, 2);
+		const [x2, y2] = this.document.c.slice(2);
 		const [cx, cy] = [(x1 + x2) / 2, (y1 + y2) / 2]; // calculate the center
 		const [px, py] = [-(y2 - y1), x2 - x1]; // Calculate the line perpendicular
 		const magnitude = Math.hypot(px, py);
