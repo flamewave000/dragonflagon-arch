@@ -7,13 +7,13 @@ SETTINGS.init(ARCHITECT.MOD_NAME);
 import LayerShortcuts from "./general/LayerShortcuts.mjs";
 import AltGridSnap from './general/AltGridSnap.mjs';
 import WallCtrlInvert from './walls/WallCtrlInvert.mjs';
-// import WallShortcuts from './walls/WallShortcuts.mjs';
+import WallShortcuts from './walls/WallShortcuts.mjs';
 // import WallJoinSplit from './walls/WallJoinSplit.mjs';
 import AltLightOrigin from './lights/AltLightOrigin.mjs';
 // import { QuickColourPicker } from './general/QuickColourPicker.mjs';
 // import CaptureGameScreen from './general/CaptureGameScreen.mjs';
 // import { LightTemplateManager, LightingLayerOverride } from './lights/LightTemplate.mjs';
-// import WallChangeType from './walls/WallChangeType.mjs';
+import WallChangeType from './walls/WallChangeType.mjs';
 // import WallAltDrop from './walls/WallAltDrop.mjs';
 import AltLightInverted from './lights/AltLightInverted.mjs';
 // import WallDirections from './walls/WallDirections.mjs';
@@ -38,7 +38,7 @@ Hooks.once('init', function () {
 	// try { ShowLayerControls.init() } catch (error) { console.error(error) }
 	try { AltGridSnap.init() } catch (error) { console.error(error) }
 	try { LayerShortcuts.init() } catch (error) { console.error(error) }
-	// try { WallShortcuts.init() } catch (error) { console.error(error) }
+	try { WallShortcuts.init() } catch (error) { console.error(error) }
 	try { WallCtrlInvert.init() } catch (error) { console.error(error) }
 	// try { WallJoinSplit.init() } catch (error) { console.error(error) }
 	// try { WallGapFiller.init() } catch (error) { console.error(error) }
@@ -85,7 +85,7 @@ Hooks.once('ready', async function () {
 	// try { PIXIAppOverride.ready() } catch (error) { console.error(error) }
 	try { LayerShortcuts.ready() } catch (error) { console.error(error) }
 	try { WallCtrlInvert.ready() } catch (error) { console.error(error) }
-	// try { WallChangeType.ready() } catch (error) { console.error(error) }
+	try { WallChangeType.ready() } catch (error) { console.error(error) }
 	// try { WallGapFiller.ready() } catch (error) { console.error(error) }
 	// try { WallAltDrop.ready() } catch (error) { console.error(error) }
 	// try { WallDirections.ready() } catch (error) { console.error(error) }
