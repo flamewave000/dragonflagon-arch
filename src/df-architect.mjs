@@ -19,13 +19,13 @@ import AltLightInverted from './lights/AltLightInverted.mjs';
 // import WallDirections from './walls/WallDirections.mjs';
 import DataMigration from './core/migration.mjs';
 // import TileFlattener from './tiles/TileFlattener.mjs';
-// import LightCounter from './lights/LightCounter.mjs';
-// import WallsCounter from './walls/WallCounter.mjs';
-// import TileCounter from './tiles/TileCounter.mjs';
-// import SoundCounter from './sounds/SoundCounter.mjs';
+import LightCounter from './lights/LightCounter.mjs';
+import WallsCounter from './walls/WallCounter.mjs';
+import TileCounter from './tiles/TileCounter.mjs';
+import SoundCounter from './sounds/SoundCounter.mjs';
 // import ShowLayerControls from './general/ShowLayerControls.mjs';
 // import TileConfigExt from './tiles/TileConfigExt.mjs';
-// import CounterUI from './core/CounterUI.mjs';
+import CounterUI from './core/CounterUI.mjs';
 // import WallGapFiller from './walls/WallGapFiller.mjs';
 
 Hooks.once('init', function () {
@@ -49,7 +49,7 @@ Hooks.once('init', function () {
 	// try { LightTemplateManager.init() } catch (error) { console.error(error) }
 	// try { TileFlattener.init() } catch (error) { console.error(error) }
 	// try { TileConfigExt.init() } catch (error) { console.error(error) }
-	// try { CounterUI.init() } catch (error) { console.error(error) }
+	try { CounterUI.init() } catch (error) { console.error(error) }
 
 	SETTINGS.register('General.ShowCounters', {
 		name: 'DF_ARCHITECT.General.ShowCounterName'.localize(),
@@ -97,8 +97,8 @@ Hooks.once('ready', async function () {
 	// try { ShowLayerControls.ready() } catch (error) { console.error(error) }
 	//! WARNING: The *Counters need to go after ShowLayerControls so they don't
 	//! accidentally pick up the layer activations during initialization
-	// try { LightCounter.ready() } catch (error) { console.error(error) }
-	// try { WallsCounter.ready() } catch (error) { console.error(error) }
-	// try { TileCounter.ready() } catch (error) { console.error(error) }
-	// try { SoundCounter.ready() } catch (error) { console.error(error) }
+	try { LightCounter.ready() } catch (error) { console.error(error) }
+	try { WallsCounter.ready() } catch (error) { console.error(error) }
+	try { TileCounter.ready() } catch (error) { console.error(error) }
+	try { SoundCounter.ready() } catch (error) { console.error(error) }
 });

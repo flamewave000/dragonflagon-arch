@@ -3,18 +3,18 @@ import CounterUI from "../core/CounterUI.mjs";
 import SETTINGS from "../core/settings.mjs";
 
 export default class LightCounter {
-	private static _counter = new CounterUI(0, 'Lights');
+	static #counter = new CounterUI(0, 'Lights');
 	static ready() {
-		libWrapper.register(ARCHITECT.MOD_NAME, 'LightingLayer.prototype.activate', (wrapped: Function) => {
+		libWrapper.register(ARCHITECT.MOD_NAME, 'LightingLayer.prototype.activate', wrapped => {
 			wrapped();
 			this.updateCount();
 			if (SETTINGS.get('General.ShowCounters'))
-				this._counter.render(true);
+				this.#counter.render(true);
 		}, 'WRAPPER');
-		libWrapper.register(ARCHITECT.MOD_NAME, 'LightingLayer.prototype.deactivate', (wrapped: Function) => {
+		libWrapper.register(ARCHITECT.MOD_NAME, 'LightingLayer.prototype.deactivate', wrapped => {
 			wrapped();
-			if (this._counter.rendered)
-				this._counter.close();
+			if (this.#counter.rendered)
+				this.#counter.close();
 		}, 'WRAPPER');
 		Hooks.on('createAmbientLight', () => this.updateCount());
 		Hooks.on('updateAmbientLight', () => this.updateCount());
@@ -23,8 +23,9 @@ export default class LightCounter {
 
 	static updateCount() {
 		if (!SETTINGS.get('General.ShowCounters')) return;
-		const objects = canvas.lighting.objects.children as AmbientLight[];
-		this._counter.count = objects.length;
+		/**@type {AmbientLight[]}*/
+		const objects = canvas.lighting.objects.children;
+		this.#counter.count = objects.length;
 		var normal = 0;
 		var unrestrained = 0;
 		var normalVision = 0;
@@ -36,7 +37,7 @@ export default class LightCounter {
 			else if (t == 0x00) unrestrained++;
 			else if (t == 0x10) unrestrainedVision++;
 		});
-		this._counter.hint = `<pre style="margin:0">
+		this.#counter.hint = `<pre style="margin:0">
                         Normal: ${normal}
                Provides Vision: ${normalVision}
                   Unrestrained: ${unrestrained}

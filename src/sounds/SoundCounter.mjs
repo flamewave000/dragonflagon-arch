@@ -3,18 +3,18 @@ import CounterUI from "../core/CounterUI.mjs";
 import SETTINGS from "../core/settings.mjs";
 
 export default class SoundCounter {
-	private static _counter = new CounterUI(0, 'Sounds');
+	static #counter = new CounterUI(0, 'Sounds');
 	static ready() {
-		libWrapper.register(ARCHITECT.MOD_NAME, 'SoundsLayer.prototype.activate', (wrapped: Function) => {
+		libWrapper.register(ARCHITECT.MOD_NAME, 'SoundsLayer.prototype.activate', wrapped => {
 			wrapped();
 			this.updateCount();
 			if (SETTINGS.get('General.ShowCounters'))
-				this._counter.render(true);
+				this.#counter.render(true);
 		}, 'WRAPPER');
-		libWrapper.register(ARCHITECT.MOD_NAME, 'SoundsLayer.prototype.deactivate', (wrapped: Function) => {
+		libWrapper.register(ARCHITECT.MOD_NAME, 'SoundsLayer.prototype.deactivate', wrapped => {
 			wrapped();
-			if (this._counter.rendered)
-				this._counter.close();
+			if (this.#counter.rendered)
+				this.#counter.close();
 		}, 'WRAPPER');
 		Hooks.on('createAmbientSound', () => this.updateCount());
 		Hooks.on('deleteAmbientSound', () => this.updateCount());
@@ -23,9 +23,10 @@ export default class SoundCounter {
 
 	static updateCount() {
 		if (!SETTINGS.get('General.ShowCounters')) return;
-		const objects = canvas.sounds.objects.children as AmbientSound[];
-		this._counter.count = objects.length;
-		this._counter.hint = `<pre style="margin:0">
+		/**@type {AmbientSound[]}*/
+		const objects = canvas.sounds.objects.children;
+		this.#counter.count = objects.length;
+		this.#counter.hint = `<pre style="margin:0">
       Normal Sounds: ${objects.filter(x => x.document.walls).length}
 Unrestrained Sounds: ${objects.filter(x => !x.document.walls).length}
 </pre>`;

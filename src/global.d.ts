@@ -3,10 +3,10 @@ import * as globalPIXI from 'pixi.js';
 import "./types/libWrapper";
 import "./types/TooltipManager";
 
+declare const foundry = globalFoundry;
 
 declare global {
 	const PIXI = globalPIXI;
-	const foundry = globalFoundry;
 
 	interface Map<K, V> {
 		getOrDefault<T extends V>(key: K, defaultValue: (() => T) | T): T;
