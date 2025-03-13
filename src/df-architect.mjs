@@ -14,7 +14,7 @@ import AltLightOrigin from './lights/AltLightOrigin.mjs';
 // import CaptureGameScreen from './general/CaptureGameScreen.mjs';
 // import { LightTemplateManager, LightingLayerOverride } from './lights/LightTemplate.mjs';
 import WallChangeType from './walls/WallChangeType.mjs';
-// import WallAltDrop from './walls/WallAltDrop.mjs';
+import WallAltDrop from './walls/WallAltDrop.mjs';
 import AltLightInverted from './lights/AltLightInverted.mjs';
 import WallDirections from './walls/WallDirections.mjs';
 import DataMigration from './core/migration.mjs';
@@ -42,7 +42,7 @@ Hooks.once('init', function () {
 	try { WallCtrlInvert.init() } catch (error) { console.error(error) }
 	// try { WallJoinSplit.init() } catch (error) { console.error(error) }
 	// try { WallGapFiller.init() } catch (error) { console.error(error) }
-	// try { WallAltDrop.init() } catch (error) { console.error(error) }
+	try { WallAltDrop.init() } catch (error) { console.error(error) }
 	try { WallDirections.init() } catch (error) { console.error(error) }
 	try { AltLightOrigin.init() } catch (error) { console.error(error) }
 	// try { CaptureGameScreen.init() } catch (error) { console.error(error) }
@@ -87,7 +87,7 @@ Hooks.once('ready', async function () {
 	try { WallCtrlInvert.ready() } catch (error) { console.error(error) }
 	try { WallChangeType.ready() } catch (error) { console.error(error) }
 	// try { WallGapFiller.ready() } catch (error) { console.error(error) }
-	// try { WallAltDrop.ready() } catch (error) { console.error(error) }
+	try { WallAltDrop.ready() } catch (error) { console.error(error) }
 	try { WallDirections.ready() } catch (error) { console.error(error) }
 	try { AltLightOrigin.ready() } catch (error) { console.error(error) }
 	// try { QuickColourPicker.ready() } catch (error) { console.error(error) }
