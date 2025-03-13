@@ -2,22 +2,30 @@ import ARCHITECT from "../core/architect.mjs";
 import SETTINGS from "../core/settings.mjs";
 
 export default class ShowLayerControls {
-	private static readonly PREF_WALLS = 'ShowLayerControls.WallsLayer';
-	private static readonly PREF_LIGHT = 'ShowLayerControls.LightingLayer';
-	private static readonly PREF_SOUND = 'ShowLayerControls.SoundsLayer';
-	private static _ready = false;
+	/**@readonly*/static PREF_WALLS = 'ShowLayerControls.WallsLayer';
+	/**@readonly*/static PREF_LIGHT = 'ShowLayerControls.LightingLayer';
+	/**@readonly*/static PREF_SOUND = 'ShowLayerControls.SoundsLayer';
+	/**@readonly*/static _ready = false;
 
-	private static get showWalls(): boolean {
+	/**@type {boolean}*/
+	static get showWalls() {
 		return game.user.isGM && SETTINGS.get(ShowLayerControls.PREF_WALLS);
 	}
-	private static get showLights(): boolean {
+	/**@type {boolean}*/
+	static get showLights() {
 		return game.user.isGM && SETTINGS.get(ShowLayerControls.PREF_LIGHT);
 	}
-	private static get showSounds(): boolean {
+	/**@type {boolean}*/
+	static get showSounds() {
 		return game.user.isGM && SETTINGS.get(ShowLayerControls.PREF_SOUND);
 	}
 
-	private static async toggleLayer(layer: string, setting: string, toggled: boolean) {
+	/**
+	 * @param {string} layer
+	 * @param {string} setting
+	 * @param {boolean} toggled
+	 */
+	static async toggleLayer(layer, setting, toggled) {
 		await SETTINGS.set(setting, toggled);
 		const control = ui.controls.controls.find(x => x.layer == layer);
 		if (toggled)
@@ -32,7 +40,7 @@ export default class ShowLayerControls {
 		SETTINGS.register(this.PREF_LIGHT, { config: false, scope: 'client', type: Boolean, default: false });
 		SETTINGS.register(this.PREF_SOUND, { config: false, scope: 'client', type: Boolean, default: false });
 
-		Hooks.on('getSceneControlButtons', (controls: SceneControl[]) => {
+		Hooks.on('getSceneControlButtons', (/**@type {SceneControl[]}*/controls) => {
 			if (!game.user.isGM) return;
 
 			const walls = controls.find(x => x.name === 'walls');
@@ -65,11 +73,27 @@ export default class ShowLayerControls {
 			});
 		});
 
+		const redraw = async (/**@type {PlaceableObject}*/x) => {
+			if (x instanceof AmbientSound)
+				x.initializeSoundSource();
+			else if (x instanceof AmbientLight)
+				x.initializeLightSource();
+			else {
+				x.updateSource();
+				x.refresh();
+				return;
+			}
+			x.renderFlags.redraw = true;
+			await x.draw();
+			await x.applyRenderFlags();
+			x.controlIcon.visible = true;
+		}
+
 		Hooks.on('updateWall', () => {
 			if (!game.user.isGM) return;
-			const refreshLayer = (layer: any) => {
+			const refreshLayer = (layer) => {
 				layer._active = true;
-				layer.objects.children.forEach((x: any) => { x.updateSource(); x.refresh() });
+				layer.objects.children.forEach(redraw);
 				layer._active = false;
 			}
 			if (this.showLights)
@@ -80,9 +104,9 @@ export default class ShowLayerControls {
 
 		Hooks.on('deleteWall', () => {
 			if (!game.user.isGM) return;
-			const refreshLayer = (layer: any) => {
+			const refreshLayer = layer => {
 				layer._active = true;
-				layer.objects.children.forEach((x: any) => { x.updateSource(); x.refresh() });
+				layer.objects.children.forEach(redraw);
 				layer._active = false;
 			}
 			if (this.showLights)
@@ -107,35 +131,14 @@ export default class ShowLayerControls {
 		libWrapper.register(ARCHITECT.MOD_NAME, 'PlaceablesLayer.prototype.deactivate', this.PlaceablesLayer_deactivate, 'MIXED');
 	}
 
-	private static AmbientLight_refresh(this: AmbientLight) {
-		/*****************************************************************************************/
-		/************* CODE COPIED FROM foundry.js AmbientLight.prototype._refresh() *************/
-		/*****************************************************************************************/
-		// const active = this.layer.active; //! DF: Disabled Active Check
-
-		// Update position and FOV
-		const { x, y } = this.document;
-		this.position.set(x, y);
-		(this as any).field.position.set(-x, -y);
-
-		// Draw the light preview field
-		const l = (this as any).field.clear();
-
-		//! DF: Disabled Active Check
-		if (/*active &&*/ this.source.los) l.lineStyle(2, 0xEEEEEE, 0.4).drawShape(this.source.los);
-
-		// Update control icon appearance
-		this.refreshControl();
-		/*****************************************************************************************/
-		/************************************* CODE COPY END *************************************/
-		/*****************************************************************************************/
-
-		this.controlIcon.visible = true;
-	}
-
-	private static PlaceablesLayer_deactivate(this: PlaceablesLayer<any>, wrapped: Function) {
+	/**
+	 * @this {PlaceablesLayer}
+	 * @param {Function} wrapped
+	 * @returns {PlaceablesLayer}
+	 */
+	static PlaceablesLayer_deactivate(wrapped) {
 		if (!ShowLayerControls._ready) return wrapped();
-		var toggled: boolean = false;
+		var toggled = false;
 		switch (this.name) {
 			case 'WallsLayer':
 				toggled = ShowLayerControls.showWalls;
@@ -153,14 +156,15 @@ export default class ShowLayerControls {
 		this.objects.visible = true;
 		if (this.preview) this.preview.removeChildren();
 
-		switch (this.name) {
-			case 'LightingLayer':
-				(this.objects.children as AmbientLight[]).forEach(x => ShowLayerControls.AmbientLight_refresh.apply(x));
-			case 'SoundsLayer':
-				(this.objects.children as (AmbientLight | AmbientSound)[]).forEach(x => x.controlIcon.visible = true);
-				break;
-		}
+		if (this.name !== 'LightingLayer' && this.name !== 'SoundsLayer')
+			return this;
 
+		/**@type {PlaceableObject[]}*/(this.objects.children).forEach(async x => {
+				x.renderFlags.redraw = true;
+				await x.draw();
+				await x.applyRenderFlags();
+				x.controlIcon.visible = true;
+			});
 		return this;
 	}
 }

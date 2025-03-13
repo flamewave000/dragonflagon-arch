@@ -23,7 +23,7 @@ import LightCounter from './lights/LightCounter.mjs';
 import WallsCounter from './walls/WallCounter.mjs';
 import TileCounter from './tiles/TileCounter.mjs';
 import SoundCounter from './sounds/SoundCounter.mjs';
-// import ShowLayerControls from './general/ShowLayerControls.mjs';
+import ShowLayerControls from './general/ShowLayerControls.mjs';
 // import TileConfigExt from './tiles/TileConfigExt.mjs';
 import CounterUI from './core/CounterUI.mjs';
 // import WallGapFiller from './walls/WallGapFiller.mjs';
@@ -35,7 +35,7 @@ Hooks.once('init', function () {
 	ARCHITECT.DrawArchitectGraphicToConsole();
 	try { DataMigration.init() } catch (error) { console.error(error) }
 	//! WARNING! ShowLayerControls needs to come before AltGridSnap
-	// try { ShowLayerControls.init() } catch (error) { console.error(error) }
+	try { ShowLayerControls.init() } catch (error) { console.error(error) }
 	try { AltGridSnap.init() } catch (error) { console.error(error) }
 	try { LayerShortcuts.init() } catch (error) { console.error(error) }
 	try { WallShortcuts.init() } catch (error) { console.error(error) }
@@ -94,7 +94,7 @@ Hooks.once('ready', async function () {
 	try { AltLightInverted.ready() } catch (error) { console.error(error) }
 	// try { LightTemplateManager.ready() } catch (error) { console.error(error) }
 	// try { LightingLayerOverride.ready() } catch (error) { console.error(error) }
-	// try { ShowLayerControls.ready() } catch (error) { console.error(error) }
+	try { ShowLayerControls.ready() } catch (error) { console.error(error) }
 	//! WARNING: The *Counters need to go after ShowLayerControls so they don't
 	//! accidentally pick up the layer activations during initialization
 	try { LightCounter.ready() } catch (error) { console.error(error) }
