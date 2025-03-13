@@ -1,4 +1,4 @@
-import SETTINGS from "./Settings.mjs";
+import SETTINGS from "./settings.mjs";
 
 /**
  * @typedef {(...args: any) => unknown} Wrapper

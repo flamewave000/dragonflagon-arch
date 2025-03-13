@@ -6,7 +6,7 @@ SETTINGS.init(ARCHITECT.MOD_NAME);
 // import PIXIAppOverride from './general/PIXIAppOverride.mjs';
 import LayerShortcuts from "./general/LayerShortcuts.mjs";
 import AltGridSnap from './general/AltGridSnap.mjs';
-// import WallCtrlInvert from './walls/WallCtrlInvert.mjs';
+import WallCtrlInvert from './walls/WallCtrlInvert.mjs';
 // import WallShortcuts from './walls/WallShortcuts.mjs';
 // import WallJoinSplit from './walls/WallJoinSplit.mjs';
 import AltLightOrigin from './lights/AltLightOrigin.mjs';
@@ -39,7 +39,7 @@ Hooks.once('init', function () {
 	try { AltGridSnap.init() } catch (error) { console.error(error) }
 	try { LayerShortcuts.init() } catch (error) { console.error(error) }
 	// try { WallShortcuts.init() } catch (error) { console.error(error) }
-	// try { WallCtrlInvert.init() } catch (error) { console.error(error) }
+	try { WallCtrlInvert.init() } catch (error) { console.error(error) }
 	// try { WallJoinSplit.init() } catch (error) { console.error(error) }
 	// try { WallGapFiller.init() } catch (error) { console.error(error) }
 	// try { WallAltDrop.init() } catch (error) { console.error(error) }
@@ -84,7 +84,7 @@ Hooks.once('ready', async function () {
 	await DataMigration.ready();
 	// try { PIXIAppOverride.ready() } catch (error) { console.error(error) }
 	try { LayerShortcuts.ready() } catch (error) { console.error(error) }
-	// try { WallCtrlInvert.ready() } catch (error) { console.error(error) }
+	try { WallCtrlInvert.ready() } catch (error) { console.error(error) }
 	// try { WallChangeType.ready() } catch (error) { console.error(error) }
 	// try { WallGapFiller.ready() } catch (error) { console.error(error) }
 	// try { WallAltDrop.ready() } catch (error) { console.error(error) }

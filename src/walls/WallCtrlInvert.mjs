@@ -3,11 +3,12 @@ import SETTINGS from "../core/settings.mjs";
 import libWrapperShared from "../core/libWrapperShared.mjs";
 
 export default class WallCtrlInvert {
-	static readonly PREF_ENABLED = 'WallCtrlInvert-Enabled';
-	private static _invertKeyboardMap = false;
-	private static _onDragLeftDropRegistrationId = -1;
-	static get enabled(): boolean { return SETTINGS.get(WallCtrlInvert.PREF_ENABLED) }
-	static set enabled(value: boolean) { SETTINGS.set(WallCtrlInvert.PREF_ENABLED, value) }
+	/**@readonly*/static PREF_ENABLED = 'WallCtrlInvert-Enabled';
+	static #invertKeyboardMap = false;
+	static #onDragLeftDropRegistrationId = -1;
+	/**@type {boolean}*/
+	static get enabled() { return SETTINGS.get(WallCtrlInvert.PREF_ENABLED) }
+	static set enabled(value) { SETTINGS.set(WallCtrlInvert.PREF_ENABLED, value) }
 
 	static init() {
 		SETTINGS.register(WallCtrlInvert.PREF_ENABLED, {
@@ -17,11 +18,11 @@ export default class WallCtrlInvert {
 			default: false,
 			onChange: toggled => {
 				if (toggled) {
-					libWrapper.register(ARCHITECT.MOD_NAME, 'KeyboardManager.prototype.isModifierActive', this._isModifierActive, 'WRAPPER');
-					this._onDragLeftDropRegistrationId = libWrapperShared.register('WallsLayer.prototype._onDragLeftDrop', this._onDragLeftDrop);
+					libWrapper.register(ARCHITECT.MOD_NAME, 'KeyboardManager.prototype.isModifierActive', this.#isModifierActive, 'WRAPPER');
+					this.#onDragLeftDropRegistrationId = libWrapperShared.register('WallsLayer.prototype._onDragLeftDrop', this.#onDragLeftDrop);
 				} else {
 					libWrapper.unregister(ARCHITECT.MOD_NAME, 'KeyboardManager.prototype.isModifierActive', false);
-					libWrapperShared.unregister('WallsLayer.prototype._onDragLeftDrop', this._onDragLeftDropRegistrationId);
+					libWrapperShared.unregister('WallsLayer.prototype._onDragLeftDrop', this.#onDragLeftDropRegistrationId);
 				}
 			}
 		});
@@ -30,14 +31,14 @@ export default class WallCtrlInvert {
 			restricted: true,
 			name: 'DF_ARCHITECT.WallCtrlInvert.Name',
 			editable: [{ key: 'KeyC', modifiers: [KeyboardManager.MODIFIER_KEYS.ALT] }],
-			onDown: <any>(async () => {
+			onDown: (async () => {
 				await SETTINGS.set(WallCtrlInvert.PREF_ENABLED, !this.enabled)
 				ui.controls.initialize();
 				return true;
 			})
 		});
 
-		Hooks.on('getSceneControlButtons', (controls: SceneControl[]) => {
+		Hooks.on('getSceneControlButtons', (/**@type {SceneControl[]}*/controls) => {
 			const isGM = game.user.isGM;
 			const wallsControls = controls.find(x => x.name === 'walls');
 			wallsControls.tools.splice(wallsControls.tools.findIndex(x => x.name === 'snap'), 0, {
@@ -47,25 +48,37 @@ export default class WallCtrlInvert {
 				visible: isGM,
 				toggle: true,
 				active: this.enabled,
-				onClick: (toggled: boolean) => { this.enabled = toggled }
+				onClick: (toggled) => { this.enabled = toggled }
 			});
 		});
 	}
 
 	static ready() {
 		if (!SETTINGS.get(WallCtrlInvert.PREF_ENABLED)) return;
-		libWrapper.register(ARCHITECT.MOD_NAME, 'KeyboardManager.prototype.isModifierActive', this._isModifierActive, 'WRAPPER');
-		this._onDragLeftDropRegistrationId = libWrapperShared.register('WallsLayer.prototype._onDragLeftDrop', this._onDragLeftDrop);
+		libWrapper.register(ARCHITECT.MOD_NAME, 'KeyboardManager.prototype.isModifierActive', this.#isModifierActive, 'WRAPPER');
+		this.#onDragLeftDropRegistrationId = libWrapperShared.register('WallsLayer.prototype._onDragLeftDrop', this.#onDragLeftDrop);
 	}
 
-	private static _onDragLeftDrop(this: WallsLayer, wrapper: (arg: any) => void, event: PIXI.InteractionEvent) {
-		WallCtrlInvert._invertKeyboardMap = true;
+	/**
+	 * @this {WallsLayer}
+	 * @param {Function} wrapper
+	 * @param {PIXI.InteractionEvent} event
+	 * @returns {unknown}
+	 */
+	static #onDragLeftDrop(wrapper, event) {
+		WallCtrlInvert.#invertKeyboardMap = true;
 		const result = wrapper(event);
-		WallCtrlInvert._invertKeyboardMap = false;
+		WallCtrlInvert.#invertKeyboardMap = false;
 		return result;
 	}
-	private static _isModifierActive(this: WallsLayer, wrapper: any, ...args: any) {
-		if (!WallCtrlInvert._invertKeyboardMap)
+	/**
+	 * @this {WallsLayer}
+	 * @param {Function} wrapper
+	 * @param {...any} args
+	 * @returns {unknown}
+	 */
+	static #isModifierActive(wrapper, ...args) {
+		if (!WallCtrlInvert.#invertKeyboardMap)
 			return wrapper(...args);
 		const clone = new Set(game.keyboard.downKeys);
 		if (KeyboardManager.MODIFIER_CODES[KeyboardManager.MODIFIER_KEYS.CONTROL].some(k => game.keyboard.downKeys.has(k)))
