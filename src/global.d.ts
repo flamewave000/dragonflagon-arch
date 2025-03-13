@@ -33,3 +33,23 @@ declare interface EntityConfigData<T> {
 	sheetClass: string
 	sheetClasses: object
 }
+
+declare interface CanvasConfig {
+	autoStart?: boolean;
+	width?: number;
+	height?: number;
+	view?: HTMLCanvasElement;
+	transparent?: boolean;
+	autoDensity?: boolean;
+	antialias?: boolean;
+	preserveDrawingBuffer?: boolean;
+	resolution?: number;
+	forceCanvas?: boolean;
+	backgroundColor?: number;
+	backgroundAlpha?: number;
+	clearBeforeRender?: boolean;
+	powerPreference?: string;
+	sharedTicker?: boolean;
+	sharedLoader?: boolean;
+	resizeTo?: Window | HTMLElement;
+}

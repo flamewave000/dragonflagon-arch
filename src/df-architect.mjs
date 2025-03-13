@@ -3,14 +3,14 @@ import SETTINGS from './core/settings.mjs';
 import ARCHITECT from "./core/architect.mjs";
 SETTINGS.init(ARCHITECT.MOD_NAME);
 
-// import PIXIAppOverride from './general/PIXIAppOverride.mjs';
+import PIXIAppOverride from './general/PIXIAppOverride.mjs';
 import LayerShortcuts from "./general/LayerShortcuts.mjs";
 import AltGridSnap from './general/AltGridSnap.mjs';
 import WallCtrlInvert from './walls/WallCtrlInvert.mjs';
 import WallShortcuts from './walls/WallShortcuts.mjs';
 import WallJoinSplit from './walls/WallJoinSplit.mjs';
 import AltLightOrigin from './lights/AltLightOrigin.mjs';
-// import { QuickColourPicker } from './general/QuickColourPicker.mjs';
+import { QuickColourPicker } from './general/QuickColourPicker.mjs';
 // import CaptureGameScreen from './general/CaptureGameScreen.mjs';
 // import { LightTemplateManager, LightingLayerOverride } from './lights/LightTemplate.mjs';
 import WallChangeType from './walls/WallChangeType.mjs';
@@ -64,7 +64,7 @@ Hooks.once('init', function () {
 Hooks.once('setup', function () {
 	if (!game.modules.get('lib-wrapper')?.active) return;
 	if (!game.modules.get('colorsettings')?.active) return;
-	// PIXIAppOverride.setup();
+	PIXIAppOverride.setup();
 });
 
 Hooks.once('ready', async function () {
@@ -82,7 +82,7 @@ Hooks.once('ready', async function () {
 	}
 
 	await DataMigration.ready();
-	// try { PIXIAppOverride.ready() } catch (error) { console.error(error) }
+	try { PIXIAppOverride.ready() } catch (error) { console.error(error) }
 	try { LayerShortcuts.ready() } catch (error) { console.error(error) }
 	try { WallCtrlInvert.ready() } catch (error) { console.error(error) }
 	try { WallChangeType.ready() } catch (error) { console.error(error) }
@@ -90,7 +90,7 @@ Hooks.once('ready', async function () {
 	try { WallAltDrop.ready() } catch (error) { console.error(error) }
 	try { WallDirections.ready() } catch (error) { console.error(error) }
 	try { AltLightOrigin.ready() } catch (error) { console.error(error) }
-	// try { QuickColourPicker.ready() } catch (error) { console.error(error) }
+	try { QuickColourPicker.ready() } catch (error) { console.error(error) }
 	try { AltLightInverted.ready() } catch (error) { console.error(error) }
 	// try { LightTemplateManager.ready() } catch (error) { console.error(error) }
 	// try { LightingLayerOverride.ready() } catch (error) { console.error(error) }

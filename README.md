@@ -2,7 +2,7 @@
 
 ![console-graphic](.assets/console-graphic.png)
 
-![v12 Progress](https://progress-bar.xyz/19/?scale=26&suffix=/26&title=FoundryVTT%20V12%20Progress&prefix=Features:%20&width=400&style=for-the-badge)
+![v12 Progress](https://progress-bar.xyz/21/?scale=26&suffix=/26&title=FoundryVTT%20V12%20Progress&prefix=Features:%20&width=400&style=for-the-badge)
 
 ![Forge Installs](https://img.shields.io/badge/dynamic/json?color=red&label=Forge%20Installs&query=package.installs&suffix=%25&url=https%3A%2F%2Fforge-vtt.com%2Fapi%2Fbazaar%2Fpackage%2Fdf-architect)
 ![Latest Version](https://img.shields.io/badge/dynamic/json?label=Latest%20Release&prefix=v&query=package.versions%5B0%5D&url=https%3A%2F%2Fforge-vtt.com%2Fapi%2Fbazaar%2Fpackage%2Fdf-architect)
@@ -88,7 +88,8 @@ The Tiles, Walls, Lights, and Sounds layers will now each display an Object Coun
 
 You can now use an eyedropper from any FoundryVTT Config dialog that has a colour selector to quickly select a colour from the current map. Great for trying to match a light colour to a material in the map like lava, water, etc. This will immediately minimize ALL open windows during the selection process. It will then restore all windows that were not previously minimized.
 
-**You can Cancel the Colour Picker with a single `Right + Click`**
+- **You can use the normal `Scroll-to-Zoom` and `Right-Click + Drag` to move around the map.**
+- **To Cancel the Colour Picker simply do a single `Right-Click`**
 
 #### For Devs: You can use this feature!
 
